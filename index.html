@@ -266,7 +266,7 @@
           </svg>
         </button>
 
-        <div class="filter-popup-card" id="pricePopup" style="width: 280px;">
+        <div class="filter-popup-card" id="pricePopup">
           <div class="price-popup-inner">
             <div class="dual-slider-container">
               <div class="dual-slider-track-bg"></div>
@@ -298,7 +298,7 @@
           </svg>
         </button>
 
-        <div class="filter-popup-card" id="ratingPopup" style="width: 260px;">
+        <div class="filter-popup-card" id="ratingPopup">
           <div class="popup-list" style="padding-top: 12px; gap: 10px;">
             <label class="popup-checkbox-item">
               <input type="checkbox" value="5">
@@ -1097,9 +1097,30 @@
         { btn: document.getElementById('chipSortBtn'), popup: document.getElementById('sortPopup') }
       ];
 
+      function adjustPopupPosition(popup) {
+        if (!popup) return;
+        popup.style.left = '';
+        popup.style.right = '';
+        var rect = popup.getBoundingClientRect();
+        var vw = window.innerWidth;
+        if (rect.right > vw - 12) {
+          popup.style.left = 'auto';
+          popup.style.right = '0';
+        }
+        var newRect = popup.getBoundingClientRect();
+        if (newRect.left < 10) {
+          popup.style.left = '0';
+          popup.style.right = 'auto';
+        }
+      }
+
       function closeAllPopups() {
         dropdowns.forEach(function(d) {
-          if (d.popup) d.popup.classList.remove('open');
+          if (d.popup) {
+            d.popup.classList.remove('open');
+            d.popup.style.left = '';
+            d.popup.style.right = '';
+          }
           if (d.btn) {
             d.btn.classList.remove('active');
             d.btn.setAttribute('aria-expanded', 'false');
@@ -1117,6 +1138,7 @@
             d.popup.classList.add('open');
             d.btn.classList.add('active');
             d.btn.setAttribute('aria-expanded', 'true');
+            adjustPopupPosition(d.popup);
           }
         });
 
