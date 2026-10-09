@@ -872,12 +872,13 @@
       // ==========================================
       var mainHeader = document.querySelector('.main-header');
       var lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
-      var scrollTolerance = 8;
+      var scrollTolerance = 5;
 
       window.addEventListener('scroll', function() {
         var currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+        if (currentScrollY < 0) currentScrollY = 0;
 
-        if (currentScrollY <= 40) {
+        if (currentScrollY <= 25) {
           if (mainHeader) {
             mainHeader.classList.remove('header-hidden');
             mainHeader.classList.remove('header-scrolled-up');
@@ -891,13 +892,13 @@
           return;
         }
 
-        if (scrollDelta > 0 && currentScrollY > 90) {
+        if (scrollDelta > 0 && currentScrollY > 70) {
           if (mainHeader && !mainHeader.classList.contains('header-hidden')) {
             mainHeader.classList.add('header-hidden');
             mainHeader.classList.remove('header-scrolled-up');
           }
         } else if (scrollDelta < 0) {
-          if (mainHeader && mainHeader.classList.contains('header-hidden')) {
+          if (mainHeader && !mainHeader.classList.contains('header-scrolled-up')) {
             mainHeader.classList.remove('header-hidden');
             mainHeader.classList.add('header-scrolled-up');
           }
