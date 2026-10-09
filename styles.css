@@ -1950,18 +1950,31 @@ body {
   .quick-filter-bar {
     position: relative;
     max-width: 100%;
+    z-index: 90;
   }
 
+  .quick-filter-bar .filter-dropdown-wrapper {
+    position: static;
+  }
+
+  .quick-filter-bar .filter-popup-card {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 150;
+  }
+
+  #brandPopup,
+  #pricePopup,
   #ratingPopup {
-    left: auto !important;
-    right: 0 !important;
-    max-width: calc(100vw - 24px) !important;
-  }
-
-  #pricePopup {
-    left: auto !important;
-    right: -40px !important;
-    max-width: calc(100vw - 24px) !important;
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: none !important;
   }
 
   .sidebar-filters {

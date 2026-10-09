@@ -1101,16 +1101,14 @@
         if (!popup) return;
         popup.style.left = '';
         popup.style.right = '';
+        if (window.innerWidth <= 860) {
+          return;
+        }
         var rect = popup.getBoundingClientRect();
         var vw = window.innerWidth;
         if (rect.right > vw - 12) {
           popup.style.left = 'auto';
           popup.style.right = '0';
-        }
-        var newRect = popup.getBoundingClientRect();
-        if (newRect.left < 10) {
-          popup.style.left = '0';
-          popup.style.right = 'auto';
         }
       }
 
