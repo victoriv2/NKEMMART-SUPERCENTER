@@ -867,6 +867,45 @@
         });
       }
 
+      // ==========================================
+      // SMART STICKY HEADER (HIDE ON SCROLL DOWN, SHOW ON SCROLL UP)
+      // ==========================================
+      var mainHeader = document.querySelector('.main-header');
+      var lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      var scrollTolerance = 8;
+
+      window.addEventListener('scroll', function() {
+        var currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (currentScrollY <= 40) {
+          if (mainHeader) {
+            mainHeader.classList.remove('header-hidden');
+            mainHeader.classList.remove('header-scrolled-up');
+          }
+          lastScrollY = currentScrollY;
+          return;
+        }
+
+        var scrollDelta = currentScrollY - lastScrollY;
+        if (Math.abs(scrollDelta) < scrollTolerance) {
+          return;
+        }
+
+        if (scrollDelta > 0 && currentScrollY > 90) {
+          if (mainHeader && !mainHeader.classList.contains('header-hidden')) {
+            mainHeader.classList.add('header-hidden');
+            mainHeader.classList.remove('header-scrolled-up');
+          }
+        } else if (scrollDelta < 0) {
+          if (mainHeader && mainHeader.classList.contains('header-hidden')) {
+            mainHeader.classList.remove('header-hidden');
+            mainHeader.classList.add('header-scrolled-up');
+          }
+        }
+
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+
       // Initial Render
       renderCart();
     });
