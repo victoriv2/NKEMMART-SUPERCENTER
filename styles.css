@@ -1455,11 +1455,13 @@ body {
   box-shadow: var(--shadow-lg);
   z-index: 999;
   padding: 4px;
+  white-space: nowrap;
 }
 
 .mobile-floating-inner {
   display: flex;
   align-items: center;
+  white-space: nowrap;
 }
 
 .mobile-float-btn {
@@ -1469,10 +1471,13 @@ body {
   padding: 8px 18px;
   font-size: 13px;
   font-weight: 700;
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .mobile-float-divider {
