@@ -125,7 +125,7 @@ body {
 
 .main-header.header-scrolled-up {
   transform: translateY(0);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .header-container {
@@ -1536,12 +1536,14 @@ body {
   z-index: 1100;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .drawer-backdrop.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .mobile-drawer {
@@ -1554,14 +1556,19 @@ body {
   background: var(--white);
   z-index: 1200;
   transform: translateX(-100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-lg);
+  box-shadow: none;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .mobile-drawer.active {
   transform: translateX(0);
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .drawer-header {
@@ -1621,12 +1628,14 @@ body {
   z-index: 2200;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .mobile-nav-backdrop.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .mobile-nav-drawer {
@@ -1639,15 +1648,20 @@ body {
   background-color: var(--white);
   z-index: 2250;
   transform: translateX(-100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
   overflow-y: auto;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+  box-shadow: none;
+  visibility: hidden;
+  pointer-events: none;
   display: flex;
   flex-direction: column;
 }
 
 .mobile-nav-drawer.active {
   transform: translateX(0);
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.18);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .mobile-nav-header {
@@ -1808,12 +1822,14 @@ body {
   z-index: 2300;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .mobile-sort-backdrop.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .mobile-sort-sheet {
@@ -1825,8 +1841,10 @@ body {
   border-radius: 16px 16px 0 0;
   z-index: 2350;
   transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 -6px 25px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+  box-shadow: none;
+  visibility: hidden;
+  pointer-events: none;
   padding: 18px 20px 24px 20px;
   max-height: 80vh;
   overflow-y: auto;
@@ -1834,6 +1852,9 @@ body {
 
 .mobile-sort-sheet.active {
   transform: translateY(0);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.18);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .sort-sheet-header {
@@ -1920,6 +1941,10 @@ body {
 }
 
 @media (max-width: 860px) {
+  body {
+    background-color: #ffffff;
+  }
+
   .top-bar {
     display: none;
   }
