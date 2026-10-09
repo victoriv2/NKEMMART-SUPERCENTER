@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart - NKEMMART SUPERCENTER</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top Announcement Ribbon -->
+  <aside class="top-bar" aria-label="Announcement Bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-left">
+        <span class="doorstep-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          Doorstep Delivery
+        </span>
+        <span>We deliver all across Nigeria!</span>
+        <span class="top-bar-slogan">"Everything Dey™"</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="index.html#sell" class="top-bar-link">Sell on Nkemmart</a>
+        <span class="top-bar-divider">|</span>
+        <a href="tel:0800NKEMMART" class="top-bar-link">Call to Order: 0800-NKEMMART</a>
+        <span class="top-bar-divider">|</span>
+        <span class="top-bar-link" style="color: #fff; font-weight: 600;">₦ NGN</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sticky Header -->
+  <header class="main-header" role="banner">
+    <div class="header-container">
+      
+      <!-- Hamburger Menu linking back to catalog -->
+      <a href="index.html" class="menu-btn" aria-label="Browse catalog" title="Browse catalog">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </a>
+
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-link" title="NKEMMART SUPERCENTER - Home">
+        <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="brand-logo" />
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-container">
+        <form class="search-form" action="index.html" method="GET" role="search">
+          <span class="search-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input 
+            type="search" 
+            name="q" 
+            class="search-input" 
+            placeholder="Search products, brands and categories" 
+            autocomplete="off"
+            aria-label="Search products, brands and categories"
+          />
+          <button type="submit" class="search-button">Search</button>
+        </form>
+      </div>
+
+      <!-- Action Navigation (Account, Help, Cart) -->
+      <nav class="header-actions" aria-label="User navigation">
+        
+        <!-- Account -->
+        <div class="action-item">
+          <button class="action-btn" aria-haspopup="true" aria-expanded="false" type="button">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span>Account</span>
+            <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          
+          <div class="dropdown-menu">
+            <div class="dropdown-header">
+              <a href="index.html#signin" class="sign-in-btn">SIGN IN</a>
+            </div>
+            <a href="index.html#account" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              My Account
+            </a>
+            <a href="index.html#orders" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Orders
+            </a>
+            <a href="index.html#saved" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              Saved Items
+            </a>
+          </div>
+        </div>
+
+        <!-- Help -->
+        <div class="action-item">
+          <button class="action-btn" aria-haspopup="true" aria-expanded="false" type="button">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>Help</span>
+            <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          
+          <div class="dropdown-menu">
+            <a href="index.html#help-center" class="dropdown-item">Help Center</a>
+            <a href="index.html#track-order" class="dropdown-item">Place & Track Order</a>
+            <a href="index.html#cancellations" class="dropdown-item">Order Cancellation</a>
+            <a href="index.html#returns" class="dropdown-item">Returns & Refunds</a>
+            <div class="dropdown-divider"></div>
+            <a href="index.html#live-chat" class="dropdown-item" style="color: var(--primary-green); font-weight: 600;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              Live Chat Support
+            </a>
+          </div>
+        </div>
+
+        <!-- Cart (Active) -->
+        <a href="cart.html" class="cart-link" aria-label="Shopping Cart" style="background-color: rgba(255, 255, 255, 0.1);">
+          <div class="cart-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-badge" id="headerCartBadge" style="display: none;"></span>
+          </div>
+          <span>Cart</span>
+        </a>
+
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- Cart Page Container -->
+  <main class="cart-page-container" role="main">
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="cart-breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="cart-breadcrumb-sep">/</span>
+      <a href="index.html">Official Stores</a>
+      <span class="cart-breadcrumb-sep">/</span>
+      <span>Shopping Cart</span>
+    </nav>
+
+    <!-- Cart Layout Grid -->
+    <div class="cart-layout" id="cartLayoutGrid">
+
+      <!-- LEFT COLUMN: Cart Items & Guarantees -->
+      <section class="cart-main-col" aria-label="Cart Items">
+
+        <!-- Active Cart Card -->
+        <div class="cart-card" id="cartItemsCard">
+          <div class="cart-header">
+            <h1 class="cart-header-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+              Cart <span class="cart-header-count" id="cartHeaderCount">(0 items)</span>
+            </h1>
+
+            <button type="button" class="cart-clear-btn" id="clearCartBtn" title="Empty all items in cart">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              Clear Cart
+            </button>
+          </div>
+
+          <!-- Items List Container -->
+          <div class="cart-items-list" id="cartItemsList">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+
+        <!-- Empty Cart Card (Hidden by default when cart has items) -->
+        <div class="cart-card" id="emptyCartCard" style="display: none;">
+          <div class="empty-cart-view">
+            <div class="empty-cart-icon-bubble">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+            </div>
+            <h2 class="empty-cart-title">Your shopping cart is empty!</h2>
+            <p class="empty-cart-subtitle">
+              You have not added any products yet. Browse through our official stores catalog to discover exclusive deals and doorstep delivery across Nigeria.
+            </p>
+            <a href="index.html" class="empty-cart-shop-btn">
+              START SHOPPING
+            </a>
+          </div>
+        </div>
+
+        <!-- Trust Pillars Assurance Card -->
+        <div class="cart-card cart-trust-card">
+          <div class="trust-pillars-grid">
+            
+            <div class="trust-pillar-item">
+              <div class="trust-pillar-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13"></rect>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                  <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                  <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                </svg>
+              </div>
+              <div>
+                <h3 class="trust-pillar-title">Doorstep Delivery</h3>
+                <p class="trust-pillar-text">Fast nationwide shipping to your exact location across Nigeria.</p>
+              </div>
+            </div>
+
+            <div class="trust-pillar-item">
+              <div class="trust-pillar-icon" style="background-color: #ecfdf5; color: var(--primary-green);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="trust-pillar-title">7-Day Free Returns</h3>
+                <p class="trust-pillar-text">Hassle-free returns and refunds policy for complete peace of mind.</p>
+              </div>
+            </div>
+
+            <div class="trust-pillar-item">
+              <div class="trust-pillar-icon" style="background-color: #fefce8; color: #b45309;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="8" r="7"></circle>
+                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                </svg>
+              </div>
+              <div>
+                <h3 class="trust-pillar-title">100% Genuine Guaranteed</h3>
+                <p class="trust-pillar-text">Sourced directly from verified brands and official distributors.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Cross-Sell / Recommendations Section -->
+        <div class="cart-card cart-recommendations-card">
+          <div class="recommendations-header">
+            <h2 class="recommendations-title">Customers Also Viewed</h2>
+            <a href="index.html" style="font-size: 13px; font-weight: 600; color: var(--primary-blue); text-decoration: none;">View All &rarr;</a>
+          </div>
+
+          <div class="recommendations-grid" id="recommendationsGrid">
+            <!-- Dynamically populated from catalog items -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN: Order Summary -->
+      <aside class="cart-summary-col" aria-label="Order Summary">
+
+        <!-- Summary Card -->
+        <div class="cart-card summary-card" id="summaryCard">
+          <h2 class="summary-title">Cart Summary</h2>
+
+          <div class="summary-rows">
+            <div class="summary-row">
+              <span class="summary-row-label">Subtotal (<span id="summaryItemCount">0 items</span>)</span>
+              <span class="summary-row-val" id="summarySubtotalVal">₦ 0</span>
+            </div>
+
+            <div class="summary-row" id="summaryDiscountRow" style="display: none;">
+              <span class="summary-row-label">Promo Discount (10%)</span>
+              <span class="summary-row-val" id="summaryDiscountVal" style="color: #ef4444; font-weight: 700;">- ₦ 0</span>
+            </div>
+
+            <div class="summary-row">
+              <span class="summary-row-label">Delivery Note</span>
+              <span class="summary-row-val highlight-green">Calculated at Checkout</span>
+            </div>
+          </div>
+
+          <!-- Promo Voucher Section -->
+          <div class="summary-promo-section">
+            <button type="button" class="promo-toggle-btn" id="promoToggleBtn">
+              <span>Have a coupon or promo code?</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="promo-form" id="promoForm">
+              <input type="text" id="promoInput" class="promo-input" placeholder="e.g. NKEM10" aria-label="Promo Code">
+              <button type="button" class="promo-apply-btn" id="promoApplyBtn">APPLY</button>
+            </div>
+            <div class="promo-feedback" id="promoFeedback"></div>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-total-row">
+            <span class="summary-total-label">Total</span>
+            <span class="summary-total-val" id="summaryTotalVal">₦ 0</span>
+          </div>
+          <p class="summary-subtext">Excluding doorstep delivery fees</p>
+
+          <!-- Checkout CTA Button -->
+          <button type="button" class="summary-checkout-btn" id="checkoutBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            CHECKOUT (<span id="btnCheckoutAmount">₦ 0</span>)
+          </button>
+
+          <a href="index.html" class="summary-continue-btn">Continue Shopping</a>
+
+          <!-- Security Assurance -->
+          <div class="summary-security">
+            <div class="security-badge">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary-green); flex-shrink: 0;">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              <span>Secured by 256-bit SSL encryption</span>
+            </div>
+
+            <div class="payment-methods-strip">
+              <span class="payment-method-chip">VERVE</span>
+              <span class="payment-method-chip">MASTERCARD</span>
+              <span class="payment-method-chip">VISA</span>
+              <span class="payment-method-chip">BANK TRANSFER</span>
+              <span class="payment-method-chip">PAYSTACK</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer Help Card -->
+        <div class="cart-card cart-help-card">
+          <div class="cart-help-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="cart-help-title">Need help with your order?</h3>
+            <p class="cart-help-text">Call our toll-free line: <a href="tel:0800NKEMMART" class="cart-help-phone">0800-NKEMMART</a></p>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Cart Logic Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var CART_STORAGE_KEY = 'nkemmart_cart';
+      var PROMO_DISCOUNT_PERCENT = 0; // 0.10 if applied
+      var activePromoCode = '';
+
+      // Catalog products for cross-sell recommendations
+      var CATALOG_PRODUCTS = [
+        {
+          id: 'prod-1',
+          title: 'Ace Elec 20000 mAh Ultra Slim Portable Power Bank - Type C Dual Input',
+          price: 7650,
+          originalPrice: 12000,
+          image: 'images/product_powerbank.jpg',
+          brand: 'Ace Elec'
+        },
+        {
+          id: 'prod-2',
+          title: 'SILVER CREST 2L Industrial 8500W Food Crusher Blender With 2 Jar',
+          price: 20954,
+          originalPrice: 26386,
+          image: 'images/product_blender.webp',
+          brand: 'Silver Crest'
+        },
+        {
+          id: 'prod-3',
+          title: 'HANSEN Electric Iron Pressing Clothes 1000W',
+          price: 5959,
+          originalPrice: 7117,
+          image: 'images/product_iron.jpg',
+          brand: 'Hansen'
+        },
+        {
+          id: 'prod-4',
+          title: 'HANSEN 18 inches industrial level standing fan',
+          price: 16998,
+          originalPrice: 20060,
+          image: 'images/product_fan.webp',
+          brand: 'Hansen'
+        },
+        {
+          id: 'prod-5',
+          title: 'Syinix 2.2L Electric Kettle - Food Grade Stainless Steel SKE22U1',
+          price: 6399,
+          originalPrice: 7229,
+          image: 'images/product_kettle.webp',
+          brand: 'Syinix'
+        },
+        {
+          id: 'prod-6',
+          title: 'SILVER CREST 8L Extra Large Digital Air Fryer 2400W',
+          price: 30999,
+          originalPrice: 44000,
+          image: 'images/product_airfryer.jpg',
+          brand: 'Silver Crest'
+        },
+        {
+          id: 'prod-7',
+          title: 'Maxi 20 Litres Manual Microwave Oven (MAXIMWO2021W) - 12 Months Warranty',
+          price: 55999,
+          originalPrice: 71550,
+          image: 'images/product_microwave.jpg',
+          brand: 'Maxi'
+        },
+        {
+          id: 'prod-8',
+          title: 'Hikers 32 Smart HD Frameless Panel Digital LED TV with Android',
+          price: 102246,
+          originalPrice: 171000,
+          image: 'images/product_tv.jpg',
+          brand: 'Hikers'
+        }
+      ];
+
+      function formatNaira(amount) {
+        return '₦ ' + Number(amount).toLocaleString('en-NG');
+      }
+
+      function getCart() {
+        try {
+          var data = localStorage.getItem(CART_STORAGE_KEY);
+          return data ? JSON.parse(data) : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveCart(cart) {
+        try {
+          localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        } catch (e) {}
+      }
+
+      function showToast(message, linkText, linkUrl) {
+        var container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        var toast = document.createElement('div');
+        toast.className = 'toast-item';
+        toast.innerHTML = 
+          '<div class="toast-content">' +
+            '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+              '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>' +
+              '<polyline points="22 4 12 14.01 9 11.01"></polyline>' +
+            '</svg>' +
+            '<span class="toast-text">' + message + '</span>' +
+          '</div>' +
+          (linkText ? '<a href="' + (linkUrl || '#') + '" class="toast-btn">' + linkText + '</a>' : '');
+
+        container.appendChild(toast);
+
+        setTimeout(function() {
+          toast.classList.add('show');
+        }, 10);
+
+        setTimeout(function() {
+          toast.classList.remove('show');
+          setTimeout(function() {
+            if (toast.parentNode) {
+              toast.parentNode.removeChild(toast);
+            }
+          }, 300);
+        }, 3200);
+      }
+
+      function renderCart() {
+        var cart = getCart();
+        var totalQty = cart.reduce(function(sum, item) { return sum + (item.qty || 1); }, 0);
+        var subtotal = cart.reduce(function(sum, item) { return sum + ((item.price || 0) * (item.qty || 1)); }, 0);
+
+        // Header and badge counts
+        var badge = document.getElementById('headerCartBadge');
+        if (badge) {
+          if (totalQty > 0) {
+            badge.style.display = 'flex';
+            badge.textContent = totalQty;
+            badge.classList.remove('bump');
+            void badge.offsetWidth;
+            badge.classList.add('bump');
+          } else {
+            badge.style.display = 'none';
+            badge.textContent = '';
+          }
+        }
+
+        var headerCount = document.getElementById('cartHeaderCount');
+        if (headerCount) {
+          headerCount.textContent = '(' + totalQty + ' ' + (totalQty === 1 ? 'item' : 'items') + ')';
+        }
+
+        var itemsCard = document.getElementById('cartItemsCard');
+        var emptyCard = document.getElementById('emptyCartCard');
+        var summaryCard = document.getElementById('summaryCard');
+        var itemsList = document.getElementById('cartItemsList');
+
+        if (cart.length === 0) {
+          if (itemsCard) itemsCard.style.display = 'none';
+          if (emptyCard) emptyCard.style.display = 'block';
+          if (summaryCard) summaryCard.style.opacity = '0.5';
+          if (summaryCard) summaryCard.style.pointerEvents = 'none';
+        } else {
+          if (itemsCard) itemsCard.style.display = 'block';
+          if (emptyCard) emptyCard.style.display = 'none';
+          if (summaryCard) summaryCard.style.opacity = '1';
+          if (summaryCard) summaryCard.style.pointerEvents = 'auto';
+
+          // Build item rows
+          if (itemsList) {
+            itemsList.innerHTML = '';
+            cart.forEach(function(item) {
+              var row = document.createElement('div');
+              row.className = 'cart-item-row';
+              row.setAttribute('data-id', item.id);
+
+              var discountHtml = '';
+              if (item.originalPrice && item.originalPrice > item.price) {
+                var disc = Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100);
+                discountHtml = 
+                  '<span class="cart-item-orig-price">' + formatNaira(item.originalPrice) + '</span>' +
+                  '<span class="cart-item-discount-tag">-' + disc + '%</span>';
+              }
+
+              var itemTotal = (item.price || 0) * (item.qty || 1);
+
+              row.innerHTML = 
+                '<div class="cart-item-img-wrapper">' +
+                  '<img src="' + item.image + '" alt="' + item.title + '" class="cart-item-img">' +
+                '</div>' +
+                '<div class="cart-item-details">' +
+                  '<span class="cart-item-store-tag">Official Store</span>' +
+                  '<a href="index.html#product" class="cart-item-title">' + item.title + '</a>' +
+                  '<div class="cart-item-status">' +
+                    '<span class="cart-item-status-dot"></span>' +
+                    '<span>In Stock | Eligible for Doorstep Delivery</span>' +
+                  '</div>' +
+                  '<div class="cart-item-actions-row">' +
+                    '<button type="button" class="cart-action-btn-text cart-action-btn-remove" data-action="remove" data-id="' + item.id + '">' +
+                      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>' +
+                      'Remove' +
+                    '</button>' +
+                    '<button type="button" class="cart-action-btn-text cart-action-btn-save" data-action="save" data-id="' + item.id + '">' +
+                      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
+                      'Save For Later' +
+                    '</button>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="cart-item-right">' +
+                  '<div class="cart-item-pricing">' +
+                    '<div class="cart-item-current-price">' + formatNaira(itemTotal) + '</div>' +
+                    '<div class="cart-item-price-sub">' +
+                      (item.qty > 1 ? '<span style="font-size: 11px; color: var(--text-muted);">' + formatNaira(item.price) + ' x ' + item.qty + '</span> ' : '') +
+                      discountHtml +
+                    '</div>' +
+                  '</div>' +
+                  '<div class="qty-stepper">' +
+                    '<button type="button" class="qty-btn qty-dec" data-action="dec" data-id="' + item.id + '" aria-label="Decrease quantity">-</button>' +
+                    '<span class="qty-display">' + (item.qty || 1) + '</span>' +
+                    '<button type="button" class="qty-btn qty-inc" data-action="inc" data-id="' + item.id + '" aria-label="Increase quantity">+</button>' +
+                  '</div>' +
+                '</div>';
+
+              itemsList.appendChild(row);
+            });
+          }
+        }
+
+        // Summary calculations
+        var discountAmount = Math.round(subtotal * PROMO_DISCOUNT_PERCENT);
+        var grandTotal = Math.max(0, subtotal - discountAmount);
+
+        var summaryCount = document.getElementById('summaryItemCount');
+        if (summaryCount) summaryCount.textContent = totalQty + ' ' + (totalQty === 1 ? 'item' : 'items');
+
+        var summarySubtotal = document.getElementById('summarySubtotalVal');
+        if (summarySubtotal) summarySubtotal.textContent = formatNaira(subtotal);
+
+        var discountRow = document.getElementById('summaryDiscountRow');
+        var discountVal = document.getElementById('summaryDiscountVal');
+        if (discountRow && discountVal) {
+          if (PROMO_DISCOUNT_PERCENT > 0) {
+            discountRow.style.display = 'flex';
+            discountVal.textContent = '- ' + formatNaira(discountAmount);
+          } else {
+            discountRow.style.display = 'none';
+          }
+        }
+
+        var summaryTotal = document.getElementById('summaryTotalVal');
+        if (summaryTotal) summaryTotal.textContent = formatNaira(grandTotal);
+
+        var checkoutBtnAmount = document.getElementById('btnCheckoutAmount');
+        if (checkoutBtnAmount) checkoutBtnAmount.textContent = formatNaira(grandTotal);
+
+        // Render recommended products
+        renderRecommendations(cart);
+      }
+
+      function renderRecommendations(cart) {
+        var recGrid = document.getElementById('recommendationsGrid');
+        if (!recGrid) return;
+
+        var recs = CATALOG_PRODUCTS.slice(0, 4);
+
+        recGrid.innerHTML = '';
+        recs.forEach(function(p) {
+          var card = document.createElement('div');
+          card.className = 'rec-card';
+          var inCart = cart.find(function(it) { return it.id === p.id; });
+          var qty = (inCart && inCart.qty) ? inCart.qty : 0;
+
+          var btnAreaHtml = '';
+          if (qty > 0) {
+            btnAreaHtml = 
+              '<div class="card-qty-stepper" style="height: 32px; margin-top: auto; background-color: var(--white);">' +
+                '<button class="card-qty-btn rec-qty-dec" type="button" data-rec-id="' + p.id + '" style="width: 32px; height: 32px;" aria-label="Decrease quantity">' +
+                  '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+                '</button>' +
+                '<span class="card-qty-val" style="font-size: 14px;">' + qty + '</span>' +
+                '<button class="card-qty-btn rec-qty-inc" type="button" data-rec-id="' + p.id + '" style="width: 32px; height: 32px;" aria-label="Increase quantity">' +
+                  '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+                '</button>' +
+              '</div>';
+          } else {
+            btnAreaHtml = '<button type="button" class="rec-card-btn" data-rec-id="' + p.id + '">Add to cart</button>';
+          }
+
+          card.innerHTML = 
+            '<div class="rec-card-media">' +
+              '<img src="' + p.image + '" alt="' + p.title + '" class="rec-card-img">' +
+            '</div>' +
+            '<div class="rec-card-title">' + p.title + '</div>' +
+            '<div class="rec-card-price">' + formatNaira(p.price) + '</div>' +
+            btnAreaHtml;
+
+          recGrid.appendChild(card);
+        });
+      }
+
+      // Handle cart item actions (increase, decrease, remove, save)
+      var itemsList = document.getElementById('cartItemsList');
+      if (itemsList) {
+        itemsList.addEventListener('click', function(e) {
+          var target = e.target.closest('button');
+          if (!target) return;
+
+          var action = target.getAttribute('data-action');
+          var id = target.getAttribute('data-id');
+          if (!action || !id) return;
+
+          var cart = getCart();
+          var itemIndex = cart.findIndex(function(item) { return item.id === id; });
+          if (itemIndex === -1) return;
+
+          if (action === 'inc') {
+            cart[itemIndex].qty = (cart[itemIndex].qty || 1) + 1;
+            saveCart(cart);
+            renderCart();
+            showToast('Quantity updated: ' + cart[itemIndex].qty, null, null);
+          } else if (action === 'dec') {
+            if (cart[itemIndex].qty > 1) {
+              cart[itemIndex].qty -= 1;
+              saveCart(cart);
+              renderCart();
+              showToast('Quantity updated: ' + cart[itemIndex].qty, null, null);
+            } else {
+              var removedTitle = cart[itemIndex].title;
+              cart.splice(itemIndex, 1);
+              saveCart(cart);
+              renderCart();
+              var shortTitle = removedTitle.length > 22 ? removedTitle.substring(0, 22) + '...' : removedTitle;
+              showToast(shortTitle + ' removed from cart', null, null);
+            }
+          } else if (action === 'remove') {
+            var removedTitle = cart[itemIndex].title;
+            cart.splice(itemIndex, 1);
+            saveCart(cart);
+            renderCart();
+            var shortTitle = removedTitle.length > 22 ? removedTitle.substring(0, 22) + '...' : removedTitle;
+            showToast(shortTitle + ' removed from cart', null, null);
+          } else if (action === 'save') {
+            var savedTitle = cart[itemIndex].title;
+            cart.splice(itemIndex, 1);
+            saveCart(cart);
+            renderCart();
+            var shortTitle = savedTitle.length > 22 ? savedTitle.substring(0, 22) + '...' : savedTitle;
+            showToast(shortTitle + ' saved for later', null, null);
+          }
+        });
+      }
+
+      // Handle Clear Cart button
+      var clearBtn = document.getElementById('clearCartBtn');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+          var cart = getCart();
+          if (cart.length === 0) return;
+          if (confirm('Are you sure you want to remove all items from your cart?')) {
+            saveCart([]);
+            renderCart();
+            showToast('All items cleared from cart', null, null);
+          }
+        });
+      }
+
+      // Handle Add to cart and steppers from recommendations
+      var recGrid = document.getElementById('recommendationsGrid');
+      if (recGrid) {
+        recGrid.addEventListener('click', function(e) {
+          var addBtn = e.target.closest('.rec-card-btn');
+          if (addBtn) {
+            var prodId = addBtn.getAttribute('data-rec-id');
+            var product = CATALOG_PRODUCTS.find(function(p) { return p.id === prodId; });
+            if (!product) return;
+
+            var cart = getCart();
+            var existing = cart.find(function(p) { return p.id === prodId; });
+            if (existing) {
+              existing.qty = (existing.qty || 1) + 1;
+            } else {
+              cart.push({
+                id: product.id,
+                title: product.title,
+                price: product.price,
+                originalPrice: product.originalPrice,
+                image: product.image,
+                brand: product.brand,
+                qty: 1
+              });
+            }
+
+            saveCart(cart);
+            renderCart();
+            showToast(product.title.substring(0, 24) + '... added to cart (1)', null, null);
+            return;
+          }
+
+          var incBtn = e.target.closest('.rec-qty-inc');
+          if (incBtn) {
+            var prodId = incBtn.getAttribute('data-rec-id');
+            var cart = getCart();
+            var idx = cart.findIndex(function(p) { return p.id === prodId; });
+            if (idx > -1) {
+              cart[idx].qty = (cart[idx].qty || 1) + 1;
+              saveCart(cart);
+              renderCart();
+              showToast('Quantity updated: ' + cart[idx].qty, null, null);
+            }
+            return;
+          }
+
+          var decBtn = e.target.closest('.rec-qty-dec');
+          if (decBtn) {
+            var prodId = decBtn.getAttribute('data-rec-id');
+            var cart = getCart();
+            var idx = cart.findIndex(function(p) { return p.id === prodId; });
+            if (idx > -1) {
+              if (cart[idx].qty > 1) {
+                cart[idx].qty -= 1;
+                saveCart(cart);
+                renderCart();
+                showToast('Quantity updated: ' + cart[idx].qty, null, null);
+              } else {
+                var removedTitle = cart[idx].title;
+                cart.splice(idx, 1);
+                saveCart(cart);
+                renderCart();
+                showToast(removedTitle.substring(0, 22) + '... removed from cart', null, null);
+              }
+            }
+            return;
+          }
+        });
+      }
+
+      // Promo Code validation
+      var promoApplyBtn = document.getElementById('promoApplyBtn');
+      var promoInput = document.getElementById('promoInput');
+      var promoFeedback = document.getElementById('promoFeedback');
+
+      if (promoApplyBtn && promoInput && promoFeedback) {
+        promoApplyBtn.addEventListener('click', function() {
+          var code = promoInput.value.trim().toUpperCase();
+          if (!code) {
+            promoFeedback.textContent = 'Please enter a valid coupon code.';
+            promoFeedback.className = 'promo-feedback error';
+            return;
+          }
+
+          if (code === 'NKEM10' || code === 'EVERYTHINGDEY' || code === 'SUPER10') {
+            PROMO_DISCOUNT_PERCENT = 0.10;
+            activePromoCode = code;
+            promoFeedback.textContent = 'Coupon ' + code + ' applied successfully! 10% discount deducted.';
+            promoFeedback.className = 'promo-feedback success';
+            promoInput.disabled = true;
+            promoApplyBtn.textContent = 'APPLIED';
+            promoApplyBtn.disabled = true;
+            renderCart();
+            showToast('10% Promo discount applied!', null, null);
+          } else {
+            promoFeedback.textContent = 'Invalid promo code. Try NKEM10 for 10% off.';
+            promoFeedback.className = 'promo-feedback error';
+          }
+        });
+      }
+
+      // Checkout Button
+      var checkoutBtn = document.getElementById('checkoutBtn');
+      if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', function() {
+          var cart = getCart();
+          if (cart.length === 0) {
+            alert('Your cart is empty. Add products to proceed to checkout.');
+            return;
+          }
+          var totalQty = cart.reduce(function(sum, item) { return sum + (item.qty || 1); }, 0);
+          var subtotal = cart.reduce(function(sum, item) { return sum + ((item.price || 0) * (item.qty || 1)); }, 0);
+          var discount = Math.round(subtotal * PROMO_DISCOUNT_PERCENT);
+          var grand = subtotal - discount;
+
+          alert(
+            'ORDER CHECKOUT INITIATED\n\n' +
+            'Items: ' + totalQty + '\n' +
+            'Subtotal: ' + formatNaira(subtotal) + '\n' +
+            (discount > 0 ? 'Promo Discount: -' + formatNaira(discount) + '\n' : '') +
+            'Total Payable: ' + formatNaira(grand) + '\n\n' +
+            'Proceeding to secure payment gateway (Doorstep Delivery)...'
+          );
+        });
+      }
+
+      // Initial Render
+      renderCart();
+    });
+  </script>
+
+</body>
+</html>
