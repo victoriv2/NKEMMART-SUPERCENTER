@@ -212,6 +212,378 @@
   <!-- Main Catalog Page -->
   <main class="catalog-page-container">
 
+    <!-- Jiji Style Hero Banner -->
+    <section class="jiji-hero-banner" aria-label="Search and Explore">
+      <div class="jiji-hero-top">
+        <div class="jiji-hero-slogan">Everything Dey™</div>
+        <div class="jiji-hero-lang">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span>English</span>
+        </div>
+      </div>
+
+      <h1 class="jiji-hero-title">What are you looking for?</h1>
+
+      <div class="jiji-hero-search-row">
+        <!-- Location Picker -->
+        <div class="jiji-location-picker" id="jijiLocationPicker">
+          <button type="button" class="jiji-location-btn" id="jijiLocationBtn" aria-haspopup="true" aria-expanded="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span id="currentLocationName">Nigeria</span>
+            <svg class="jiji-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <div class="jiji-location-dropdown" id="jijiLocationDropdown">
+            <div class="jiji-dropdown-header">Select Location</div>
+            <div class="jiji-dropdown-list">
+              <button type="button" class="jiji-dropdown-item active" data-loc="Nigeria">All Nigeria</button>
+              <button type="button" class="jiji-dropdown-item" data-loc="Lagos">Lagos State</button>
+              <button type="button" class="jiji-dropdown-item" data-loc="Abuja">Abuja (FCT)</button>
+              <button type="button" class="jiji-dropdown-item" data-loc="Rivers">Rivers (Port Harcourt)</button>
+              <button type="button" class="jiji-dropdown-item" data-loc="Oyo">Oyo (Ibadan)</button>
+              <button type="button" class="jiji-dropdown-item" data-loc="Kano">Kano State</button>
+              <button type="button" class="jiji-dropdown-item" data-loc="Enugu">Enugu State</button>
+              <button type="button" class="jiji-dropdown-item" data-loc="Anambra">Anambra State</button>
+              <button type="button" class="jiji-dropdown-item" data-loc="Delta">Delta State</button>
+              <button type="button" class="jiji-dropdown-item" data-loc="Ogun">Ogun State</button>
+              <button type="button" class="jiji-dropdown-item" data-loc="Kaduna">Kaduna State</button>
+              <button type="button" class="jiji-dropdown-item" data-loc="Edo">Edo (Benin)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Input -->
+        <form class="jiji-search-box" id="jijiHeroSearchForm" action="#" method="GET">
+          <input type="search" class="jiji-search-input" id="jijiHeroSearchInput" placeholder="I am looking for..." aria-label="I am looking for...">
+          <button type="submit" class="jiji-search-submit-btn" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Recommended for You Strip -->
+    <section class="jiji-recommended-section" aria-label="Recommended For You">
+      <div class="jiji-section-title-row">
+        <h2 class="jiji-section-title">Recommended for you</h2>
+      </div>
+      <div class="jiji-recommended-scroll">
+        <a href="#vehicles" class="jiji-rec-pill" data-category="vehicles">
+          <span class="jiji-rec-dot" style="background-color: #0284c7;"></span>
+          <span>Cars & Vehicles</span>
+        </a>
+        <a href="#phones" class="jiji-rec-pill" data-category="phones">
+          <span class="jiji-rec-dot" style="background-color: #8b5cf6;"></span>
+          <span>Mobile Phones</span>
+        </a>
+        <a href="#electronics" class="jiji-rec-pill" data-category="electronics">
+          <span class="jiji-rec-dot" style="background-color: #0b4dbb;"></span>
+          <span>Laptops & Computers</span>
+        </a>
+        <a href="#appliances" class="jiji-rec-pill" data-category="appliances">
+          <span class="jiji-rec-dot" style="background-color: #00a859;"></span>
+          <span>Home Appliances</span>
+        </a>
+        <a href="#fashion" class="jiji-rec-pill" data-category="fashion">
+          <span class="jiji-rec-dot" style="background-color: #f43f5e;"></span>
+          <span>Fashion & Wear</span>
+        </a>
+        <a href="#food" class="jiji-rec-pill" data-category="food">
+          <span class="jiji-rec-dot" style="background-color: #d97706;"></span>
+          <span>Groceries & Food</span>
+        </a>
+        <a href="#power" class="jiji-rec-pill" data-category="power">
+          <span class="jiji-rec-dot" style="background-color: #eab308;"></span>
+          <span>Generators & Solar</span>
+        </a>
+        <a href="#beauty" class="jiji-rec-pill" data-category="beauty">
+          <span class="jiji-rec-dot" style="background-color: #ec4899;"></span>
+          <span>Beauty & Fragrance</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Jiji Style Categories Grid (18 Items) -->
+    <section class="jiji-categories-section" aria-label="Marketplace Categories">
+      <div class="jiji-category-grid" id="jijiCategoryGrid">
+        
+        <!-- 1. Trending -->
+        <button type="button" class="jiji-cat-card active" data-category="trending" title="Trending">
+          <div class="jiji-cat-tile">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="catFlameGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#ff7a00"/>
+                  <stop offset="100%" stop-color="#e11d48"/>
+                </linearGradient>
+              </defs>
+              <path d="M12 2c.5 2.5 2 4.5 4 6 2.5 1.8 3.5 4.5 3 7.5-.6 3.8-3.9 6.5-7.8 6.5-4.4 0-8-3.6-8-8 0-3.3 2-6.2 3.8-8.5 1-1.3 2.5-.5 2 1-.6 1.8.2 3.8 2 4.5 1.2.5 1.5-1.5 1-2.5-.8-1.5-.5-4.5 0-6.5z" fill="url(#catFlameGrad)"/>
+              <path d="M12 14c-1 0-2 1-2 2.5 0 1.4 1 2.5 2 2.5s2-1.1 2-2.5c0-1.5-1-2.5-2-2.5z" fill="#ffedd5"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Trending</span>
+        </button>
+
+        <!-- 2. Vehicles -->
+        <button type="button" class="jiji-cat-card" data-category="vehicles" title="Vehicles">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <path d="M4 11l2-5h12l2 5v6H4v-6z" fill="#0284c7" stroke="#0369a1" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="M6 11l1.5-3.5h9L18 11H6z" fill="#bae6fd"/>
+              <circle cx="7" cy="17" r="2" fill="#1e293b"/>
+              <circle cx="7" cy="17" r="0.8" fill="#e2e8f0"/>
+              <circle cx="17" cy="17" r="2" fill="#1e293b"/>
+              <circle cx="17" cy="17" r="0.8" fill="#e2e8f0"/>
+              <circle cx="5" cy="13" r="0.8" fill="#fef08a"/>
+              <circle cx="19" cy="13" r="0.8" fill="#fef08a"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Vehicles</span>
+        </button>
+
+        <!-- 3. Property -->
+        <button type="button" class="jiji-cat-card" data-category="property" title="Property">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9z" fill="#f8fafc" stroke="#475569" stroke-width="1.3"/>
+              <polygon points="12 3 2 11 4 11 12 5 20 11 22 11" fill="#dc2626"/>
+              <rect x="7" y="14" width="4" height="7" fill="#0284c7" rx="0.5"/>
+              <rect x="14" y="13" width="4" height="4" fill="#38bdf8" rx="0.5"/>
+              <rect x="16" y="5" width="2" height="3" fill="#64748b"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Property</span>
+        </button>
+
+        <!-- 4. Phones & Tablets -->
+        <button type="button" class="jiji-cat-card" data-category="phones" title="Phones & Tablets">
+          <div class="jiji-cat-tile">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="catPhoneGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#8b5cf6"/>
+                  <stop offset="100%" stop-color="#ec4899"/>
+                </linearGradient>
+              </defs>
+              <rect x="6" y="2" width="12" height="20" rx="2.5" fill="#1e1b4b" stroke="#312e81" stroke-width="1.2"/>
+              <rect x="7.5" y="4.5" width="9" height="15" rx="1.5" fill="url(#catPhoneGrad)"/>
+              <circle cx="12" cy="3.2" r="0.5" fill="#94a3b8"/>
+              <line x1="10.5" y1="20.5" x2="13.5" y2="20.5" stroke="#94a3b8" stroke-width="0.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Phones & Tablets</span>
+        </button>
+
+        <!-- 5. Electronics -->
+        <button type="button" class="jiji-cat-card" data-category="electronics" title="Electronics">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <rect x="4" y="4" width="16" height="11" rx="1.5" fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+              <rect x="5.5" y="5.5" width="13" height="8" rx="0.8" fill="#38bdf8"/>
+              <path d="M2 17h20v1.5a1.5 1.5 0 0 1-1.5 1.5H3.5A1.5 1.5 0 0 1 2 18.5V17z" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
+              <line x1="10" y1="17.5" x2="14" y2="17.5" stroke="#475569" stroke-width="0.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Electronics</span>
+        </button>
+
+        <!-- 6. Home, Furniture & Appliances -->
+        <button type="button" class="jiji-cat-card" data-category="appliances" title="Home, Furniture & Appliances">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <path d="M6 9c0-2.2 1.8-4 4-4h4c2.2 0 4 1.8 4 4v4H6V9z" fill="#2563eb"/>
+              <path d="M4 11c0-1.1.9-2 2-2h1v6H5a2 2 0 0 1-2-2v-1a1 1 0 0 1 1-1z" fill="#1d4ed8"/>
+              <path d="M20 11c0-1.1-.9-2-2-2h-1v6h2a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1z" fill="#1d4ed8"/>
+              <rect x="5" y="14" width="14" height="4" rx="1" fill="#3b82f6"/>
+              <line x1="7" y1="18" x2="6" y2="21" stroke="#78350f" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="17" y1="18" x2="18" y2="21" stroke="#78350f" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Home, Furniture & Appliances</span>
+        </button>
+
+        <!-- 7. Fashion -->
+        <button type="button" class="jiji-cat-card" data-category="fashion" title="Fashion">
+          <div class="jiji-cat-tile">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none">
+              <path d="M9 3l-2 3 2 4-2 11h10l-2-11 2-4-2-3c-1 1-2 1-3 1s-2 0-3-1z" fill="#f43f5e" stroke="#e11d48" stroke-width="1" stroke-linejoin="round"/>
+              <ellipse cx="12" cy="10" rx="3" ry="1.2" fill="#be123c"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Fashion</span>
+        </button>
+
+        <!-- 8. Beauty & Personal Care -->
+        <button type="button" class="jiji-cat-card" data-category="beauty" title="Beauty & Personal Care">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <rect x="4" y="9" width="6" height="12" rx="1.5" fill="#f472b6" stroke="#db2777" stroke-width="1"/>
+              <rect x="5.5" y="6" width="3" height="3" fill="#ec4899"/>
+              <rect x="13" y="7" width="7" height="14" rx="2" fill="#c084fc" stroke="#9333ea" stroke-width="1"/>
+              <rect x="15" y="4" width="3" height="3" rx="0.5" fill="#fbbf24"/>
+              <ellipse cx="16.5" cy="13" rx="2" ry="3" fill="#ffffff" fill-opacity="0.3"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Beauty & Personal Care</span>
+        </button>
+
+        <!-- 9. Services -->
+        <button type="button" class="jiji-cat-card" data-category="services" title="Services">
+          <div class="jiji-cat-tile">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6-4.9 4.9-1.4-.3-2.1 2.1a1 1 0 0 0 0 1.4l1.4 1.4a1 1 0 0 0 1.4 0l2.1-2.1-.3-1.4 4.9-4.9 1.6 1.6a1 1 0 0 0 1.4 0l1.4-1.4a3 3 0 0 0-4.2-4.2l-1.5 1.5z" fill="#64748b"/>
+              <path d="M6 18l-3 3v-2l2-2 1 1z" fill="#d97706"/>
+              <path d="M8 12l4-4 2 2-4 4-2-2z" fill="#0284c7"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Services</span>
+        </button>
+
+        <!-- 10. Repair & Construction -->
+        <button type="button" class="jiji-cat-card" data-category="repair" title="Repair & Construction">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <path d="M3 16h18a1 1 0 0 0 1-1c-1-6.5-5-10-10-10S3 8.5 2 15a1 1 0 0 0 1 1z" fill="#eab308" stroke="#ca8a04" stroke-width="1.2"/>
+              <rect x="1" y="16" width="22" height="2.5" rx="1" fill="#facc15" stroke="#ca8a04" stroke-width="0.8"/>
+              <path d="M10.5 5.2V16h3V5.2c-.5-.1-1-.2-1.5-.2s-1 .1-1.5.2z" fill="#ca8a04"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Repair & Construction</span>
+        </button>
+
+        <!-- 11. Commercial Equipment & Tools -->
+        <button type="button" class="jiji-cat-card" data-category="commercial" title="Commercial Equipment & Tools">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <rect x="4" y="9" width="14" height="10" rx="1.5" fill="#475569" stroke="#334155" stroke-width="1.2"/>
+              <circle cx="11" cy="14" r="3.5" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+              <circle cx="11" cy="14" r="1.5" fill="#334155"/>
+              <path d="M18 11h3v3h-3" fill="#cbd5e1" stroke="#334155" stroke-width="1"/>
+              <line x1="6" y1="6" x2="16" y2="6" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+              <line x1="11" y1="6" x2="11" y2="9" stroke="#0ea5e9" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Commercial Equipment & Tools</span>
+        </button>
+
+        <!-- 12. Leisure & Activities -->
+        <button type="button" class="jiji-cat-card" data-category="leisure" title="Leisure & Activities">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <line x1="3" y1="18" x2="20" y2="15" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+              <line x1="4" y1="19" x2="20" y2="16" stroke="#0ea5e9" stroke-width="1.5"/>
+              <path d="M17 15l-3-8h3" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="14" cy="5" r="1" fill="#0284c7"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Leisure & Activities</span>
+        </button>
+
+        <!-- 13. Babies & Kids -->
+        <button type="button" class="jiji-cat-card" data-category="babies" title="Babies & Kids">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <circle cx="6.5" cy="7.5" r="2.5" fill="#d97706"/>
+              <circle cx="17.5" cy="7.5" r="2.5" fill="#d97706"/>
+              <circle cx="12" cy="11" r="5" fill="#f59e0b" stroke="#d97706" stroke-width="1"/>
+              <circle cx="10.5" cy="10" r="0.8" fill="#1e293b"/>
+              <circle cx="13.5" cy="10" r="0.8" fill="#1e293b"/>
+              <ellipse cx="12" cy="12.5" rx="2" ry="1.2" fill="#fde68a"/>
+              <circle cx="12" cy="12" r="0.6" fill="#1e293b"/>
+              <ellipse cx="12" cy="17.5" rx="4.5" ry="3.5" fill="#f59e0b" stroke="#d97706" stroke-width="1"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Babies & Kids</span>
+        </button>
+
+        <!-- 14. Food, Agriculture & Farming -->
+        <button type="button" class="jiji-cat-card" data-category="food" title="Food, Agriculture & Farming">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <path d="M5 8h14l-1.5 13h-11L5 8z" fill="#d97706" stroke="#b45309" stroke-width="1.2"/>
+              <path d="M7 8V5c0-1 1-2 2-2h6c1 0 2 1 2 2v3" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="10" cy="6" r="2" fill="#ea580c"/>
+              <circle cx="14" cy="5" r="2.2" fill="#22c55e"/>
+              <path d="M11 4l1-2 1 2" stroke="#15803d" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Food, Agriculture & Farming</span>
+        </button>
+
+        <!-- 15. Animals & Pets -->
+        <button type="button" class="jiji-cat-card" data-category="animals" title="Animals & Pets">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <path d="M7 6c1-2 4-2 5 0l2 4 4 1-1 4-3 1v5l-4-1-3-4V6z" fill="#b45309" stroke="#78350f" stroke-width="1"/>
+              <path d="M6 8l-2 5 3 2 1-3" fill="#78350f"/>
+              <circle cx="11" cy="9" r="1" fill="#1e293b"/>
+              <polygon points="17 11 19 12 17 13" fill="#1e293b"/>
+              <rect x="7" y="17" width="7" height="1.8" rx="0.5" fill="#ef4444"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Animals & Pets</span>
+        </button>
+
+        <!-- 16. Jobs -->
+        <button type="button" class="jiji-cat-card" data-category="jobs" title="Jobs">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="8" width="18" height="13" rx="2" fill="#78350f" stroke="#451a03" stroke-width="1.2"/>
+              <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="#451a03" stroke-width="1.5"/>
+              <line x1="3" y1="13" x2="21" y2="13" stroke="#92400e" stroke-width="1.5"/>
+              <rect x="10.5" y="12" width="3" height="3" rx="0.5" fill="#facc15" stroke="#b45309" stroke-width="0.8"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Jobs</span>
+        </button>
+
+        <!-- 17. Seeking Work - CVs -->
+        <button type="button" class="jiji-cat-card" data-category="cvs" title="Seeking Work - CVs">
+          <div class="jiji-cat-tile">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none">
+              <rect x="5" y="4" width="14" height="17" rx="1.5" fill="#f8fafc" stroke="#475569" stroke-width="1.2"/>
+              <rect x="8" y="2" width="8" height="3.5" rx="1" fill="#0284c7"/>
+              <line x1="8" y1="9" x2="16" y2="9" stroke="#64748b" stroke-width="1.2" stroke-linecap="round"/>
+              <line x1="8" y1="12" x2="16" y2="12" stroke="#64748b" stroke-width="1.2" stroke-linecap="round"/>
+              <line x1="8" y1="15" x2="13" y2="15" stroke="#64748b" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="15.5" cy="15.5" r="1.5" fill="#10b981"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Seeking Work - CVs</span>
+        </button>
+
+        <!-- 18. Business & Industry -->
+        <button type="button" class="jiji-cat-card" data-category="business" title="Business & Industry">
+          <div class="jiji-cat-tile">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <rect x="4" y="6" width="9" height="15" rx="1" fill="#1e293b" stroke="#0f172a" stroke-width="1"/>
+              <rect x="6" y="8" width="2" height="2" fill="#facc15"/>
+              <rect x="9" y="8" width="2" height="2" fill="#facc15"/>
+              <rect x="6" y="12" width="2" height="2" fill="#facc15"/>
+              <rect x="9" y="12" width="2" height="2" fill="#facc15"/>
+              <rect x="14" y="10" width="7" height="11" rx="1" fill="#475569" stroke="#334155" stroke-width="1"/>
+              <rect x="16" y="12" width="3" height="2" fill="#38bdf8"/>
+              <rect x="16" y="16" width="3" height="2" fill="#38bdf8"/>
+            </svg>
+          </div>
+          <span class="jiji-cat-label">Business & Industry</span>
+        </button>
+
+      </div>
+    </section>
+
     <!-- Quick Filter Bar with Dropdown Menus (Brand, Price, Rating) -->
     <div class="quick-filter-bar">
       
@@ -511,14 +883,27 @@
       <section class="catalog-content" aria-label="Official Store Products">
         
         <!-- Top Catalog Heading & Sort Control -->
-        <div class="catalog-header-card">
+        <div class="catalog-header-card" id="trendingProductsSection">
           <div class="catalog-title-wrapper">
-            <h1 class="catalog-title">Official Stores</h1>
-            <span class="catalog-count">(4,618 products found)</span>
+            <h1 class="catalog-title" id="catalogMainHeading">Trending</h1>
+            <span class="catalog-count" id="catalogCountText">(4,618 products found)</span>
           </div>
 
-          <div class="catalog-sort">
-            <span class="sort-label">Sort by:</span>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <!-- View Mode Toggle (Grid / List matching Jiji Screenshot 2) -->
+            <button type="button" class="trending-view-toggle-btn" id="trendingViewToggleBtn" aria-label="Toggle grid or list view" title="Toggle view">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+              </svg>
+            </button>
+
+            <div class="catalog-sort">
+              <span class="sort-label">Sort by:</span>
             <div class="filter-dropdown-wrapper sort-dropdown-wrapper">
               <button class="chip-btn sort-chip-btn" id="chipSortBtn" type="button" aria-haspopup="true" aria-expanded="false">
                 <span id="sortCurrentLabel">Popularity</span>
@@ -564,6 +949,7 @@
             </div>
           </div>
         </div>
+      </div>
 
         <!-- Products Grid (4 columns desktop, 2 columns mobile) -->
         <div class="products-grid">
@@ -1775,6 +2161,158 @@
           return;
         }
       });
+
+      // ==========================================
+      // JIJI STYLE MARKETPLACE FUNCTIONALITY
+      // ==========================================
+
+      // 1. Location Selector Dropdown
+      var jijiLocBtn = document.getElementById('jijiLocationBtn');
+      var jijiLocDropdown = document.getElementById('jijiLocationDropdown');
+      var currLocSpan = document.getElementById('currentLocationName');
+
+      if (jijiLocBtn && jijiLocDropdown) {
+        jijiLocBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var isOpen = jijiLocDropdown.classList.contains('active');
+          if (typeof closeAllPopups === 'function') closeAllPopups();
+          if (!isOpen) {
+            jijiLocDropdown.classList.add('active');
+            jijiLocBtn.setAttribute('aria-expanded', 'true');
+          }
+        });
+
+        var locItems = jijiLocDropdown.querySelectorAll('.jiji-dropdown-item');
+        locItems.forEach(function(item) {
+          item.addEventListener('click', function(e) {
+            e.stopPropagation();
+            locItems.forEach(function(i) { i.classList.remove('active'); });
+            item.classList.add('active');
+            var selectedText = item.textContent.replace(' State', '').replace(' (FCT)', '').replace(' (Port Harcourt)', '').replace(' (Ibadan)', '').replace(' (Benin)', '');
+            if (currLocSpan) currLocSpan.textContent = selectedText;
+            jijiLocDropdown.classList.remove('active');
+            jijiLocBtn.setAttribute('aria-expanded', 'false');
+            showToast('Showing verified listings in ' + item.textContent, null, null);
+          });
+        });
+      }
+
+      // Close location dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (jijiLocDropdown && jijiLocDropdown.classList.contains('active')) {
+          if (!jijiLocDropdown.contains(e.target) && !jijiLocBtn.contains(e.target)) {
+            jijiLocDropdown.classList.remove('active');
+            if (jijiLocBtn) jijiLocBtn.setAttribute('aria-expanded', 'false');
+          }
+        }
+      });
+
+      // 2. Jiji Hero Search Filter
+      var heroSearchForm = document.getElementById('jijiHeroSearchForm');
+      var heroSearchInput = document.getElementById('jijiHeroSearchInput');
+      if (heroSearchForm && heroSearchInput) {
+        heroSearchForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var query = heroSearchInput.value.trim().toLowerCase();
+          var productCards = document.querySelectorAll('.products-grid .product-card');
+          var matchCount = 0;
+
+          productCards.forEach(function(card) {
+            var title = (card.getAttribute('data-title') || '').toLowerCase();
+            var brand = (card.getAttribute('data-brand') || '').toLowerCase();
+            if (!query || title.indexOf(query) > -1 || brand.indexOf(query) > -1) {
+              card.style.display = '';
+              matchCount++;
+            } else {
+              card.style.display = 'none';
+            }
+          });
+
+          var heading = document.getElementById('catalogMainHeading');
+          var countText = document.getElementById('catalogCountText');
+          if (heading) heading.textContent = query ? 'Search: "' + query + '"' : 'Trending';
+          if (countText) countText.textContent = '(' + matchCount + ' products found)';
+
+          var target = document.getElementById('trendingProductsSection');
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      }
+
+      // 3. Category Grid Interactive Filtering
+      var catCards = document.querySelectorAll('.jiji-cat-card');
+      catCards.forEach(function(card) {
+        card.addEventListener('click', function(e) {
+          e.preventDefault();
+          catCards.forEach(function(c) { c.classList.remove('active'); });
+          card.classList.add('active');
+
+          var catName = card.getAttribute('data-category');
+          var label = card.querySelector('.jiji-cat-label');
+          var catTitle = label ? label.textContent.trim() : 'Trending';
+
+          var heading = document.getElementById('catalogMainHeading');
+          var countText = document.getElementById('catalogCountText');
+          if (heading) heading.textContent = catTitle;
+
+          var productCards = document.querySelectorAll('.products-grid .product-card');
+          var matchCount = 0;
+
+          productCards.forEach(function(pCard) {
+            var title = (pCard.getAttribute('data-title') || '').toLowerCase();
+            var show = true;
+            if (catName === 'vehicles') {
+              show = false;
+            } else if (catName === 'phones') {
+              show = title.indexOf('power') > -1 || title.indexOf('phone') > -1;
+            } else if (catName === 'electronics') {
+              show = title.indexOf('tv') > -1 || title.indexOf('power') > -1;
+            } else if (catName === 'appliances') {
+              show = title.indexOf('blender') > -1 || title.indexOf('air fryer') > -1 || title.indexOf('iron') > -1 || title.indexOf('fan') > -1 || title.indexOf('kettle') > -1 || title.indexOf('microwave') > -1;
+            } else if (catName === 'fashion') {
+              show = false;
+            } else if (catName === 'trending') {
+              show = true;
+            }
+
+            if (show) {
+              pCard.style.display = '';
+              matchCount++;
+            } else {
+              pCard.style.display = 'none';
+            }
+          });
+
+          if (matchCount === 0 && catName !== 'trending') {
+            productCards.forEach(function(pCard) { pCard.style.display = ''; });
+            matchCount = productCards.length;
+            showToast('Showing available supercenter stock for ' + catTitle, null, null);
+          }
+
+          if (countText) countText.textContent = '(' + matchCount + ' products found)';
+
+          var target = document.getElementById('trendingProductsSection');
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      // 4. View Mode Toggle (Grid vs List matching Jiji Screenshot 2)
+      var viewToggleBtn = document.getElementById('trendingViewToggleBtn');
+      var productsGridEl = document.querySelector('.products-grid');
+      if (viewToggleBtn && productsGridEl) {
+        viewToggleBtn.addEventListener('click', function() {
+          var isList = productsGridEl.classList.toggle('list-view');
+          viewToggleBtn.classList.toggle('active', isList);
+          if (isList) {
+            viewToggleBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>';
+          } else {
+            viewToggleBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>';
+          }
+        });
+      }
 
       // Synchronize badges and product card steppers on page load
       updateCartBadges();
