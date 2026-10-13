@@ -3356,21 +3356,32 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s, box-shadow 0.2s, border-color 0.2s;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  border: 2px solid transparent;
+}
+
+/* Real category photo fills the tile */
+.jiji-cat-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 16px;
+  transition: transform 0.25s ease;
 }
 
 .jiji-cat-card:hover .jiji-cat-tile,
 .jiji-cat-card.active .jiji-cat-tile {
-  background-color: #e2e8f0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  border-color: #00a859;
 }
 
 .jiji-cat-card.active .jiji-cat-tile {
-  border: 2px solid #00a859;
-  background-color: #ecfdf5;
+  border-color: #008751;
+  box-shadow: 0 4px 14px rgba(0, 168, 89, 0.25);
 }
 
 .jiji-cat-label {
