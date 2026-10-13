@@ -1213,14 +1213,15 @@ body {
   height: calc(100% - 16px);
   object-fit: contain;
   border-radius: 8px;
-  /* Smooth zoom effect */
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.4, 1);
+  /* Smooth zoom and curve transition */
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.4, 1), border-radius 0.3s ease;
   transform-origin: center center;
 }
 
-/* Zoom a little bit when hovering over product */
+/* Zoom a little bit and remove curve when hovering over product */
 .product-card:hover .card-img {
   transform: scale(1.08);
+  border-radius: 0;
 }
 
 /* Image Badges */
@@ -2929,11 +2930,12 @@ body {
   height: 100%;
   object-fit: contain;
   border-radius: 6px;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, border-radius 0.3s ease;
 }
 
 .rec-card:hover .rec-card-img {
   transform: scale(1.08);
+  border-radius: 0;
 }
 
 .rec-card-title {
