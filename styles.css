@@ -3330,7 +3330,7 @@ body {
 
 @media (min-width: 1024px) {
   .jiji-category-grid {
-    grid-template-columns: repeat(9, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 18px 14px;
   }
 }
