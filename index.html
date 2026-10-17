@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
-  <link rel="stylesheet" href="styles.css?v=2.6">
+  <link rel="stylesheet" href="styles.css?v=2.7">
+  <script src="taxonomy.js"></script>
 </head>
 <body>
 
@@ -2064,11 +2065,146 @@
         });
       }
 
+      // 5. Jiji-style Mobile Subcategory Drawer Controller
+      var drawerOverlay = document.getElementById('jijiDrawerOverlay');
+      var drawerEl = document.getElementById('jijiDrawer');
+      var drawerList = document.getElementById('jijiDrawerList');
+      var drawerSearch = document.getElementById('jijiDrawerSearch');
+      var drawerCatTitle = document.getElementById('jijiDrawerCatTitle');
+      var drawerCatViewAll = document.getElementById('jijiDrawerCatViewAll');
+      var drawerBackBtn = document.getElementById('jijiDrawerBackBtn');
+      var drawerCloseBtn = document.getElementById('jijiDrawerCloseBtn');
+
+      var currentDrawerCatKey = null;
+
+      function openSubcategoryDrawer(catKey) {
+        var tax = window.NKEMMART_TAXONOMY;
+        if (!tax || !tax[catKey]) {
+          window.location.href = 'category.html?cat=' + encodeURIComponent(catKey);
+          return;
+        }
+
+        currentDrawerCatKey = catKey;
+        var catData = tax[catKey];
+
+        if (drawerCatTitle) drawerCatTitle.textContent = catData.name;
+        if (drawerCatViewAll) {
+          drawerCatViewAll.href = 'category.html?cat=' + encodeURIComponent(catKey);
+          drawerCatViewAll.textContent = 'View all ' + catData.name;
+        }
+        if (drawerSearch) drawerSearch.value = '';
+
+        renderDrawerSubcategories(catData.subcategories, catKey);
+
+        if (drawerOverlay) drawerOverlay.classList.add('active');
+        if (drawerEl) drawerEl.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeSubcategoryDrawer() {
+        if (drawerOverlay) drawerOverlay.classList.remove('active');
+        if (drawerEl) drawerEl.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      function renderDrawerSubcategories(subcats, catKey) {
+        if (!drawerList) return;
+        drawerList.innerHTML = '';
+
+        if (!subcats || subcats.length === 0) {
+          drawerList.innerHTML = '<li style="padding: 24px; text-align: center; color: #64748b;">No matching subcategories found.</li>';
+          return;
+        }
+
+        subcats.forEach(function(sub) {
+          var li = document.createElement('li');
+          li.className = 'jiji-subcat-item';
+          li.innerHTML = 
+            '<a href="category.html?cat=' + encodeURIComponent(catKey) + '&sub=' + encodeURIComponent(sub.id) + '" class="jiji-subcat-link">' +
+              '<div class="jiji-subcat-thumb">' +
+                '<img src="' + sub.icon + '" alt="' + sub.name + '" loading="lazy">' +
+              '</div>' +
+              '<div class="jiji-subcat-text">' +
+                '<div class="jiji-subcat-name">' + sub.name + '</div>' +
+                '<div class="jiji-subcat-count">' + sub.count + ' ads</div>' +
+              '</div>' +
+              '<svg class="jiji-subcat-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+                '<polyline points="9 18 15 12 9 6"></polyline>' +
+              '</svg>' +
+            '</a>';
+          drawerList.appendChild(li);
+        });
+      }
+
+      if (drawerBackBtn) drawerBackBtn.addEventListener('click', closeSubcategoryDrawer);
+      if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeSubcategoryDrawer);
+      if (drawerOverlay) drawerOverlay.addEventListener('click', closeSubcategoryDrawer);
+
+      if (drawerSearch) {
+        drawerSearch.addEventListener('input', function() {
+          var query = this.value.trim().toLowerCase();
+          var tax = window.NKEMMART_TAXONOMY;
+          if (!currentDrawerCatKey || !tax || !tax[currentDrawerCatKey]) return;
+          var allSubcats = tax[currentDrawerCatKey].subcategories;
+          if (!query) {
+            renderDrawerSubcategories(allSubcats, currentDrawerCatKey);
+          } else {
+            var filtered = allSubcats.filter(function(sub) {
+              return sub.name.toLowerCase().indexOf(query) > -1;
+            });
+            renderDrawerSubcategories(filtered, currentDrawerCatKey);
+          }
+        });
+      }
+
+      // Category card clicks: Open Jiji-style subcategory drawer
+      catCards.forEach(function(card) {
+        card.addEventListener('click', function(e) {
+          var catName = card.getAttribute('data-category');
+          openSubcategoryDrawer(catName);
+        });
+      });
+
       // Synchronize badges and product card steppers on page load
       updateCartBadges();
       syncProductCardsUI();
     });
   </script>
+
+  <!-- Jiji-Style Mobile Subcategory Drawer -->
+  <div class="jiji-drawer-overlay" id="jijiDrawerOverlay" aria-hidden="true"></div>
+  <aside class="jiji-drawer" id="jijiDrawer" role="dialog" aria-modal="true" aria-label="Subcategories">
+    <div class="jiji-drawer-header">
+      <button type="button" class="jiji-drawer-back-btn" id="jijiDrawerBackBtn" aria-label="Go back">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <div class="jiji-drawer-search-wrap">
+        <input type="text" class="jiji-drawer-search-input" id="jijiDrawerSearch" placeholder="Find category..." autocomplete="off">
+      </div>
+      <button type="button" class="jiji-drawer-close-btn" id="jijiDrawerCloseBtn" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="jiji-drawer-cat-info">
+      <span class="jiji-drawer-cat-title" id="jijiDrawerCatTitle">Category</span>
+      <a href="category.html" class="jiji-drawer-cat-viewall" id="jijiDrawerCatViewAll">
+        View all
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </a>
+    </div>
+
+    <ul class="jiji-drawer-list" id="jijiDrawerList">
+      <!-- Populated dynamically from taxonomy.js -->
+    </ul>
+  </aside>
 
   <!-- Toast Notification Container -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
