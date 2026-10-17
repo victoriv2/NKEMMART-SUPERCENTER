@@ -3351,7 +3351,7 @@ body {
   width: 100%;
   max-width: 82px;
   aspect-ratio: 1 / 1;
-  background-color: #f0f4f9;
+  background-color: #ffffff;
   border-radius: 18px;
   display: flex;
   align-items: center;
@@ -3359,28 +3359,32 @@ body {
   transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
   position: relative;
   overflow: hidden;
-  border: 2px solid transparent;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
-/* Real category photo - product on white bg, floats cleanly in tile */
+/* Real category photo - product on white bg, blends seamlessly into white tile */
 .jiji-cat-img {
-  width: 88%;
-  height: 88%;
+  width: 90%;
+  height: 90%;
   object-fit: contain;
   object-position: center;
   display: block;
+  border-radius: 14px;
   transition: transform 0.25s ease;
 }
 
 .jiji-cat-card:hover .jiji-cat-tile,
 .jiji-cat-card.active .jiji-cat-tile {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  border-color: transparent;
+  background-color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
 }
 
 .jiji-cat-card.active .jiji-cat-tile {
-  border-color: transparent;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 .jiji-cat-label {
@@ -3700,13 +3704,13 @@ body {
   width: 50px;
   height: 50px;
   border-radius: 12px;
-  background-color: #f0f4f9;
+  background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
 }
 
 .jiji-subcat-thumb img {
