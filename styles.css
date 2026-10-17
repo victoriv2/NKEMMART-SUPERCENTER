@@ -3372,15 +3372,8 @@ body {
   transition: transform 0.25s ease;
 }
 
-.jiji-cat-card:hover .jiji-cat-tile,
-.jiji-cat-card.active .jiji-cat-tile {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
-  border-color: #00a859;
-}
-
-.jiji-cat-card.active .jiji-cat-tile {
-  border-color: #008751;
-  box-shadow: 0 4px 14px rgba(0, 168, 89, 0.25);
+.jiji-cat-card:hover .jiji-cat-tile {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
 .jiji-cat-label {
@@ -3392,12 +3385,6 @@ body {
   line-height: 1.25;
   max-width: 84px;
   word-wrap: break-word;
-  transition: color 0.2s;
-}
-
-.jiji-cat-card:hover .jiji-cat-label,
-.jiji-cat-card.active .jiji-cat-label {
-  color: #008751;
 }
 
 /* =========================================
