@@ -3363,28 +3363,28 @@ body {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
-/* Real category photo - product on white bg, blends seamlessly into white tile */
+/* Jiji-style: Real photo fills the entire rounded tile smoothly with no inset gaps */
 .jiji-cat-img {
-  width: 90%;
-  height: 90%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   object-position: center;
   display: block;
-  border-radius: 14px;
+  border-radius: 17px;
   transition: transform 0.25s ease;
 }
 
 .jiji-cat-card:hover .jiji-cat-tile,
 .jiji-cat-card.active .jiji-cat-tile {
   background-color: #ffffff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09);
   border-color: #cbd5e1;
 }
 
 .jiji-cat-card.active .jiji-cat-tile {
   background-color: #ffffff;
   border-color: #cbd5e1;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09);
 }
 
 .jiji-cat-label {
@@ -3714,9 +3714,11 @@ body {
 }
 
 .jiji-subcat-thumb img {
-  width: 86%;
-  height: 86%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 11px;
 }
 
 .jiji-subcat-text {
