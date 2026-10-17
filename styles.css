@@ -3745,17 +3745,18 @@ body {
   flex-shrink: 0;
 }
 
-/* Dedicated Category Page Styles */
+/* Dedicated Category Page Styles - Clean Branded Presentation */
 .cat-page-banner {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 55%, #00a859 100%);
   color: #ffffff;
-  padding: 24px 20px;
-  border-radius: 14px;
-  margin-bottom: 20px;
+  padding: 26px 28px;
+  border-radius: 16px;
+  margin-bottom: 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 24px;
+  box-shadow: 0 4px 18px rgba(11, 77, 187, 0.12);
 }
 
 .cat-page-banner-content {
@@ -3764,7 +3765,7 @@ body {
 
 .cat-page-breadcrumbs {
   font-size: 13px;
-  color: #94a3b8;
+  color: rgba(255, 255, 255, 0.78);
   margin-bottom: 8px;
   display: flex;
   align-items: center;
@@ -3772,7 +3773,8 @@ body {
 }
 
 .cat-page-breadcrumbs a {
-  color: #38bdf8;
+  color: #ffffff;
+  font-weight: 500;
   text-decoration: none;
 }
 
@@ -3781,34 +3783,37 @@ body {
 }
 
 .cat-page-heading {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 800;
   margin: 0 0 6px 0;
   color: #ffffff;
+  letter-spacing: -0.3px;
 }
 
 .cat-page-desc {
-  font-size: 14px;
-  color: #cbd5e1;
+  font-size: 14.5px;
+  color: rgba(255, 255, 255, 0.88);
   margin: 0;
 }
 
 .cat-page-banner-badge {
-  width: 72px;
-  height: 72px;
-  border-radius: 16px;
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
   background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .cat-page-banner-badge img {
-  width: 82%;
-  height: 82%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Subcategories Strip / Pill Row on Category Page */
@@ -3878,9 +3883,11 @@ body {
 }
 
 .cat-subcat-card-thumb img {
-  width: 80%;
-  height: 80%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 7px;
 }
 
 .cat-subcat-card-name {

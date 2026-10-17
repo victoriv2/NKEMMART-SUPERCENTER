@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=3.0">
+  <link rel="stylesheet" href="styles.css?v=3.1">
   <script src="taxonomy.js"></script>
 </head>
 <body>
@@ -20,35 +20,33 @@
             <circle cx="5.5" cy="18.5" r="2.5"></circle>
             <circle cx="18.5" cy="18.5" r="2.5"></circle>
           </svg>
-          Doorstep Delivery Available Across Nigeria
+          Doorstep Delivery
         </span>
+        <span>We deliver all across Nigeria!</span>
+        <span class="top-bar-slogan">"Everything Dey™"</span>
       </div>
       <div class="top-bar-right">
-        <a href="#sell" class="top-link">Sell on NKEMMART</a>
-        <span class="top-divider">|</span>
-        <a href="#track" class="top-link">Track Order</a>
-        <span class="top-divider">|</span>
-        <a href="#help" class="top-link">24/7 Help Center</a>
+        <a href="#sell" class="top-bar-link">Sell on Nkemmart</a>
+        <span class="top-bar-divider">|</span>
+        <a href="tel:+234" class="top-bar-link">Call to Order: 0800-NKEMMART</a>
+        <span class="top-bar-divider">|</span>
+        <span class="top-bar-link" style="color: #fff; font-weight: 600;">₦ NGN</span>
       </div>
     </div>
   </aside>
 
-  <!-- Sticky Main Application Header -->
-  <header class="app-header" role="banner">
-    <div class="header-inner">
+  <!-- Main Sticky Header (Matching index.html) -->
+  <header class="main-header" role="banner">
+    <div class="header-container">
       
-      <!-- Mobile / Desktop Hamburger Menu Trigger -->
-      <div class="hamburger-container">
-        <button 
-          class="hamburger-btn" 
-          id="hamburgerBtn" 
-          aria-label="Toggle all categories menu" 
-          aria-expanded="false" 
-          aria-controls="desktopCategoryDropdown"
-        >
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
+      <!-- Hamburger Menu & Desktop Categories Dropdown -->
+      <div class="header-menu-wrapper">
+        <button class="menu-btn" id="mobileMenuBtn" aria-label="Open categories menu" title="All Categories" aria-haspopup="true" aria-expanded="false">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
         </button>
 
         <!-- Desktop Categories Dropdown -->
@@ -134,6 +132,8 @@
 
       <!-- Action Navigation (Account, Help, Cart) -->
       <nav class="header-actions" aria-label="User navigation">
+        
+        <!-- Account Dropdown -->
         <div class="action-item">
           <button class="action-btn" aria-haspopup="true" aria-expanded="false">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -145,8 +145,49 @@
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </button>
+          
+          <div class="dropdown-menu">
+            <div class="dropdown-header">
+              <a href="#signin" class="sign-in-btn">SIGN IN</a>
+            </div>
+            <a href="#account" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              My Account
+            </a>
+            <a href="#orders" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Orders
+            </a>
+            <a href="#saved" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              Saved Items
+            </a>
+          </div>
         </div>
 
+        <!-- Help Dropdown -->
+        <div class="action-item">
+          <button class="action-btn" aria-haspopup="true" aria-expanded="false">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>Help</span>
+            <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          
+          <div class="dropdown-menu">
+            <a href="#help-center" class="dropdown-item">Help Center</a>
+            <a href="#track-order" class="dropdown-item">Place & Track Order</a>
+            <a href="#cancellations" class="dropdown-item">Order Cancellation</a>
+            <a href="#returns" class="dropdown-item">Returns & Refunds</a>
+          </div>
+        </div>
+
+        <!-- Cart Button -->
         <a href="cart.html" class="cart-link" aria-label="Shopping Cart">
           <div class="cart-icon-wrapper">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -158,6 +199,7 @@
           </div>
           <span>Cart</span>
         </a>
+
       </nav>
 
     </div>
@@ -429,16 +471,16 @@
       }
 
       // Mobile Hamburger toggle
-      var hamburgerBtn = document.getElementById('hamburgerBtn');
+      var menuBtn = document.getElementById('mobileMenuBtn');
       var desktopCategoryDropdown = document.getElementById('desktopCategoryDropdown');
-      if (hamburgerBtn && desktopCategoryDropdown) {
-        hamburgerBtn.addEventListener('click', function(e) {
+      if (menuBtn && desktopCategoryDropdown) {
+        menuBtn.addEventListener('click', function(e) {
           e.stopPropagation();
-          desktopCategoryDropdown.classList.toggle('active');
+          desktopCategoryDropdown.classList.toggle('open');
         });
         document.addEventListener('click', function(e) {
-          if (!desktopCategoryDropdown.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-            desktopCategoryDropdown.classList.remove('active');
+          if (!desktopCategoryDropdown.contains(e.target) && !menuBtn.contains(e.target)) {
+            desktopCategoryDropdown.classList.remove('open');
           }
         });
       }
