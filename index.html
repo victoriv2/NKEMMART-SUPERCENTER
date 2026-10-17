@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
-  <link rel="stylesheet" href="styles.css?v=2.7">
+  <link rel="stylesheet" href="styles.css?v=2.8">
   <script src="taxonomy.js"></script>
 </head>
 <body>
@@ -480,15 +480,18 @@
         <div class="filter-section">
           <h2 class="filter-title">Category</h2>
           <ul class="filter-category-list">
-            <li><a href="#computing" class="filter-category-link">Computing</a></li>
-            <li><a href="#electronics" class="filter-category-link active">Electronics</a></li>
-            <li><a href="#garden" class="filter-category-link">Garden & Outdoors</a></li>
-            <li><a href="#phones" class="filter-category-link">Phones & Tablets</a></li>
-            <li><a href="#fashion" class="filter-category-link">Fashion</a></li>
-            <li><a href="#home-office" class="filter-category-link">Home & Office</a></li>
-            <li><a href="#grocery" class="filter-category-link">Grocery</a></li>
-            <li><a href="#health-beauty" class="filter-category-link">Health & Beauty</a></li>
-            <li><a href="#baby" class="filter-category-link">Baby Products</a></li>
+            <li><a href="category.html?cat=vehicles" class="filter-category-link">Vehicles</a></li>
+            <li><a href="category.html?cat=appliances" class="filter-category-link">Appliances</a></li>
+            <li><a href="category.html?cat=phones" class="filter-category-link">Phones & Tablets</a></li>
+            <li><a href="category.html?cat=health-beauty" class="filter-category-link">Health & Beauty</a></li>
+            <li><a href="category.html?cat=home-office" class="filter-category-link">Home & Office</a></li>
+            <li><a href="category.html?cat=electronics" class="filter-category-link">Electronics</a></li>
+            <li><a href="category.html?cat=fashion" class="filter-category-link">Fashion</a></li>
+            <li><a href="category.html?cat=supermarket" class="filter-category-link">Supermarket</a></li>
+            <li><a href="category.html?cat=computing" class="filter-category-link">Computing</a></li>
+            <li><a href="category.html?cat=baby" class="filter-category-link">Baby Products</a></li>
+            <li><a href="category.html?cat=gaming" class="filter-category-link">Gaming</a></li>
+            <li><a href="category.html?cat=other" class="filter-category-link">Other categories</a></li>
           </ul>
         </div>
 
@@ -1974,79 +1977,13 @@
         });
       }
 
-      // 3. Category Grid Interactive Filtering
+      // 3. Category Grid - Click opens the subcategory drawer/modal (no product filtering)
       var catCards = document.querySelectorAll('.jiji-cat-card');
       catCards.forEach(function(card) {
         card.addEventListener('click', function(e) {
           e.preventDefault();
-          catCards.forEach(function(c) { c.classList.remove('active'); });
-          card.classList.add('active');
-
           var catName = card.getAttribute('data-category');
-          var label = card.querySelector('.jiji-cat-label');
-          var catTitle = label ? label.textContent.trim() : 'Trending';
-
-          var heading = document.getElementById('catalogMainHeading');
-          var countText = document.getElementById('catalogCountText');
-          if (heading) heading.textContent = catTitle;
-
-          var productCards = document.querySelectorAll('.products-grid .product-card');
-          var matchCount = 0;
-
-          productCards.forEach(function(pCard) {
-            var title = (pCard.getAttribute('data-title') || '').toLowerCase();
-            var show = true;
-            if (catName === 'vehicles') {
-              show = title.indexOf('car') > -1 || title.indexOf('vehicle') > -1 || title.indexOf('auto') > -1 || title.indexOf('motor') > -1 || title.indexOf('tyre') > -1;
-            } else if (catName === 'appliances') {
-              show = title.indexOf('blender') > -1 || title.indexOf('air fryer') > -1 || title.indexOf('iron') > -1 || title.indexOf('fan') > -1 || title.indexOf('kettle') > -1 || title.indexOf('microwave') > -1;
-            } else if (catName === 'phones') {
-              show = title.indexOf('power') > -1 || title.indexOf('phone') > -1 || title.indexOf('tablet') > -1;
-            } else if (catName === 'health-beauty') {
-              show = title.indexOf('beauty') > -1 || title.indexOf('cream') > -1 || title.indexOf('hair') > -1 || title.indexOf('soap') > -1;
-            } else if (catName === 'home-office') {
-              show = title.indexOf('fan') > -1 || title.indexOf('iron') > -1 || title.indexOf('kettle') > -1 || title.indexOf('blender') > -1;
-            } else if (catName === 'electronics') {
-              show = title.indexOf('tv') > -1 || title.indexOf('sound') > -1 || title.indexOf('speaker') > -1 || title.indexOf('power') > -1;
-            } else if (catName === 'fashion') {
-              show = title.indexOf('watch') > -1 || title.indexOf('shoe') > -1 || title.indexOf('bag') > -1;
-            } else if (catName === 'supermarket') {
-              show = title.indexOf('food') > -1 || title.indexOf('oil') > -1 || title.indexOf('grocery') > -1;
-            } else if (catName === 'computing') {
-              show = title.indexOf('laptop') > -1 || title.indexOf('mouse') > -1 || title.indexOf('computer') > -1;
-            } else if (catName === 'baby') {
-              show = title.indexOf('baby') > -1 || title.indexOf('diaper') > -1;
-            } else if (catName === 'gaming') {
-              show = title.indexOf('game') > -1 || title.indexOf('playstation') > -1 || title.indexOf('ps5') > -1;
-            } else if (catName === 'other') {
-              show = true;
-            }
-
-            if (show) {
-              pCard.style.display = '';
-              matchCount++;
-            } else {
-              pCard.style.display = 'none';
-            }
-          });
-
-          if (catName === 'other') {
-            var catDropdown = document.getElementById('categoriesDropdown');
-            if (catDropdown) catDropdown.classList.toggle('active');
-          }
-
-          if (matchCount === 0 && catName !== 'official') {
-            productCards.forEach(function(pCard) { pCard.style.display = ''; });
-            matchCount = productCards.length;
-            showToast('Showing available supercenter stock for ' + catTitle, null, null);
-          }
-
-          if (countText) countText.textContent = '(' + matchCount + ' products found)';
-
-          var target = document.getElementById('trendingProductsSection');
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
+          openSubcategoryDrawer(catName);
         });
       });
 
@@ -2157,13 +2094,7 @@
         });
       }
 
-      // Category card clicks: Open Jiji-style subcategory drawer
-      catCards.forEach(function(card) {
-        card.addEventListener('click', function(e) {
-          var catName = card.getAttribute('data-category');
-          openSubcategoryDrawer(catName);
-        });
-      });
+
 
       // Synchronize badges and product card steppers on page load
       updateCartBadges();

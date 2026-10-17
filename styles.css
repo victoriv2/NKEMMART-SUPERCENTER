@@ -3374,13 +3374,13 @@ body {
 
 .jiji-cat-card:hover .jiji-cat-tile,
 .jiji-cat-card.active .jiji-cat-tile {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
-  border-color: #00a859;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  border-color: transparent;
 }
 
 .jiji-cat-card.active .jiji-cat-tile {
-  border-color: #008751;
-  box-shadow: 0 4px 14px rgba(0, 168, 89, 0.25);
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
 .jiji-cat-label {
@@ -3397,7 +3397,7 @@ body {
 
 .jiji-cat-card:hover .jiji-cat-label,
 .jiji-cat-card.active .jiji-cat-label {
-  color: #008751;
+  color: #334155;
 }
 
 /* =========================================
