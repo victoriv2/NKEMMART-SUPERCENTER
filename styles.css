@@ -3698,6 +3698,7 @@ body.drawer-open {
   height: 42px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   gap: 8px;
+  touch-action: none;
 }
 
 .jiji-drawer-search-icon {
@@ -3713,6 +3714,7 @@ body.drawer-open {
   color: #1e293b;
   background: transparent;
   padding: 0;
+  touch-action: none;
 }
 
 .jiji-drawer-search-input::placeholder {

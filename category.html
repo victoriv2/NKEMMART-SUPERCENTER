@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=4.4">
+  <link rel="stylesheet" href="styles.css?v=4.5">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -785,7 +785,7 @@
 
         function touchStart(e) {
           if (e.touches.length !== 1) return;
-          if (e.target.closest('input, button, a')) return;
+          if (e.target.closest('button, a')) return;
           startY = e.touches[0].clientY;
           currentY = startY;
           startTime = Date.now();
@@ -796,18 +796,24 @@
 
         function touchMove(e) {
           if (!isDragging) return;
-          if (e.cancelable) e.preventDefault();
           currentY = e.touches[0].clientY;
           var deltaY = currentY - startY;
 
-          if (deltaY > 0) {
-            drawerEl.style.transform = 'translateY(' + deltaY + 'px)';
-          } else {
-            drawerEl.style.transform = 'translateY(0)';
-            var maxAllowedH = Math.round(window.innerHeight * 0.94);
-            var pullUpAmount = -deltaY;
-            var targetH = Math.min(startHeight + pullUpAmount, maxAllowedH);
-            drawerEl.style.height = targetH + 'px';
+          if (Math.abs(deltaY) > 5) {
+            if (deltaY > 0) {
+              if (drawerSearch && document.activeElement === drawerSearch) {
+                drawerSearch.blur();
+              }
+              if (e.cancelable) e.preventDefault();
+              drawerEl.style.transform = 'translateY(' + deltaY + 'px)';
+            } else {
+              if (e.cancelable) e.preventDefault();
+              drawerEl.style.transform = 'translateY(0)';
+              var maxAllowedH = Math.round(window.innerHeight * 0.94);
+              var pullUpAmount = -deltaY;
+              var targetH = Math.min(startHeight + pullUpAmount, maxAllowedH);
+              drawerEl.style.height = targetH + 'px';
+            }
           }
         }
 
@@ -820,7 +826,7 @@
           var elapsed = Date.now() - startTime;
           var velocity = deltaY / Math.max(elapsed, 1);
 
-          if (deltaY > 110 || velocity > 0.45) {
+          if (deltaY > 90 || velocity > 0.35) {
             drawerEl.style.transform = 'translateY(100%)';
             setTimeout(function() {
               closeDrawer();
