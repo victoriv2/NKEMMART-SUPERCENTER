@@ -2037,7 +2037,7 @@ body {
 
   .header-container {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto auto 1fr;
     grid-template-areas:
       "menu logo actions"
       "search search search";
@@ -2055,14 +2055,19 @@ body {
     grid-area: menu;
     display: flex;
     align-items: center;
+    width: auto;
   }
 
   .brand-link {
     grid-area: logo;
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    justify-content: flex-start;
+    width: fit-content;
+    max-width: fit-content;
     min-width: 0;
     margin-left: 4px;
+    justify-self: start;
   }
 
   .brand-logo {
@@ -2070,6 +2075,7 @@ body {
     max-width: 115px;
     width: auto;
     object-fit: contain;
+    display: block;
   }
 
   .header-actions {

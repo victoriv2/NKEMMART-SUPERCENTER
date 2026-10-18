@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=7.6">
+  <link rel="stylesheet" href="styles.css?v=7.7">
 </head>
 <body>
 
@@ -38,14 +38,14 @@
   <header class="main-header" role="banner">
     <div class="header-container">
       
-      <!-- Hamburger Menu linking back to catalog -->
-      <a href="index.html" class="menu-btn" aria-label="Browse catalog" title="Browse catalog">
+      <!-- Hamburger Menu Button -->
+      <button class="menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu" type="button">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="3" y1="12" x2="21" y2="12"></line>
           <line x1="3" y1="6" x2="21" y2="6"></line>
           <line x1="3" y1="18" x2="21" y2="18"></line>
         </svg>
-      </a>
+      </button>
 
       <!-- Brand Logo -->
       <a href="index.html" class="brand-link" title="NKEMMART SUPERCENTER - Home">
@@ -163,8 +163,6 @@
     <!-- Breadcrumb Navigation -->
     <nav class="cart-breadcrumb" aria-label="Breadcrumb">
       <a href="index.html">Home</a>
-      <span class="cart-breadcrumb-sep">/</span>
-      <a href="index.html">Official Stores</a>
       <span class="cart-breadcrumb-sep">/</span>
       <span>Shopping Cart</span>
     </nav>
@@ -358,6 +356,70 @@
     </div>
 
   </main>
+
+  <!-- Mobile Navigation Drawer & Backdrop -->
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+  <aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Navigation">
+    <div class="mobile-nav-header">
+      <button class="mobile-nav-close" id="mobileNavCloseBtn" aria-label="Close menu" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="mobile-nav-logo">
+    </div>
+
+    <!-- Need Help Section -->
+    <div class="mobile-nav-section">
+      <a href="index.html#help" class="mobile-nav-link-row">
+        <span>NEED HELP?</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </a>
+    </div>
+
+    <!-- My Account Section -->
+    <div class="mobile-nav-section">
+      <div class="mobile-section-header">
+        <span class="mobile-section-title">MY ACCOUNT</span>
+      </div>
+      <div class="mobile-sub-nav-list">
+        <a href="index.html#orders" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>Orders</span>
+        </a>
+        <a href="saved-items.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span>Saved Items</span>
+        </a>
+        <a href="cart.html" class="mobile-sub-nav-item" style="color: var(--primary-blue); font-weight: 700;">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>Shopping Cart</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="mobile-nav-section">
+      <div class="mobile-section-header">
+        <span class="mobile-section-title">EXPLORE</span>
+      </div>
+      <div class="mobile-sub-nav-list">
+        <a href="index.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          <span>All Official Stores</span>
+        </a>
+        <a href="category.html?cat=appliances" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="10" x2="20" y2="10"></line></svg>
+          <span>Appliances</span>
+        </a>
+        <a href="category.html?cat=phones" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+          <span>Phones & Tablets</span>
+        </a>
+      </div>
+    </div>
+  </aside>
 
   <!-- Toast Notification Container -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
@@ -980,6 +1042,32 @@
 
         lastScrollY = currentScrollY;
       }, { passive: true });
+
+      // Mobile Navigation Drawer
+      var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      var mobileNavDrawer = document.getElementById('mobileNavDrawer');
+      var mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+      var mobileNavCloseBtn = document.getElementById('mobileNavCloseBtn');
+
+      function openMobileDrawer() {
+        if (mobileNavDrawer && mobileNavBackdrop) {
+          mobileNavDrawer.classList.add('open');
+          mobileNavBackdrop.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      function closeMobileDrawer() {
+        if (mobileNavDrawer && mobileNavBackdrop) {
+          mobileNavDrawer.classList.remove('open');
+          mobileNavBackdrop.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      }
+
+      if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openMobileDrawer);
+      if (mobileNavCloseBtn) mobileNavCloseBtn.addEventListener('click', closeMobileDrawer);
+      if (mobileNavBackdrop) mobileNavBackdrop.addEventListener('click', closeMobileDrawer);
 
       // Initial Render
       renderCart();
