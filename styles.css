@@ -3738,11 +3738,13 @@ body {
   width: 110px !important;
 }
 
+.products-grid.list-view .card-qty-btn,
 .products-grid.list-view .qty-btn {
   width: 28px !important;
   height: 28px !important;
 }
 
+.products-grid.list-view .card-qty-val,
 .products-grid.list-view .qty-val {
   font-size: 12px !important;
 }

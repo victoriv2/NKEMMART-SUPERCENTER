@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=6.5">
+  <link rel="stylesheet" href="styles.css?v=6.6">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -929,6 +929,7 @@
           art.setAttribute('data-price', prod.price);
           art.setAttribute('data-original', prod.originalPrice);
           art.setAttribute('data-image', prod.image);
+          art.setAttribute('data-brand', prod.brand || 'Official Store');
 
           art.innerHTML = 
             '<div class="card-media">' +
@@ -961,6 +962,9 @@
             '</div>';
           prodGrid.appendChild(art);
         });
+        if (typeof syncProductCardsUI === 'function') {
+          syncProductCardsUI();
+        }
       }
 
       function generateCategoryProducts(catKey, subKey, cData) {
@@ -2011,10 +2015,72 @@
         });
       }
 
-      updateCartBadges();
+      function showToast(message, linkText, linkUrl) {
+        var container = document.getElementById('toastContainer');
+        if (!container) return;
 
-      // Add to cart click handling
+        var toast = document.createElement('div');
+        toast.className = 'toast-item';
+        toast.innerHTML = 
+          '<div class="toast-content">' +
+            '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+              '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>' +
+              '<polyline points="22 4 12 14.01 9 11.01"></polyline>' +
+            '</svg>' +
+            '<span class="toast-text">' + message + '</span>' +
+          '</div>' +
+          (linkText ? '<a href="' + linkUrl + '" class="toast-btn">' + linkText + '</a>' : '');
+
+        container.appendChild(toast);
+
+        setTimeout(function() {
+          toast.classList.add('show');
+        }, 10);
+
+        setTimeout(function() {
+          toast.classList.remove('show');
+          setTimeout(function() {
+            if (toast.parentNode) {
+              toast.parentNode.removeChild(toast);
+            }
+          }, 300);
+        }, 3500);
+      }
+
+      function syncProductCardsUI() {
+        var cart = getCart();
+        var cards = document.querySelectorAll('.product-card');
+        cards.forEach(function(card) {
+          var id = card.getAttribute('data-id');
+          var wrap = card.querySelector('.card-action-wrap');
+          if (!wrap) return;
+
+          var cartItem = cart.find(function(it) { return it.id === id; });
+          var qty = (cartItem && cartItem.qty) ? cartItem.qty : 0;
+
+          if (qty > 0) {
+            wrap.innerHTML = 
+              '<div class="card-qty-stepper">' +
+                '<button class="card-qty-btn card-qty-dec" type="button" data-action="dec" data-id="' + id + '" aria-label="Decrease quantity">' +
+                  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+                '</button>' +
+                '<span class="card-qty-val">' + qty + '</span>' +
+                '<button class="card-qty-btn card-qty-inc" type="button" data-action="inc" data-id="' + id + '" aria-label="Increase quantity">' +
+                  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+                '</button>' +
+              '</div>';
+          } else {
+            wrap.innerHTML = '<button class="card-action-btn" type="button">Add to cart</button>';
+          }
+        });
+      }
+
+      updateCartBadges();
+      syncProductCardsUI();
+
+      // Delegated click handler for Add to Cart and Stepper (+ / -)
       document.addEventListener('click', function(e) {
+        // 1. Click "Add to cart"
         var addBtn = e.target.closest('.card-action-btn');
         if (addBtn) {
           var card = addBtn.closest('.product-card');
@@ -2026,7 +2092,7 @@
           var price = parseInt(card.getAttribute('data-price'), 10) || 0;
           var originalPrice = parseInt(card.getAttribute('data-original'), 10) || 0;
           var image = card.getAttribute('data-image') || (card.querySelector('.card-img') ? card.querySelector('.card-img').getAttribute('src') : '');
-          var brand = 'Official Store';
+          var brand = card.getAttribute('data-brand') || 'Official Store';
 
           var cart = getCart();
           var existingIndex = cart.findIndex(function(item) { return item.id === id; });
@@ -2047,15 +2113,59 @@
 
           saveCart(cart);
           updateCartBadges();
+          syncProductCardsUI();
 
-          var toast = document.getElementById('toastContainer');
-          if (toast) {
-            var msg = document.createElement('div');
-            msg.className = 'toast';
-            msg.textContent = 'Item added to cart!';
-            toast.appendChild(msg);
-            setTimeout(function() { msg.remove(); }, 2500);
+          var shortTitle = title.length > 25 ? title.substring(0, 25) + '...' : title;
+          showToast(shortTitle + ' added to cart (1)', 'VIEW CART', 'cart.html');
+          return;
+        }
+
+        // 2. Click Stepper Increment (+)
+        var incBtn = e.target.closest('.card-qty-inc');
+        if (incBtn) {
+          e.preventDefault();
+          var id = incBtn.getAttribute('data-id');
+          var cart = getCart();
+          var idx = cart.findIndex(function(item) { return item.id === id; });
+          if (idx > -1) {
+            cart[idx].qty = (cart[idx].qty || 1) + 1;
+            saveCart(cart);
+            updateCartBadges();
+            syncProductCardsUI();
+            var shortTitle = cart[idx].title.length > 22 ? cart[idx].title.substring(0, 22) + '...' : cart[idx].title;
+            showToast(shortTitle + ' quantity: ' + cart[idx].qty, 'VIEW CART', 'cart.html');
           }
+          return;
+        }
+
+        // 3. Click Stepper Decrement (-)
+        var decBtn = e.target.closest('.card-qty-dec');
+        if (decBtn) {
+          e.preventDefault();
+          var id = decBtn.getAttribute('data-id');
+          var cart = getCart();
+          var idx = cart.findIndex(function(item) { return item.id === id; });
+          if (idx > -1) {
+            if (cart[idx].qty > 1) {
+              cart[idx].qty -= 1;
+              var newQty = cart[idx].qty;
+              saveCart(cart);
+              updateCartBadges();
+              syncProductCardsUI();
+              var shortTitle = cart[idx].title.length > 22 ? cart[idx].title.substring(0, 22) + '...' : cart[idx].title;
+              showToast(shortTitle + ' quantity: ' + newQty, 'VIEW CART', 'cart.html');
+            } else {
+              // Drops to 0: remove product from cart and revert to "Add to cart"
+              var removedTitle = cart[idx].title;
+              cart.splice(idx, 1);
+              saveCart(cart);
+              updateCartBadges();
+              syncProductCardsUI();
+              var shortTitle = removedTitle.length > 22 ? removedTitle.substring(0, 22) + '...' : removedTitle;
+              showToast(shortTitle + ' removed from cart', null, null);
+            }
+          }
+          return;
         }
       });
     });
