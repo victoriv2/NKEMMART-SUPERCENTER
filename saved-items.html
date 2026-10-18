@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <title>Saved Items - NKEMMART SUPERCENTER</title>
+  <link rel="stylesheet" href="styles.css?v=6.8">
+</head>
+<body>
+
+  <!-- Top Announcement / Utility Ribbon -->
+  <aside class="top-bar" aria-label="Announcement Bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-left">
+        <span class="doorstep-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          Doorstep Delivery
+        </span>
+        <span>We deliver all across Nigeria!</span>
+        <span class="top-bar-slogan">"Everything Dey™"</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="index.html#sell" class="top-bar-link">Sell on Nkemmart</a>
+        <span class="top-bar-divider">|</span>
+        <a href="tel:0800NKEMMART" class="top-bar-link">Call to Order: 0800-NKEMMART</a>
+        <span class="top-bar-divider">|</span>
+        <span class="top-bar-link" style="color: #fff; font-weight: 600;">₦ NGN</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sticky Header -->
+  <header class="main-header" role="banner">
+    <div class="header-container">
+      
+      <!-- Hamburger Menu Button -->
+      <button class="menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu" type="button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-link" title="NKEMMART SUPERCENTER - Home">
+        <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="brand-logo" />
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-container">
+        <form class="search-form" action="index.html" method="GET" role="search">
+          <span class="search-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input 
+            type="search" 
+            name="q" 
+            class="search-input" 
+            placeholder="Search products, brands and categories" 
+            autocomplete="off"
+            aria-label="Search products, brands and categories"
+          />
+          <button type="submit" class="search-button">Search</button>
+        </form>
+      </div>
+
+      <!-- Action Navigation (Account, Help, Cart) -->
+      <nav class="header-actions" aria-label="User navigation">
+        
+        <!-- Account Dropdown -->
+        <div class="action-item">
+          <button class="action-btn" aria-haspopup="true" aria-expanded="false" type="button">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span>Account</span>
+            <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          
+          <div class="dropdown-menu">
+            <div class="dropdown-header">
+              <a href="index.html#signin" class="sign-in-btn">SIGN IN</a>
+            </div>
+            <a href="index.html#account" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              My Account
+            </a>
+            <a href="index.html#orders" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Orders
+            </a>
+            <a href="saved-items.html" class="dropdown-item" style="color: var(--primary-blue); font-weight: 700;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              Saved Items
+            </a>
+          </div>
+        </div>
+
+        <!-- Help Dropdown -->
+        <div class="action-item">
+          <button class="action-btn" aria-haspopup="true" aria-expanded="false" type="button">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>Help</span>
+            <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          
+          <div class="dropdown-menu">
+            <a href="index.html#help" class="dropdown-item">Help Center</a>
+            <a href="index.html#track-order" class="dropdown-item">Place & Track Order</a>
+            <a href="index.html#returns" class="dropdown-item">Order Cancellation & Returns</a>
+            <a href="index.html#contact" class="dropdown-item">Payment & Account</a>
+            <div class="dropdown-footer">
+              <a href="tel:0800NKEMMART" class="live-chat-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                Call: 0800-NKEMMART
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cart Button with Counter -->
+        <a href="cart.html" class="action-btn cart-btn-header" aria-label="View Shopping Cart">
+          <div class="cart-icon-wrapper">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-badge" id="headerCartBadge" style="display: none;"></span>
+          </div>
+          <span>Cart</span>
+        </a>
+
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- Saved Items Page Container -->
+  <main class="cart-page-container" role="main">
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="cart-breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="cart-breadcrumb-sep">/</span>
+      <a href="index.html">Official Stores</a>
+      <span class="cart-breadcrumb-sep">/</span>
+      <span>Saved Items</span>
+    </nav>
+
+    <!-- Layout Grid -->
+    <div class="cart-layout" id="savedLayoutGrid">
+
+      <!-- LEFT COLUMN: Saved Items & Guarantees -->
+      <section class="cart-main-col" aria-label="Saved Items">
+
+        <!-- Active Saved Items Card -->
+        <div class="cart-card" id="savedItemsCard">
+          <div class="cart-header">
+            <h1 class="cart-header-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+              Saved Items <span class="cart-header-count" id="savedHeaderCount">(0)</span>
+            </h1>
+
+            <button type="button" class="cart-clear-btn" id="clearSavedBtn" title="Remove all saved items">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              Clear All
+            </button>
+          </div>
+
+          <!-- Items List Container -->
+          <div class="cart-items-list" id="savedItemsList">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+
+        <!-- Empty Saved Items Card (Hidden by default when list has items) -->
+        <div class="cart-card" id="emptySavedCard" style="display: none;">
+          <div class="empty-cart-view">
+            <div class="empty-cart-icon-bubble" style="background-color: #fef2f2; color: #ef4444;">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </div>
+            <h2 class="empty-cart-title">You haven't saved any items yet!</h2>
+            <p class="empty-cart-subtitle">
+              Found something you like? Tap on the heart icon on any product or save items from your shopping cart to keep track of them here.
+            </p>
+            <a href="index.html" class="empty-cart-shop-btn">
+              START SHOPPING
+            </a>
+          </div>
+        </div>
+
+        <!-- Trust Pillars Assurance Card -->
+        <div class="cart-card cart-trust-card">
+          <div class="trust-pillars-grid">
+            
+            <div class="trust-pillar-item">
+              <div class="trust-pillar-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13"></rect>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                  <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                  <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                </svg>
+              </div>
+              <div>
+                <h3 class="trust-pillar-title">Doorstep Delivery</h3>
+                <p class="trust-pillar-text">Fast nationwide shipping to your exact location across Nigeria.</p>
+              </div>
+            </div>
+
+            <div class="trust-pillar-item">
+              <div class="trust-pillar-icon" style="background-color: #ecfdf5; color: var(--primary-green);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="trust-pillar-title">7-Day Free Returns</h3>
+                <p class="trust-pillar-text">Hassle-free returns and refunds policy for complete peace of mind.</p>
+              </div>
+            </div>
+
+            <div class="trust-pillar-item">
+              <div class="trust-pillar-icon" style="background-color: #eff6ff; color: var(--primary-blue);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+              </div>
+              <div>
+                <h3 class="trust-pillar-title">100% Genuine</h3>
+                <p class="trust-pillar-text">Directly backed by verified official brand manufacturers.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Cross-Sell / Recommended Products Carousel -->
+        <div class="cart-card recommendations-card" id="recSectionCard">
+          <div class="recommendations-header">
+            <h2 class="recommendations-title">Recommended For You</h2>
+            <span class="recommendations-subtitle">Top official store picks based on customer favorites</span>
+          </div>
+
+          <div class="recommendations-grid" id="recommendationsGrid">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN: Saved Summary & Help -->
+      <aside class="cart-summary-col" aria-label="Saved Summary">
+
+        <!-- Saved Items Summary Card -->
+        <div class="cart-card summary-card">
+          <div class="summary-header">
+            <h2 class="summary-title">SAVED SUMMARY</h2>
+          </div>
+
+          <div class="summary-body">
+            <div class="summary-row">
+              <span class="summary-row-label">Total Saved</span>
+              <span class="summary-row-val" id="summarySavedTotal">0 items</span>
+            </div>
+
+            <div class="summary-row">
+              <span class="summary-row-label">Estimated Value</span>
+              <span class="summary-row-val" id="summarySavedValue" style="color: var(--primary-blue); font-weight: 700;">₦ 0</span>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <!-- Move All to Cart CTA Button -->
+            <button type="button" class="summary-checkout-btn" id="btnMoveAllToCart">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+              MOVE ALL TO CART
+            </button>
+
+            <a href="index.html" class="summary-continue-btn">Continue Shopping</a>
+
+            <p class="summary-subtext" style="text-align: center; margin-top: 12px; margin-bottom: 0;">
+              Items stay in your saved list until purchased or removed
+            </p>
+          </div>
+        </div>
+
+        <!-- Customer Help Card -->
+        <div class="cart-card cart-help-card">
+          <div class="cart-help-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="cart-help-title">Need help with your saved items?</h3>
+            <p class="cart-help-text">Call our toll-free line: <a href="tel:0800NKEMMART" class="cart-help-phone">0800-NKEMMART</a></p>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- Back to Top Button -->
+  <a href="#" class="back-to-top-btn" title="Back to top" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </a>
+
+  <!-- Off-Canvas Mobile Navigation Drawer -->
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+  <aside class="mobile-nav-drawer" id="mobileNavDrawer" role="dialog" aria-modal="true" aria-label="Main Navigation Menu">
+    <div class="mobile-nav-header">
+      <button class="mobile-nav-close" id="mobileNavCloseBtn" aria-label="Close menu" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="mobile-nav-logo">
+    </div>
+
+    <!-- Need Help Section -->
+    <div class="mobile-nav-section">
+      <a href="index.html#help" class="mobile-nav-link-row">
+        <span>NEED HELP?</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </a>
+    </div>
+
+    <!-- My Account Section -->
+    <div class="mobile-nav-section">
+      <div class="mobile-section-header">
+        <span class="mobile-section-title">MY ACCOUNT</span>
+      </div>
+      <div class="mobile-sub-nav-list">
+        <a href="index.html#orders" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>Orders</span>
+        </a>
+        <a href="saved-items.html" class="mobile-sub-nav-item" style="color: var(--primary-blue); font-weight: 700;">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span>Saved Items</span>
+        </a>
+        <a href="cart.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>Shopping Cart</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="mobile-nav-section">
+      <div class="mobile-section-header">
+        <span class="mobile-section-title">EXPLORE</span>
+      </div>
+      <div class="mobile-sub-nav-list">
+        <a href="index.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          <span>All Official Stores</span>
+        </a>
+        <a href="category.html?cat=appliances" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="10" x2="20" y2="10"></line></svg>
+          <span>Appliances</span>
+        </a>
+        <a href="category.html?cat=phones" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+          <span>Phones & Tablets</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var SAVED_STORAGE_KEY = 'nkemmart_saved_items';
+      var CART_STORAGE_KEY = 'nkemmart_cart';
+
+      // Catalog products for cross-sell recommendations
+      var CATALOG_PRODUCTS = [
+        {
+          id: 'prod-1',
+          title: 'Ace Elec 20000 mAh Ultra Slim Portable Power Bank - Type C Dual Input',
+          price: 7650,
+          originalPrice: 12000,
+          image: 'images/product_powerbank.jpg',
+          brand: 'Ace Elec'
+        },
+        {
+          id: 'prod-2',
+          title: 'SILVER CREST 2L Industrial 8500W Food Crusher Blender With 2 Jar',
+          price: 20954,
+          originalPrice: 26386,
+          image: 'images/product_blender.webp',
+          brand: 'Silver Crest'
+        },
+        {
+          id: 'prod-3',
+          title: 'HANSEN Electric Iron Pressing Clothes 1000W',
+          price: 5959,
+          originalPrice: 7117,
+          image: 'images/product_iron.jpg',
+          brand: 'Hansen'
+        },
+        {
+          id: 'prod-4',
+          title: 'HANSEN 18 inches industrial level standing fan',
+          price: 16998,
+          originalPrice: 20060,
+          image: 'images/product_fan.webp',
+          brand: 'Hansen'
+        },
+        {
+          id: 'prod-5',
+          title: 'Syinix 2.2L Electric Kettle - Food Grade Stainless Steel SKE22U1',
+          price: 6399,
+          originalPrice: 7229,
+          image: 'images/product_kettle.webp',
+          brand: 'Syinix'
+        },
+        {
+          id: 'prod-6',
+          title: 'SILVER CREST 8L Extra Large Digital Air Fryer 2400W',
+          price: 30999,
+          originalPrice: 44000,
+          image: 'images/product_airfryer.jpg',
+          brand: 'Silver Crest'
+        },
+        {
+          id: 'prod-7',
+          title: 'Maxi 20 Litres Manual Microwave Oven (MAXIMWO2021W) - 12 Months Warranty',
+          price: 55999,
+          originalPrice: 71550,
+          image: 'images/product_microwave.jpg',
+          brand: 'Maxi'
+        },
+        {
+          id: 'prod-8',
+          title: 'Hikers 32 Smart HD Frameless Panel Digital LED TV with Android',
+          price: 102246,
+          originalPrice: 171000,
+          image: 'images/product_tv.jpg',
+          brand: 'Hikers'
+        }
+      ];
+
+      function formatNaira(amount) {
+        return '₦ ' + Number(amount).toLocaleString('en-NG');
+      }
+
+      function getSaved() {
+        try {
+          var data = localStorage.getItem(SAVED_STORAGE_KEY);
+          return data ? JSON.parse(data) : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveSaved(list) {
+        try {
+          localStorage.setItem(SAVED_STORAGE_KEY, JSON.stringify(list));
+        } catch (e) {}
+      }
+
+      function getCart() {
+        try {
+          var data = localStorage.getItem(CART_STORAGE_KEY);
+          return data ? JSON.parse(data) : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveCart(cart) {
+        try {
+          localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        } catch (e) {}
+      }
+
+      function updateHeaderCartBadge() {
+        var cart = getCart();
+        var totalQty = cart.reduce(function(sum, item) { return sum + (item.qty || 1); }, 0);
+        var badge = document.getElementById('headerCartBadge');
+        if (badge) {
+          if (totalQty > 0) {
+            badge.style.display = 'flex';
+            badge.textContent = totalQty;
+            badge.classList.remove('bump');
+            void badge.offsetWidth;
+            badge.classList.add('bump');
+          } else {
+            badge.style.display = 'none';
+            badge.textContent = '';
+          }
+        }
+      }
+
+      function attachSwipeToDismiss(toast, dismissTimer) {
+        var startX = 0;
+        var startY = 0;
+        var currentX = 0;
+        var isSwiping = false;
+        var isHorizontal = null;
+
+        toast.addEventListener('pointerdown', function(e) {
+          if (e.target.closest('.toast-btn')) return;
+          startX = e.clientX;
+          startY = e.clientY;
+          currentX = startX;
+          isSwiping = true;
+          isHorizontal = null;
+          toast.style.transition = 'none';
+          try {
+            toast.setPointerCapture(e.pointerId);
+          } catch (err) {}
+        });
+
+        toast.addEventListener('pointermove', function(e) {
+          if (!isSwiping) return;
+          var deltaX = e.clientX - startX;
+          var deltaY = e.clientY - startY;
+
+          if (isHorizontal === null) {
+            if (Math.abs(deltaX) > 6 || Math.abs(deltaY) > 6) {
+              isHorizontal = Math.abs(deltaX) >= Math.abs(deltaY);
+            }
+          }
+
+          if (isHorizontal) {
+            currentX = e.clientX;
+            var dismissProgress = Math.min(1, Math.abs(deltaX) / (toast.offsetWidth * 0.75));
+            toast.style.transform = 'translateX(' + deltaX + 'px)';
+            toast.style.opacity = Math.max(0, 1 - dismissProgress * 0.85);
+          }
+        });
+
+        function endSwipe() {
+          if (!isSwiping) return;
+          isSwiping = false;
+          var deltaX = currentX - startX;
+
+          if (isHorizontal && Math.abs(deltaX) > 45) {
+            if (dismissTimer) clearTimeout(dismissTimer);
+            var direction = deltaX > 0 ? 1 : -1;
+            toast.style.transition = 'transform 0.22s ease-out, opacity 0.22s ease-out';
+            toast.style.transform = 'translateX(' + (direction * 125) + '%)';
+            toast.style.opacity = '0';
+            setTimeout(function() {
+              if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+              }
+            }, 230);
+          } else {
+            toast.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+            toast.style.transform = 'translateX(0)';
+            toast.style.opacity = '1';
+          }
+          isHorizontal = null;
+        }
+
+        toast.addEventListener('pointerup', endSwipe);
+        toast.addEventListener('pointercancel', endSwipe);
+      }
+
+      function showToast(message, linkText, linkUrl) {
+        var container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        while (container.firstChild) {
+          container.removeChild(container.firstChild);
+        }
+
+        var toast = document.createElement('div');
+        toast.className = 'toast-item';
+        toast.innerHTML = 
+          '<div class="toast-content">' +
+            '<span class="toast-text">' + message + '</span>' +
+          '</div>' +
+          (linkText ? '<a href="' + (linkUrl || '#') + '" class="toast-btn">' + linkText + '</a>' : '');
+
+        container.appendChild(toast);
+
+        setTimeout(function() {
+          toast.classList.add('show');
+        }, 10);
+
+        var dismissTimer = setTimeout(function() {
+          toast.classList.remove('show');
+          setTimeout(function() {
+            if (toast.parentNode) {
+              toast.parentNode.removeChild(toast);
+            }
+          }, 300);
+        }, 3200);
+
+        attachSwipeToDismiss(toast, dismissTimer);
+      }
+
+      function renderSavedItems() {
+        var saved = getSaved();
+        var totalCount = saved.length;
+        var totalValue = saved.reduce(function(sum, item) { return sum + (item.price || 0); }, 0);
+
+        var headerCount = document.getElementById('savedHeaderCount');
+        if (headerCount) {
+          headerCount.textContent = '(' + totalCount + ')';
+        }
+
+        var summaryTotal = document.getElementById('summarySavedTotal');
+        if (summaryTotal) {
+          summaryTotal.textContent = totalCount + ' ' + (totalCount === 1 ? 'item' : 'items');
+        }
+
+        var summaryValue = document.getElementById('summarySavedValue');
+        if (summaryValue) {
+          summaryValue.textContent = formatNaira(totalValue);
+        }
+
+        var btnMoveAll = document.getElementById('btnMoveAllToCart');
+        if (btnMoveAll) {
+          if (totalCount > 0) {
+            btnMoveAll.disabled = false;
+            btnMoveAll.style.opacity = '1';
+            btnMoveAll.style.pointerEvents = 'auto';
+          } else {
+            btnMoveAll.disabled = true;
+            btnMoveAll.style.opacity = '0.5';
+            btnMoveAll.style.pointerEvents = 'none';
+          }
+        }
+
+        var itemsCard = document.getElementById('savedItemsCard');
+        var emptyCard = document.getElementById('emptySavedCard');
+        var itemsList = document.getElementById('savedItemsList');
+
+        if (totalCount === 0) {
+          if (itemsCard) itemsCard.style.display = 'none';
+          if (emptyCard) emptyCard.style.display = 'block';
+        } else {
+          if (itemsCard) itemsCard.style.display = 'block';
+          if (emptyCard) emptyCard.style.display = 'none';
+
+          if (itemsList) {
+            itemsList.innerHTML = '';
+            saved.forEach(function(item) {
+              var row = document.createElement('div');
+              row.className = 'cart-item-row';
+              row.setAttribute('data-id', item.id);
+
+              var discountHtml = '';
+              if (item.originalPrice && item.originalPrice > item.price) {
+                var disc = Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100);
+                discountHtml = 
+                  '<span class="cart-item-orig-price">' + formatNaira(item.originalPrice) + '</span>' +
+                  '<span class="cart-item-discount-tag">-' + disc + '%</span>';
+              }
+
+              row.innerHTML = 
+                '<div class="cart-item-img-wrapper">' +
+                  '<img src="' + item.image + '" alt="' + item.title + '" class="cart-item-img">' +
+                '</div>' +
+                '<div class="cart-item-details">' +
+                  '<span class="cart-item-store-tag">Official Store</span>' +
+                  '<a href="index.html#product" class="cart-item-title">' + item.title + '</a>' +
+                  '<div class="cart-item-status">' +
+                    '<span class="cart-item-status-dot"></span>' +
+                    '<span>In Stock | Eligible for Doorstep Delivery</span>' +
+                  '</div>' +
+                  '<div class="cart-item-actions-row">' +
+                    '<button type="button" class="btn-move-to-cart" data-action="move-to-cart" data-id="' + item.id + '">' +
+                      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>' +
+                      'MOVE TO CART' +
+                    '</button>' +
+                    '<button type="button" class="cart-action-btn-text cart-action-btn-remove" data-action="remove" data-id="' + item.id + '">' +
+                      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>' +
+                      'Remove' +
+                    '</button>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="cart-item-right">' +
+                  '<div class="cart-item-pricing">' +
+                    '<div class="cart-item-current-price">' + formatNaira(item.price) + '</div>' +
+                    '<div class="cart-item-price-sub">' +
+                      discountHtml +
+                    '</div>' +
+                  '</div>' +
+                '</div>';
+
+              itemsList.appendChild(row);
+            });
+          }
+        }
+
+        renderRecommendations();
+      }
+
+      function renderRecommendations() {
+        var recGrid = document.getElementById('recommendationsGrid');
+        if (!recGrid) return;
+
+        var cart = getCart();
+        var saved = getSaved();
+        var savedIds = saved.map(function(s) { return s.id; });
+        var recs = CATALOG_PRODUCTS.slice(0, 4);
+
+        recGrid.innerHTML = '';
+        recs.forEach(function(p) {
+          var card = document.createElement('div');
+          card.className = 'rec-card';
+          var inCart = cart.find(function(it) { return it.id === p.id; });
+          var qty = (inCart && inCart.qty) ? inCart.qty : 0;
+          var isSaved = savedIds.indexOf(p.id) > -1;
+
+          var btnAreaHtml = '';
+          if (qty > 0) {
+            btnAreaHtml = 
+              '<div class="rec-qty-stepper">' +
+                '<button type="button" class="rec-qty-btn rec-qty-dec" data-rec-id="' + p.id + '">-</button>' +
+                '<span class="rec-qty-val">' + qty + '</span>' +
+                '<button type="button" class="rec-qty-btn rec-qty-inc" data-rec-id="' + p.id + '">+</button>' +
+              '</div>';
+          } else {
+            btnAreaHtml = '<button type="button" class="rec-card-btn" data-rec-id="' + p.id + '">Add to cart</button>';
+          }
+
+          var discountPercent = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
+
+          card.innerHTML = 
+            '<div class="rec-card-media" style="position: relative;">' +
+              '<img src="' + p.image + '" alt="' + p.title + '" class="rec-card-img">' +
+              '<button type="button" class="wishlist-btn ' + (isSaved ? 'active' : '') + '" data-rec-wish="' + p.id + '" aria-label="Toggle wishlist" style="position: absolute; bottom: 8px; right: 8px;">' +
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="' + (isSaved ? '#ef4444' : 'none') + '" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
+              '</button>' +
+            '</div>' +
+            '<div class="rec-card-body">' +
+              '<span class="rec-card-store">Official Store</span>' +
+              '<a href="index.html#product" class="rec-card-title">' + p.title + '</a>' +
+              '<div class="rec-card-price-row">' +
+                '<span class="rec-card-price">' + formatNaira(p.price) + '</span>' +
+                '<span class="rec-card-discount">-' + discountPercent + '%</span>' +
+              '</div>' +
+              '<span class="rec-card-orig-price">' + formatNaira(p.originalPrice) + '</span>' +
+              btnAreaHtml +
+            '</div>';
+
+          recGrid.appendChild(card);
+        });
+      }
+
+      // Handle item removal and move to cart
+      var itemsList = document.getElementById('savedItemsList');
+      if (itemsList) {
+        itemsList.addEventListener('click', function(e) {
+          var btn = e.target.closest('button');
+          if (!btn) return;
+
+          var action = btn.getAttribute('data-action');
+          var id = btn.getAttribute('data-id');
+          if (!action || !id) return;
+
+          var saved = getSaved();
+          var itemIndex = saved.findIndex(function(it) { return it.id === id; });
+          if (itemIndex === -1) return;
+
+          var item = saved[itemIndex];
+          var title = item.title;
+          var shortTitle = title.length > 22 ? title.substring(0, 22) + '...' : title;
+
+          if (action === 'remove') {
+            saved.splice(itemIndex, 1);
+            saveSaved(saved);
+            renderSavedItems();
+            showToast(shortTitle + ' removed from saved items', null, null);
+          } else if (action === 'move-to-cart') {
+            var cart = getCart();
+            var existing = cart.find(function(it) { return it.id === item.id; });
+            if (existing) {
+              existing.qty = (existing.qty || 1) + 1;
+            } else {
+              cart.push({
+                id: item.id,
+                title: item.title,
+                price: item.price,
+                originalPrice: item.originalPrice,
+                image: item.image,
+                brand: item.brand,
+                qty: 1
+              });
+            }
+            saveCart(cart);
+            saved.splice(itemIndex, 1);
+            saveSaved(saved);
+            updateHeaderCartBadge();
+            renderSavedItems();
+            showToast(shortTitle + ' moved to cart', 'VIEW CART', 'cart.html');
+          }
+        });
+      }
+
+      // Handle Clear All button
+      var clearBtn = document.getElementById('clearSavedBtn');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+          var saved = getSaved();
+          if (saved.length === 0) return;
+          if (confirm('Are you sure you want to remove all saved items?')) {
+            saveSaved([]);
+            renderSavedItems();
+            showToast('All saved items removed', null, null);
+          }
+        });
+      }
+
+      // Handle Move All to Cart button
+      var moveAllBtn = document.getElementById('btnMoveAllToCart');
+      if (moveAllBtn) {
+        moveAllBtn.addEventListener('click', function() {
+          var saved = getSaved();
+          if (saved.length === 0) return;
+
+          var cart = getCart();
+          saved.forEach(function(item) {
+            var existing = cart.find(function(it) { return it.id === item.id; });
+            if (existing) {
+              existing.qty = (existing.qty || 1) + 1;
+            } else {
+              cart.push({
+                id: item.id,
+                title: item.title,
+                price: item.price,
+                originalPrice: item.originalPrice,
+                image: item.image,
+                brand: item.brand,
+                qty: 1
+              });
+            }
+          });
+
+          saveCart(cart);
+          saveSaved([]);
+          updateHeaderCartBadge();
+          renderSavedItems();
+          showToast('All items moved to shopping cart', 'VIEW CART', 'cart.html');
+        });
+      }
+
+      // Handle recommendations interactions (Add to Cart, Steppers, Wishlist toggle)
+      var recGrid = document.getElementById('recommendationsGrid');
+      if (recGrid) {
+        recGrid.addEventListener('click', function(e) {
+          // 1. Add to cart
+          var addBtn = e.target.closest('.rec-card-btn');
+          if (addBtn) {
+            var prodId = addBtn.getAttribute('data-rec-id');
+            var product = CATALOG_PRODUCTS.find(function(p) { return p.id === prodId; });
+            if (!product) return;
+
+            var cart = getCart();
+            var existing = cart.find(function(p) { return p.id === prodId; });
+            if (existing) {
+              existing.qty = (existing.qty || 1) + 1;
+            } else {
+              cart.push({
+                id: product.id,
+                title: product.title,
+                price: product.price,
+                originalPrice: product.originalPrice,
+                image: product.image,
+                brand: product.brand,
+                qty: 1
+              });
+            }
+
+            saveCart(cart);
+            updateHeaderCartBadge();
+            renderRecommendations();
+            showToast(product.title.substring(0, 22) + '... added to cart (1)', 'VIEW CART', 'cart.html');
+            return;
+          }
+
+          // 2. Stepper Increment
+          var incBtn = e.target.closest('.rec-qty-inc');
+          if (incBtn) {
+            var prodId = incBtn.getAttribute('data-rec-id');
+            var cart = getCart();
+            var idx = cart.findIndex(function(p) { return p.id === prodId; });
+            if (idx > -1) {
+              cart[idx].qty = (cart[idx].qty || 1) + 1;
+              saveCart(cart);
+              updateHeaderCartBadge();
+              renderRecommendations();
+              showToast('Quantity: ' + cart[idx].qty, 'VIEW CART', 'cart.html');
+            }
+            return;
+          }
+
+          // 3. Stepper Decrement
+          var decBtn = e.target.closest('.rec-qty-dec');
+          if (decBtn) {
+            var prodId = decBtn.getAttribute('data-rec-id');
+            var cart = getCart();
+            var idx = cart.findIndex(function(p) { return p.id === prodId; });
+            if (idx > -1) {
+              if (cart[idx].qty > 1) {
+                cart[idx].qty -= 1;
+                saveCart(cart);
+                updateHeaderCartBadge();
+                renderRecommendations();
+                showToast('Quantity: ' + cart[idx].qty, 'VIEW CART', 'cart.html');
+              } else {
+                var removedTitle = cart[idx].title;
+                cart.splice(idx, 1);
+                saveCart(cart);
+                updateHeaderCartBadge();
+                renderRecommendations();
+                showToast(removedTitle.substring(0, 22) + '... removed from cart', null, null);
+              }
+            }
+            return;
+          }
+
+          // 4. Wishlist Heart Toggle
+          var wishBtn = e.target.closest('.wishlist-btn');
+          if (wishBtn) {
+            var prodId = wishBtn.getAttribute('data-rec-wish');
+            var product = CATALOG_PRODUCTS.find(function(p) { return p.id === prodId; });
+            if (!product) return;
+
+            var saved = getSaved();
+            var existIdx = saved.findIndex(function(s) { return s.id === product.id; });
+            var shortTitle = product.title.substring(0, 22) + '...';
+
+            if (existIdx > -1) {
+              saved.splice(existIdx, 1);
+              saveSaved(saved);
+              renderSavedItems();
+              showToast(shortTitle + ' removed from saved items', null, null);
+            } else {
+              saved.unshift({
+                id: product.id,
+                title: product.title,
+                price: product.price,
+                originalPrice: product.originalPrice,
+                image: product.image,
+                brand: product.brand
+              });
+              saveSaved(saved);
+              renderSavedItems();
+              showToast(shortTitle + ' added to saved items', null, null);
+            }
+            return;
+          }
+        });
+      }
+
+      // Mobile Navigation Drawer
+      var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      var mobileNavDrawer = document.getElementById('mobileNavDrawer');
+      var mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+      var mobileNavCloseBtn = document.getElementById('mobileNavCloseBtn');
+
+      function openMobileDrawer() {
+        if (mobileNavDrawer && mobileNavBackdrop) {
+          mobileNavDrawer.classList.add('open');
+          mobileNavBackdrop.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      function closeMobileDrawer() {
+        if (mobileNavDrawer && mobileNavBackdrop) {
+          mobileNavDrawer.classList.remove('open');
+          mobileNavBackdrop.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      }
+
+      if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openMobileDrawer);
+      if (mobileNavCloseBtn) mobileNavCloseBtn.addEventListener('click', closeMobileDrawer);
+      if (mobileNavBackdrop) mobileNavBackdrop.addEventListener('click', closeMobileDrawer);
+
+      // Smart sticky header
+      var mainHeader = document.querySelector('.main-header');
+      var lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      var scrollTolerance = 5;
+
+      window.addEventListener('scroll', function() {
+        var currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+        if (currentScrollY < 0) currentScrollY = 0;
+
+        if (currentScrollY <= 25) {
+          if (mainHeader) {
+            mainHeader.classList.remove('header-hidden');
+            mainHeader.classList.remove('header-scrolled-up');
+          }
+          lastScrollY = currentScrollY;
+          return;
+        }
+
+        var scrollDelta = currentScrollY - lastScrollY;
+        if (Math.abs(scrollDelta) < scrollTolerance) {
+          return;
+        }
+
+        if (scrollDelta > 0 && currentScrollY > 70) {
+          if (mainHeader && !mainHeader.classList.contains('header-hidden')) {
+            mainHeader.classList.add('header-hidden');
+            mainHeader.classList.remove('header-scrolled-up');
+          }
+        } else if (scrollDelta < 0) {
+          if (mainHeader && !mainHeader.classList.contains('header-scrolled-up')) {
+            mainHeader.classList.remove('header-hidden');
+            mainHeader.classList.add('header-scrolled-up');
+          }
+        }
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+
+      // Initial Render
+      updateHeaderCartBadge();
+      renderSavedItems();
+    });
+  </script>
+
+</body>
+</html>

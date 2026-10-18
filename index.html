@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
-  <link rel="stylesheet" href="styles.css?v=6.7">
+  <link rel="stylesheet" href="styles.css?v=6.8">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -158,7 +158,7 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
               Orders
             </a>
-            <a href="#saved" class="dropdown-item">
+            <a href="saved-items.html" class="dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
               Saved Items
             </a>
@@ -1079,7 +1079,7 @@
           <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
           <span>Voucher</span>
         </a>
-        <a href="#saved-items" class="mobile-sub-nav-item">
+        <a href="saved-items.html" class="mobile-sub-nav-item">
           <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
           <span>Saved Items</span>
         </a>
@@ -2011,7 +2011,28 @@
         });
       }
 
-      // Delegated click handler for Add to Cart and Stepper (+ / -)
+      function syncWishlistButtons() {
+        var savedList = [];
+        try {
+          savedList = JSON.parse(localStorage.getItem('nkemmart_saved_items')) || [];
+        } catch (err) { savedList = []; }
+
+        var savedIds = savedList.map(function(it) { return it.id; });
+        var cards = document.querySelectorAll('.product-card');
+        cards.forEach(function(card) {
+          var id = card.getAttribute('data-id');
+          var btn = card.querySelector('.wishlist-btn');
+          if (btn) {
+            if (savedIds.indexOf(id) > -1) {
+              btn.classList.add('active');
+            } else {
+              btn.classList.remove('active');
+            }
+          }
+        });
+      }
+
+      // Delegated click handler for Add to Cart, Stepper (+ / -), and Wishlist Heart
       document.addEventListener('click', function(e) {
         // 1. Click "Add to cart"
         var addBtn = e.target.closest('.card-action-btn');
@@ -2097,6 +2118,49 @@
               var shortTitle = removedTitle.length > 22 ? removedTitle.substring(0, 22) + '...' : removedTitle;
               showToast(shortTitle + ' removed from cart', null, null);
             }
+          }
+          return;
+        }
+
+        // 4. Click Wishlist Heart Button
+        var wishBtn = e.target.closest('.wishlist-btn');
+        if (wishBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          var card = wishBtn.closest('.product-card');
+          if (!card) return;
+          var id = card.getAttribute('data-id') || 'prod-' + Date.now();
+          var title = card.getAttribute('data-title') || card.querySelector('.product-title').textContent.trim();
+          var price = parseInt(card.getAttribute('data-price'), 10) || 0;
+          var originalPrice = parseInt(card.getAttribute('data-original'), 10) || 0;
+          var image = card.getAttribute('data-image') || (card.querySelector('.card-img') ? card.querySelector('.card-img').getAttribute('src') : '');
+          var brand = card.getAttribute('data-brand') || 'Official Store';
+
+          var savedList = [];
+          try {
+            savedList = JSON.parse(localStorage.getItem('nkemmart_saved_items')) || [];
+          } catch (err) { savedList = []; }
+
+          var existIdx = savedList.findIndex(function(it) { return it.id === id; });
+          var shortTitle = title && title.length > 22 ? title.substring(0, 22) + '...' : (title || 'Item');
+
+          if (existIdx > -1) {
+            savedList.splice(existIdx, 1);
+            localStorage.setItem('nkemmart_saved_items', JSON.stringify(savedList));
+            wishBtn.classList.remove('active');
+            showToast(shortTitle + ' removed from saved items', null, null);
+          } else {
+            savedList.unshift({
+              id: id,
+              title: title,
+              price: price,
+              originalPrice: originalPrice,
+              image: image,
+              brand: brand
+            });
+            localStorage.setItem('nkemmart_saved_items', JSON.stringify(savedList));
+            wishBtn.classList.add('active');
+            showToast(shortTitle + ' added to saved items', 'VIEW SAVED', 'saved-items.html');
           }
           return;
         }
@@ -2557,9 +2621,10 @@
 
 
 
-      // Synchronize badges and product card steppers on page load
+      // Synchronize badges, product card steppers, and wishlist hearts on page load
       updateCartBadges();
       syncProductCardsUI();
+      syncWishlistButtons();
     });
   </script>
 

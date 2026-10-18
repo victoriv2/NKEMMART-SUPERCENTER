@@ -1299,6 +1299,41 @@ body {
   border-color: #feb2b2;
 }
 
+.wishlist-btn.active {
+  color: var(--badge-red);
+  background-color: #fff5f5;
+  border-color: #feb2b2;
+}
+
+.wishlist-btn.active svg {
+  fill: var(--badge-red);
+}
+
+.btn-move-to-cart {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.15s, transform 0.1s;
+}
+
+.btn-move-to-cart:hover {
+  background-color: var(--primary-blue-hover);
+}
+
+.btn-move-to-cart:active {
+  transform: scale(0.98);
+}
+
 /* Card Body Content */
 .card-body {
   padding: 12px;

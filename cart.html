@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=6.7">
+  <link rel="stylesheet" href="styles.css?v=6.8">
 </head>
 <body>
 
@@ -101,7 +101,7 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
               Orders
             </a>
-            <a href="index.html#saved" class="dropdown-item">
+            <a href="saved-items.html" class="dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
               Saved Items
             </a>
@@ -786,12 +786,27 @@
             var shortTitle = removedTitle.length > 22 ? removedTitle.substring(0, 22) + '...' : removedTitle;
             showToast(shortTitle + ' removed from cart', null, null);
           } else if (action === 'save') {
-            var savedTitle = cart[itemIndex].title;
+            var savedItem = cart[itemIndex];
+            var savedTitle = savedItem.title;
+            try {
+              var savedList = JSON.parse(localStorage.getItem('nkemmart_saved_items')) || [];
+              if (!savedList.some(function(it) { return it.id === savedItem.id; })) {
+                savedList.unshift({
+                  id: savedItem.id,
+                  title: savedItem.title,
+                  price: savedItem.price,
+                  originalPrice: savedItem.originalPrice,
+                  image: savedItem.image,
+                  brand: savedItem.brand
+                });
+                localStorage.setItem('nkemmart_saved_items', JSON.stringify(savedList));
+              }
+            } catch (err) {}
             cart.splice(itemIndex, 1);
             saveCart(cart);
             renderCart();
             var shortTitle = savedTitle.length > 22 ? savedTitle.substring(0, 22) + '...' : savedTitle;
-            showToast(shortTitle + ' saved for later', null, null);
+            showToast(shortTitle + ' saved for later', 'VIEW SAVED', 'saved-items.html');
           }
         });
       }
