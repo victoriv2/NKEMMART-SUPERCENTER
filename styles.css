@@ -3543,30 +3543,59 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  max-width: 580px;
+  width: 100%;
+  max-width: 540px;
   margin: 0 auto;
-  height: 92vh;
-  max-height: 840px;
+  height: auto;
+  max-height: 85vh;
+  max-height: 85dvh;
+  min-height: 0;
   background-color: #ffffff;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.25);
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.28);
   z-index: 99999;
   display: flex;
   flex-direction: column;
   transform: translateY(100%);
   transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
+  padding-bottom: env(safe-area-inset-bottom, 12px);
+}
+
+.jiji-drawer::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 4.5px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 3px;
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
 }
 
 .jiji-drawer.active {
   transform: translateY(0);
 }
 
+@media (min-width: 601px) {
+  .jiji-drawer {
+    bottom: 24px;
+    border-radius: 22px;
+    max-height: 82vh;
+    padding-bottom: 0;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+  }
+}
+
 /* Drawer Header with Green bar, Back arrow, Search input */
 .jiji-drawer-header {
   background: linear-gradient(135deg, #008751 0%, #00a859 100%);
-  padding: 12px 14px 14px 14px;
+  padding: 16px 14px 12px 14px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -3673,8 +3702,11 @@ body {
 
 /* Scrollable subcategories list */
 .jiji-drawer-list {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: calc(85dvh - 120px);
   overflow-y: auto;
+  overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   padding: 0;
   margin: 0;
