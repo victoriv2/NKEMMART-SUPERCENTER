@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=5.3">
+  <link rel="stylesheet" href="styles.css?v=5.4">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -405,7 +405,18 @@
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <input type="text" class="jiji-drawer-search-input" id="jijiDrawerSearch" placeholder="Find category..." autocomplete="off">
+          <input 
+            type="search" 
+            class="jiji-drawer-search-input" 
+            id="jijiDrawerSearch" 
+            name="q" 
+            placeholder="Find category..." 
+            autocomplete="off" 
+            autocorrect="off" 
+            autocapitalize="none" 
+            spellcheck="false" 
+            enterkeyhint="search" 
+            inputmode="search">
         </div>
         <button type="button" class="jiji-drawer-close-btn" id="jijiDrawerCloseBtn" aria-label="Close">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -879,18 +890,20 @@
         var currentY = 0;
         var startTime = 0;
         var isDragging = false;
+        var touchStartedOnInput = false;
 
         function touchStart(e) {
           if (e.touches.length !== 1) return;
           if (e.target.closest('button, a')) return;
 
+          touchStartedOnInput = !!e.target.closest('.jiji-drawer-search-wrap, #jijiDrawerSearch');
+
           var isInputActive = drawerEl.classList.contains('search-active') || 
                               drawerEl.classList.contains('keyboard-open') || 
                               (drawerSearch && document.activeElement === drawerSearch);
 
-          // ONLY disable hand movement on the search input when the input IS active (typing / focused)!
-          // When the input is NOT active, touching or swiping on the input/header responds to hand movement.
-          if (isInputActive && e.target.closest('.jiji-drawer-search-wrap, #jijiDrawerSearch')) {
+          // If input is active, ignore touches on the input so typing/editing is 100% uninterrupted
+          if (isInputActive && touchStartedOnInput) {
             return;
           }
 
@@ -906,13 +919,15 @@
           currentY = e.touches[0].clientY;
           var deltaY = currentY - startY;
 
-          // Only initiate pull-down if swiping downwards by more than 6px
-          if (deltaY > 6) {
+          // If touch started on the input, require at least 22px of deliberate downward drag before moving drawer
+          var threshold = touchStartedOnInput ? 22 : 8;
+
+          if (deltaY > threshold) {
             if (drawerSearch && document.activeElement === drawerSearch) {
               drawerSearch.blur();
             }
             if (e.cancelable) e.preventDefault();
-            drawerEl.style.transform = 'translateY(' + deltaY + 'px)';
+            drawerEl.style.transform = 'translateY(' + (deltaY - threshold) + 'px)';
           } else {
             drawerEl.style.transform = 'translateY(0)';
           }
