@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
-  <link rel="stylesheet" href="styles.css?v=4.7">
+  <link rel="stylesheet" href="styles.css?v=4.8">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -2131,7 +2131,7 @@
       function closeSubcategoryDrawer(isPopstate) {
         if (drawerOverlay) drawerOverlay.classList.remove('active');
         if (drawerEl) {
-          drawerEl.classList.remove('active', 'fully-expanded', 'keyboard-open');
+          drawerEl.classList.remove('active', 'fully-expanded', 'keyboard-open', 'search-active');
           drawerEl.style.transform = '';
           drawerEl.style.top = '';
           drawerEl.style.bottom = '';
@@ -2251,6 +2251,13 @@
         function touchStart(e) {
           if (e.touches.length !== 1) return;
           if (e.target.closest('button, a')) return;
+
+          // When search input is active (focused), touches on the input itself must NOT trigger hand movement or close the modal
+          var isInputActive = (drawerEl.classList.contains('search-active') || (drawerSearch && document.activeElement === drawerSearch));
+          if (isInputActive && e.target.closest('.jiji-drawer-search-wrap, #jijiDrawerSearch')) {
+            return;
+          }
+
           startY = e.touches[0].clientY;
           currentY = startY;
           startTime = Date.now();
@@ -2367,10 +2374,9 @@
       // Virtual Keyboard handler: Keep modal list visible when keyboard opens
       function updateVisualViewportDrawer() {
         if (!drawerEl || !drawerEl.classList.contains('active')) return;
-        var isSearchActive = (drawerSearch && document.activeElement === drawerSearch);
         if (window.visualViewport) {
           var vv = window.visualViewport;
-          var isKeyboard = (window.innerHeight - vv.height) > 120 || isSearchActive;
+          var isKeyboard = (window.innerHeight - vv.height) > 120;
           if (isKeyboard) {
             drawerEl.classList.add('keyboard-open');
             var topPos = Math.max(Math.round(vv.offsetTop + 6), 6);
@@ -2384,10 +2390,11 @@
             drawerEl.style.bottom = '';
             drawerEl.style.height = '';
           }
-        } else if (isSearchActive) {
-          drawerEl.classList.add('keyboard-open');
         } else {
           drawerEl.classList.remove('keyboard-open');
+          drawerEl.style.top = '';
+          drawerEl.style.bottom = '';
+          drawerEl.style.height = '';
         }
       }
 
@@ -2398,14 +2405,18 @@
 
       if (drawerSearch) {
         drawerSearch.addEventListener('focus', function() {
-          drawerEl.classList.add('keyboard-open');
+          drawerEl.classList.add('search-active');
           setTimeout(updateVisualViewportDrawer, 60);
           setTimeout(updateVisualViewportDrawer, 250);
         });
         drawerSearch.addEventListener('blur', function() {
+          drawerEl.classList.remove('search-active', 'keyboard-open');
+          drawerEl.style.top = '';
+          drawerEl.style.bottom = '';
+          drawerEl.style.height = '';
           setTimeout(function() {
             updateVisualViewportDrawer();
-          }, 200);
+          }, 150);
         });
       }
 

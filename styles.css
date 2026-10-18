@@ -3706,7 +3706,7 @@ body.drawer-open {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 4px;
 }
 
 @media (min-width: 601px) {
@@ -3721,6 +3721,7 @@ body.drawer-open {
 
 .jiji-drawer-search-wrap {
   flex: 1;
+  width: 100%;
   position: relative;
   background: #ffffff;
   border-radius: 8px;
@@ -3731,6 +3732,7 @@ body.drawer-open {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   gap: 8px;
   touch-action: none;
+  transition: width 0.2s ease;
 }
 
 .jiji-drawer-search-icon {
@@ -3767,12 +3769,18 @@ body.drawer-open {
   cursor: pointer;
   flex-shrink: 0;
   padding: 0;
-  transition: background-color 0.15s;
+  transition: background-color 0.15s, opacity 0.15s;
 }
 
 .jiji-drawer-close-btn:hover,
 .jiji-drawer-close-btn:active {
   background-color: rgba(255, 255, 255, 0.18);
+}
+
+/* When search input is active (focused), hide the close X so search bar auto fills full width */
+.jiji-drawer.search-active .jiji-drawer-close-btn,
+.jiji-drawer-header-row:focus-within .jiji-drawer-close-btn {
+  display: none !important;
 }
 
 /* Category header badge inside drawer */
