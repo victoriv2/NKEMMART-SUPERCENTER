@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Saved Items - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=7.3">
+  <link rel="stylesheet" href="styles.css?v=7.4">
 </head>
 <body>
 
@@ -197,39 +197,6 @@
             </button>
           </div>
 
-          <!-- Filter Tabs -->
-          <div class="saved-filter-tabs">
-            <button type="button" class="saved-tab-btn active" data-tab="all">
-              All Items <span class="saved-tab-count" id="tabCountAll">0</span>
-            </button>
-            <button type="button" class="saved-tab-btn" data-tab="instock">
-              In Stock <span class="saved-tab-count" id="tabCountInStock">0</span>
-            </button>
-            <button type="button" class="saved-tab-btn" data-tab="drops">
-              Price Drops <span class="saved-tab-count" id="tabCountDrops">0</span>
-            </button>
-          </div>
-
-          <!-- Multi-Select Batch Actions Toolbar -->
-          <div class="saved-batch-toolbar">
-            <div class="saved-batch-left">
-              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;">
-                <input type="checkbox" id="selectAllSavedCheckbox" style="width: 17px; height: 17px; accent-color: var(--primary-blue);">
-                <span>Select All (<span id="selectedCountText">0</span>)</span>
-              </label>
-            </div>
-            <div class="saved-batch-actions">
-              <button type="button" class="btn-batch-action primary" id="btnMoveSelectedToCart" disabled>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                Move Selected to Cart
-              </button>
-              <button type="button" class="btn-batch-action" id="btnRemoveSelected" disabled>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                Remove
-              </button>
-            </div>
-          </div>
-
           <!-- Items List Container -->
           <div class="cart-items-list" id="savedItemsList">
             <!-- Dynamically populated via JS -->
@@ -249,10 +216,10 @@
               Found something you like? Tap on the heart icon on any product or save items from your shopping cart to track price drops and order anytime.
             </p>
             <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 10px; margin-bottom: 12px;">
-              <a href="category.html?cat=phones" class="btn-batch-action">Phones & Tablets</a>
-              <a href="category.html?cat=appliances" class="btn-batch-action">Appliances</a>
-              <a href="category.html?cat=electronics" class="btn-batch-action">Electronics</a>
-              <a href="category.html?cat=computing" class="btn-batch-action">Computing</a>
+              <a href="category.html?cat=phones" class="empty-quick-tag">Phones & Tablets</a>
+              <a href="category.html?cat=appliances" class="empty-quick-tag">Appliances</a>
+              <a href="category.html?cat=electronics" class="empty-quick-tag">Electronics</a>
+              <a href="category.html?cat=computing" class="empty-quick-tag">Computing</a>
             </div>
             <a href="index.html" class="empty-cart-shop-btn">
               START SHOPPING
@@ -484,8 +451,6 @@
     document.addEventListener('DOMContentLoaded', function() {
       var SAVED_STORAGE_KEY = 'nkemmart_saved_items';
       var CART_STORAGE_KEY = 'nkemmart_cart';
-      var currentTab = 'all';
-      var selectedIds = new Set();
 
       // Catalog products for cross-sell recommendations
       var CATALOG_PRODUCTS = [
@@ -708,31 +673,6 @@
         attachSwipeToDismiss(toast, dismissTimer);
       }
 
-      function updateBatchToolbar() {
-        var selectAllCb = document.getElementById('selectAllSavedCheckbox');
-        var selectedCountText = document.getElementById('selectedCountText');
-        var btnMoveSelected = document.getElementById('btnMoveSelectedToCart');
-        var btnRemoveSelected = document.getElementById('btnRemoveSelected');
-
-        var saved = getSaved();
-        var count = selectedIds.size;
-
-        if (selectedCountText) selectedCountText.textContent = count;
-
-        if (selectAllCb) {
-          selectAllCb.checked = (saved.length > 0 && count === saved.length);
-          selectAllCb.indeterminate = (count > 0 && count < saved.length);
-        }
-
-        if (btnMoveSelected) {
-          btnMoveSelected.disabled = count === 0;
-        }
-
-        if (btnRemoveSelected) {
-          btnRemoveSelected.disabled = count === 0;
-        }
-      }
-
       function renderSavedItems() {
         var saved = getSaved();
         var totalCount = saved.length;
@@ -743,19 +683,8 @@
         // Header counts
         var headerCount = document.getElementById('savedHeaderCount');
         if (headerCount) {
-          headerCount.textContent = '(' + totalCount + ')';
+          headerCount.textContent = '(' + totalCount + (totalCount === 1 ? ' item)' : ' items)');
         }
-
-        // Tab counts
-        var countInStock = totalCount; // All catalog items are in stock
-        var countDrops = saved.filter(function(it) { return it.originalPrice && it.originalPrice > it.price; }).length;
-
-        var tabAll = document.getElementById('tabCountAll');
-        if (tabAll) tabAll.textContent = totalCount;
-        var tabStock = document.getElementById('tabCountInStock');
-        if (tabStock) tabStock.textContent = countInStock;
-        var tabDrops = document.getElementById('tabCountDrops');
-        if (tabDrops) tabDrops.textContent = countDrops;
 
         // Summary values
         var summaryTotal = document.getElementById('summarySavedTotal');
@@ -817,87 +746,67 @@
         if (totalCount === 0) {
           if (itemsCard) itemsCard.style.display = 'none';
           if (emptyCard) emptyCard.style.display = 'block';
-          selectedIds.clear();
-          updateBatchToolbar();
         } else {
           if (itemsCard) itemsCard.style.display = 'block';
           if (emptyCard) emptyCard.style.display = 'none';
 
-          // Filter items based on current active tab
-          var filteredList = saved;
-          if (currentTab === 'drops') {
-            filteredList = saved.filter(function(it) { return it.originalPrice && it.originalPrice > it.price; });
-          }
-
           if (itemsList) {
             itemsList.innerHTML = '';
-            filteredList.forEach(function(item) {
-              var isChecked = selectedIds.has(item.id);
+            saved.forEach(function(item) {
               var row = document.createElement('div');
               row.className = 'saved-item-row';
               row.setAttribute('data-id', item.id);
 
               var discountHtml = '';
-              var dropBadgeHtml = '';
               if (item.originalPrice && item.originalPrice > item.price) {
                 var disc = Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100);
                 discountHtml = 
-                  '<span class="saved-item-orig">' + formatNaira(item.originalPrice) + '</span>' +
-                  '<span class="saved-item-disc">-' + disc + '%</span>';
-                dropBadgeHtml = 
-                  '<span class="saved-drop-badge">' +
-                    '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>' +
-                    'Price Drop ' + disc + '% off' +
-                  '</span>';
+                  '<span class="cart-item-orig-price">' + formatNaira(item.originalPrice) + '</span>' +
+                  '<span class="cart-item-discount-tag">-' + disc + '%</span>';
               }
 
               row.innerHTML = 
-                '<div class="saved-item-main">' +
-                  '<input type="checkbox" class="saved-item-checkbox" data-select-id="' + item.id + '" ' + (isChecked ? 'checked' : '') + ' aria-label="Select ' + item.title + '">' +
-                  '<div class="saved-item-img-wrapper">' +
-                    '<img src="' + item.image + '" alt="' + item.title + '" class="saved-item-img">' +
+                '<div class="saved-item-top">' +
+                  '<div class="cart-item-img-wrapper">' +
+                    '<img src="' + item.image + '" alt="' + item.title + '" class="cart-item-img">' +
                   '</div>' +
-                  '<div class="saved-item-details">' +
-                    '<div class="saved-item-meta-row">' +
-                      '<span class="rec-card-store" style="margin-bottom: 0;">Official Store</span>' +
-                      dropBadgeHtml +
-                    '</div>' +
-                    '<a href="index.html#product" class="saved-item-title">' + item.title + '</a>' +
-                    '<div class="saved-rating-row">' +
-                      '<div class="stars-row">' +
-                        '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
-                        '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
-                        '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
-                        '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
-                        '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
-                      '</div>' +
-                      '<span>4.8 (120+ sold)</span>' +
-                    '</div>' +
-                    '<div class="saved-item-pricing-inline">' +
-                      '<span class="saved-item-price">' + formatNaira(item.price) + '</span>' +
+                  '<div class="cart-item-details">' +
+                    '<span class="cart-item-store-tag">Official Store</span>' +
+                    '<a href="index.html#product" class="cart-item-title">' + item.title + '</a>' +
+                    '<div class="mobile-price">' +
+                      '<span class="cart-item-current-price">' + formatNaira(item.price) + '</span>' +
                       discountHtml +
                     '</div>' +
-                    '<div class="cart-item-status" style="font-size: 11.5px;">' +
+                    '<div class="cart-item-status">' +
                       '<span class="cart-item-status-dot"></span>' +
                       '<span>In Stock | Eligible for Doorstep Delivery</span>' +
                     '</div>' +
                   '</div>' +
                 '</div>' +
-                '<div class="saved-actions-row">' +
-                  '<button type="button" class="btn-move-to-cart" data-action="move-to-cart" data-id="' + item.id + '">' +
-                    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>' +
-                    'MOVE TO CART' +
-                  '</button>' +
-                  '<button type="button" class="btn-remove-saved" data-action="remove" data-id="' + item.id + '">' +
+                '<div class="cart-item-actions-row">' +
+                  '<button type="button" class="cart-action-btn-text cart-action-btn-remove" data-action="remove" data-id="' + item.id + '">' +
                     '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>' +
                     'Remove' +
+                  '</button>' +
+                  '<button type="button" class="saved-item-btn-cart mobile-only-btn" data-action="move-to-cart" data-id="' + item.id + '">' +
+                    '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>' +
+                    'Move to Cart' +
+                  '</button>' +
+                '</div>' +
+                '<div class="cart-item-right">' +
+                  '<div class="cart-item-pricing">' +
+                    '<div class="cart-item-current-price">' + formatNaira(item.price) + '</div>' +
+                    '<div class="cart-item-price-sub">' + discountHtml + '</div>' +
+                  '</div>' +
+                  '<button type="button" class="saved-item-btn-cart" data-action="move-to-cart" data-id="' + item.id + '">' +
+                    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>' +
+                    'MOVE TO CART' +
                   '</button>' +
                 '</div>';
 
               itemsList.appendChild(row);
             });
           }
-          updateBatchToolbar();
         }
 
         renderRecommendations();
@@ -959,109 +868,8 @@
         });
       }
 
-      // Filter Tabs click
-      var tabBtns = document.querySelectorAll('.saved-tab-btn');
-      tabBtns.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          tabBtns.forEach(function(b) { b.classList.remove('active'); });
-          btn.classList.add('active');
-          currentTab = btn.getAttribute('data-tab');
-          renderSavedItems();
-        });
-      });
-
-      // Item selection checkbox click delegation
-      var itemsListEl = document.getElementById('savedItemsList');
-      if (itemsListEl) {
-        itemsListEl.addEventListener('change', function(e) {
-          var cb = e.target.closest('.saved-item-checkbox');
-          if (cb) {
-            var id = cb.getAttribute('data-select-id');
-            if (cb.checked) {
-              selectedIds.add(id);
-            } else {
-              selectedIds.delete(id);
-            }
-            updateBatchToolbar();
-          }
-        });
-      }
-
-      // Select All checkbox
-      var selectAllCb = document.getElementById('selectAllSavedCheckbox');
-      if (selectAllCb) {
-        selectAllCb.addEventListener('change', function() {
-          var saved = getSaved();
-          if (selectAllCb.checked) {
-            saved.forEach(function(it) { selectedIds.add(it.id); });
-          } else {
-            selectedIds.clear();
-          }
-          var itemCheckboxes = document.querySelectorAll('.saved-item-checkbox');
-          itemCheckboxes.forEach(function(cb) {
-            cb.checked = selectAllCb.checked;
-          });
-          updateBatchToolbar();
-        });
-      }
-
-      // Move Selected to Cart
-      var btnMoveSelected = document.getElementById('btnMoveSelectedToCart');
-      if (btnMoveSelected) {
-        btnMoveSelected.addEventListener('click', function() {
-          if (selectedIds.size === 0) return;
-          var saved = getSaved();
-          var cart = getCart();
-
-          saved.forEach(function(item) {
-            if (selectedIds.has(item.id)) {
-              var existing = cart.find(function(it) { return it.id === item.id; });
-              if (existing) {
-                existing.qty = (existing.qty || 1) + 1;
-              } else {
-                cart.push({
-                  id: item.id,
-                  title: item.title,
-                  price: item.price,
-                  originalPrice: item.originalPrice,
-                  image: item.image,
-                  brand: item.brand,
-                  qty: 1
-                });
-              }
-            }
-          });
-
-          var remaining = saved.filter(function(it) { return !selectedIds.has(it.id); });
-          var movedCount = selectedIds.size;
-          selectedIds.clear();
-
-          saveCart(cart);
-          saveSaved(remaining);
-          updateHeaderCartBadge();
-          renderSavedItems();
-          showToast(movedCount + ' item(s) moved to cart', 'VIEW CART', 'cart.html');
-        });
-      }
-
-      // Remove Selected
-      var btnRemoveSelected = document.getElementById('btnRemoveSelected');
-      if (btnRemoveSelected) {
-        btnRemoveSelected.addEventListener('click', function() {
-          if (selectedIds.size === 0) return;
-          var saved = getSaved();
-          var count = selectedIds.size;
-          if (confirm('Are you sure you want to remove ' + count + ' selected item(s)?')) {
-            var remaining = saved.filter(function(it) { return !selectedIds.has(it.id); });
-            selectedIds.clear();
-            saveSaved(remaining);
-            renderSavedItems();
-            showToast(count + ' item(s) removed from saved list', null, null);
-          }
-        });
-      }
-
       // Handle item removal and move to cart
+      var itemsListEl = document.getElementById('savedItemsList');
       if (itemsListEl) {
         itemsListEl.addEventListener('click', function(e) {
           var btn = e.target.closest('button');
@@ -1081,7 +889,6 @@
 
           if (action === 'remove') {
             saved.splice(itemIndex, 1);
-            selectedIds.delete(id);
             saveSaved(saved);
             renderSavedItems();
             showToast(shortTitle + ' removed from saved items', null, null);
@@ -1103,7 +910,6 @@
             }
             saveCart(cart);
             saved.splice(itemIndex, 1);
-            selectedIds.delete(id);
             saveSaved(saved);
             updateHeaderCartBadge();
             renderSavedItems();
@@ -1119,7 +925,6 @@
           var saved = getSaved();
           if (saved.length === 0) return;
           if (confirm('Are you sure you want to remove all saved items?')) {
-            selectedIds.clear();
             saveSaved([]);
             renderSavedItems();
             showToast('All saved items removed', null, null);
@@ -1153,7 +958,6 @@
           });
 
           saveCart(cart);
-          selectedIds.clear();
           saveSaved([]);
           updateHeaderCartBadge();
           renderSavedItems();
@@ -1250,7 +1054,6 @@
 
             if (existIdx > -1) {
               saved.splice(existIdx, 1);
-              selectedIds.delete(product.id);
               saveSaved(saved);
               renderSavedItems();
               showToast(shortTitle + ' removed from saved items', null, null);
