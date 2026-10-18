@@ -3814,27 +3814,22 @@ body {
 .cat-page-banner {
   background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 55%, #00a859 100%);
   color: #ffffff;
-  padding: 24px 28px;
+  padding: 22px 28px 24px 28px;
   border-radius: 16px;
   margin-bottom: 22px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  flex-direction: column;
+  justify-content: center;
   box-shadow: 0 4px 18px rgba(11, 77, 187, 0.12);
   overflow: hidden;
   box-sizing: border-box;
 }
 
-.cat-page-banner-content {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
 .cat-page-breadcrumbs {
+  width: 100%;
   font-size: 13px;
   color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -3866,8 +3861,21 @@ body {
   text-decoration: underline;
 }
 
+.cat-page-banner-main {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.cat-page-banner-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .cat-page-heading {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 800;
   margin: 0 0 6px 0;
   color: #ffffff;
@@ -3876,14 +3884,14 @@ body {
 }
 
 .cat-page-desc {
-  font-size: 14.5px;
+  font-size: 14px;
   color: rgba(255, 255, 255, 0.88);
   margin: 0;
 }
 
 .cat-page-banner-badge {
-  width: 80px;
-  height: 80px;
+  width: 76px;
+  height: 76px;
   border-radius: 18px;
   background-color: #ffffff;
   display: flex;
@@ -3906,20 +3914,24 @@ body {
 
 @media (max-width: 640px) {
   .cat-page-banner {
-    padding: 16px 14px;
-    gap: 12px;
+    padding: 16px 16px 18px 16px;
     border-radius: 14px;
     margin-bottom: 16px;
+    min-height: 135px;
   }
 
   .cat-page-breadcrumbs {
-    font-size: 12px;
+    font-size: 12.5px;
     gap: 5px;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
+  }
+
+  .cat-page-banner-main {
+    gap: 14px;
   }
 
   .cat-page-heading {
-    font-size: 20px;
+    font-size: 21px;
     line-height: 1.25;
     margin: 0 0 4px 0;
   }
@@ -3934,10 +3946,10 @@ body {
   }
 
   .cat-page-banner-badge {
-    width: 66px;
-    height: 66px;
+    width: 68px;
+    height: 68px;
     border-radius: 14px;
-    padding: 5px;
+    padding: 6px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
   }
 }
