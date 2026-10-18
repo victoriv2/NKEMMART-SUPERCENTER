@@ -515,6 +515,11 @@ body {
 
 .chip-chevron {
   transition: transform 0.2s ease;
+  pointer-events: none;
+}
+
+.chip-btn svg {
+  pointer-events: none;
 }
 
 .chip-btn.active .chip-chevron {

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
-  <link rel="stylesheet" href="styles.css?v=5.7">
+  <link rel="stylesheet" href="styles.css?v=5.8">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -1220,6 +1220,8 @@
         { btn: document.getElementById('chipSortBtn'), popup: document.getElementById('sortPopup') }
       ];
 
+      var isProgrammaticScroll = false;
+
       function scrollPopupIntoViewAboveFloatingBar(popup, btn) {
         if (!popup) return;
 
@@ -1254,10 +1256,14 @@
             }
 
             if (scrollAmount > 0) {
+              isProgrammaticScroll = true;
               window.scrollBy({
                 top: Math.round(scrollAmount),
                 behavior: 'smooth'
               });
+              setTimeout(function() {
+                isProgrammaticScroll = false;
+              }, 450);
             }
           }
         }, 50);
@@ -1775,6 +1781,7 @@
       var scrollTolerance = 5;
 
       window.addEventListener('scroll', function() {
+        if (isProgrammaticScroll) return;
         var currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
         if (currentScrollY < 0) currentScrollY = 0;
 
@@ -1796,7 +1803,6 @@
         // Scrolling DOWN -> Hide header to maximize screen space
         if (scrollDelta > 0 && currentScrollY > 70) {
           if (mainHeader && !mainHeader.classList.contains('header-hidden')) {
-            if (typeof closeAllPopups === 'function') closeAllPopups();
             mainHeader.classList.add('header-hidden');
             mainHeader.classList.remove('header-scrolled-up');
           }
