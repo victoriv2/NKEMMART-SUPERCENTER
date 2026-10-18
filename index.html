@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
-  <link rel="stylesheet" href="styles.css?v=3.6">
+  <link rel="stylesheet" href="styles.css?v=3.7">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -2179,6 +2179,10 @@
           }, { passive: true });
 
           drawerList.addEventListener('touchmove', function(e) {
+            // When keyboard is open or search is focused, allow 100% free native scrolling
+            if (drawerEl.classList.contains('keyboard-open') || (drawerSearch && document.activeElement === drawerSearch)) {
+              return;
+            }
             if (listStartY !== null && drawerList.scrollTop <= 0) {
               var dy = e.touches[0].clientY - listStartY;
               if (dy > 12) {
@@ -2209,13 +2213,16 @@
       // Virtual Keyboard handler: Keep modal list visible when keyboard opens
       function updateVisualViewportDrawer() {
         if (!drawerEl || !drawerEl.classList.contains('active')) return;
+        var isSearchActive = (drawerSearch && document.activeElement === drawerSearch);
         if (window.visualViewport) {
           var vv = window.visualViewport;
-          var isKeyboard = (window.innerHeight - vv.height) > 140;
-          if (isKeyboard || (drawerSearch && document.activeElement === drawerSearch)) {
+          var isKeyboard = (window.innerHeight - vv.height) > 120 || isSearchActive;
+          if (isKeyboard) {
             drawerEl.classList.add('keyboard-open');
-            drawerEl.style.top = (vv.offsetTop + 6) + 'px';
-            drawerEl.style.height = (vv.height - 12) + 'px';
+            var topPos = Math.max(Math.round(vv.offsetTop + 6), 6);
+            var availH = Math.round(vv.height - 12);
+            drawerEl.style.top = topPos + 'px';
+            drawerEl.style.height = availH + 'px';
             drawerEl.style.bottom = 'auto';
           } else {
             drawerEl.classList.remove('keyboard-open');
@@ -2223,6 +2230,10 @@
             drawerEl.style.bottom = '';
             drawerEl.style.height = '';
           }
+        } else if (isSearchActive) {
+          drawerEl.classList.add('keyboard-open');
+        } else {
+          drawerEl.classList.remove('keyboard-open');
         }
       }
 
@@ -2233,9 +2244,9 @@
 
       if (drawerSearch) {
         drawerSearch.addEventListener('focus', function() {
-          drawerEl.classList.add('fully-expanded');
-          setTimeout(updateVisualViewportDrawer, 100);
-          setTimeout(updateVisualViewportDrawer, 300);
+          drawerEl.classList.add('keyboard-open');
+          setTimeout(updateVisualViewportDrawer, 60);
+          setTimeout(updateVisualViewportDrawer, 250);
         });
         drawerSearch.addEventListener('blur', function() {
           setTimeout(function() {

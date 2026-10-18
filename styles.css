@@ -3575,9 +3575,18 @@ body {
 
 /* Keyboard open state: pin drawer to top of visual viewport so results are visible above keyboard */
 .jiji-drawer.keyboard-open {
-  top: 8px !important;
+  top: 6px !important;
   bottom: auto !important;
   transition: transform 0.15s ease, height 0.15s ease !important;
+}
+
+.jiji-drawer.keyboard-open .jiji-drawer-list {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  padding-bottom: 70px !important;
 }
 
 @media (min-width: 601px) {
@@ -3740,6 +3749,7 @@ body {
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
   padding: 0;
   margin: 0;
   list-style: none;
