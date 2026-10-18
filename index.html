@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
-  <link rel="stylesheet" href="styles.css?v=5.0">
+  <link rel="stylesheet" href="styles.css?v=5.1">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -2166,18 +2166,13 @@
                               drawerEl.classList.contains('search-active') || 
                               drawerEl.classList.contains('keyboard-open');
           if (isInputActive) {
-            // When keyboard is active and you press back on your phone,
-            // retract the input, blur it, reveal the X button back, and KEEP the modal open!
+            // As soon as you press back, input retracts and reveals the X!
             if (drawerSearch) {
               drawerSearch.blur();
             }
             drawerEl.classList.remove('search-active', 'keyboard-open');
             drawerEl.style.maxHeight = '';
             drawerEl.style.height = '';
-            try {
-              history.pushState({ modalOpen: 'subcategoryDrawer' }, '');
-              modalHistoryPushed = true;
-            } catch (err) {}
             return;
           }
 
@@ -2272,9 +2267,8 @@
           if (e.touches.length !== 1) return;
           if (e.target.closest('button, a')) return;
 
-          // When search input is active (focused) or keyboard is open, touches within the modal must NEVER trigger drag-to-close
-          var isInputActive = (drawerEl.classList.contains('search-active') || drawerEl.classList.contains('keyboard-open') || (drawerSearch && document.activeElement === drawerSearch));
-          if (isInputActive) {
+          // Disable hand movement ONLY on the search input itself - rest of modal still responds to gestures
+          if (e.target.closest('.jiji-drawer-search-wrap, #jijiDrawerSearch')) {
             return;
           }
 
@@ -2312,13 +2306,14 @@
         function touchEnd() {
           if (!isDragging) return;
           isDragging = false;
-          drawerEl.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+          drawerEl.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
 
           var deltaY = currentY - startY;
           var elapsed = Date.now() - startTime;
           var velocity = deltaY / Math.max(elapsed, 1);
 
-          if (deltaY > 90 || velocity > 0.35) {
+          // Only close on deliberate downward pull (deltaY > 100 or deltaY > 45 with high velocity), never on tap
+          if ((deltaY > 100) || (deltaY > 45 && velocity > 0.45)) {
             drawerEl.style.transform = 'translateY(100%)';
             setTimeout(function() {
               closeSubcategoryDrawer();
@@ -2383,7 +2378,7 @@
           drawerList.addEventListener('touchend', function(e) {
             if (isListPulling) {
               isListPulling = false;
-              drawerEl.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s ease';
+              drawerEl.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
               var dy = e.changedTouches[0].clientY - listStartY;
               if (dy > 110) {
                 drawerEl.style.transform = 'translateY(100%)';
@@ -2423,6 +2418,13 @@
             drawerEl.style.bottom = '';
             drawerEl.style.maxHeight = '';
             drawerEl.style.height = '';
+            // As soon as keyboard closes on back button press, immediately retract search input & reveal X
+            if (drawerEl.classList.contains('search-active')) {
+              if (drawerSearch && document.activeElement === drawerSearch) {
+                drawerSearch.blur();
+              }
+              drawerEl.classList.remove('search-active');
+            }
           }
         } else {
           drawerEl.classList.remove('keyboard-open');

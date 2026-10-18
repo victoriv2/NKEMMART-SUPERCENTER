@@ -3864,7 +3864,7 @@ body.drawer-open {
 /* Drawer Header - Single unified container with zero seams or lines */
 .jiji-drawer-header {
   background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 100%);
-  padding: 8px 8px 12px 14px;
+  padding: 8px 6px 12px 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3895,7 +3895,7 @@ body.drawer-open {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
 }
 
 @media (min-width: 601px) {
@@ -3949,7 +3949,7 @@ body.drawer-open {
   background: none;
   border: none;
   color: #ffffff;
-  width: 36px;
+  width: 34px;
   height: 36px;
   display: flex;
   align-items: center;
@@ -3958,7 +3958,7 @@ body.drawer-open {
   cursor: pointer;
   flex-shrink: 0;
   padding: 0;
-  margin-right: -4px;
+  margin-right: -2px;
   transition: background-color 0.15s, opacity 0.15s;
 }
 
