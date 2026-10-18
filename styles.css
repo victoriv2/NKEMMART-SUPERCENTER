@@ -3870,20 +3870,21 @@ body.drawer-open {
   }
 
   .jiji-drawer-header {
-    padding: 14px 14px !important;
+    padding: 14px 6px 14px 14px !important;
   }
 
   .jiji-drawer-drag-pill {
     display: none !important;
   }
 
-  /* On desktop screen: The 'X' close button MUST ALWAYS SHOW - never disappears or retracts */
+  /* On desktop screen: The 'X' close button MUST ALWAYS SHOW - never disappears or retracts, adjusted slightly to the right */
   .jiji-drawer .jiji-drawer-close-btn,
   .jiji-drawer.search-active .jiji-drawer-close-btn {
     display: flex !important;
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
+    margin-right: -2px !important;
   }
 
   .jiji-drawer-search-wrap {
@@ -3929,15 +3930,6 @@ body.drawer-open {
   gap: 2px;
 }
 
-@media (min-width: 601px) {
-  .jiji-drawer-header {
-    padding: 14px 14px;
-  }
-
-  .jiji-drawer-drag-pill {
-    display: none;
-  }
-}
 
 .jiji-drawer-search-wrap {
   flex: 1;
