@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=3.8">
+  <link rel="stylesheet" href="styles.css?v=3.9">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -717,6 +717,7 @@
 
       // Touch Gesture Support: Pull down to close, raise up to expand
       var drawerHeader = document.getElementById('jijiDrawerHeader');
+      var drawerCatInfo = document.querySelector('.jiji-drawer-cat-info');
 
       (function setupGesture() {
         if (!drawerEl) return;
@@ -724,13 +725,16 @@
         var currentY = 0;
         var startTime = 0;
         var isDragging = false;
+        var startHeight = 0;
 
         function touchStart(e) {
           if (e.touches.length !== 1) return;
+          if (e.target.closest('input, button, a')) return;
           startY = e.touches[0].clientY;
           currentY = startY;
           startTime = Date.now();
           isDragging = true;
+          startHeight = drawerEl.offsetHeight;
           drawerEl.style.transition = 'none';
         }
 
@@ -741,41 +745,53 @@
 
           if (deltaY > 0) {
             drawerEl.style.transform = 'translateY(' + deltaY + 'px)';
-          } else if (deltaY < 0) {
-            if (!drawerEl.classList.contains('fully-expanded')) {
-              drawerEl.style.transform = 'translateY(' + (deltaY * 0.35) + 'px)';
-            }
+          } else {
+            drawerEl.style.transform = 'translateY(0)';
+            var maxAllowedH = Math.round(window.innerHeight * 0.94);
+            var pullUpAmount = -deltaY;
+            var targetH = Math.min(startHeight + pullUpAmount, maxAllowedH);
+            drawerEl.style.height = targetH + 'px';
           }
         }
 
         function touchEnd() {
           if (!isDragging) return;
           isDragging = false;
-          drawerEl.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s ease';
+          drawerEl.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
 
           var deltaY = currentY - startY;
           var elapsed = Date.now() - startTime;
           var velocity = deltaY / Math.max(elapsed, 1);
 
-          if (deltaY > 110 || velocity > 0.4) {
+          if (deltaY > 110 || velocity > 0.45) {
             drawerEl.style.transform = 'translateY(100%)';
             setTimeout(function() {
               closeDrawer();
+              drawerEl.style.height = '';
+              drawerEl.classList.remove('fully-expanded');
             }, 260);
-          } else if (deltaY < -50 || velocity < -0.3) {
+          } else if (deltaY < -35 || velocity < -0.35) {
             drawerEl.classList.add('fully-expanded');
+            drawerEl.style.height = '';
+            drawerEl.style.transform = 'translateY(0)';
+          } else if (deltaY > 35 && drawerEl.classList.contains('fully-expanded')) {
+            drawerEl.classList.remove('fully-expanded');
+            drawerEl.style.height = '';
             drawerEl.style.transform = 'translateY(0)';
           } else {
             drawerEl.style.transform = 'translateY(0)';
+            drawerEl.style.height = '';
           }
         }
 
-        if (drawerHeader) {
-          drawerHeader.addEventListener('touchstart', touchStart, { passive: true });
-          drawerHeader.addEventListener('touchmove', touchMove, { passive: true });
-          drawerHeader.addEventListener('touchend', touchEnd, { passive: true });
-          drawerHeader.addEventListener('touchcancel', touchEnd, { passive: true });
-        }
+        [drawerHeader, drawerCatInfo].forEach(function(el) {
+          if (el) {
+            el.addEventListener('touchstart', touchStart, { passive: true });
+            el.addEventListener('touchmove', touchMove, { passive: true });
+            el.addEventListener('touchend', touchEnd, { passive: true });
+            el.addEventListener('touchcancel', touchEnd, { passive: true });
+          }
+        });
 
         if (drawerList) {
           var listStartY = null;
