@@ -3810,33 +3810,40 @@ body.drawer-open {
   max-height: 94vh !important;
 }
 
-/* Keyboard open & search active state on mobile - zero bouncing, stable bottom anchor */
-.jiji-drawer.keyboard-open,
-.jiji-drawer.search-active {
-  bottom: 0 !important;
-  top: auto !important;
-  transition: none !important;
+@media (max-width: 600px) {
+  /* Keyboard open & search active state on mobile only - zero bouncing, stable bottom anchor */
+  .jiji-drawer.keyboard-open,
+  .jiji-drawer.search-active {
+    bottom: 0 !important;
+    top: auto !important;
+    transition: none !important;
+  }
+
+  .jiji-drawer.keyboard-open .jiji-drawer-list {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: none !important;
+    padding-bottom: 30px !important;
+  }
+
+  /* When search input is active on mobile, expand symmetrically with 14px padding on both sides */
+  .jiji-drawer.search-active .jiji-drawer-header {
+    padding: 8px 14px 12px 14px;
+  }
 }
 
-.jiji-drawer.keyboard-open .jiji-drawer-list {
-  flex: 1 1 auto !important;
-  min-height: 0 !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-  overscroll-behavior: none !important;
-  padding-bottom: 30px !important;
-}
-
-/* Desktop Modal: Elevated, centered card dialog, completely hidden when inactive */
+/* Desktop Modal: Elevated, centered card dialog, completely stationary and centered */
 @media (min-width: 601px) {
   .jiji-drawer {
-    top: 50%;
-    left: 50%;
-    bottom: auto;
-    right: auto;
+    top: 50% !important;
+    left: 50% !important;
+    bottom: auto !important;
+    right: auto !important;
     width: 90%;
     max-width: 500px;
-    height: auto;
+    height: auto !important;
     max-height: 78vh;
     border-radius: 20px;
     padding-bottom: 0;
@@ -3848,17 +3855,40 @@ body.drawer-open {
     transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
   }
 
-  .jiji-drawer.active {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
+  /* When active on desktop, modal stays strictly centered, never moves up or shifts on hardware typing */
+  .jiji-drawer.active,
+  .jiji-drawer.active.search-active,
+  .jiji-drawer.active.keyboard-open {
+    transform: translate(-50%, -50%) scale(1) !important;
+    top: 50% !important;
+    bottom: auto !important;
+    height: auto !important;
+    max-height: 78vh !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
   }
 
-  .jiji-drawer.keyboard-open {
-    top: 50% !important;
-    transform: translate(-50%, -50%) scale(1) !important;
-    height: auto !important;
+  .jiji-drawer-header {
+    padding: 14px 14px !important;
+  }
+
+  .jiji-drawer-drag-pill {
+    display: none !important;
+  }
+
+  /* On desktop screen: The 'X' close button MUST ALWAYS SHOW - never disappears or retracts */
+  .jiji-drawer .jiji-drawer-close-btn,
+  .jiji-drawer.search-active .jiji-drawer-close-btn {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  .jiji-drawer-search-wrap {
+    flex: 1;
+    width: auto;
   }
 }
 
@@ -3872,11 +3902,6 @@ body.drawer-open {
   position: relative;
   flex-shrink: 0;
   touch-action: auto !important;
-}
-
-/* When search input is active, expand symmetrically with 14px padding on both sides */
-.jiji-drawer.search-active .jiji-drawer-header {
-  padding: 8px 14px 12px 14px;
 }
 
 /* Drag pill centered at the very top inside the unified header */
@@ -3976,9 +4001,11 @@ body.drawer-open {
   background-color: rgba(255, 255, 255, 0.18);
 }
 
-/* When search input is active (focused), hide the close X so search bar auto fills full width */
-.jiji-drawer.search-active .jiji-drawer-close-btn {
-  display: none !important;
+/* When search input is active on mobile only, hide the close X so search bar auto fills full width */
+@media (max-width: 600px) {
+  .jiji-drawer.search-active .jiji-drawer-close-btn {
+    display: none !important;
+  }
 }
 
 /* Category header badge inside drawer */
