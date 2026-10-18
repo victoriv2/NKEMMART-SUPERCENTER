@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=3.2">
+  <link rel="stylesheet" href="styles.css?v=3.3">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -213,10 +213,10 @@
       <div class="cat-page-banner-content">
         <div class="cat-page-breadcrumbs">
           <a href="index.html">Home</a>
-          <span>/</span>
-          <span id="breadcrumbCatName">Category</span>
-          <span id="breadcrumbSubSeparator" style="display: none;">/</span>
-          <span id="breadcrumbSubName" style="color: #38bdf8; display: none;"></span>
+          <span class="breadcrumb-sep">/</span>
+          <a href="#" id="breadcrumbCatLink"><span id="breadcrumbCatName">Category</span></a>
+          <span id="breadcrumbSubSeparator" class="breadcrumb-sep" style="display: none;">/</span>
+          <span id="breadcrumbSubName" class="breadcrumb-current" style="color: #38bdf8; display: none;"></span>
         </div>
         <h1 class="cat-page-heading" id="catHeadingTitle">Category Catalog</h1>
         <p class="cat-page-desc" id="catHeadingDesc">Explore genuine verified listings and products on NKEMMART Supercenter</p>
@@ -264,6 +264,133 @@
     </div>
 
   </main>
+
+  <!-- Off-Canvas Mobile Navigation Drawer (Hamburger Menu) -->
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+  <aside class="mobile-nav-drawer" id="mobileNavDrawer" role="dialog" aria-modal="true" aria-label="Main Navigation Menu">
+    <div class="mobile-nav-header">
+      <button class="mobile-nav-close" id="mobileNavCloseBtn" aria-label="Close menu" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="mobile-nav-logo">
+    </div>
+
+    <!-- Need Help Section -->
+    <div class="mobile-nav-section">
+      <a href="#help" class="mobile-nav-link-row">
+        <span>NEED HELP?</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </a>
+    </div>
+
+    <!-- My Account Section -->
+    <div class="mobile-nav-section">
+      <a href="#account" class="mobile-nav-link-row">
+        <span>MY NKEMMART ACCOUNT</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </a>
+      <div class="mobile-sub-nav-list">
+        <a href="#orders" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          <span>Orders</span>
+        </a>
+        <a href="#pending-reviews" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span>Pending Reviews</span>
+        </a>
+        <a href="#vouchers" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+          <span>Voucher</span>
+        </a>
+        <a href="#saved-items" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span>Saved Items</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Our Categories Section -->
+    <div class="mobile-nav-section">
+      <div class="mobile-section-header">
+        <span class="mobile-section-title">OUR CATEGORIES</span>
+        <a href="category.html?cat=vehicles" class="mobile-section-see-all">See All</a>
+      </div>
+      <div class="mobile-categories-list">
+        <a href="category.html?cat=vehicles" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L18 11l-2.7-3.6a1 1 0 0 0-.8-.4H9.5a1 1 0 0 0-.8.4L6 11l-3.16.86a1 1 0 0 0-.84.99V16h3"></path><circle cx="6.5" cy="16.5" r="2.5"></circle><circle cx="16.5" cy="16.5" r="2.5"></circle></svg>
+          <span>Vehicles</span>
+        </a>
+        <a href="category.html?cat=appliances" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="10" x2="20" y2="10"></line></svg>
+          <span>Appliances</span>
+        </a>
+        <a href="category.html?cat=phones" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+          <span>Phones & Tablets</span>
+        </a>
+        <a href="category.html?cat=health-beauty" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 21h10M12 3v18M8 8l4-5 4 5"></path></svg>
+          <span>Health & Beauty</span>
+        </a>
+        <a href="category.html?cat=home-office" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          <span>Home & Office</span>
+        </a>
+        <a href="category.html?cat=electronics" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+          <span>Electronics</span>
+        </a>
+        <a href="category.html?cat=fashion" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.5a2 2 0 0 0 1.25 1.57L7 12v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-9l2.89-1.24a2 2 0 0 0 1.25-1.57l.58-3.5a2 2 0 0 0-1.34-2.23z"></path></svg>
+          <span>Fashion</span>
+        </a>
+        <a href="category.html?cat=supermarket" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 5-5 13-5 13S7 12 7 7a5 5 0 0 1 5-5z"></path></svg>
+          <span>Supermarket</span>
+        </a>
+        <a href="category.html?cat=computing" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>Computing</span>
+        </a>
+        <a href="category.html?cat=baby" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+          <span>Baby Products</span>
+        </a>
+        <a href="category.html?cat=gaming" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="6"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="11" r="1"></circle><circle cx="18" cy="13" r="1"></circle></svg>
+          <span>Gaming</span>
+        </a>
+        <a href="category.html?cat=other" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+          <span>Other categories</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Our Services Section -->
+    <div class="mobile-nav-section">
+      <div class="mobile-section-header">
+        <span class="mobile-section-title">OUR SERVICES</span>
+      </div>
+      <div class="mobile-services-list">
+        <a href="#service-center" class="mobile-service-item">
+          <svg class="mobile-service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+          <span>Service Center</span>
+        </a>
+        <a href="#contact-us" class="mobile-service-item">
+          <svg class="mobile-service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+          <span>Contact Us</span>
+        </a>
+      </div>
+    </div>
+  </aside>
 
   <!-- Jiji-Style Mobile Subcategory Drawer -->
   <div class="jiji-drawer-overlay" id="jijiDrawerOverlay" aria-hidden="true"></div>
@@ -319,6 +446,7 @@
 
       // Update Header & Breadcrumbs
       var breadcrumbCat = document.getElementById('breadcrumbCatName');
+      var breadcrumbCatLink = document.getElementById('breadcrumbCatLink');
       var breadcrumbSubSep = document.getElementById('breadcrumbSubSeparator');
       var breadcrumbSub = document.getElementById('breadcrumbSubName');
       var catHeading = document.getElementById('catHeadingTitle');
@@ -326,6 +454,7 @@
       var badgeImg = document.getElementById('catBannerBadgeImg');
 
       if (breadcrumbCat) breadcrumbCat.textContent = catData.name;
+      if (breadcrumbCatLink) breadcrumbCatLink.href = 'category.html?cat=' + encodeURIComponent(currentCatKey);
       if (badgeImg) badgeImg.src = catData.icon;
 
       if (currentSubKey) {
@@ -338,10 +467,12 @@
           }
           if (catHeading) catHeading.textContent = subMatch.name;
           if (catDesc) catDesc.textContent = 'Showing ' + subMatch.count + ' verified ads and official store products';
+          if (badgeImg) badgeImg.src = subMatch.icon;
         }
       } else {
         if (catHeading) catHeading.textContent = catData.name;
         if (catDesc) catDesc.textContent = 'Explore over ' + catData.count + ' active listings in ' + catData.name;
+        if (badgeImg) badgeImg.src = catData.icon;
       }
 
       // Populate Subcategories Strip
@@ -470,20 +601,50 @@
         return list;
       }
 
-      // Mobile Hamburger toggle
-      var menuBtn = document.getElementById('mobileMenuBtn');
+      // Mobile Nav Drawer functionality (Hamburger menu on mobile)
+      var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      var mobileNavDrawer = document.getElementById('mobileNavDrawer');
+      var mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+      var mobileNavCloseBtn = document.getElementById('mobileNavCloseBtn');
       var desktopCategoryDropdown = document.getElementById('desktopCategoryDropdown');
-      if (menuBtn && desktopCategoryDropdown) {
-        menuBtn.addEventListener('click', function(e) {
+
+      function openMobileNav() {
+        if (mobileNavDrawer && mobileNavBackdrop) {
+          mobileNavDrawer.classList.add('active');
+          mobileNavBackdrop.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      function closeMobileNav() {
+        if (mobileNavDrawer && mobileNavBackdrop) {
+          mobileNavDrawer.classList.remove('active');
+          mobileNavBackdrop.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      }
+
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function(e) {
           e.stopPropagation();
-          desktopCategoryDropdown.classList.toggle('open');
-        });
-        document.addEventListener('click', function(e) {
-          if (!desktopCategoryDropdown.contains(e.target) && !menuBtn.contains(e.target)) {
-            desktopCategoryDropdown.classList.remove('open');
+          if (window.innerWidth <= 860) {
+            openMobileNav();
+          } else {
+            if (desktopCategoryDropdown) {
+              desktopCategoryDropdown.classList.toggle('open');
+            }
           }
         });
       }
+
+      if (mobileNavCloseBtn) mobileNavCloseBtn.addEventListener('click', closeMobileNav);
+      if (mobileNavBackdrop) mobileNavBackdrop.addEventListener('click', closeMobileNav);
+
+      document.addEventListener('click', function(e) {
+        if (desktopCategoryDropdown && !desktopCategoryDropdown.contains(e.target) && mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
+          desktopCategoryDropdown.classList.remove('open');
+        }
+      });
 
       // Jiji-style Mobile Drawer logic on category page
       var drawerOverlay = document.getElementById('jijiDrawerOverlay');

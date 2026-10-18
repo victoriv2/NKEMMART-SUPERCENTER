@@ -3781,27 +3781,46 @@ body {
 .cat-page-banner {
   background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 55%, #00a859 100%);
   color: #ffffff;
-  padding: 26px 28px;
+  padding: 24px 28px;
   border-radius: 16px;
   margin-bottom: 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 20px;
   box-shadow: 0 4px 18px rgba(11, 77, 187, 0.12);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .cat-page-banner-content {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .cat-page-breadcrumbs {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.85);
   margin-bottom: 8px;
   display: flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cat-page-breadcrumbs::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-page-breadcrumbs a,
+.cat-page-breadcrumbs span {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .cat-page-breadcrumbs a {
@@ -3820,6 +3839,7 @@ body {
   margin: 0 0 6px 0;
   color: #ffffff;
   letter-spacing: -0.3px;
+  word-break: break-word;
 }
 
 .cat-page-desc {
@@ -3831,7 +3851,7 @@ body {
 .cat-page-banner-badge {
   width: 80px;
   height: 80px;
-  border-radius: 20px;
+  border-radius: 18px;
   background-color: #ffffff;
   display: flex;
   align-items: center;
@@ -3840,12 +3860,53 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px;
+  box-sizing: border-box;
 }
 
 .cat-page-banner-badge img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .cat-page-banner {
+    padding: 16px 14px;
+    gap: 12px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+  }
+
+  .cat-page-breadcrumbs {
+    font-size: 12px;
+    gap: 5px;
+    margin-bottom: 6px;
+  }
+
+  .cat-page-heading {
+    font-size: 20px;
+    line-height: 1.25;
+    margin: 0 0 4px 0;
+  }
+
+  .cat-page-desc {
+    font-size: 12px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .cat-page-banner-badge {
+    width: 66px;
+    height: 66px;
+    border-radius: 14px;
+    padding: 5px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+  }
 }
 
 /* Subcategories Strip / Pill Row on Category Page */
