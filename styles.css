@@ -1644,7 +1644,7 @@ body {
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.55);
-  z-index: 2200;
+  z-index: 30000;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -1667,7 +1667,7 @@ body {
   height: 100dvh;
   max-height: 100dvh;
   background-color: var(--white);
-  z-index: 2250;
+  z-index: 30050;
   transform: translateX(-100%);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
   overflow-y: auto;
@@ -2079,7 +2079,7 @@ body {
   .quick-filter-bar {
     position: relative;
     max-width: 100%;
-    z-index: 10050;
+    z-index: 90;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
@@ -2113,7 +2113,7 @@ body {
     max-width: none !important;
     max-height: calc(100vh - 130px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    z-index: 10050 !important;
+    z-index: 500 !important;
   }
 
   .quick-filter-bar .filter-popup-card.open {
