@@ -4332,6 +4332,11 @@ body.drawer-open {
   border-radius: 7px;
 }
 
+.cat-subcat-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
 .cat-subcat-card-name {
   font-size: 13px;
   font-weight: 600;
@@ -4343,6 +4348,55 @@ body.drawer-open {
   font-size: 11.5px;
   color: #64748b;
   margin-top: 2px;
+}
+
+.cat-subcat-card-arrow {
+  display: none;
+  margin-left: auto;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* Mobile view: Subcategories in list form instead of grid (only mobile view) */
+@media (max-width: 600px) {
+  .cat-subcats-strip {
+    padding: 12px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+  }
+
+  .cat-subcats-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cat-subcat-card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    border-radius: 10px;
+    gap: 12px;
+  }
+
+  .cat-subcat-card-thumb {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+  }
+
+  .cat-subcat-card-name {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .cat-subcat-card-count {
+    font-size: 12px;
+  }
+
+  .cat-subcat-card-arrow {
+    display: block;
+  }
 }
 
 

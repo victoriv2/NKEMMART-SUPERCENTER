@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=5.8">
+  <link rel="stylesheet" href="styles.css?v=5.9">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -501,7 +501,8 @@
         allCard.className = 'cat-subcat-card' + (!currentSubKey ? ' active' : '');
         allCard.innerHTML = 
           '<div class="cat-subcat-card-thumb"><img src="' + catData.icon + '" alt="All"></div>' +
-          '<div><div class="cat-subcat-card-name">All ' + catData.name + '</div><div class="cat-subcat-card-count">' + catData.count + ' ads</div></div>';
+          '<div class="cat-subcat-card-info"><div class="cat-subcat-card-name">All ' + catData.name + '</div><div class="cat-subcat-card-count">' + catData.count + ' ads</div></div>' +
+          '<svg class="cat-subcat-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
         subcatsGrid.appendChild(allCard);
 
         catData.subcategories.forEach(function(sub) {
@@ -510,7 +511,8 @@
           subCard.className = 'cat-subcat-card' + (currentSubKey === sub.id ? ' active' : '');
           subCard.innerHTML = 
             '<div class="cat-subcat-card-thumb"><img src="' + sub.icon + '" alt="' + sub.name + '"></div>' +
-            '<div><div class="cat-subcat-card-name">' + sub.name + '</div><div class="cat-subcat-card-count">' + sub.count + ' ads</div></div>';
+            '<div class="cat-subcat-card-info"><div class="cat-subcat-card-name">' + sub.name + '</div><div class="cat-subcat-card-count">' + sub.count + ' ads</div></div>' +
+            '<svg class="cat-subcat-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
           subcatsGrid.appendChild(subCard);
         });
       }
