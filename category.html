@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=3.3">
+  <link rel="stylesheet" href="styles.css?v=3.4">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -395,7 +395,10 @@
   <!-- Jiji-Style Mobile Subcategory Drawer -->
   <div class="jiji-drawer-overlay" id="jijiDrawerOverlay" aria-hidden="true"></div>
   <aside class="jiji-drawer" id="jijiDrawer" role="dialog" aria-modal="true" aria-label="Subcategories">
-    <div class="jiji-drawer-header">
+    <div class="jiji-drawer-drag-area" id="jijiDrawerDragArea" aria-label="Drag to adjust or close">
+      <span class="jiji-drawer-drag-pill"></span>
+    </div>
+    <div class="jiji-drawer-header" id="jijiDrawerHeader">
       <button type="button" class="jiji-drawer-back-btn" id="jijiDrawerBackBtn" aria-label="Go back">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 18 9 12 15 6"></polyline>
@@ -670,7 +673,16 @@
 
       function closeDrawer() {
         if (drawerOverlay) drawerOverlay.classList.remove('active');
-        if (drawerEl) drawerEl.classList.remove('active');
+        if (drawerEl) {
+          drawerEl.classList.remove('active', 'fully-expanded', 'keyboard-open');
+          drawerEl.style.transform = '';
+          drawerEl.style.top = '';
+          drawerEl.style.bottom = '';
+          drawerEl.style.height = '';
+        }
+        if (drawerSearch && document.activeElement === drawerSearch) {
+          drawerSearch.blur();
+        }
         document.body.style.overflow = '';
       }
 
@@ -701,6 +713,147 @@
             return s.name.toLowerCase().indexOf(q) > -1;
           });
           renderDrawer(filtered);
+        });
+      }
+
+      // Touch Gesture Support: Pull down to close, raise up to expand
+      var drawerDragArea = document.getElementById('jijiDrawerDragArea');
+      var drawerHeader = document.getElementById('jijiDrawerHeader');
+
+      (function setupGesture() {
+        if (!drawerEl) return;
+        var startY = 0;
+        var currentY = 0;
+        var startTime = 0;
+        var isDragging = false;
+
+        function touchStart(e) {
+          if (e.touches.length !== 1) return;
+          startY = e.touches[0].clientY;
+          currentY = startY;
+          startTime = Date.now();
+          isDragging = true;
+          drawerEl.style.transition = 'none';
+        }
+
+        function touchMove(e) {
+          if (!isDragging) return;
+          currentY = e.touches[0].clientY;
+          var deltaY = currentY - startY;
+
+          if (deltaY > 0) {
+            drawerEl.style.transform = 'translateY(' + deltaY + 'px)';
+          } else if (deltaY < 0) {
+            if (!drawerEl.classList.contains('fully-expanded')) {
+              drawerEl.style.transform = 'translateY(' + (deltaY * 0.35) + 'px)';
+            }
+          }
+        }
+
+        function touchEnd() {
+          if (!isDragging) return;
+          isDragging = false;
+          drawerEl.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s ease';
+
+          var deltaY = currentY - startY;
+          var elapsed = Date.now() - startTime;
+          var velocity = deltaY / Math.max(elapsed, 1);
+
+          if (deltaY > 110 || velocity > 0.4) {
+            drawerEl.style.transform = 'translateY(100%)';
+            setTimeout(function() {
+              closeDrawer();
+            }, 260);
+          } else if (deltaY < -50 || velocity < -0.3) {
+            drawerEl.classList.add('fully-expanded');
+            drawerEl.style.transform = 'translateY(0)';
+          } else {
+            drawerEl.style.transform = 'translateY(0)';
+          }
+        }
+
+        [drawerDragArea, drawerHeader].forEach(function(el) {
+          if (el) {
+            el.addEventListener('touchstart', touchStart, { passive: true });
+            el.addEventListener('touchmove', touchMove, { passive: true });
+            el.addEventListener('touchend', touchEnd, { passive: true });
+            el.addEventListener('touchcancel', touchEnd, { passive: true });
+          }
+        });
+
+        if (drawerList) {
+          var listStartY = null;
+          var isListPulling = false;
+          drawerList.addEventListener('touchstart', function(e) {
+            if (drawerList.scrollTop <= 0 && e.touches.length === 1) {
+              listStartY = e.touches[0].clientY;
+              isListPulling = false;
+            }
+          }, { passive: true });
+
+          drawerList.addEventListener('touchmove', function(e) {
+            if (listStartY !== null && drawerList.scrollTop <= 0) {
+              var dy = e.touches[0].clientY - listStartY;
+              if (dy > 12) {
+                isListPulling = true;
+                drawerEl.style.transition = 'none';
+                drawerEl.style.transform = 'translateY(' + (dy - 12) + 'px)';
+              }
+            }
+          }, { passive: true });
+
+          drawerList.addEventListener('touchend', function(e) {
+            if (isListPulling) {
+              isListPulling = false;
+              drawerEl.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s ease';
+              var dy = e.changedTouches[0].clientY - listStartY;
+              if (dy > 110) {
+                drawerEl.style.transform = 'translateY(100%)';
+                setTimeout(closeDrawer, 260);
+              } else {
+                drawerEl.style.transform = 'translateY(0)';
+              }
+              listStartY = null;
+            }
+          }, { passive: true });
+        }
+      })();
+
+      // Virtual Keyboard handler: Keep modal list visible when keyboard opens
+      function updateVisualViewportDrawer() {
+        if (!drawerEl || !drawerEl.classList.contains('active')) return;
+        if (window.visualViewport) {
+          var vv = window.visualViewport;
+          var isKeyboard = (window.innerHeight - vv.height) > 140;
+          if (isKeyboard || (drawerSearch && document.activeElement === drawerSearch)) {
+            drawerEl.classList.add('keyboard-open');
+            drawerEl.style.top = (vv.offsetTop + 6) + 'px';
+            drawerEl.style.height = (vv.height - 12) + 'px';
+            drawerEl.style.bottom = 'auto';
+          } else {
+            drawerEl.classList.remove('keyboard-open');
+            drawerEl.style.top = '';
+            drawerEl.style.bottom = '';
+            drawerEl.style.height = '';
+          }
+        }
+      }
+
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', updateVisualViewportDrawer);
+        window.visualViewport.addEventListener('scroll', updateVisualViewportDrawer);
+      }
+
+      if (drawerSearch) {
+        drawerSearch.addEventListener('focus', function() {
+          drawerEl.classList.add('fully-expanded');
+          setTimeout(updateVisualViewportDrawer, 100);
+          setTimeout(updateVisualViewportDrawer, 300);
+        });
+        drawerSearch.addEventListener('blur', function() {
+          setTimeout(function() {
+            updateVisualViewportDrawer();
+          }, 200);
         });
       }
 

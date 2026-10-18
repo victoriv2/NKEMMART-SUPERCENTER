@@ -3544,63 +3544,97 @@ body {
   left: 0;
   right: 0;
   width: 100%;
-  max-width: 540px;
+  max-width: 560px;
   margin: 0 auto;
-  height: auto;
-  max-height: 85vh;
-  max-height: 85dvh;
-  min-height: 0;
+  height: 80vh;
+  height: 80dvh;
+  max-height: 94vh;
+  max-height: 94dvh;
   background-color: #ffffff;
-  border-top-left-radius: 22px;
-  border-top-right-radius: 22px;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
   box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.28);
   z-index: 99999;
   display: flex;
   flex-direction: column;
   transform: translateY(100%);
-  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), height 0.28s ease;
   overflow: hidden;
   padding-bottom: env(safe-area-inset-bottom, 12px);
-}
-
-.jiji-drawer::before {
-  content: '';
-  display: block;
-  width: 40px;
-  height: 4.5px;
-  background: rgba(255, 255, 255, 0.55);
-  border-radius: 3px;
-  position: absolute;
-  top: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  pointer-events: none;
+  will-change: transform, height;
 }
 
 .jiji-drawer.active {
   transform: translateY(0);
 }
 
+.jiji-drawer.fully-expanded {
+  height: 94vh !important;
+  height: 94dvh !important;
+}
+
+/* Keyboard open state: pin drawer to top of visual viewport so results are visible above keyboard */
+.jiji-drawer.keyboard-open {
+  top: 8px !important;
+  bottom: auto !important;
+  transition: transform 0.15s ease, height 0.15s ease !important;
+}
+
 @media (min-width: 601px) {
   .jiji-drawer {
     bottom: 24px;
     border-radius: 22px;
+    height: 75vh;
     max-height: 82vh;
     padding-bottom: 0;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
   }
 }
 
+/* Dedicated top drag handle bar for flexible swipe gesture */
+.jiji-drawer-drag-area {
+  width: 100%;
+  padding: 10px 0 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  background: linear-gradient(135deg, #008751 0%, #00a859 100%);
+  user-select: none;
+  -webkit-user-select: none;
+  flex-shrink: 0;
+}
+
+.jiji-drawer-drag-area:active {
+  cursor: grabbing;
+}
+
+.jiji-drawer-drag-pill {
+  width: 52px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 3px;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.jiji-drawer-drag-area:hover .jiji-drawer-drag-pill,
+.jiji-drawer-drag-area:active .jiji-drawer-drag-pill {
+  background: rgba(255, 255, 255, 0.95);
+  transform: scaleX(1.15);
+}
+
 /* Drawer Header with Green bar, Back arrow, Search input */
 .jiji-drawer-header {
   background: linear-gradient(135deg, #008751 0%, #00a859 100%);
-  padding: 16px 14px 12px 14px;
+  padding: 4px 14px 12px 14px;
   display: flex;
   align-items: center;
   gap: 10px;
   position: relative;
   flex-shrink: 0;
+  cursor: grab;
+  touch-action: pan-y;
 }
 
 .jiji-drawer-back-btn {
@@ -3704,7 +3738,6 @@ body {
 .jiji-drawer-list {
   flex: 1 1 auto;
   min-height: 0;
-  max-height: calc(85dvh - 120px);
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
