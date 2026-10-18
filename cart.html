@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=6.8">
+  <link rel="stylesheet" href="styles.css?v=6.9">
 </head>
 <body>
 
@@ -292,28 +292,10 @@
               <span class="summary-row-val" id="summarySubtotalVal">₦ 0</span>
             </div>
 
-            <div class="summary-row" id="summaryDiscountRow" style="display: none;">
-              <span class="summary-row-label">Promo Discount (10%)</span>
-              <span class="summary-row-val" id="summaryDiscountVal" style="color: #ef4444; font-weight: 700;">- ₦ 0</span>
-            </div>
-
             <div class="summary-row">
               <span class="summary-row-label">Delivery Note</span>
               <span class="summary-row-val highlight-green">Calculated at Checkout</span>
             </div>
-          </div>
-
-          <!-- Promo Voucher Section -->
-          <div class="summary-promo-section">
-            <button type="button" class="promo-toggle-btn" id="promoToggleBtn">
-              <span>Have a coupon or promo code?</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <div class="promo-form" id="promoForm">
-              <input type="text" id="promoInput" class="promo-input" placeholder="e.g. NKEM10" aria-label="Promo Code">
-              <button type="button" class="promo-apply-btn" id="promoApplyBtn">APPLY</button>
-            </div>
-            <div class="promo-feedback" id="promoFeedback"></div>
           </div>
 
           <div class="summary-divider"></div>
@@ -380,8 +362,6 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       var CART_STORAGE_KEY = 'nkemmart_cart';
-      var PROMO_DISCOUNT_PERCENT = 0; // 0.10 if applied
-      var activePromoCode = '';
 
       // Catalog products for cross-sell recommendations
       var CATALOG_PRODUCTS = [
@@ -673,25 +653,13 @@
         }
 
         // Summary calculations
-        var discountAmount = Math.round(subtotal * PROMO_DISCOUNT_PERCENT);
-        var grandTotal = Math.max(0, subtotal - discountAmount);
+        var grandTotal = subtotal;
 
         var summaryCount = document.getElementById('summaryItemCount');
         if (summaryCount) summaryCount.textContent = totalQty + ' ' + (totalQty === 1 ? 'item' : 'items');
 
         var summarySubtotal = document.getElementById('summarySubtotalVal');
         if (summarySubtotal) summarySubtotal.textContent = formatNaira(subtotal);
-
-        var discountRow = document.getElementById('summaryDiscountRow');
-        var discountVal = document.getElementById('summaryDiscountVal');
-        if (discountRow && discountVal) {
-          if (PROMO_DISCOUNT_PERCENT > 0) {
-            discountRow.style.display = 'flex';
-            discountVal.textContent = '- ' + formatNaira(discountAmount);
-          } else {
-            discountRow.style.display = 'none';
-          }
-        }
 
         var summaryTotal = document.getElementById('summaryTotalVal');
         if (summaryTotal) summaryTotal.textContent = formatNaira(grandTotal);
@@ -707,14 +675,19 @@
         var recGrid = document.getElementById('recommendationsGrid');
         if (!recGrid) return;
 
-        var recs = CATALOG_PRODUCTS.slice(0, 4);
+        var savedList = [];
+        try {
+          savedList = JSON.parse(localStorage.getItem('nkemmart_saved_items')) || [];
+        } catch (e) { savedList = []; }
+        var savedIds = savedList.map(function(s) { return s.id; });
 
         recGrid.innerHTML = '';
-        recs.forEach(function(p) {
+        CATALOG_PRODUCTS.forEach(function(p) {
           var card = document.createElement('div');
           card.className = 'rec-card';
           var inCart = cart.find(function(it) { return it.id === p.id; });
           var qty = (inCart && inCart.qty) ? inCart.qty : 0;
+          var isSaved = savedIds.indexOf(p.id) > -1;
 
           var btnAreaHtml = '';
           if (qty > 0) {
@@ -732,13 +705,25 @@
             btnAreaHtml = '<button type="button" class="rec-card-btn" data-rec-id="' + p.id + '">Add to cart</button>';
           }
 
+          var discountPercent = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
+
           card.innerHTML = 
             '<div class="rec-card-media">' +
               '<img src="' + p.image + '" alt="' + p.title + '" class="rec-card-img">' +
+              '<button type="button" class="wishlist-btn ' + (isSaved ? 'active' : '') + '" data-rec-wish="' + p.id + '" aria-label="Toggle wishlist" style="position: absolute; bottom: 8px; right: 8px;">' +
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="' + (isSaved ? '#ef4444' : 'none') + '" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
+              '</button>' +
             '</div>' +
-            '<div class="rec-card-title">' + p.title + '</div>' +
-            '<div class="rec-card-price">' + formatNaira(p.price) + '</div>' +
-            btnAreaHtml;
+            '<div class="rec-card-body">' +
+              '<span class="rec-card-store">Official Store</span>' +
+              '<a href="index.html#product" class="rec-card-title">' + p.title + '</a>' +
+              '<div class="rec-card-price-row">' +
+                '<span class="rec-card-price">' + formatNaira(p.price) + '</span>' +
+                '<span class="rec-card-discount">-' + discountPercent + '%</span>' +
+              '</div>' +
+              '<span class="rec-card-orig-price">' + formatNaira(p.originalPrice) + '</span>' +
+              btnAreaHtml +
+            '</div>';
 
           recGrid.appendChild(card);
         });
@@ -890,38 +875,40 @@
                 showToast(removedTitle.substring(0, 22) + '... removed from cart', null, null);
               }
             }
+          // 4. Wishlist Heart Toggle
+          var wishBtn = e.target.closest('.wishlist-btn');
+          if (wishBtn) {
+            var prodId = wishBtn.getAttribute('data-rec-wish');
+            var product = CATALOG_PRODUCTS.find(function(p) { return p.id === prodId; });
+            if (!product) return;
+
+            var saved = [];
+            try {
+              saved = JSON.parse(localStorage.getItem('nkemmart_saved_items')) || [];
+            } catch (err) { saved = []; }
+
+            var existIdx = saved.findIndex(function(s) { return s.id === product.id; });
+            var shortTitle = product.title.substring(0, 22) + '...';
+
+            if (existIdx > -1) {
+              saved.splice(existIdx, 1);
+              localStorage.setItem('nkemmart_saved_items', JSON.stringify(saved));
+              renderRecommendations(getCart());
+              showToast(shortTitle + ' removed from saved items', null, null);
+            } else {
+              saved.unshift({
+                id: product.id,
+                title: product.title,
+                price: product.price,
+                originalPrice: product.originalPrice,
+                image: product.image,
+                brand: product.brand
+              });
+              localStorage.setItem('nkemmart_saved_items', JSON.stringify(saved));
+              renderRecommendations(getCart());
+              showToast(shortTitle + ' added to saved items', 'VIEW SAVED', 'saved-items.html');
+            }
             return;
-          }
-        });
-      }
-
-      // Promo Code validation
-      var promoApplyBtn = document.getElementById('promoApplyBtn');
-      var promoInput = document.getElementById('promoInput');
-      var promoFeedback = document.getElementById('promoFeedback');
-
-      if (promoApplyBtn && promoInput && promoFeedback) {
-        promoApplyBtn.addEventListener('click', function() {
-          var code = promoInput.value.trim().toUpperCase();
-          if (!code) {
-            promoFeedback.textContent = 'Please enter a valid coupon code.';
-            promoFeedback.className = 'promo-feedback error';
-            return;
-          }
-
-          if (code === 'NKEM10' || code === 'EVERYTHINGDEY' || code === 'SUPER10') {
-            PROMO_DISCOUNT_PERCENT = 0.10;
-            activePromoCode = code;
-            promoFeedback.textContent = 'Coupon ' + code + ' applied successfully! 10% discount deducted.';
-            promoFeedback.className = 'promo-feedback success';
-            promoInput.disabled = true;
-            promoApplyBtn.textContent = 'APPLIED';
-            promoApplyBtn.disabled = true;
-            renderCart();
-            showToast('10% Promo discount applied!', null, null);
-          } else {
-            promoFeedback.textContent = 'Invalid promo code. Try NKEM10 for 10% off.';
-            promoFeedback.className = 'promo-feedback error';
           }
         });
       }
@@ -937,15 +924,11 @@
           }
           var totalQty = cart.reduce(function(sum, item) { return sum + (item.qty || 1); }, 0);
           var subtotal = cart.reduce(function(sum, item) { return sum + ((item.price || 0) * (item.qty || 1)); }, 0);
-          var discount = Math.round(subtotal * PROMO_DISCOUNT_PERCENT);
-          var grand = subtotal - discount;
 
           alert(
             'ORDER CHECKOUT INITIATED\n\n' +
             'Items: ' + totalQty + '\n' +
-            'Subtotal: ' + formatNaira(subtotal) + '\n' +
-            (discount > 0 ? 'Promo Discount: -' + formatNaira(discount) + '\n' : '') +
-            'Total Payable: ' + formatNaira(grand) + '\n\n' +
+            'Total Payable: ' + formatNaira(subtotal) + '\n\n' +
             'Proceeding to secure payment gateway (Doorstep Delivery)...'
           );
         });
