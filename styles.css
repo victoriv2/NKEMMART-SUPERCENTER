@@ -3710,12 +3710,12 @@ body {
    JIJI STYLE HERO BANNER & SEARCH
 ========================================= */
 .jiji-hero-banner {
-  background: linear-gradient(135deg, #008751 0%, #00a859 55%, #0b4dbb 100%);
+  background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 55%, #00a859 100%);
   border-radius: 16px;
   padding: 24px 20px;
   margin-bottom: 20px;
   color: #ffffff;
-  box-shadow: 0 4px 20px rgba(0, 135, 81, 0.18);
+  box-shadow: 0 4px 20px rgba(11, 77, 187, 0.18);
   position: relative;
   overflow: visible;
 }
@@ -3845,8 +3845,8 @@ body {
 
 .jiji-dropdown-item:hover,
 .jiji-dropdown-item.active {
-  background-color: #ecfdf5;
-  color: #008751;
+  background-color: #eff6ff;
+  color: var(--primary-blue);
   font-weight: 600;
 }
 
@@ -3875,7 +3875,7 @@ body {
 }
 
 .jiji-search-submit-btn {
-  background: #00a859;
+  background: var(--primary-blue);
   border: none;
   border-radius: 50%;
   width: 36px;
@@ -3890,7 +3890,7 @@ body {
 }
 
 .jiji-search-submit-btn:hover {
-  background-color: #008751;
+  background-color: var(--primary-blue-hover);
 }
 
 /* =========================================
@@ -3944,9 +3944,9 @@ body {
 }
 
 .jiji-rec-pill:hover {
-  border-color: #00a859;
-  background-color: #f0fdf4;
-  color: #008751;
+  border-color: var(--primary-blue);
+  background-color: #eff6ff;
+  color: var(--primary-blue);
 }
 
 .jiji-rec-dot {
@@ -4098,9 +4098,9 @@ body {
 
 .trending-view-toggle-btn:hover,
 .trending-view-toggle-btn.active {
-  background-color: #f1f5f9;
-  color: #008751;
-  border-color: #00a859;
+  background-color: #eff6ff;
+  color: var(--primary-blue);
+  border-color: var(--primary-blue);
 }
 
 /* List view support for products (Tight, compact mobile & desktop e-commerce layout) */
@@ -5090,10 +5090,24 @@ body.drawer-open {
   cursor: pointer;
 }
 
-.cat-subcat-card:hover,
+.cat-subcat-card:hover {
+  border-color: var(--primary-blue);
+  background-color: #f8faff;
+}
+
 .cat-subcat-card.active {
-  border-color: #008751;
-  background-color: #ecfdf5;
+  border-color: var(--primary-blue);
+  background-color: #eff6ff;
+  box-shadow: 0 2px 8px rgba(11, 77, 187, 0.08);
+}
+
+.cat-subcat-card.active .cat-subcat-card-name {
+  color: var(--primary-blue);
+  font-weight: 700;
+}
+
+.cat-subcat-card.active .cat-subcat-card-arrow {
+  color: var(--primary-blue);
 }
 
 .cat-subcat-card-thumb {
