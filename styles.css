@@ -3546,37 +3546,41 @@ body {
   width: 100%;
   max-width: 560px;
   margin: 0 auto;
-  height: 80vh;
-  height: 80dvh;
-  max-height: 94vh;
-  max-height: 94dvh;
+  height: 75vh;
+  height: 75dvh;
+  max-height: 88dvh;
   background-color: #ffffff;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
   box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.28);
   z-index: 99999;
   display: flex;
   flex-direction: column;
   transform: translateY(100%);
-  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), height 0.28s ease;
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s, opacity 0.2s;
   overflow: hidden;
   padding-bottom: env(safe-area-inset-bottom, 12px);
-  will-change: transform, height;
 }
 
 .jiji-drawer.active {
   transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .jiji-drawer.fully-expanded {
-  height: 94vh !important;
-  height: 94dvh !important;
+  height: 92vh !important;
+  height: 92dvh !important;
 }
 
-/* Keyboard open state: pin drawer to top of visual viewport so results are visible above keyboard */
+/* Keyboard open state on mobile */
 .jiji-drawer.keyboard-open {
   top: 6px !important;
   bottom: auto !important;
+  height: auto !important;
+  max-height: calc(100% - 12px) !important;
   transition: transform 0.15s ease, height 0.15s ease !important;
 }
 
@@ -3589,59 +3593,50 @@ body {
   padding-bottom: 70px !important;
 }
 
+/* Desktop Modal: Elevated, centered card dialog, completely hidden when inactive */
 @media (min-width: 601px) {
   .jiji-drawer {
-    bottom: 24px;
-    border-radius: 22px;
-    height: 75vh;
-    max-height: 82vh;
+    top: 50%;
+    left: 50%;
+    bottom: auto;
+    right: auto;
+    width: 90%;
+    max-width: 500px;
+    height: auto;
+    max-height: 78vh;
+    border-radius: 20px;
     padding-bottom: 0;
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    transform: translate(-50%, -46%) scale(0.96);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
+  }
+
+  .jiji-drawer.active {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .jiji-drawer.keyboard-open {
+    top: 50% !important;
+    transform: translate(-50%, -50%) scale(1) !important;
+    height: auto !important;
   }
 }
 
-/* Dedicated top drag handle bar for flexible swipe gesture */
-.jiji-drawer-drag-area {
-  width: 100%;
-  padding: 8px 0 3px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  touch-action: none;
-  background: linear-gradient(135deg, #008751 0%, #00a859 100%);
-  user-select: none;
-  -webkit-user-select: none;
-  flex-shrink: 0;
-}
-
-.jiji-drawer-drag-area:active {
-  cursor: grabbing;
-}
-
-.jiji-drawer-drag-pill {
-  width: 36px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.42);
-  border-radius: 2px;
-  transition: background 0.15s;
-}
-
-.jiji-drawer-drag-area:hover .jiji-drawer-drag-pill,
-.jiji-drawer-drag-area:active .jiji-drawer-drag-pill {
-  background: rgba(255, 255, 255, 0.75);
-}
-
-/* Drawer Header with Green bar, Back arrow, Search input */
+/* Drawer Header with Green bar, Back arrow, Search input (Clean, NO lines above) */
 .jiji-drawer-header {
   background: linear-gradient(135deg, #008751 0%, #00a859 100%);
-  padding: 3px 14px 10px 14px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
   gap: 10px;
   position: relative;
   flex-shrink: 0;
-  cursor: grab;
   touch-action: pan-y;
 }
 
