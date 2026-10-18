@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=4.5">
+  <link rel="stylesheet" href="styles.css?v=4.6">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -65,7 +65,7 @@
               <span>Phones & Tablets</span>
             </a>
             <a href="category.html?cat=health-beauty" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 21h10M12 3v18M8 8l4-5 4 5"></path></svg>
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path><path d="M19 3v4M21 5h-4"></path></svg>
               <span>Health & Beauty</span>
             </a>
             <a href="category.html?cat=home-office" class="category-dropdown-item">
@@ -289,12 +289,12 @@
     </div>
 
     <!-- My Account Section -->
-    <div class="mobile-nav-section">
-      <a href="#account" class="mobile-nav-link-row">
+    <div class="mobile-nav-section" id="mobileAccountSection">
+      <button type="button" class="mobile-nav-link-row mobile-nav-accordion-toggle" id="mobileAccountToggle" aria-expanded="true" aria-controls="mobileAccountSubNav">
         <span>MY NKEMMART ACCOUNT</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </a>
-      <div class="mobile-sub-nav-list">
+        <svg class="mobile-nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="mobile-sub-nav-list" id="mobileAccountSubNav">
         <a href="#orders" class="mobile-sub-nav-item">
           <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
           <span>Orders</span>
@@ -334,7 +334,7 @@
           <span>Phones & Tablets</span>
         </a>
         <a href="category.html?cat=health-beauty" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 21h10M12 3v18M8 8l4-5 4 5"></path></svg>
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path><path d="M19 3v4M21 5h-4"></path></svg>
           <span>Health & Beauty</span>
         </a>
         <a href="category.html?cat=home-office" class="mobile-category-item">
@@ -605,21 +605,72 @@
       var mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
       var mobileNavCloseBtn = document.getElementById('mobileNavCloseBtn');
       var desktopCategoryDropdown = document.getElementById('desktopCategoryDropdown');
+      var mobileAccountToggle = document.getElementById('mobileAccountToggle');
+      var mobileAccountSection = document.getElementById('mobileAccountSection');
+
+      var mobileNavScrollY = 0;
+      var mobileNavHistoryPushed = false;
+
+      function lockBodyForNav() {
+        mobileNavScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        document.body.style.position = 'fixed';
+        document.body.style.top = -mobileNavScrollY + 'px';
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
+      }
+
+      function unlockBodyForNav() {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        window.scrollTo(0, mobileNavScrollY);
+      }
 
       function openMobileNav() {
         if (mobileNavDrawer && mobileNavBackdrop) {
           mobileNavDrawer.classList.add('active');
           mobileNavBackdrop.classList.add('active');
-          document.body.style.overflow = 'hidden';
+          lockBodyForNav();
+
+          if (!mobileNavHistoryPushed) {
+            try {
+              history.pushState({ modalOpen: 'mobileNav' }, '');
+              mobileNavHistoryPushed = true;
+            } catch (err) {}
+          }
         }
       }
 
-      function closeMobileNav() {
+      function closeMobileNav(isPopstate) {
         if (mobileNavDrawer && mobileNavBackdrop) {
           mobileNavDrawer.classList.remove('active');
           mobileNavBackdrop.classList.remove('active');
-          document.body.style.overflow = '';
+          unlockBodyForNav();
+
+          if (mobileNavHistoryPushed && !isPopstate) {
+            mobileNavHistoryPushed = false;
+            try {
+              if (history.state && history.state.modalOpen === 'mobileNav') {
+                history.back();
+              }
+            } catch (err) {}
+          } else {
+            mobileNavHistoryPushed = false;
+          }
         }
+      }
+
+      if (mobileAccountToggle && mobileAccountSection) {
+        mobileAccountToggle.addEventListener('click', function(e) {
+          e.preventDefault();
+          var isCollapsed = mobileAccountSection.classList.toggle('collapsed');
+          mobileAccountToggle.setAttribute('aria-expanded', isCollapsed ? 'false' : 'true');
+        });
       }
 
       if (mobileMenuBtn) {
@@ -635,8 +686,13 @@
         });
       }
 
-      if (mobileNavCloseBtn) mobileNavCloseBtn.addEventListener('click', closeMobileNav);
-      if (mobileNavBackdrop) mobileNavBackdrop.addEventListener('click', closeMobileNav);
+      if (mobileNavCloseBtn) mobileNavCloseBtn.addEventListener('click', function() { closeMobileNav(); });
+      if (mobileNavBackdrop) {
+        mobileNavBackdrop.addEventListener('click', function() { closeMobileNav(); });
+        mobileNavBackdrop.addEventListener('touchmove', function(e) {
+          if (e.cancelable) e.preventDefault();
+        }, { passive: false });
+      }
 
       document.addEventListener('click', function(e) {
         if (desktopCategoryDropdown && !desktopCategoryDropdown.contains(e.target) && mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
@@ -727,6 +783,9 @@
 
       // Close modal on hardware/phone back button or browser back gesture
       window.addEventListener('popstate', function(e) {
+        if (mobileNavDrawer && mobileNavDrawer.classList.contains('active')) {
+          closeMobileNav(true);
+        }
         if (drawerEl && drawerEl.classList.contains('active')) {
           closeDrawer(true);
         }
@@ -734,8 +793,13 @@
 
       // Close modal on Escape key
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && drawerEl && drawerEl.classList.contains('active')) {
-          closeDrawer();
+        if (e.key === 'Escape') {
+          if (mobileNavDrawer && mobileNavDrawer.classList.contains('active')) {
+            closeMobileNav();
+          }
+          if (drawerEl && drawerEl.classList.contains('active')) {
+            closeDrawer();
+          }
         }
       });
 
