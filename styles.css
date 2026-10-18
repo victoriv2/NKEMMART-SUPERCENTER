@@ -3521,6 +3521,14 @@ body {
 /* ========================================================
    JIJI-STYLE MOBILE SUBCATEGORIES DRAWER / MODAL
    ======================================================== */
+/* Lock background scrolling completely when drawer/modal is open */
+html.drawer-open,
+body.drawer-open {
+  overflow: hidden !important;
+  touch-action: none !important;
+  overscroll-behavior: none !important;
+}
+
 .jiji-drawer-overlay {
   position: fixed;
   inset: 0;
@@ -3531,6 +3539,8 @@ body {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.28s ease, visibility 0.28s ease;
+  touch-action: none;
+  overscroll-behavior: none;
 }
 
 .jiji-drawer-overlay.active {
@@ -3562,6 +3572,7 @@ body {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s, opacity 0.2s, height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   padding-bottom: env(safe-area-inset-bottom, 12px);
+  overscroll-behavior: contain;
 }
 
 .jiji-drawer.active {
@@ -3638,7 +3649,7 @@ body {
   align-items: center;
   position: relative;
   flex-shrink: 0;
-  touch-action: pan-y;
+  touch-action: none;
 }
 
 /* Drag pill centered at the very top inside the unified header */
@@ -3738,6 +3749,7 @@ body {
   justify-content: space-between;
   border-bottom: 1px solid #e2e8f0;
   flex-shrink: 0;
+  touch-action: none;
 }
 
 .jiji-drawer-cat-title {
