@@ -3629,60 +3629,50 @@ body {
   }
 }
 
-/* Clean, subtle drag handle bar for mobile bottom-sheet */
-.jiji-drawer-drag-area {
-  width: 100%;
-  padding: 8px 0 3px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  touch-action: none;
-  background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 100%);
-  user-select: none;
-  -webkit-user-select: none;
-  flex-shrink: 0;
-}
-
-.jiji-drawer-drag-area:active {
-  cursor: grabbing;
-}
-
-.jiji-drawer-drag-pill {
-  width: 38px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.55);
-  border-radius: 4px;
-  transition: background-color 0.15s, transform 0.15s;
-}
-
-.jiji-drawer-drag-area:hover .jiji-drawer-drag-pill,
-.jiji-drawer-drag-area:active .jiji-drawer-drag-pill {
-  background: rgba(255, 255, 255, 0.9);
-  transform: scaleX(1.1);
-}
-
-@media (min-width: 601px) {
-  .jiji-drawer-drag-area {
-    display: none;
-  }
-}
-
-/* Drawer Header with Company Blue bar, Search input, Close button */
+/* Drawer Header - Single unified container with zero seams or lines */
 .jiji-drawer-header {
   background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 100%);
-  padding: 4px 14px 12px 14px;
+  padding: 8px 14px 12px 14px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
   position: relative;
   flex-shrink: 0;
   touch-action: pan-y;
 }
 
+/* Drag pill centered at the very top inside the unified header */
+.jiji-drawer-drag-pill {
+  width: 40px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 4px;
+  margin: 0 auto 10px auto;
+  cursor: grab;
+  transition: background-color 0.15s, transform 0.15s;
+  flex-shrink: 0;
+}
+
+.jiji-drawer-drag-pill:hover,
+.jiji-drawer-drag-pill:active {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scaleX(1.1);
+}
+
+.jiji-drawer-header-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 @media (min-width: 601px) {
   .jiji-drawer-header {
     padding: 14px 16px;
+  }
+
+  .jiji-drawer-drag-pill {
+    display: none;
   }
 }
 

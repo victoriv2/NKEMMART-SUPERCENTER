@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=4.1">
+  <link rel="stylesheet" href="styles.css?v=4.2">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -397,23 +397,23 @@
   <!-- Jiji-Style Mobile Subcategory Drawer -->
   <div class="jiji-drawer-overlay" id="jijiDrawerOverlay" aria-hidden="true"></div>
   <aside class="jiji-drawer" id="jijiDrawer" role="dialog" aria-modal="true" aria-label="Subcategories">
-    <div class="jiji-drawer-drag-area" id="jijiDrawerDragArea" aria-label="Drag to adjust or close">
-      <span class="jiji-drawer-drag-pill"></span>
-    </div>
     <div class="jiji-drawer-header" id="jijiDrawerHeader">
-      <div class="jiji-drawer-search-wrap">
-        <svg class="jiji-drawer-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input type="text" class="jiji-drawer-search-input" id="jijiDrawerSearch" placeholder="Find category..." autocomplete="off">
+      <span class="jiji-drawer-drag-pill" aria-hidden="true"></span>
+      <div class="jiji-drawer-header-row">
+        <div class="jiji-drawer-search-wrap">
+          <svg class="jiji-drawer-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" class="jiji-drawer-search-input" id="jijiDrawerSearch" placeholder="Find category..." autocomplete="off">
+        </div>
+        <button type="button" class="jiji-drawer-close-btn" id="jijiDrawerCloseBtn" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
-      <button type="button" class="jiji-drawer-close-btn" id="jijiDrawerCloseBtn" aria-label="Close">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
     </div>
 
     <div class="jiji-drawer-cat-info">
@@ -716,7 +716,6 @@
       }
 
       // Touch Gesture Support: Pull down to close, raise up to expand
-      var drawerDragArea = document.getElementById('jijiDrawerDragArea');
       var drawerHeader = document.getElementById('jijiDrawerHeader');
       var drawerCatInfo = document.querySelector('.jiji-drawer-cat-info');
 
@@ -785,7 +784,7 @@
           }
         }
 
-        [drawerDragArea, drawerHeader, drawerCatInfo].forEach(function(el) {
+        [drawerHeader, drawerCatInfo].forEach(function(el) {
           if (el) {
             el.addEventListener('touchstart', touchStart, { passive: true });
             el.addEventListener('touchmove', touchMove, { passive: true });
