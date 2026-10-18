@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=5.2">
+  <link rel="stylesheet" href="styles.css?v=5.3">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -715,6 +715,7 @@
       var drawerCatViewAll = document.getElementById('jijiDrawerCatViewAll');
       var drawerCloseBtn = document.getElementById('jijiDrawerCloseBtn');
       var modalHistoryPushed = false;
+      var wasKeyboardOpen = false;
       var drawerScrollY = 0;
 
       function lockBodyScroll() {
@@ -742,6 +743,7 @@
       }
 
       function openDrawer() {
+        wasKeyboardOpen = false;
         if (drawerCatTitle) drawerCatTitle.textContent = catData.name;
         if (drawerCatViewAll) {
           drawerCatViewAll.href = 'category.html?cat=' + encodeURIComponent(currentCatKey);
@@ -762,6 +764,7 @@
       }
 
       function closeDrawer(isPopstate) {
+        wasKeyboardOpen = false;
         if (drawerOverlay) drawerOverlay.classList.remove('active');
         if (drawerEl) {
           drawerEl.classList.remove('active', 'fully-expanded', 'keyboard-open', 'search-active');
@@ -769,6 +772,7 @@
           drawerEl.style.top = '';
           drawerEl.style.bottom = '';
           drawerEl.style.height = '';
+          drawerEl.style.maxHeight = '';
         }
         if (drawerSearch && document.activeElement === drawerSearch) {
           drawerSearch.blur();
@@ -794,6 +798,24 @@
           closeMobileNav(true);
         }
         if (drawerEl && drawerEl.classList.contains('active')) {
+          var isInputActive = (drawerSearch && document.activeElement === drawerSearch) || 
+                              drawerEl.classList.contains('search-active') || 
+                              drawerEl.classList.contains('keyboard-open');
+          if (isInputActive) {
+            if (drawerSearch) {
+              drawerSearch.blur();
+            }
+            drawerEl.classList.remove('search-active', 'keyboard-open');
+            drawerEl.style.maxHeight = '';
+            drawerEl.style.height = '';
+            wasKeyboardOpen = false;
+            try {
+              history.pushState({ modalOpen: 'subcategoryDrawer' }, '');
+              modalHistoryPushed = true;
+            } catch (err) {}
+            return;
+          }
+
           closeDrawer(true);
         }
       });
@@ -857,14 +879,17 @@
         var currentY = 0;
         var startTime = 0;
         var isDragging = false;
-        var startHeight = 0;
 
         function touchStart(e) {
           if (e.touches.length !== 1) return;
           if (e.target.closest('button, a')) return;
 
-          // When search input is active (focused), touches on the input itself must NOT trigger hand movement or close the modal
-          var isInputActive = (drawerEl.classList.contains('search-active') || (drawerSearch && document.activeElement === drawerSearch));
+          var isInputActive = drawerEl.classList.contains('search-active') || 
+                              drawerEl.classList.contains('keyboard-open') || 
+                              (drawerSearch && document.activeElement === drawerSearch);
+
+          // ONLY disable hand movement on the search input when the input IS active (typing / focused)!
+          // When the input is NOT active, touching or swiping on the input/header responds to hand movement.
           if (isInputActive && e.target.closest('.jiji-drawer-search-wrap, #jijiDrawerSearch')) {
             return;
           }
@@ -873,7 +898,6 @@
           currentY = startY;
           startTime = Date.now();
           isDragging = true;
-          startHeight = drawerEl.offsetHeight;
           drawerEl.style.transition = 'none';
         }
 
@@ -882,51 +906,36 @@
           currentY = e.touches[0].clientY;
           var deltaY = currentY - startY;
 
-          if (Math.abs(deltaY) > 5) {
-            if (deltaY > 0) {
-              if (drawerSearch && document.activeElement === drawerSearch) {
-                drawerSearch.blur();
-              }
-              if (e.cancelable) e.preventDefault();
-              drawerEl.style.transform = 'translateY(' + deltaY + 'px)';
-            } else {
-              if (e.cancelable) e.preventDefault();
-              drawerEl.style.transform = 'translateY(0)';
-              var maxAllowedH = Math.round(window.innerHeight * 0.94);
-              var pullUpAmount = -deltaY;
-              var targetH = Math.min(startHeight + pullUpAmount, maxAllowedH);
-              drawerEl.style.height = targetH + 'px';
+          // Only initiate pull-down if swiping downwards by more than 6px
+          if (deltaY > 6) {
+            if (drawerSearch && document.activeElement === drawerSearch) {
+              drawerSearch.blur();
             }
+            if (e.cancelable) e.preventDefault();
+            drawerEl.style.transform = 'translateY(' + deltaY + 'px)';
+          } else {
+            drawerEl.style.transform = 'translateY(0)';
           }
         }
 
         function touchEnd() {
           if (!isDragging) return;
           isDragging = false;
-          drawerEl.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+          drawerEl.style.transition = 'transform 0.22s ease-out';
 
           var deltaY = currentY - startY;
           var elapsed = Date.now() - startTime;
           var velocity = deltaY / Math.max(elapsed, 1);
 
-          if (deltaY > 90 || velocity > 0.35) {
+          // Only close on deliberate downward pull (deltaY > 100 or deltaY > 45 with high velocity), never on tap
+          if ((deltaY > 100) || (deltaY > 45 && velocity > 0.45)) {
             drawerEl.style.transform = 'translateY(100%)';
             setTimeout(function() {
               closeDrawer();
-              drawerEl.style.height = '';
               drawerEl.classList.remove('fully-expanded');
-            }, 260);
-          } else if (deltaY < -35 || velocity < -0.35) {
-            drawerEl.classList.add('fully-expanded');
-            drawerEl.style.height = '';
-            drawerEl.style.transform = 'translateY(0)';
-          } else if (deltaY > 35 && drawerEl.classList.contains('fully-expanded')) {
-            drawerEl.classList.remove('fully-expanded');
-            drawerEl.style.height = '';
-            drawerEl.style.transform = 'translateY(0)';
+            }, 240);
           } else {
             drawerEl.style.transform = 'translateY(0)';
-            drawerEl.style.height = '';
           }
         }
 
@@ -938,96 +947,68 @@
             el.addEventListener('touchcancel', touchEnd, { passive: true });
           }
         });
-
-        if (drawerList) {
-          var listStartY = null;
-          var isListPulling = false;
-          drawerList.addEventListener('touchstart', function(e) {
-            if (drawerList.scrollTop <= 0 && e.touches.length === 1) {
-              listStartY = e.touches[0].clientY;
-              isListPulling = false;
-            }
-          }, { passive: true });
-
-          drawerList.addEventListener('touchmove', function(e) {
-            // When keyboard is open or search is focused, allow 100% free native scrolling
-            if (drawerEl.classList.contains('keyboard-open') || (drawerSearch && document.activeElement === drawerSearch)) {
-              return;
-            }
-            if (listStartY !== null && drawerList.scrollTop <= 0) {
-              var dy = e.touches[0].clientY - listStartY;
-              if (dy > 12) {
-                isListPulling = true;
-                if (e.cancelable) e.preventDefault();
-                drawerEl.style.transition = 'none';
-                drawerEl.style.transform = 'translateY(' + (dy - 12) + 'px)';
-              }
-            }
-          }, { passive: false });
-
-          drawerList.addEventListener('touchend', function(e) {
-            if (isListPulling) {
-              isListPulling = false;
-              drawerEl.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s ease';
-              var dy = e.changedTouches[0].clientY - listStartY;
-              if (dy > 110) {
-                drawerEl.style.transform = 'translateY(100%)';
-                setTimeout(closeDrawer, 260);
-              } else {
-                drawerEl.style.transform = 'translateY(0)';
-              }
-              listStartY = null;
-            }
-          }, { passive: true });
-        }
       })();
 
-      // Virtual Keyboard handler: Keep modal list visible when keyboard opens
+      // Prevent clicks/touches within the modal from closing it
+      if (drawerEl) {
+        drawerEl.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+
+      // Virtual Keyboard handler: Keep modal stable with zero bouncing
       function updateVisualViewportDrawer() {
         if (!drawerEl || !drawerEl.classList.contains('active')) return;
         if (window.visualViewport) {
           var vv = window.visualViewport;
           var isKeyboard = (window.innerHeight - vv.height) > 120;
           if (isKeyboard) {
+            wasKeyboardOpen = true;
             drawerEl.classList.add('keyboard-open');
-            var topPos = Math.max(Math.round(vv.offsetTop + 6), 6);
-            var availH = Math.round(vv.height - 12);
-            drawerEl.style.top = topPos + 'px';
-            drawerEl.style.height = availH + 'px';
-            drawerEl.style.bottom = 'auto';
+            drawerEl.style.maxHeight = Math.round(vv.height - 8) + 'px';
+            drawerEl.style.height = Math.round(vv.height - 8) + 'px';
+            drawerEl.style.top = '';
+            drawerEl.style.bottom = '0';
           } else {
             drawerEl.classList.remove('keyboard-open');
             drawerEl.style.top = '';
             drawerEl.style.bottom = '';
+            drawerEl.style.maxHeight = '';
             drawerEl.style.height = '';
+            // Only retract if keyboard was actually open and now closed (user tapped phone back to close keyboard)
+            if (wasKeyboardOpen) {
+              wasKeyboardOpen = false;
+              if (drawerSearch && document.activeElement === drawerSearch) {
+                drawerSearch.blur();
+              }
+              drawerEl.classList.remove('search-active');
+            }
           }
         } else {
           drawerEl.classList.remove('keyboard-open');
           drawerEl.style.top = '';
           drawerEl.style.bottom = '';
+          drawerEl.style.maxHeight = '';
           drawerEl.style.height = '';
         }
       }
 
       if (window.visualViewport) {
         window.visualViewport.addEventListener('resize', updateVisualViewportDrawer);
-        window.visualViewport.addEventListener('scroll', updateVisualViewportDrawer);
       }
 
       if (drawerSearch) {
         drawerSearch.addEventListener('focus', function() {
           drawerEl.classList.add('search-active');
-          setTimeout(updateVisualViewportDrawer, 60);
-          setTimeout(updateVisualViewportDrawer, 250);
         });
+
         drawerSearch.addEventListener('blur', function() {
           drawerEl.classList.remove('search-active', 'keyboard-open');
           drawerEl.style.top = '';
           drawerEl.style.bottom = '';
+          drawerEl.style.maxHeight = '';
           drawerEl.style.height = '';
-          setTimeout(function() {
-            updateVisualViewportDrawer();
-          }, 150);
+          wasKeyboardOpen = false;
         });
       }
 

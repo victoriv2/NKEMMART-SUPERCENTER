@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
-  <link rel="stylesheet" href="styles.css?v=5.2">
+  <link rel="stylesheet" href="styles.css?v=5.3">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -2071,6 +2071,7 @@
 
       var drawerScrollY = 0;
       var modalHistoryPushed = false;
+      var wasKeyboardOpen = false;
 
       function lockBodyScroll() {
         drawerScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -2097,6 +2098,7 @@
       }
 
       function openSubcategoryDrawer(catKey) {
+        wasKeyboardOpen = false;
         var tax = window.NKEMMART_TAXONOMY;
         if (!tax || !tax[catKey]) {
           window.location.href = 'category.html?cat=' + encodeURIComponent(catKey);
@@ -2129,6 +2131,7 @@
       }
 
       function closeSubcategoryDrawer(isPopstate) {
+        wasKeyboardOpen = false;
         if (drawerOverlay) drawerOverlay.classList.remove('active');
         if (drawerEl) {
           drawerEl.classList.remove('active', 'fully-expanded', 'keyboard-open', 'search-active');
@@ -2173,6 +2176,11 @@
             drawerEl.classList.remove('search-active', 'keyboard-open');
             drawerEl.style.maxHeight = '';
             drawerEl.style.height = '';
+            wasKeyboardOpen = false;
+            try {
+              history.pushState({ modalOpen: 'subcategoryDrawer' }, '');
+              modalHistoryPushed = true;
+            } catch (err) {}
             return;
           }
 
@@ -2261,14 +2269,18 @@
         var currentY = 0;
         var startTime = 0;
         var isDragging = false;
-        var startHeight = 0;
 
         function touchStart(e) {
           if (e.touches.length !== 1) return;
           if (e.target.closest('button, a')) return;
 
-          // Disable hand movement ONLY on the search input itself - rest of modal still responds to gestures
-          if (e.target.closest('.jiji-drawer-search-wrap, #jijiDrawerSearch')) {
+          var isInputActive = drawerEl.classList.contains('search-active') || 
+                              drawerEl.classList.contains('keyboard-open') || 
+                              (drawerSearch && document.activeElement === drawerSearch);
+
+          // ONLY disable hand movement on the search input when the input IS active (typing / focused)!
+          // When the input is NOT active, touching or swiping on the input/header responds to hand movement.
+          if (isInputActive && e.target.closest('.jiji-drawer-search-wrap, #jijiDrawerSearch')) {
             return;
           }
 
@@ -2276,7 +2288,6 @@
           currentY = startY;
           startTime = Date.now();
           isDragging = true;
-          startHeight = drawerEl.offsetHeight;
           drawerEl.style.transition = 'none';
         }
 
@@ -2285,7 +2296,8 @@
           currentY = e.touches[0].clientY;
           var deltaY = currentY - startY;
 
-          if (deltaY > 5) {
+          // Only initiate pull-down if swiping downwards by more than 6px
+          if (deltaY > 6) {
             if (drawerSearch && document.activeElement === drawerSearch) {
               drawerSearch.blur();
             }
@@ -2341,6 +2353,7 @@
           var vv = window.visualViewport;
           var isKeyboard = (window.innerHeight - vv.height) > 120;
           if (isKeyboard) {
+            wasKeyboardOpen = true;
             drawerEl.classList.add('keyboard-open');
             drawerEl.style.maxHeight = Math.round(vv.height - 8) + 'px';
             drawerEl.style.height = Math.round(vv.height - 8) + 'px';
@@ -2352,8 +2365,9 @@
             drawerEl.style.bottom = '';
             drawerEl.style.maxHeight = '';
             drawerEl.style.height = '';
-            // As soon as keyboard closes on back button press, immediately retract search input & reveal X
-            if (drawerEl.classList.contains('search-active')) {
+            // Only retract if keyboard was actually open and now closed (user tapped phone back to close keyboard)
+            if (wasKeyboardOpen) {
+              wasKeyboardOpen = false;
               if (drawerSearch && document.activeElement === drawerSearch) {
                 drawerSearch.blur();
               }
@@ -2376,7 +2390,6 @@
       if (drawerSearch) {
         drawerSearch.addEventListener('focus', function() {
           drawerEl.classList.add('search-active');
-          updateVisualViewportDrawer();
         });
 
         drawerSearch.addEventListener('blur', function() {
@@ -2385,7 +2398,7 @@
           drawerEl.style.bottom = '';
           drawerEl.style.maxHeight = '';
           drawerEl.style.height = '';
-          setTimeout(updateVisualViewportDrawer, 100);
+          wasKeyboardOpen = false;
         });
       }
 
