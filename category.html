@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=4.0">
+  <link rel="stylesheet" href="styles.css?v=4.1">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -401,12 +401,11 @@
       <span class="jiji-drawer-drag-pill"></span>
     </div>
     <div class="jiji-drawer-header" id="jijiDrawerHeader">
-      <button type="button" class="jiji-drawer-back-btn" id="jijiDrawerBackBtn" aria-label="Go back">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-      </button>
       <div class="jiji-drawer-search-wrap">
+        <svg class="jiji-drawer-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
         <input type="text" class="jiji-drawer-search-input" id="jijiDrawerSearch" placeholder="Find category..." autocomplete="off">
       </div>
       <button type="button" class="jiji-drawer-close-btn" id="jijiDrawerCloseBtn" aria-label="Close">
@@ -658,7 +657,6 @@
       var drawerSearch = document.getElementById('jijiDrawerSearch');
       var drawerCatTitle = document.getElementById('jijiDrawerCatTitle');
       var drawerCatViewAll = document.getElementById('jijiDrawerCatViewAll');
-      var drawerBackBtn = document.getElementById('jijiDrawerBackBtn');
       var drawerCloseBtn = document.getElementById('jijiDrawerCloseBtn');
 
       function openDrawer() {
@@ -704,7 +702,6 @@
         });
       }
 
-      if (drawerBackBtn) drawerBackBtn.addEventListener('click', closeDrawer);
       if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
       if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
 

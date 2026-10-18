@@ -3638,7 +3638,7 @@ body {
   justify-content: center;
   cursor: grab;
   touch-action: none;
-  background: linear-gradient(135deg, #008751 0%, #00a859 100%);
+  background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 100%);
   user-select: none;
   -webkit-user-select: none;
   flex-shrink: 0;
@@ -3668,13 +3668,13 @@ body {
   }
 }
 
-/* Drawer Header with Green bar, Back arrow, Search input */
+/* Drawer Header with Company Blue bar, Search input, Close button */
 .jiji-drawer-header {
-  background: linear-gradient(135deg, #008751 0%, #00a859 100%);
-  padding: 3px 14px 10px 14px;
+  background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 100%);
+  padding: 4px 14px 12px 14px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   position: relative;
   flex-shrink: 0;
   touch-action: pan-y;
@@ -3682,28 +3682,8 @@ body {
 
 @media (min-width: 601px) {
   .jiji-drawer-header {
-    padding: 12px 14px;
+    padding: 14px 16px;
   }
-}
-
-.jiji-drawer-back-btn {
-  background: none;
-  border: none;
-  color: #ffffff;
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  flex-shrink: 0;
-  padding: 0;
-  transition: background-color 0.15s;
-}
-
-.jiji-drawer-back-btn:hover {
-  background-color: rgba(255, 255, 255, 0.16);
 }
 
 .jiji-drawer-search-wrap {
@@ -3716,6 +3696,12 @@ body {
   padding: 0 12px;
   height: 42px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  gap: 8px;
+}
+
+.jiji-drawer-search-icon {
+  color: #94a3b8;
+  flex-shrink: 0;
 }
 
 .jiji-drawer-search-input {
@@ -3746,6 +3732,7 @@ body {
   cursor: pointer;
   flex-shrink: 0;
   padding: 0;
+  transition: background-color 0.15s;
 }
 
 .jiji-drawer-close-btn:hover {
@@ -3772,7 +3759,7 @@ body {
 .jiji-drawer-cat-viewall {
   font-size: 13px;
   font-weight: 600;
-  color: #008751;
+  color: var(--primary-blue);
   text-decoration: none;
   display: flex;
   align-items: center;
