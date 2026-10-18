@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
-  <link rel="stylesheet" href="styles.css?v=6.6">
+  <link rel="stylesheet" href="styles.css?v=6.7">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -1882,18 +1882,85 @@
         });
       }
 
+      function attachSwipeToDismiss(toast, dismissTimer) {
+        var startX = 0;
+        var startY = 0;
+        var currentX = 0;
+        var isSwiping = false;
+        var isHorizontal = null;
+
+        toast.addEventListener('pointerdown', function(e) {
+          if (e.target.closest('.toast-btn')) return;
+          startX = e.clientX;
+          startY = e.clientY;
+          currentX = startX;
+          isSwiping = true;
+          isHorizontal = null;
+          toast.style.transition = 'none';
+          try {
+            toast.setPointerCapture(e.pointerId);
+          } catch (err) {}
+        });
+
+        toast.addEventListener('pointermove', function(e) {
+          if (!isSwiping) return;
+          var deltaX = e.clientX - startX;
+          var deltaY = e.clientY - startY;
+
+          if (isHorizontal === null) {
+            if (Math.abs(deltaX) > 6 || Math.abs(deltaY) > 6) {
+              isHorizontal = Math.abs(deltaX) >= Math.abs(deltaY);
+            }
+          }
+
+          if (isHorizontal) {
+            currentX = e.clientX;
+            var dismissProgress = Math.min(1, Math.abs(deltaX) / (toast.offsetWidth * 0.75));
+            toast.style.transform = 'translateX(' + deltaX + 'px)';
+            toast.style.opacity = Math.max(0, 1 - dismissProgress * 0.85);
+          }
+        });
+
+        function endSwipe() {
+          if (!isSwiping) return;
+          isSwiping = false;
+          var deltaX = currentX - startX;
+
+          if (isHorizontal && Math.abs(deltaX) > 45) {
+            if (dismissTimer) clearTimeout(dismissTimer);
+            var direction = deltaX > 0 ? 1 : -1;
+            toast.style.transition = 'transform 0.22s ease-out, opacity 0.22s ease-out';
+            toast.style.transform = 'translateX(' + (direction * 125) + '%)';
+            toast.style.opacity = '0';
+            setTimeout(function() {
+              if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+              }
+            }, 230);
+          } else {
+            toast.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+            toast.style.transform = 'translateX(0)';
+            toast.style.opacity = '1';
+          }
+          isHorizontal = null;
+        }
+
+        toast.addEventListener('pointerup', endSwipe);
+        toast.addEventListener('pointercancel', endSwipe);
+      }
+
       function showToast(message, linkText, linkUrl) {
         var container = document.getElementById('toastContainer');
         if (!container) return;
+
+        while (container.firstChild) {
+          container.removeChild(container.firstChild);
+        }
 
         var toast = document.createElement('div');
         toast.className = 'toast-item';
         toast.innerHTML = 
           '<div class="toast-content">' +
-            '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
-              '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>' +
-              '<polyline points="22 4 12 14.01 9 11.01"></polyline>' +
-            '</svg>' +
             '<span class="toast-text">' + message + '</span>' +
           '</div>' +
           (linkText ? '<a href="' + linkUrl + '" class="toast-btn">' + linkText + '</a>' : '');
@@ -1904,7 +1971,7 @@
           toast.classList.add('show');
         }, 10);
 
-        setTimeout(function() {
+        var dismissTimer = setTimeout(function() {
           toast.classList.remove('show');
           setTimeout(function() {
             if (toast.parentNode) {
@@ -1912,6 +1979,8 @@
             }
           }, 300);
         }, 3500);
+
+        attachSwipeToDismiss(toast, dismissTimer);
       }
 
       function syncProductCardsUI() {
