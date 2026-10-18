@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
-  <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
+  <title>NKEMMART SUPERCENTER - Online Shopping | Supermarket</title>
   <link rel="stylesheet" href="styles.css?v=7.7">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
@@ -621,7 +621,7 @@
       </aside>
 
       <!-- RIGHT COLUMN: PRODUCTS LISTING -->
-      <section class="catalog-content" aria-label="Official Store Products">
+      <section class="catalog-content" aria-label="Products Catalog">
         
         <!-- Top Catalog Heading & Sort Control -->
         <div class="catalog-header-card" id="trendingProductsSection">
@@ -706,7 +706,6 @@
             </div>
 
             <div class="card-body">
-              <span class="store-tag">Official Store</span>
               <a href="#product" class="product-title">Ace Elec 20000 mAh Ultra Slim Portable Power Bank - Type C Dual Input</a>
               
               <div class="price-row">
@@ -743,7 +742,6 @@
             </div>
 
             <div class="card-body">
-              <span class="store-tag">Official Store</span>
               <a href="#product" class="product-title">SILVER CREST 2L Industrial 8500W Food Crusher Blender With 2 Jar</a>
               
               <div class="price-row">
@@ -780,7 +778,6 @@
             </div>
 
             <div class="card-body">
-              <span class="store-tag">Official Store</span>
               <a href="#product" class="product-title">HANSEN Electric Iron Pressing Clothes 1000W</a>
               
               <div class="price-row">
@@ -817,7 +814,6 @@
             </div>
 
             <div class="card-body">
-              <span class="store-tag">Official Store</span>
               <a href="#product" class="product-title">HANSEN 18 inches industrial level standing fan</a>
               
               <div class="price-row">
@@ -854,7 +850,6 @@
             </div>
 
             <div class="card-body">
-              <span class="store-tag">Official Store</span>
               <a href="#product" class="product-title">Syinix 2.2L Electric Kettle - Food Grade Stainless Steel SKE22U1</a>
               
               <div class="price-row">
@@ -891,7 +886,6 @@
             </div>
 
             <div class="card-body">
-              <span class="store-tag">Official Store</span>
               <a href="#product" class="product-title">SILVER CREST 8L Extra Large Digital Air Fryer 2400W</a>
               
               <div class="price-row">
@@ -928,7 +922,6 @@
             </div>
 
             <div class="card-body">
-              <span class="store-tag">Official Store</span>
               <a href="#product" class="product-title">Maxi 20 Litres Manual Microwave Oven (MAXIMWO2021W) - 12 Months Warranty</a>
               
               <div class="price-row">
@@ -965,7 +958,6 @@
             </div>
 
             <div class="card-body">
-              <span class="store-tag">Official Store</span>
               <a href="#product" class="product-title">Hikers 32 Smart HD Frameless Panel Digital LED TV with Android</a>
               
               <div class="price-row">
@@ -2054,7 +2046,7 @@
           var price = parseInt(card.getAttribute('data-price'), 10) || 0;
           var originalPrice = parseInt(card.getAttribute('data-original'), 10) || 0;
           var image = card.getAttribute('data-image') || (card.querySelector('.card-img') ? card.querySelector('.card-img').getAttribute('src') : '');
-          var brand = card.getAttribute('data-brand') || 'Official Store';
+          var brand = card.getAttribute('data-brand') || 'Verified';
 
           var cart = getCart();
           var existingIndex = cart.findIndex(function(item) { return item.id === id; });
@@ -2142,7 +2134,7 @@
           var price = parseInt(card.getAttribute('data-price'), 10) || 0;
           var originalPrice = parseInt(card.getAttribute('data-original'), 10) || 0;
           var image = card.getAttribute('data-image') || (card.querySelector('.card-img') ? card.querySelector('.card-img').getAttribute('src') : '');
-          var brand = card.getAttribute('data-brand') || 'Official Store';
+          var brand = card.getAttribute('data-brand') || 'Verified';
 
           var savedList = [];
           try {

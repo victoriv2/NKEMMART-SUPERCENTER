@@ -862,7 +862,7 @@
             breadcrumbSub.textContent = subMatch.name;
           }
           if (catHeading) catHeading.textContent = subMatch.name;
-          if (catDesc) catDesc.textContent = 'Showing ' + subMatch.count + ' verified ads and official store products';
+          if (catDesc) catDesc.textContent = 'Showing ' + subMatch.count + ' verified products';
           if (badgeImg) badgeImg.src = subMatch.icon;
         }
       } else {
@@ -937,7 +937,7 @@
           art.setAttribute('data-price', prod.price);
           art.setAttribute('data-original', prod.originalPrice);
           art.setAttribute('data-image', prod.image);
-          art.setAttribute('data-brand', prod.brand || 'Official Store');
+          art.setAttribute('data-brand', prod.brand || 'Verified');
 
           art.innerHTML = 
             '<div class="card-media">' +
@@ -947,7 +947,6 @@
               '</button>' +
             '</div>' +
             '<div class="card-body">' +
-              '<span class="store-tag">Official Store</span>' +
               '<a href="#product" class="product-title">' + prod.title + '</a>' +
               '<div class="price-row">' +
                 '<span class="current-price">₦ ' + prod.price.toLocaleString() + '</span>' +
@@ -2191,7 +2190,7 @@
           var price = parseInt(card.getAttribute('data-price'), 10) || 0;
           var originalPrice = parseInt(card.getAttribute('data-original'), 10) || 0;
           var image = card.getAttribute('data-image') || (card.querySelector('.card-img') ? card.querySelector('.card-img').getAttribute('src') : '');
-          var brand = card.getAttribute('data-brand') || 'Official Store';
+          var brand = card.getAttribute('data-brand') || 'Verified';
 
           var cart = getCart();
           var existingIndex = cart.findIndex(function(item) { return item.id === id; });
@@ -2279,7 +2278,7 @@
           var price = parseInt(card.getAttribute('data-price'), 10) || 0;
           var originalPrice = parseInt(card.getAttribute('data-original'), 10) || 0;
           var image = card.getAttribute('data-image') || (card.querySelector('.card-img') ? card.querySelector('.card-img').getAttribute('src') : '');
-          var brand = card.getAttribute('data-brand') || 'Official Store';
+          var brand = card.getAttribute('data-brand') || 'Verified';
 
           var savedList = [];
           try {
