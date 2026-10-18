@@ -2008,7 +2008,7 @@ body {
       "search search search";
     align-items: center;
     gap: 8px 8px;
-    padding: 8px 10px;
+    padding: 8px 16px;
   }
 
   .desktop-category-dropdown,
@@ -2107,8 +2107,8 @@ body {
   .quick-filter-bar .filter-popup-card {
     position: absolute;
     top: calc(100% + 8px);
-    left: 8px !important;
-    right: 8px !important;
+    left: 0 !important;
+    right: 0 !important;
     width: auto !important;
     max-width: none !important;
     max-height: calc(100vh - 130px);
@@ -2123,8 +2123,8 @@ body {
   #brandPopup,
   #pricePopup,
   #ratingPopup {
-    left: 8px !important;
-    right: 8px !important;
+    left: 0 !important;
+    right: 0 !important;
     width: auto !important;
     max-width: none !important;
     max-height: calc(100vh - 130px);
@@ -3807,7 +3807,7 @@ body {
   }
 
   .catalog-page-container {
-    padding: 0 10px;
+    padding: 0 16px;
   }
 
   .jiji-category-grid {
@@ -3840,16 +3840,20 @@ body {
 }
 
 @media (max-width: 420px) {
+  .header-container {
+    padding: 8px 15px;
+  }
+
   .catalog-page-container {
-    padding: 0 8px;
+    padding: 0 15px;
   }
 
   .jiji-category-grid {
-    gap: 10px 6px;
+    gap: 10px 8px;
   }
 
   .jiji-cat-tile {
-    max-width: 62px;
+    max-width: 64px;
     border-radius: 13px;
   }
 
@@ -3870,7 +3874,7 @@ body {
 
 @media (max-width: 360px) {
   .header-container {
-    padding: 6px 6px;
+    padding: 6px 14px;
     gap: 6px 4px;
   }
 
@@ -3915,15 +3919,15 @@ body {
   }
 
   .catalog-page-container {
-    padding: 0 5px;
+    padding: 0 14px;
   }
 
   .jiji-category-grid {
-    gap: 8px 4px;
+    gap: 8px 6px;
   }
 
   .jiji-cat-tile {
-    max-width: 54px;
+    max-width: 56px;
     border-radius: 11px;
   }
 
