@@ -2071,7 +2071,6 @@
 
       var drawerScrollY = 0;
       var modalHistoryPushed = false;
-      var searchHistoryPushed = false;
 
       function lockBodyScroll() {
         drawerScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -2120,7 +2119,6 @@
         if (drawerEl) drawerEl.classList.add('active');
         lockBodyScroll();
 
-        searchHistoryPushed = false;
         // Push history state so phone back button closes the modal
         if (!modalHistoryPushed) {
           try {
@@ -2145,16 +2143,7 @@
         }
         unlockBodyScroll();
 
-        // If closed via UI (overlay click, swipe, Escape, X button) and not phone back button, pop history
-        if (searchHistoryPushed) {
-          searchHistoryPushed = false;
-          try {
-            if (history.state && history.state.searchActive) {
-              history.back();
-            }
-          } catch (err) {}
-        }
-
+        // If closed via UI (overlay click outside, X button, swipe) and not phone back button, pop history
         if (modalHistoryPushed && !isPopstate) {
           modalHistoryPushed = false;
           try {
@@ -2173,20 +2162,22 @@
           closeMobileNav(true);
         }
         if (drawerEl && drawerEl.classList.contains('active')) {
-          var isSearchActive = searchHistoryPushed || 
-                               drawerEl.classList.contains('search-active') || 
-                               drawerEl.classList.contains('keyboard-open') || 
-                               (drawerSearch && document.activeElement === drawerSearch);
-          if (isSearchActive) {
+          var isInputActive = (drawerSearch && document.activeElement === drawerSearch) || 
+                              drawerEl.classList.contains('search-active') || 
+                              drawerEl.classList.contains('keyboard-open');
+          if (isInputActive) {
             // When keyboard is active and you press back on your phone,
             // retract the input, blur it, reveal the X button back, and KEEP the modal open!
-            searchHistoryPushed = false;
             if (drawerSearch) {
               drawerSearch.blur();
             }
             drawerEl.classList.remove('search-active', 'keyboard-open');
             drawerEl.style.maxHeight = '';
             drawerEl.style.height = '';
+            try {
+              history.pushState({ modalOpen: 'subcategoryDrawer' }, '');
+              modalHistoryPushed = true;
+            } catch (err) {}
             return;
           }
 
@@ -2281,9 +2272,9 @@
           if (e.touches.length !== 1) return;
           if (e.target.closest('button, a')) return;
 
-          // When search input is active (focused), touches on the input itself must NOT trigger hand movement or close the modal
-          var isInputActive = (drawerEl.classList.contains('search-active') || (drawerSearch && document.activeElement === drawerSearch));
-          if (isInputActive && e.target.closest('.jiji-drawer-search-wrap, #jijiDrawerSearch')) {
+          // When search input is active (focused) or keyboard is open, touches within the modal must NEVER trigger drag-to-close
+          var isInputActive = (drawerEl.classList.contains('search-active') || drawerEl.classList.contains('keyboard-open') || (drawerSearch && document.activeElement === drawerSearch));
+          if (isInputActive) {
             return;
           }
 
@@ -2361,6 +2352,12 @@
           var listStartY = null;
           var isListPulling = false;
           drawerList.addEventListener('touchstart', function(e) {
+            var isInputActive = (drawerEl.classList.contains('search-active') || drawerEl.classList.contains('keyboard-open') || (drawerSearch && document.activeElement === drawerSearch));
+            if (isInputActive) {
+              listStartY = null;
+              isListPulling = false;
+              return;
+            }
             if (drawerList.scrollTop <= 0 && e.touches.length === 1) {
               listStartY = e.touches[0].clientY;
               isListPulling = false;
@@ -2369,7 +2366,7 @@
 
           drawerList.addEventListener('touchmove', function(e) {
             // When keyboard is open or search is focused, allow 100% free native scrolling
-            if (drawerEl.classList.contains('keyboard-open') || (drawerSearch && document.activeElement === drawerSearch)) {
+            if (drawerEl.classList.contains('keyboard-open') || drawerEl.classList.contains('search-active') || (drawerSearch && document.activeElement === drawerSearch)) {
               return;
             }
             if (listStartY !== null && drawerList.scrollTop <= 0) {
@@ -2399,6 +2396,13 @@
           }, { passive: true });
         }
       })();
+
+      // Prevent clicks/touches within the modal from closing it
+      if (drawerEl) {
+        drawerEl.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
 
       // Virtual Keyboard handler: Keep modal stable with zero bouncing
       function updateVisualViewportDrawer() {
@@ -2437,12 +2441,6 @@
       if (drawerSearch) {
         drawerSearch.addEventListener('focus', function() {
           drawerEl.classList.add('search-active');
-          if (!searchHistoryPushed && modalHistoryPushed) {
-            try {
-              history.pushState({ modalOpen: 'subcategoryDrawer', searchActive: true }, '');
-              searchHistoryPushed = true;
-            } catch (err) {}
-          }
           updateVisualViewportDrawer();
         });
 
@@ -2452,14 +2450,6 @@
           drawerEl.style.bottom = '';
           drawerEl.style.maxHeight = '';
           drawerEl.style.height = '';
-          if (searchHistoryPushed) {
-            searchHistoryPushed = false;
-            try {
-              if (history.state && history.state.searchActive) {
-                history.back();
-              }
-            } catch (err) {}
-          }
           setTimeout(updateVisualViewportDrawer, 100);
         });
       }
