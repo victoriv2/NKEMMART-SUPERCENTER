@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
-  <link rel="stylesheet" href="styles.css?v=4.3">
+  <link rel="stylesheet" href="styles.css?v=4.4">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -2009,11 +2009,11 @@
       var drawerSearch = document.getElementById('jijiDrawerSearch');
       var drawerCatTitle = document.getElementById('jijiDrawerCatTitle');
       var drawerCatViewAll = document.getElementById('jijiDrawerCatViewAll');
-      var drawerCloseBtn = document.getElementById('jijiDrawerCloseBtn');
 
       var currentDrawerCatKey = null;
 
       var drawerScrollY = 0;
+      var modalHistoryPushed = false;
 
       function lockBodyScroll() {
         drawerScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -2061,9 +2061,17 @@
         if (drawerOverlay) drawerOverlay.classList.add('active');
         if (drawerEl) drawerEl.classList.add('active');
         lockBodyScroll();
+
+        // Push history state so phone back button closes the modal
+        if (!modalHistoryPushed) {
+          try {
+            history.pushState({ modalOpen: 'subcategoryDrawer' }, '');
+            modalHistoryPushed = true;
+          } catch (err) {}
+        }
       }
 
-      function closeSubcategoryDrawer() {
+      function closeSubcategoryDrawer(isPopstate) {
         if (drawerOverlay) drawerOverlay.classList.remove('active');
         if (drawerEl) {
           drawerEl.classList.remove('active', 'fully-expanded', 'keyboard-open');
@@ -2076,7 +2084,33 @@
           drawerSearch.blur();
         }
         unlockBodyScroll();
+
+        // If closed via UI (overlay click, swipe, Escape) and not phone back button, pop history
+        if (modalHistoryPushed && !isPopstate) {
+          modalHistoryPushed = false;
+          try {
+            if (history.state && history.state.modalOpen === 'subcategoryDrawer') {
+              history.back();
+            }
+          } catch (err) {}
+        } else {
+          modalHistoryPushed = false;
+        }
       }
+
+      // Close modal on hardware/phone back button or browser back gesture
+      window.addEventListener('popstate', function(e) {
+        if (drawerEl && drawerEl.classList.contains('active')) {
+          closeSubcategoryDrawer(true);
+        }
+      });
+
+      // Close modal on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && drawerEl && drawerEl.classList.contains('active')) {
+          closeSubcategoryDrawer();
+        }
+      });
 
       function renderDrawerSubcategories(subcats, catKey) {
         if (!drawerList) return;
@@ -2107,7 +2141,6 @@
         });
       }
 
-      if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeSubcategoryDrawer);
       if (drawerOverlay) {
         drawerOverlay.addEventListener('click', closeSubcategoryDrawer);
         drawerOverlay.addEventListener('touchmove', function(e) {
@@ -2320,12 +2353,6 @@
           </svg>
           <input type="text" class="jiji-drawer-search-input" id="jijiDrawerSearch" placeholder="Find category..." autocomplete="off">
         </div>
-        <button type="button" class="jiji-drawer-close-btn" id="jijiDrawerCloseBtn" aria-label="Close">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
       </div>
     </div>
 

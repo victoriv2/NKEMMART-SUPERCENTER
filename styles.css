@@ -3721,23 +3721,7 @@ body.drawer-open {
 }
 
 .jiji-drawer-close-btn {
-  background: none;
-  border: none;
-  color: #ffffff;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  flex-shrink: 0;
-  padding: 0;
-  transition: background-color 0.15s;
-}
-
-.jiji-drawer-close-btn:hover {
-  background-color: rgba(255, 255, 255, 0.16);
+  display: none !important;
 }
 
 /* Category header badge inside drawer */
