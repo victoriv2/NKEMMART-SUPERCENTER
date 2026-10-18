@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Saved Items - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=7.5">
+  <link rel="stylesheet" href="styles.css?v=7.6">
 </head>
 <body>
 
@@ -180,20 +180,21 @@
         <div class="cart-card" id="savedItemsCard">
           
           <!-- Top Header -->
-          <div class="cart-header">
+          <div class="cart-header saved-card-header">
             <h1 class="cart-header-title">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
               </svg>
-              Saved Items <span class="cart-header-count" id="savedHeaderCount">(0)</span>
+              <span class="saved-header-text">Saved Items</span>
+              <span class="cart-header-count" id="savedHeaderCount">(0)</span>
             </h1>
 
             <button type="button" class="cart-clear-btn" id="clearSavedBtn" title="Remove all saved items">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="3 6 5 6 21 6"></polyline>
                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
               </svg>
-              Clear All
+              <span>Clear All</span>
             </button>
           </div>
 
@@ -302,17 +303,6 @@
 
           <div class="summary-body">
             
-            <!-- Free Delivery Progress Bar -->
-            <div class="shipping-progress-card" id="shippingProgressCard">
-              <div class="shipping-progress-text" id="shippingProgressText">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon></svg>
-                <span id="shippingProgressLabel">Free Delivery Progress</span>
-              </div>
-              <div class="shipping-progress-track">
-                <div class="shipping-progress-fill" id="shippingProgressFill" style="width: 0%;"></div>
-              </div>
-            </div>
-
             <div class="summary-row">
               <span class="summary-row-label">Total Saved</span>
               <span class="summary-row-val" id="summarySavedTotal">0 items</span>
@@ -707,24 +697,6 @@
           summaryValue.textContent = formatNaira(totalValue);
         }
 
-        // Free Delivery Progress
-        var FREE_DELIVERY_THRESHOLD = 30000;
-        var progressPercent = Math.min(100, Math.round((totalValue / FREE_DELIVERY_THRESHOLD) * 100));
-        var progressFill = document.getElementById('shippingProgressFill');
-        var progressLabel = document.getElementById('shippingProgressLabel');
-
-        if (progressFill && progressLabel) {
-          progressFill.style.width = progressPercent + '%';
-          if (totalValue >= FREE_DELIVERY_THRESHOLD) {
-            progressLabel.textContent = 'Unlocked Free Nationwide Delivery!';
-          } else if (totalValue > 0) {
-            var diff = FREE_DELIVERY_THRESHOLD - totalValue;
-            progressLabel.textContent = 'Add ' + formatNaira(diff) + ' more for FREE Delivery';
-          } else {
-            progressLabel.textContent = 'Free Delivery on orders over ₦ 30,000';
-          }
-        }
-
         // Move all to cart button state
         var btnMoveAll = document.getElementById('btnMoveAllToCart');
         if (btnMoveAll) {
@@ -766,32 +738,30 @@
               }
 
               row.innerHTML = 
-                '<div class="saved-item-top">' +
-                  '<div class="cart-item-img-wrapper">' +
-                    '<img src="' + item.image + '" alt="' + item.title + '" class="cart-item-img">' +
+                '<div class="cart-item-img-wrapper">' +
+                  '<img src="' + item.image + '" alt="' + item.title + '" class="cart-item-img">' +
+                '</div>' +
+                '<div class="cart-item-details">' +
+                  '<span class="cart-item-store-tag">Official Store</span>' +
+                  '<a href="index.html#product" class="cart-item-title">' + item.title + '</a>' +
+                  '<div class="mobile-price">' +
+                    '<span class="cart-item-current-price">' + formatNaira(item.price) + '</span>' +
+                    discountHtml +
                   '</div>' +
-                  '<div class="cart-item-details">' +
-                    '<span class="cart-item-store-tag">Official Store</span>' +
-                    '<a href="index.html#product" class="cart-item-title">' + item.title + '</a>' +
-                    '<div class="mobile-price">' +
-                      '<span class="cart-item-current-price">' + formatNaira(item.price) + '</span>' +
-                      discountHtml +
-                    '</div>' +
-                    '<div class="cart-item-status">' +
-                      '<span class="cart-item-status-dot"></span>' +
-                      '<span>In Stock | Eligible for Doorstep Delivery</span>' +
-                    '</div>' +
-                    '<div class="cart-item-actions-row">' +
-                      '<button type="button" class="btn-saved-move-cart" data-action="move-to-cart" data-id="' + item.id + '">' +
-                        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>' +
-                        'MOVE TO CART' +
-                      '</button>' +
-                      '<button type="button" class="btn-saved-remove" data-action="remove" data-id="' + item.id + '">' +
-                        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>' +
-                        'Remove' +
-                      '</button>' +
-                    '</div>' +
+                  '<div class="cart-item-status">' +
+                    '<span class="cart-item-status-dot"></span>' +
+                    '<span>In Stock | Eligible for Doorstep Delivery</span>' +
                   '</div>' +
+                '</div>' +
+                '<div class="cart-item-actions-row">' +
+                  '<button type="button" class="btn-saved-move-cart" data-action="move-to-cart" data-id="' + item.id + '">' +
+                    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>' +
+                    'MOVE TO CART' +
+                  '</button>' +
+                  '<button type="button" class="btn-saved-remove" data-action="remove" data-id="' + item.id + '">' +
+                    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>' +
+                    'Remove' +
+                  '</button>' +
                 '</div>' +
                 '<div class="cart-item-right">' +
                   '<div class="cart-item-pricing">' +
