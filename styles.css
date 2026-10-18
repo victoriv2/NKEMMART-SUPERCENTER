@@ -2041,8 +2041,9 @@ body {
     right: 8px !important;
     width: auto !important;
     max-width: none !important;
+    max-height: calc(100vh - 130px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    z-index: 150;
+    z-index: 998;
   }
 
   #brandPopup,
@@ -2052,6 +2053,7 @@ body {
     right: 8px !important;
     width: auto !important;
     max-width: none !important;
+    max-height: calc(100vh - 130px);
   }
 
   .sidebar-filters {

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
-  <link rel="stylesheet" href="styles.css?v=5.4">
+  <link rel="stylesheet" href="styles.css?v=5.5">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -1220,6 +1220,49 @@
         { btn: document.getElementById('chipSortBtn'), popup: document.getElementById('sortPopup') }
       ];
 
+      function scrollPopupIntoViewAboveFloatingBar(popup, btn) {
+        if (!popup) return;
+
+        // Allow DOM reflow and animation to establish dimensions
+        setTimeout(function() {
+          if (!popup.classList.contains('open')) return;
+
+          var popupRect = popup.getBoundingClientRect();
+          var floatBar = document.querySelector('.mobile-floating-bar');
+          var bottomLimit = window.innerHeight - 16;
+
+          if (floatBar && window.getComputedStyle(floatBar).display !== 'none') {
+            var barRect = floatBar.getBoundingClientRect();
+            // Keep popup bottom comfortably 14px above the top edge of the floating bar
+            bottomLimit = barRect.top - 14;
+          }
+
+          var overlap = popupRect.bottom - bottomLimit;
+          if (overlap > 0) {
+            var mainHeader = document.querySelector('.main-header');
+            var headerBottom = 0;
+            if (mainHeader) {
+              headerBottom = mainHeader.getBoundingClientRect().bottom;
+            }
+
+            var btnRect = btn ? btn.getBoundingClientRect() : null;
+            var maxScrollAllowed = btnRect ? (btnRect.top - headerBottom - 8) : overlap;
+
+            var scrollAmount = overlap;
+            if (maxScrollAllowed > 0 && scrollAmount > maxScrollAllowed) {
+              scrollAmount = maxScrollAllowed;
+            }
+
+            if (scrollAmount > 0) {
+              window.scrollBy({
+                top: Math.round(scrollAmount),
+                behavior: 'smooth'
+              });
+            }
+          }
+        }, 50);
+      }
+
       function adjustPopupPosition(popup) {
         if (!popup) return;
         popup.style.left = '';
@@ -1260,6 +1303,7 @@
             d.btn.classList.add('active');
             d.btn.setAttribute('aria-expanded', 'true');
             adjustPopupPosition(d.popup);
+            scrollPopupIntoViewAboveFloatingBar(d.popup, d.btn);
           }
         });
 
@@ -1537,6 +1581,14 @@
       var brandSearch = document.getElementById('brandPopupSearch');
       var brandList = document.getElementById('brandPopupList');
       if (brandSearch && brandList) {
+        brandSearch.addEventListener('focus', function() {
+          setTimeout(function() {
+            var bp = document.getElementById('brandPopup');
+            var bb = document.getElementById('chipBrandBtn');
+            scrollPopupIntoViewAboveFloatingBar(bp, bb);
+          }, 150);
+        });
+
         brandSearch.addEventListener('input', function() {
           var filter = brandSearch.value.toLowerCase();
           var items = brandList.querySelectorAll('.popup-checkbox-item');
