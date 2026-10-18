@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=3.9">
+  <link rel="stylesheet" href="styles.css?v=4.0">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -397,6 +397,9 @@
   <!-- Jiji-Style Mobile Subcategory Drawer -->
   <div class="jiji-drawer-overlay" id="jijiDrawerOverlay" aria-hidden="true"></div>
   <aside class="jiji-drawer" id="jijiDrawer" role="dialog" aria-modal="true" aria-label="Subcategories">
+    <div class="jiji-drawer-drag-area" id="jijiDrawerDragArea" aria-label="Drag to adjust or close">
+      <span class="jiji-drawer-drag-pill"></span>
+    </div>
     <div class="jiji-drawer-header" id="jijiDrawerHeader">
       <button type="button" class="jiji-drawer-back-btn" id="jijiDrawerBackBtn" aria-label="Go back">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -716,6 +719,7 @@
       }
 
       // Touch Gesture Support: Pull down to close, raise up to expand
+      var drawerDragArea = document.getElementById('jijiDrawerDragArea');
       var drawerHeader = document.getElementById('jijiDrawerHeader');
       var drawerCatInfo = document.querySelector('.jiji-drawer-cat-info');
 
@@ -784,7 +788,7 @@
           }
         }
 
-        [drawerHeader, drawerCatInfo].forEach(function(el) {
+        [drawerDragArea, drawerHeader, drawerCatInfo].forEach(function(el) {
           if (el) {
             el.addEventListener('touchstart', touchStart, { passive: true });
             el.addEventListener('touchmove', touchMove, { passive: true });
