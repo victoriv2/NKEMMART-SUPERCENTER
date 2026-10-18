@@ -3594,7 +3594,7 @@ body {
 /* Dedicated top drag handle bar for flexible swipe gesture */
 .jiji-drawer-drag-area {
   width: 100%;
-  padding: 10px 0 6px 0;
+  padding: 8px 0 3px 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3611,23 +3611,22 @@ body {
 }
 
 .jiji-drawer-drag-pill {
-  width: 52px;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.65);
-  border-radius: 3px;
-  transition: background 0.15s, transform 0.15s;
+  width: 36px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.42);
+  border-radius: 2px;
+  transition: background 0.15s;
 }
 
 .jiji-drawer-drag-area:hover .jiji-drawer-drag-pill,
 .jiji-drawer-drag-area:active .jiji-drawer-drag-pill {
-  background: rgba(255, 255, 255, 0.95);
-  transform: scaleX(1.15);
+  background: rgba(255, 255, 255, 0.75);
 }
 
 /* Drawer Header with Green bar, Back arrow, Search input */
 .jiji-drawer-header {
   background: linear-gradient(135deg, #008751 0%, #00a859 100%);
-  padding: 4px 14px 12px 14px;
+  padding: 3px 14px 10px 14px;
   display: flex;
   align-items: center;
   gap: 10px;
