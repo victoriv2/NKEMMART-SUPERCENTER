@@ -3791,7 +3791,7 @@ body.drawer-open {
   transform: translateY(100%);
   visibility: hidden;
   pointer-events: none;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s, opacity 0.2s, height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s, opacity 0.2s;
   overflow: hidden;
   padding-bottom: env(safe-area-inset-bottom, 12px);
   overscroll-behavior: contain;
@@ -3809,13 +3809,12 @@ body.drawer-open {
   max-height: 96dvh !important;
 }
 
-/* Keyboard open state on mobile */
-.jiji-drawer.keyboard-open {
-  top: 6px !important;
-  bottom: auto !important;
-  height: auto !important;
-  max-height: calc(100% - 12px) !important;
-  transition: transform 0.15s ease, height 0.15s ease !important;
+/* Keyboard open & search active state on mobile - zero bouncing, stable bottom anchor */
+.jiji-drawer.keyboard-open,
+.jiji-drawer.search-active {
+  bottom: 0 !important;
+  top: auto !important;
+  transition: none !important;
 }
 
 .jiji-drawer.keyboard-open .jiji-drawer-list {
@@ -3824,7 +3823,7 @@ body.drawer-open {
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
   overscroll-behavior: contain !important;
-  padding-bottom: 70px !important;
+  padding-bottom: 30px !important;
 }
 
 /* Desktop Modal: Elevated, centered card dialog, completely hidden when inactive */
@@ -3865,7 +3864,7 @@ body.drawer-open {
 /* Drawer Header - Single unified container with zero seams or lines */
 .jiji-drawer-header {
   background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 100%);
-  padding: 8px 14px 12px 14px;
+  padding: 8px 8px 12px 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3896,12 +3895,12 @@ body.drawer-open {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 @media (min-width: 601px) {
   .jiji-drawer-header {
-    padding: 14px 16px;
+    padding: 14px 14px;
   }
 
   .jiji-drawer-drag-pill {
@@ -3959,6 +3958,7 @@ body.drawer-open {
   cursor: pointer;
   flex-shrink: 0;
   padding: 0;
+  margin-right: -4px;
   transition: background-color 0.15s, opacity 0.15s;
 }
 
@@ -3968,8 +3968,7 @@ body.drawer-open {
 }
 
 /* When search input is active (focused), hide the close X so search bar auto fills full width */
-.jiji-drawer.search-active .jiji-drawer-close-btn,
-.jiji-drawer-header-row:focus-within .jiji-drawer-close-btn {
+.jiji-drawer.search-active .jiji-drawer-close-btn {
   display: none !important;
 }
 

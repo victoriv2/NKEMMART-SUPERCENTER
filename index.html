@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>NKEMMART SUPERCENTER - Official Stores | Online Shopping</title>
-  <link rel="stylesheet" href="styles.css?v=4.9">
+  <link rel="stylesheet" href="styles.css?v=5.0">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -2071,6 +2071,7 @@
 
       var drawerScrollY = 0;
       var modalHistoryPushed = false;
+      var searchHistoryPushed = false;
 
       function lockBodyScroll() {
         drawerScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -2119,6 +2120,7 @@
         if (drawerEl) drawerEl.classList.add('active');
         lockBodyScroll();
 
+        searchHistoryPushed = false;
         // Push history state so phone back button closes the modal
         if (!modalHistoryPushed) {
           try {
@@ -2136,13 +2138,23 @@
           drawerEl.style.top = '';
           drawerEl.style.bottom = '';
           drawerEl.style.height = '';
+          drawerEl.style.maxHeight = '';
         }
         if (drawerSearch && document.activeElement === drawerSearch) {
           drawerSearch.blur();
         }
         unlockBodyScroll();
 
-        // If closed via UI (overlay click, swipe, Escape) and not phone back button, pop history
+        // If closed via UI (overlay click, swipe, Escape, X button) and not phone back button, pop history
+        if (searchHistoryPushed) {
+          searchHistoryPushed = false;
+          try {
+            if (history.state && history.state.searchActive) {
+              history.back();
+            }
+          } catch (err) {}
+        }
+
         if (modalHistoryPushed && !isPopstate) {
           modalHistoryPushed = false;
           try {
@@ -2161,6 +2173,23 @@
           closeMobileNav(true);
         }
         if (drawerEl && drawerEl.classList.contains('active')) {
+          var isSearchActive = searchHistoryPushed || 
+                               drawerEl.classList.contains('search-active') || 
+                               drawerEl.classList.contains('keyboard-open') || 
+                               (drawerSearch && document.activeElement === drawerSearch);
+          if (isSearchActive) {
+            // When keyboard is active and you press back on your phone,
+            // retract the input, blur it, reveal the X button back, and KEEP the modal open!
+            searchHistoryPushed = false;
+            if (drawerSearch) {
+              drawerSearch.blur();
+            }
+            drawerEl.classList.remove('search-active', 'keyboard-open');
+            drawerEl.style.maxHeight = '';
+            drawerEl.style.height = '';
+            return;
+          }
+
           closeSubcategoryDrawer(true);
         }
       });
@@ -2371,7 +2400,7 @@
         }
       })();
 
-      // Virtual Keyboard handler: Keep modal list visible when keyboard opens
+      // Virtual Keyboard handler: Keep modal stable with zero bouncing
       function updateVisualViewportDrawer() {
         if (!drawerEl || !drawerEl.classList.contains('active')) return;
         if (window.visualViewport) {
@@ -2379,21 +2408,23 @@
           var isKeyboard = (window.innerHeight - vv.height) > 120;
           if (isKeyboard) {
             drawerEl.classList.add('keyboard-open');
-            var topPos = Math.max(Math.round(vv.offsetTop + 6), 6);
-            var availH = Math.round(vv.height - 12);
-            drawerEl.style.top = topPos + 'px';
-            drawerEl.style.height = availH + 'px';
-            drawerEl.style.bottom = 'auto';
+            // Keep anchored to bottom, set height to visual viewport height without bouncing
+            drawerEl.style.maxHeight = Math.round(vv.height - 8) + 'px';
+            drawerEl.style.height = Math.round(vv.height - 8) + 'px';
+            drawerEl.style.top = '';
+            drawerEl.style.bottom = '0';
           } else {
             drawerEl.classList.remove('keyboard-open');
             drawerEl.style.top = '';
             drawerEl.style.bottom = '';
+            drawerEl.style.maxHeight = '';
             drawerEl.style.height = '';
           }
         } else {
           drawerEl.classList.remove('keyboard-open');
           drawerEl.style.top = '';
           drawerEl.style.bottom = '';
+          drawerEl.style.maxHeight = '';
           drawerEl.style.height = '';
         }
       }
@@ -2406,17 +2437,30 @@
       if (drawerSearch) {
         drawerSearch.addEventListener('focus', function() {
           drawerEl.classList.add('search-active');
-          setTimeout(updateVisualViewportDrawer, 60);
-          setTimeout(updateVisualViewportDrawer, 250);
+          if (!searchHistoryPushed && modalHistoryPushed) {
+            try {
+              history.pushState({ modalOpen: 'subcategoryDrawer', searchActive: true }, '');
+              searchHistoryPushed = true;
+            } catch (err) {}
+          }
+          updateVisualViewportDrawer();
         });
+
         drawerSearch.addEventListener('blur', function() {
           drawerEl.classList.remove('search-active', 'keyboard-open');
           drawerEl.style.top = '';
           drawerEl.style.bottom = '';
+          drawerEl.style.maxHeight = '';
           drawerEl.style.height = '';
-          setTimeout(function() {
-            updateVisualViewportDrawer();
-          }, 150);
+          if (searchHistoryPushed) {
+            searchHistoryPushed = false;
+            try {
+              if (history.state && history.state.searchActive) {
+                history.back();
+              }
+            } catch (err) {}
+          }
+          setTimeout(updateVisualViewportDrawer, 100);
         });
       }
 
