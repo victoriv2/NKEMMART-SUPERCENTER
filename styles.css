@@ -26,15 +26,18 @@
 }
 
 html {
+  overflow-x: hidden;
   overflow-x: clip;
-  max-width: 100vw;
+  max-width: 100%;
   width: 100%;
   background-color: #000000;
+  box-sizing: border-box;
 }
 
 body {
+  overflow-x: hidden;
   overflow-x: clip;
-  max-width: 100vw;
+  max-width: 100%;
   width: 100%;
   font-family: var(--font-main);
   background-color: var(--bg-light);
@@ -42,6 +45,7 @@ body {
   -webkit-font-smoothing: antialiased;
   padding-bottom: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 
 /* -----------------------------------------
@@ -2207,7 +2211,7 @@ body {
   }
 
   .catalog-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
   }
 
@@ -2502,8 +2506,11 @@ body {
 ----------------------------------------- */
 .cart-page-container {
   max-width: 1240px;
+  width: 100%;
+  box-sizing: border-box;
   margin: 16px auto 40px auto;
   padding: 0 16px;
+  overflow-x: clip;
 }
 
 .cart-breadcrumb {
@@ -2530,9 +2537,11 @@ body {
 
 .cart-layout {
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: minmax(0, 1fr) 360px;
   gap: 20px;
   align-items: start;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .cart-main-col {
@@ -3734,7 +3743,7 @@ body {
 ----------------------------------------- */
 @media (max-width: 992px) {
   .cart-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .cart-summary-col {
@@ -5814,14 +5823,14 @@ body.modal-open {
 /* Responsive Footer adjustments */
 @media (max-width: 992px) {
   .footer-main {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 32px;
   }
 }
 
 @media (max-width: 600px) {
   .footer-main {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 28px;
     padding: 32px 16px 24px 16px;
   }
@@ -6834,7 +6843,7 @@ body.modal-open {
 
   /* Reviews container with side margins and rounded corners */
   .pdp-reviews-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
   }
 

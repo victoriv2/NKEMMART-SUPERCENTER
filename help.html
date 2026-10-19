@@ -4,14 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Help Center & Customer Care - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=14.0">
+  <link rel="stylesheet" href="styles.css?v=15.0">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
   <style>
     .help-page-wrap {
       max-width: 1200px;
+      width: 100%;
+      box-sizing: border-box;
       margin: 24px auto 60px;
       padding: 0 16px;
+      overflow-x: clip;
     }
 
     .help-hero {
@@ -22,6 +25,8 @@
       text-align: center;
       margin-bottom: 32px;
       box-shadow: 0 4px 16px rgba(0, 128, 67, 0.15);
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .help-hero h1 {
@@ -40,8 +45,10 @@
 
     .help-search-box {
       max-width: 540px;
+      width: 100%;
       margin: 0 auto;
       position: relative;
+      box-sizing: border-box;
     }
 
     .help-search-input {
@@ -70,6 +77,8 @@
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 16px;
       margin-bottom: 36px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .help-quick-card {
@@ -84,6 +93,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-width: 0;
+      box-sizing: border-box;
     }
 
     .help-quick-card:hover {
@@ -118,8 +129,12 @@
 
     .help-layout {
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 260px minmax(0, 1fr);
       gap: 32px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
     }
 
     .help-sidebar {
@@ -130,17 +145,29 @@
       position: sticky;
       top: 80px;
       height: fit-content;
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .help-content-area {
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     @media (max-width: 900px) {
       .help-layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 20px;
       }
       .help-sidebar {
         position: static !important;
         top: auto !important;
         margin-bottom: 24px;
+        width: 100%;
+        max-width: 100%;
       }
     }
 
@@ -183,6 +210,12 @@
       border-radius: 10px;
       padding: 24px;
       margin-bottom: 24px;
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
     .help-section-title {
@@ -195,10 +228,13 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
     .help-section-title svg {
       color: #008043;
+      flex-shrink: 0;
     }
 
     .faq-item {
@@ -206,6 +242,7 @@
       border-radius: 8px;
       margin-bottom: 12px;
       overflow: hidden;
+      box-sizing: border-box;
     }
 
     .faq-question {
@@ -215,10 +252,18 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
       font-weight: 600;
       font-size: 14px;
       color: #1f2937;
       user-select: none;
+      box-sizing: border-box;
+    }
+
+    .faq-question span {
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: break-word;
     }
 
     .faq-question:hover {
@@ -233,6 +278,9 @@
       border-top: 1px solid #e5e7eb;
       background: #ffffff;
       display: none;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      box-sizing: border-box;
     }
 
     .faq-item.open .faq-answer {
@@ -246,6 +294,26 @@
     .faq-chevron {
       transition: transform 0.2s ease;
       color: #6b7280;
+      flex-shrink: 0;
+    }
+
+    .careers-partner-banner {
+      background: #f9fafb;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .careers-partner-content {
+      flex: 1;
+      min-width: 240px;
     }
 
     .contact-card-grid {
@@ -253,6 +321,8 @@
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
       margin-top: 20px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .contact-method-card {
@@ -261,6 +331,8 @@
       border-radius: 8px;
       padding: 16px;
       text-align: center;
+      min-width: 0;
+      box-sizing: border-box;
     }
 
     .contact-method-card h4 {
@@ -287,6 +359,7 @@
       font-weight: 700;
       text-decoration: none;
       transition: opacity 0.15s ease;
+      box-sizing: border-box;
     }
 
     .contact-action-btn.phone {
@@ -310,17 +383,21 @@
 
     .service-table-responsive {
       width: 100%;
+      max-width: 100%;
+      min-width: 0;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       margin-top: 16px;
       border: 1px solid #e5e7eb;
       border-radius: 8px;
       background: #ffffff;
+      box-sizing: border-box;
+      display: block;
     }
 
     .service-centers-table {
       width: 100%;
-      min-width: 520px;
+      min-width: 480px;
       border-collapse: collapse;
       font-size: 13px;
     }
@@ -356,33 +433,44 @@
       .help-page-wrap {
         margin: 16px auto 40px;
         padding: 0 12px;
+        width: 100%;
+        box-sizing: border-box;
       }
       .help-hero {
-        padding: 28px 16px;
-        margin-bottom: 24px;
+        padding: 24px 14px;
+        margin-bottom: 20px;
         border-radius: 10px;
+        width: 100%;
+        box-sizing: border-box;
       }
       .help-hero h1 {
-        font-size: 22px;
+        font-size: 20px;
       }
       .help-hero p {
-        font-size: 14px;
+        font-size: 13.5px;
       }
       .help-search-input {
         height: 44px;
-        font-size: 14px;
+        font-size: 13.5px;
+        padding: 0 42px 0 14px;
+      }
+      .help-search-icon {
+        right: 14px;
       }
       .help-quick-cards {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
+        width: 100%;
       }
       .help-quick-card {
         padding: 14px 10px;
+        min-width: 0;
+        box-sizing: border-box;
       }
       .help-card-icon {
-        width: 38px;
-        height: 38px;
+        width: 36px;
+        height: 36px;
         margin-bottom: 8px;
       }
       .help-quick-card h3 {
@@ -391,11 +479,49 @@
       .help-quick-card p {
         font-size: 11px;
       }
+      .help-sidebar {
+        padding: 14px 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .help-nav-item {
+        padding: 8px 10px;
+        font-size: 13px;
+      }
       .help-section {
-        padding: 18px 14px;
+        padding: 18px 12px;
+        border-radius: 8px;
+        margin-bottom: 18px;
       }
       .help-section-title {
-        font-size: 17px;
+        font-size: 16px;
+        gap: 8px;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+      }
+      .faq-question {
+        padding: 12px 14px;
+        font-size: 13px;
+      }
+      .faq-answer {
+        padding: 14px;
+        font-size: 13px;
+      }
+      .contact-card-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .careers-partner-banner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .careers-partner-content {
+        min-width: 0;
+      }
+      .careers-partner-banner .contact-action-btn {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
       }
     }
   </style>
@@ -852,8 +978,8 @@
           <p style="font-size: 14px; color: #4b5563; line-height: 1.6; margin-bottom: 14px;">
             Join one of Nigeria's fastest growing commerce ecosystems! We are always looking for passionate customer support specialists, warehouse supervisors, and logistics riders.
           </p>
-          <div style="background: #f9fafb; padding: 16px; border-radius: 8px; border: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div>
+          <div class="careers-partner-banner">
+            <div class="careers-partner-content">
               <strong style="color: #111827; font-size: 14px;">Logistics Fleet Owners & Dispatch Riders</strong>
               <p style="font-size: 13px; color: #6b7280; margin: 4px 0 0;">Partner with NKEMMART Logistics to fulfill last-mile deliveries across Nigerian states.</p>
             </div>
