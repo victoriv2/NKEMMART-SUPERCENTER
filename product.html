@@ -4,114 +4,223 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Product Details - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=8.4">
+  <link rel="stylesheet" href="styles.css?v=8.5">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body class="pdp-page">
 
-  <!-- TOP BAR / ANNOUNCEMENT -->
-  <header class="top-bar">
+  <!-- Top Announcement / Utility Ribbon (Desktop) -->
+  <aside class="top-bar" aria-label="Announcement Bar">
     <div class="top-bar-inner">
       <div class="top-bar-left">
-        <span class="delivery-badge">Doorstep Delivery Nationwide</span>
-        <span class="top-sep">|</span>
-        <a href="tel:0800NKEMMART" class="top-tel-link">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-          <span>Call to Order: 0800-NKEMMART</span>
-        </a>
+        <span class="doorstep-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          Doorstep Delivery
+        </span>
+        <span>We deliver all across Nigeria!</span>
+        <span class="top-bar-slogan">"Everything Dey™"</span>
       </div>
       <div class="top-bar-right">
-        <a href="index.html#sell" class="top-link">Sell on Nkemmart</a>
-        <span class="top-sep">|</span>
-        <a href="index.html#help-center" class="top-link">Help Center</a>
+        <a href="index.html#sell" class="top-bar-link">Sell on Nkemmart</a>
+        <span class="top-bar-divider">|</span>
+        <a href="tel:0800NKEMMART" class="top-bar-link">Call to Order: 0800-NKEMMART</a>
+        <span class="top-bar-divider">|</span>
+        <span class="top-bar-link" style="color: #fff; font-weight: 600;">₦ NGN</span>
       </div>
     </div>
-  </header>
+  </aside>
 
-  <!-- MAIN HEADER -->
-  <header class="main-header" id="mainHeader">
-    <div class="main-header-inner">
+  <!-- Sticky Header -->
+  <header class="main-header" role="banner">
+    <div class="header-container">
       
-      <!-- Mobile Drawer Hamburger -->
-      <button class="mobile-drawer-btn" id="mobileDrawerOpenBtn" aria-label="Open navigation menu" type="button">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
+      <!-- Hamburger Menu & Desktop Categories Dropdown -->
+      <div class="header-menu-wrapper">
+        <button class="menu-btn" id="mobileMenuBtn" aria-label="Open categories menu" title="All Categories" type="button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <!-- Desktop Categories Dropdown -->
+        <div class="desktop-category-dropdown" id="desktopCategoryDropdown">
+          <div class="category-dropdown-list">
+            <a href="category.html?cat=vehicles" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L18 11l-2.7-3.6a1 1 0 0 0-.8-.4H9.5a1 1 0 0 0-.8.4L6 11l-3.16.86a1 1 0 0 0-.84.99V16h3"></path><circle cx="6.5" cy="16.5" r="2.5"></circle><circle cx="16.5" cy="16.5" r="2.5"></circle></svg>
+              <span>Vehicles</span>
+            </a>
+            <a href="category.html?cat=appliances" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="10" x2="20" y2="10"></line></svg>
+              <span>Appliances</span>
+            </a>
+            <a href="category.html?cat=phones" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+              <span>Phones & Tablets</span>
+            </a>
+            <a href="category.html?cat=health-beauty" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path></svg>
+              <span>Health & Beauty</span>
+            </a>
+            <a href="category.html?cat=home-office" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              <span>Home & Office</span>
+            </a>
+            <a href="category.html?cat=electronics" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+              <span>Electronics</span>
+            </a>
+            <a href="category.html?cat=fashion" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.5a2 2 0 0 0 1.25 1.57L7 12v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-9l2.89-1.24a2 2 0 0 0 1.25-1.57l.58-3.5a2 2 0 0 0-1.34-2.23z"></path></svg>
+              <span>Fashion</span>
+            </a>
+            <a href="category.html?cat=supermarket" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 5-5 13-5 13S7 12 7 7a5 5 0 0 1 5-5z"></path></svg>
+              <span>Supermarket</span>
+            </a>
+            <a href="category.html?cat=computing" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              <span>Computing</span>
+            </a>
+            <a href="category.html?cat=baby" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+              <span>Baby Products</span>
+            </a>
+            <a href="category.html?cat=gaming" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="6"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="11" r="1"></circle><circle cx="18" cy="13" r="1"></circle></svg>
+              <span>Gaming</span>
+            </a>
+            <a href="category.html?cat=other" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+              <span>Other categories</span>
+            </a>
+          </div>
+        </div>
+      </div>
 
       <!-- Brand Logo -->
-      <a href="index.html" class="header-logo" aria-label="NKEMMART SUPERCENTER Homepage">
-        <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER Logo" class="logo-img">
+      <a href="index.html" class="brand-link" title="NKEMMART SUPERCENTER - Home">
+        <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="brand-logo" />
       </a>
 
       <!-- Search Bar -->
-      <form class="header-search-form" action="category.html" method="GET" role="search" id="headerSearchForm">
-        <div class="search-input-wrap">
-          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="search" name="q" class="search-input" id="headerSearchInput" placeholder="Search products, brands and categories..." autocomplete="off">
-        </div>
-        <button type="submit" class="search-btn">Search</button>
-      </form>
+      <div class="search-container">
+        <form class="search-form" action="category.html" method="GET" role="search" id="headerSearchForm">
+          <span class="search-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input 
+            type="search" 
+            name="q" 
+            class="search-input" 
+            placeholder="Search products, brands and categories" 
+            autocomplete="off"
+            aria-label="Search products, brands and categories"
+          />
+          <button type="submit" class="search-button">Search</button>
+        </form>
+      </div>
 
-      <!-- Header Actions: Account, Help, Saved Items, Cart -->
-      <div class="header-actions">
+      <!-- Action Navigation (Account, Help, Saved, Cart) -->
+      <nav class="header-actions" aria-label="User navigation">
+        
         <!-- Account Dropdown -->
-        <div class="header-dropdown" id="accountDropdown">
-          <button class="header-action-btn" type="button" aria-expanded="false" id="accountMenuBtn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <span class="action-btn-text">Account</span>
-            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <div class="action-item">
+          <button class="action-btn" aria-haspopup="true" aria-expanded="false" type="button" id="accountMenuBtn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span>Account</span>
+            <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </button>
+          
           <div class="dropdown-menu" id="accountMenu">
             <div class="dropdown-header">
-              <a href="index.html#signin" class="dropdown-signin-btn">SIGN IN</a>
+              <a href="index.html#signin" class="sign-in-btn">SIGN IN</a>
             </div>
-            <ul class="dropdown-list">
-              <li><a href="index.html#account" class="dropdown-item">My Nkemmart Account</a></li>
-              <li><a href="index.html#orders" class="dropdown-item">Orders</a></li>
-              <li><a href="saved-items.html" class="dropdown-item">Saved Items</a></li>
-            </ul>
+            <a href="index.html#account" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              My Account
+            </a>
+            <a href="index.html#orders" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Orders
+            </a>
+            <a href="saved-items.html" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              Saved Items
+            </a>
+            <a href="cart.html" class="dropdown-item" style="color: var(--primary-blue); font-weight: 700;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              Shopping Cart
+            </a>
           </div>
         </div>
 
         <!-- Help Dropdown -->
-        <div class="header-dropdown" id="helpDropdown">
-          <button class="header-action-btn" type="button" aria-expanded="false" id="helpMenuBtn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-            <span class="action-btn-text">Help</span>
-            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <div class="action-item">
+          <button class="action-btn" aria-haspopup="true" aria-expanded="false" type="button" id="helpMenuBtn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>Help</span>
+            <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </button>
+          
           <div class="dropdown-menu" id="helpMenu">
-            <ul class="dropdown-list">
-              <li><a href="index.html#help-center" class="dropdown-item">Help Center</a></li>
-              <li><a href="index.html#track-order" class="dropdown-item">Track Your Order</a></li>
-              <li><a href="index.html#returns" class="dropdown-item">Returns & Refunds</a></li>
-              <li><a href="index.html#contact-us" class="dropdown-item">Contact Us</a></li>
-            </ul>
+            <a href="index.html#help-center" class="dropdown-item">Help Center</a>
+            <a href="index.html#track-order" class="dropdown-item">Place & Track Order</a>
+            <a href="index.html#cancellations" class="dropdown-item">Order Cancellation</a>
+            <a href="index.html#returns" class="dropdown-item">Returns & Refunds</a>
+            <div class="dropdown-divider"></div>
+            <a href="index.html#live-chat" class="dropdown-item" style="color: var(--primary-green); font-weight: 600;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              Live Chat Support
+            </a>
           </div>
         </div>
 
         <!-- Saved Items Button -->
-        <a href="saved-items.html" class="header-action-btn" id="savedItemsHeaderLink" aria-label="Saved Items">
-          <div class="header-icon-wrap">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-            <span class="header-badge" id="headerSavedBadge" style="display: none;">0</span>
+        <a href="saved-items.html" class="action-btn saved-link" aria-label="Saved Items" style="padding: 8px 10px;">
+          <div style="position: relative; display: inline-flex; align-items: center; justify-content: center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <span class="cart-badge" id="headerSavedBadge" style="display: none; background-color: #ef4444;">0</span>
           </div>
-          <span class="action-btn-text">Saved</span>
+          <span>Saved</span>
         </a>
 
         <!-- Cart Button -->
-        <a href="cart.html" class="header-action-btn cart-btn-active" id="cartHeaderLink" aria-label="Shopping Cart">
-          <div class="header-icon-wrap">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-            <span class="header-badge" id="headerCartBadge" style="display: none;">0</span>
+        <a href="cart.html" class="cart-link" aria-label="Shopping Cart">
+          <div class="cart-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-badge" id="headerCartBadge" style="display: none;">0</span>
           </div>
-          <span class="action-btn-text">Cart</span>
+          <span>Cart</span>
         </a>
 
-      </div>
+      </nav>
     </div>
   </header>
 
@@ -214,6 +323,32 @@
       <!-- 3. Right Perks & Delivery Card -->
       <aside class="pdp-perks-card">
         <h3 class="pdp-perks-title">Delivery & Returns</h3>
+
+        <!-- Interactive Delivery Location Estimator -->
+        <div class="pdp-delivery-estimator">
+          <label class="pdp-estimator-label" for="pdpLocationSelect">Delivery Destination & Fees</label>
+          <select id="pdpLocationSelect" class="pdp-location-select" aria-label="Select Delivery State">
+            <option value="lagos" selected>Lagos (Ikeja, Island, Mainland)</option>
+            <option value="abuja">Abuja (FCT, Garki, Wuse, Maitama)</option>
+            <option value="rivers">Rivers (Port Harcourt, Obio-Akpor)</option>
+            <option value="oyo">Oyo (Ibadan, Ogbomoso)</option>
+            <option value="kano">Kano (Kano Municipal)</option>
+            <option value="enugu">Enugu (Enugu Urban, Nsukka)</option>
+            <option value="anambra">Anambra (Onitsha, Awka, Nnewi)</option>
+            <option value="delta">Delta (Warri, Asaba)</option>
+            <option value="other">Other States Nationwide</option>
+          </select>
+          <div class="pdp-delivery-estimate-result" id="pdpDeliveryEstimateResult">
+            <div class="pdp-estimate-line">
+              <span>Doorstep Delivery:</span>
+              <strong class="pdp-estimate-badge" id="pdpEstimateCost">₦ 1,500</strong>
+            </div>
+            <div class="pdp-estimate-line">
+              <span>Estimated Delivery:</span>
+              <span id="pdpEstimateTime">Within 24 - 48 Hours</span>
+            </div>
+          </div>
+        </div>
         
         <div class="pdp-perk-row">
           <div class="pdp-perk-icon-wrap">
@@ -221,7 +356,7 @@
           </div>
           <div class="pdp-perk-text">
             <strong>Doorstep Delivery</strong>
-            <span>Delivery within 24 to 72 hours across Lagos, Abuja, Port Harcourt and nationwide.</span>
+            <span>Rapid dispatched delivery straight to your residential or office address nationwide.</span>
           </div>
         </div>
 
@@ -253,6 +388,23 @@
             <strong>Secure Payment Guaranteed</strong>
             <span>Multiple safe payment gateways: Card, Transfer, USSD, or Pay on Delivery.</span>
           </div>
+        </div>
+
+        <!-- Share Product -->
+        <div class="pdp-share-strip">
+          <span class="pdp-share-label">Share:</span>
+          <button type="button" class="pdp-share-btn" id="pdpCopyLinkBtn" title="Copy Link" aria-label="Copy Link">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+          </button>
+          <button type="button" class="pdp-share-btn whatsapp" id="pdpShareWaBtn" title="Share on WhatsApp" aria-label="Share on WhatsApp">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          </button>
+          <button type="button" class="pdp-share-btn twitter" id="pdpShareTwBtn" title="Share on X" aria-label="Share on X">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </button>
+          <button type="button" class="pdp-share-btn facebook" id="pdpShareFbBtn" title="Share on Facebook" aria-label="Share on Facebook">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </button>
         </div>
       </aside>
 
@@ -369,35 +521,74 @@
             </div>
           </div>
 
-          <div class="pdp-reviews-list">
-            <div class="pdp-review-card-item">
-              <div class="pdp-review-header">
-                <span class="pdp-reviewer-name">Chinedu O. (Verified Purchase)</span>
-                <span class="pdp-review-date">2 days ago</span>
-              </div>
-              <div class="pdp-stars-box" style="color: #f59e0b; margin-bottom: 4px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              </div>
-              <p class="pdp-review-comment">Super fast delivery to Ikeja, Lagos! The build quality is genuine and works perfectly straight out of the box. Highly recommended supercenter.</p>
+          <div class="pdp-reviews-list" id="pdpReviewsList">
+            <div class="pdp-reviews-actions-bar">
+              <span style="font-size: 14px; font-weight: 700; color: #0f172a;">Customer Feedback</span>
+              <button type="button" class="pdp-write-review-btn" id="pdpWriteReviewToggleBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                <span>Write a Review</span>
+              </button>
             </div>
 
-            <div class="pdp-review-card-item">
-              <div class="pdp-review-header">
-                <span class="pdp-reviewer-name">Fatima A. (Verified Purchase)</span>
-                <span class="pdp-review-date">1 week ago</span>
+            <!-- Review submission form -->
+            <form class="pdp-review-form-card" id="pdpReviewForm">
+              <h4 style="margin: 0 0 12px 0; font-size: 15px; color: #0f172a;">Share Your Experience</h4>
+              <div class="pdp-form-row">
+                <div class="pdp-form-group">
+                  <label for="pdpReviewerNameInput">Your Name</label>
+                  <input type="text" id="pdpReviewerNameInput" class="pdp-form-input" placeholder="e.g. Tunde A. (Lagos)" required>
+                </div>
+                <div class="pdp-form-group">
+                  <label for="pdpReviewRatingSelect">Rating</label>
+                  <select id="pdpReviewRatingSelect" class="pdp-form-select">
+                    <option value="5" selected>5 Stars - Excellent</option>
+                    <option value="4">4 Stars - Very Good</option>
+                    <option value="3">3 Stars - Good</option>
+                    <option value="2">2 Stars - Fair</option>
+                    <option value="1">1 Star - Poor</option>
+                  </select>
+                </div>
               </div>
-              <div class="pdp-stars-box" style="color: #f59e0b; margin-bottom: 4px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <div class="pdp-form-group">
+                <label for="pdpReviewTextInput">Review Comment</label>
+                <textarea id="pdpReviewTextInput" class="pdp-form-textarea" rows="3" placeholder="Share details about delivery, product performance, packaging, or durability..." required></textarea>
               </div>
-              <p class="pdp-review-comment">Original product exactly as advertised. The package was sealed properly and the courier was polite. Will definitely buy again from Nkemmart.</p>
+              <div class="pdp-form-submit-row">
+                <button type="button" class="pdp-form-cancel-btn" id="pdpCancelReviewBtn">Cancel</button>
+                <button type="submit" class="pdp-form-submit-btn">Submit Review</button>
+              </div>
+            </form>
+
+            <div id="pdpReviewsContainer">
+              <div class="pdp-review-card-item">
+                <div class="pdp-review-header">
+                  <span class="pdp-reviewer-name">Chinedu O. (Verified Purchase)</span>
+                  <span class="pdp-review-date">2 days ago</span>
+                </div>
+                <div class="pdp-stars-box" style="color: #f59e0b; margin-bottom: 4px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </div>
+                <p class="pdp-review-comment">Super fast delivery to Ikeja, Lagos! The build quality is genuine and works perfectly straight out of the box. Highly recommended supercenter.</p>
+              </div>
+
+              <div class="pdp-review-card-item">
+                <div class="pdp-review-header">
+                  <span class="pdp-reviewer-name">Fatima A. (Verified Purchase)</span>
+                  <span class="pdp-review-date">1 week ago</span>
+                </div>
+                <div class="pdp-stars-box" style="color: #f59e0b; margin-bottom: 4px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </div>
+                <p class="pdp-review-comment">Original product exactly as advertised. The package was sealed properly and the courier was polite. Will definitely buy again from Nkemmart.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -573,20 +764,57 @@
   </footer>
 
 
-  <!-- Mobile Menu Drawer Backdrop & Aside -->
-  <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop"></div>
-  <aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Menu">
-    <div class="mobile-drawer-header">
-      <span class="mobile-drawer-title">Menu</span>
-      <button class="mobile-drawer-close" id="mobileDrawerCloseBtn" aria-label="Close menu" type="button">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+  <!-- Mobile Navigation Drawer & Backdrop -->
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+  <aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Navigation">
+    <div class="mobile-nav-header">
+      <button class="mobile-nav-close" id="mobileNavCloseBtn" aria-label="Close menu" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
       </button>
+      <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="mobile-nav-logo">
     </div>
-    <div class="mobile-drawer-body">
+
+    <!-- Need Help Section -->
+    <div class="mobile-nav-section">
+      <a href="index.html#help-center" class="mobile-nav-link-row">
+        <span>NEED HELP?</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </a>
+    </div>
+
+    <!-- My Account Section -->
+    <div class="mobile-nav-section">
+      <div class="mobile-nav-link-row" style="cursor: default;">
+        <span>MY ACCOUNT</span>
+      </div>
       <div class="mobile-sub-nav-list">
-        <a href="index.html" class="mobile-sub-nav-item">
-          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-          <span>Home</span>
+        <a href="index.html#orders" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>Orders</span>
+        </a>
+        <a href="saved-items.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span>Saved Items</span>
+        </a>
+        <a href="cart.html" class="mobile-sub-nav-item" style="color: var(--primary-blue); font-weight: 700;">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>Shopping Cart</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="mobile-nav-section">
+      <div class="mobile-nav-link-row" style="cursor: default;">
+        <span>OUR CATEGORIES</span>
+      </div>
+      <div class="mobile-sub-nav-list">
+        <a href="category.html?cat=vehicles" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L18 11l-2.7-3.6a1 1 0 0 0-.8-.4H9.5a1 1 0 0 0-.8.4L6 11l-3.16.86a1 1 0 0 0-.84.99V16h3"></path><circle cx="6.5" cy="16.5" r="2.5"></circle><circle cx="16.5" cy="16.5" r="2.5"></circle></svg>
+          <span>Vehicles</span>
         </a>
         <a href="category.html?cat=appliances" class="mobile-sub-nav-item">
           <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="10" x2="20" y2="10"></line></svg>
@@ -596,16 +824,56 @@
           <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
           <span>Phones & Tablets</span>
         </a>
-        <a href="saved-items.html" class="mobile-sub-nav-item">
-          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-          <span>Saved Items</span>
+        <a href="category.html?cat=health-beauty" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path></svg>
+          <span>Health & Beauty</span>
         </a>
-        <a href="cart.html" class="mobile-sub-nav-item">
-          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-          <span>Shopping Cart</span>
+        <a href="category.html?cat=home-office" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          <span>Home & Office</span>
+        </a>
+        <a href="category.html?cat=electronics" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+          <span>Electronics</span>
+        </a>
+        <a href="category.html?cat=fashion" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.5a2 2 0 0 0 1.25 1.57L7 12v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-9l2.89-1.24a2 2 0 0 0 1.25-1.57l.58-3.5a2 2 0 0 0-1.34-2.23z"></path></svg>
+          <span>Fashion</span>
+        </a>
+        <a href="category.html?cat=supermarket" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 5-5 13-5 13S7 12 7 7a5 5 0 0 1 5-5z"></path></svg>
+          <span>Supermarket</span>
+        </a>
+        <a href="category.html?cat=computing" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>Computing</span>
         </a>
       </div>
     </div>
+  </aside>
+
+  <!-- Image Enlarge / Lightbox Modal -->
+  <div class="pdp-lightbox-modal" id="pdpLightboxModal" aria-hidden="true" role="dialog" aria-label="Enlarged Product Image">
+    <div class="pdp-lightbox-content">
+      <button type="button" class="pdp-lightbox-close" id="pdpLightboxCloseBtn" aria-label="Close enlarged preview">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <img src="" alt="Enlarged Product View" class="pdp-lightbox-img" id="pdpLightboxImg">
+    </div>
+  </div>
+
+  <!-- Mobile Sticky Bottom Action Bar -->
+  <aside class="pdp-mobile-sticky-bar" id="pdpMobileStickyBar" aria-label="Quick Actions">
+    <button type="button" class="pdp-sticky-wish-btn" id="pdpStickyWishBtn" aria-label="Save to wishlist">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+    </button>
+    <button type="button" class="pdp-sticky-cart-btn" id="pdpStickyCartBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+      <span>ADD TO CART</span>
+    </button>
+    <button type="button" class="pdp-sticky-buy-btn" id="pdpStickyBuyBtn">
+      <span>BUY NOW</span>
+    </button>
   </aside>
 
   <!-- Toast Notification Container -->
@@ -1065,107 +1333,292 @@
       var qtyInc = document.getElementById('pdpQtyIncBtn');
       var qtyDec = document.getElementById('pdpQtyDecBtn');
 
+      function updateStepperButtons() {
+        if (!qtyInput) return;
+        var val = parseInt(qtyInput.value, 10) || 1;
+        if (qtyDec) {
+          qtyDec.disabled = (val <= 1);
+          qtyDec.style.opacity = (val <= 1) ? '0.5' : '1';
+        }
+        if (qtyInc) {
+          qtyInc.disabled = (val >= 10);
+          qtyInc.style.opacity = (val >= 10) ? '0.5' : '1';
+        }
+      }
+      updateStepperButtons();
+
       if (qtyInc && qtyInput) {
         qtyInc.addEventListener('click', function() {
           var val = parseInt(qtyInput.value, 10) || 1;
-          if (val < 10) qtyInput.value = val + 1;
+          if (val < 10) {
+            qtyInput.value = val + 1;
+            updateStepperButtons();
+          }
         });
       }
       if (qtyDec && qtyInput) {
         qtyDec.addEventListener('click', function() {
           var val = parseInt(qtyInput.value, 10) || 1;
-          if (val > 1) qtyInput.value = val - 1;
+          if (val > 1) {
+            qtyInput.value = val - 1;
+            updateStepperButtons();
+          }
         });
       }
 
       // Add to Cart
-      var addCartBtn = document.getElementById('pdpAddToCartBtn');
-      if (addCartBtn) {
-        addCartBtn.addEventListener('click', function() {
-          var qty = parseInt(qtyInput ? qtyInput.value : 1, 10) || 1;
-          var cart = getCart();
-          var existing = cart.find(function(it) { return it.id === activeProduct.id; });
-          if (existing) {
-            existing.qty = (existing.qty || 1) + qty;
-          } else {
-            cart.push({
-              id: activeProduct.id,
-              title: activeProduct.title,
-              price: activeProduct.price,
-              originalPrice: activeProduct.originalPrice,
-              image: activeProduct.image,
-              brand: activeProduct.brand,
-              qty: qty
-            });
-          }
-          saveCart(cart);
-          updateBadges();
-          showToast(activeProduct.title.substring(0, 22) + '... added to cart (' + qty + ')', 'VIEW CART', 'cart.html');
-        });
+      function handleAddToCart() {
+        var qty = parseInt(qtyInput ? qtyInput.value : 1, 10) || 1;
+        var cart = getCart();
+        var existing = cart.find(function(it) { return it.id === activeProduct.id; });
+        if (existing) {
+          existing.qty = (existing.qty || 1) + qty;
+        } else {
+          cart.push({
+            id: activeProduct.id,
+            title: activeProduct.title,
+            price: activeProduct.price,
+            originalPrice: activeProduct.originalPrice,
+            image: activeProduct.image,
+            brand: activeProduct.brand,
+            qty: qty
+          });
+        }
+        saveCart(cart);
+        updateBadges();
+        showToast(activeProduct.title.substring(0, 22) + '... added to cart (' + qty + ')', 'VIEW CART', 'cart.html');
       }
 
+      var addCartBtn = document.getElementById('pdpAddToCartBtn');
+      if (addCartBtn) addCartBtn.addEventListener('click', handleAddToCart);
+
+      var stickyCartBtn = document.getElementById('pdpStickyCartBtn');
+      if (stickyCartBtn) stickyCartBtn.addEventListener('click', handleAddToCart);
+
       // Buy Now
-      var buyNowBtn = document.getElementById('pdpBuyNowBtn');
-      if (buyNowBtn) {
-        buyNowBtn.addEventListener('click', function() {
-          var qty = parseInt(qtyInput ? qtyInput.value : 1, 10) || 1;
-          var cart = getCart();
-          var existing = cart.find(function(it) { return it.id === activeProduct.id; });
-          if (existing) {
-            existing.qty = (existing.qty || 1) + qty;
-          } else {
-            cart.push({
-              id: activeProduct.id,
-              title: activeProduct.title,
-              price: activeProduct.price,
-              originalPrice: activeProduct.originalPrice,
-              image: activeProduct.image,
-              brand: activeProduct.brand,
-              qty: qty
-            });
-          }
-          saveCart(cart);
-          window.location.href = 'cart.html';
-        });
+      function handleBuyNow() {
+        var qty = parseInt(qtyInput ? qtyInput.value : 1, 10) || 1;
+        var cart = getCart();
+        var existing = cart.find(function(it) { return it.id === activeProduct.id; });
+        if (existing) {
+          existing.qty = (existing.qty || 1) + qty;
+        } else {
+          cart.push({
+            id: activeProduct.id,
+            title: activeProduct.title,
+            price: activeProduct.price,
+            originalPrice: activeProduct.originalPrice,
+            image: activeProduct.image,
+            brand: activeProduct.brand,
+            qty: qty
+          });
+        }
+        saveCart(cart);
+        window.location.href = 'cart.html';
       }
+
+      var buyNowBtn = document.getElementById('pdpBuyNowBtn');
+      if (buyNowBtn) buyNowBtn.addEventListener('click', handleBuyNow);
+
+      var stickyBuyBtn = document.getElementById('pdpStickyBuyBtn');
+      if (stickyBuyBtn) stickyBuyBtn.addEventListener('click', handleBuyNow);
 
       // Wishlist Toggle
       var wishBtn = document.getElementById('pdpWishlistBtn');
+      var stickyWishBtn = document.getElementById('pdpStickyWishBtn');
+
       function syncWishlistBtn() {
-        if (!wishBtn) return;
         var saved = getSaved();
         var exists = saved.some(function(it) { return it.id === activeProduct.id; });
-        if (exists) {
-          wishBtn.classList.add('active');
-        } else {
-          wishBtn.classList.remove('active');
+        if (wishBtn) {
+          if (exists) wishBtn.classList.add('active');
+          else wishBtn.classList.remove('active');
+        }
+        if (stickyWishBtn) {
+          if (exists) stickyWishBtn.classList.add('active');
+          else stickyWishBtn.classList.remove('active');
         }
       }
       syncWishlistBtn();
 
-      if (wishBtn) {
-        wishBtn.addEventListener('click', function() {
-          var saved = getSaved();
-          var idx = saved.findIndex(function(it) { return it.id === activeProduct.id; });
-          if (idx > -1) {
-            saved.splice(idx, 1);
-            saveSaved(saved);
-            wishBtn.classList.remove('active');
-            showToast('Removed from saved items', null, null);
-          } else {
-            saved.unshift({
-              id: activeProduct.id,
-              title: activeProduct.title,
-              price: activeProduct.price,
-              originalPrice: activeProduct.originalPrice,
-              image: activeProduct.image,
-              brand: activeProduct.brand
+      function handleWishlistToggle() {
+        var saved = getSaved();
+        var idx = saved.findIndex(function(it) { return it.id === activeProduct.id; });
+        if (idx > -1) {
+          saved.splice(idx, 1);
+          saveSaved(saved);
+          syncWishlistBtn();
+          showToast('Removed from saved items', null, null);
+        } else {
+          saved.unshift({
+            id: activeProduct.id,
+            title: activeProduct.title,
+            price: activeProduct.price,
+            originalPrice: activeProduct.originalPrice,
+            image: activeProduct.image,
+            brand: activeProduct.brand
+          });
+          saveSaved(saved);
+          syncWishlistBtn();
+          showToast('Added to saved items', 'VIEW SAVED', 'saved-items.html');
+        }
+        updateBadges();
+      }
+
+      if (wishBtn) wishBtn.addEventListener('click', handleWishlistToggle);
+      if (stickyWishBtn) stickyWishBtn.addEventListener('click', handleWishlistToggle);
+
+      // Lightbox Image Zoom Modal
+      var lightboxModal = document.getElementById('pdpLightboxModal');
+      var lightboxImg = document.getElementById('pdpLightboxImg');
+      var lightboxClose = document.getElementById('pdpLightboxCloseBtn');
+      var mainImgWrap = document.getElementById('pdpMainImageWrap');
+
+      if (mainImgWrap && lightboxModal && lightboxImg) {
+        mainImgWrap.style.cursor = 'zoom-in';
+        mainImgWrap.addEventListener('click', function(e) {
+          if (e.target.closest('.pdp-discount-badge') || e.target.closest('.pdp-verified-badge')) return;
+          lightboxImg.src = mainImg.src;
+          lightboxModal.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        });
+      }
+
+      function closeLightbox() {
+        if (lightboxModal) {
+          lightboxModal.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      }
+
+      if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+      if (lightboxModal) {
+        lightboxModal.addEventListener('click', function(e) {
+          if (e.target === lightboxModal) closeLightbox();
+        });
+      }
+
+      // Delivery Estimator Selection
+      var locationSelect = document.getElementById('pdpLocationSelect');
+      var estimateCost = document.getElementById('pdpEstimateCost');
+      var estimateTime = document.getElementById('pdpEstimateTime');
+
+      var RATES = {
+        lagos: { cost: '₦ 1,500', time: 'Within 24 - 48 Hours' },
+        abuja: { cost: '₦ 2,200', time: 'Within 48 - 72 Hours' },
+        rivers: { cost: '₦ 2,500', time: 'Within 48 - 72 Hours' },
+        oyo: { cost: '₦ 1,800', time: 'Within 48 - 72 Hours' },
+        kano: { cost: '₦ 2,800', time: '3 - 4 Days Delivery' },
+        enugu: { cost: '₦ 2,500', time: 'Within 48 - 72 Hours' },
+        anambra: { cost: '₦ 2,200', time: 'Within 48 - 72 Hours' },
+        delta: { cost: '₦ 2,500', time: 'Within 48 - 72 Hours' },
+        other: { cost: '₦ 3,000', time: '3 - 5 Days Nationwide' }
+      };
+
+      if (locationSelect && estimateCost && estimateTime) {
+        locationSelect.addEventListener('change', function() {
+          var sel = locationSelect.value;
+          var rate = RATES[sel] || RATES.other;
+          estimateCost.textContent = rate.cost;
+          estimateTime.textContent = rate.time;
+        });
+      }
+
+      // Social Share Buttons
+      var copyLinkBtn = document.getElementById('pdpCopyLinkBtn');
+      if (copyLinkBtn) {
+        copyLinkBtn.addEventListener('click', function() {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(window.location.href).then(function() {
+              showToast('Product link copied to clipboard!', null, null);
             });
-            saveSaved(saved);
-            wishBtn.classList.add('active');
-            showToast('Added to saved items', 'VIEW SAVED', 'saved-items.html');
+          } else {
+            showToast('Link: ' + window.location.href, null, null);
           }
-          updateBadges();
+        });
+      }
+
+      var shareWaBtn = document.getElementById('pdpShareWaBtn');
+      if (shareWaBtn) {
+        shareWaBtn.addEventListener('click', function() {
+          var text = encodeURIComponent('Check out this ' + activeProduct.title + ' on NKEMMART: ' + window.location.href);
+          window.open('https://api.whatsapp.com/send?text=' + text, '_blank');
+        });
+      }
+
+      var shareTwBtn = document.getElementById('pdpShareTwBtn');
+      if (shareTwBtn) {
+        shareTwBtn.addEventListener('click', function() {
+          var text = encodeURIComponent('Check out this ' + activeProduct.title + ' on NKEMMART SUPERCENTER');
+          window.open('https://twitter.com/intent/tweet?text=' + text + '&url=' + encodeURIComponent(window.location.href), '_blank');
+        });
+      }
+
+      var shareFbBtn = document.getElementById('pdpShareFbBtn');
+      if (shareFbBtn) {
+        shareFbBtn.addEventListener('click', function() {
+          window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank');
+        });
+      }
+
+      // Write a Review Interactive Form
+      var writeReviewBtn = document.getElementById('pdpWriteReviewToggleBtn');
+      var reviewForm = document.getElementById('pdpReviewForm');
+      var cancelReviewBtn = document.getElementById('pdpCancelReviewBtn');
+      var reviewsContainer = document.getElementById('pdpReviewsContainer');
+
+      if (writeReviewBtn && reviewForm) {
+        writeReviewBtn.addEventListener('click', function() {
+          reviewForm.classList.toggle('open');
+        });
+      }
+      if (cancelReviewBtn && reviewForm) {
+        cancelReviewBtn.addEventListener('click', function() {
+          reviewForm.classList.remove('open');
+        });
+      }
+
+      if (reviewForm && reviewsContainer) {
+        reviewForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var nameInp = document.getElementById('pdpReviewerNameInput');
+          var ratingSel = document.getElementById('pdpReviewRatingSelect');
+          var textInp = document.getElementById('pdpReviewTextInput');
+
+          var name = (nameInp && nameInp.value) ? nameInp.value.trim() : 'Verified Customer';
+          var rating = parseInt(ratingSel ? ratingSel.value : '5', 10) || 5;
+          var comment = (textInp && textInp.value) ? textInp.value.trim() : '';
+
+          if (!comment) return;
+
+          // Build stars SVG string
+          var starsHtml = '';
+          for (var i = 0; i < 5; i++) {
+            var color = (i < rating) ? '#f59e0b' : '#cbd5e1';
+            starsHtml += '<svg width="12" height="12" viewBox="0 0 24 24" fill="' + color + '"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+          }
+
+          var reviewCard = document.createElement('div');
+          reviewCard.className = 'pdp-review-card-item';
+          reviewCard.innerHTML = 
+            '<div class="pdp-review-header">' +
+              '<span class="pdp-reviewer-name">' + name + ' (Verified Purchase)</span>' +
+              '<span class="pdp-review-date">Just now</span>' +
+            '</div>' +
+            '<div class="pdp-stars-box" style="margin-bottom: 4px;">' + starsHtml + '</div>' +
+            '<p class="pdp-review-comment">' + comment + '</p>';
+
+          reviewsContainer.insertBefore(reviewCard, reviewsContainer.firstChild);
+
+          // Update verified count badge
+          if (activeProduct.reviews) {
+            activeProduct.reviews += 1;
+            if (revCountEl) revCountEl.textContent = activeProduct.reviews.toLocaleString() + ' verified ratings';
+          }
+
+          reviewForm.reset();
+          reviewForm.classList.remove('open');
+          showToast('Thank you! Your verified review has been published.', null, null);
         });
       }
 
@@ -1270,47 +1723,115 @@
         });
       }
 
-      // Mobile Drawer open/close
-      var drawerOpenBtn = document.getElementById('mobileDrawerOpenBtn');
-      var drawerCloseBtn = document.getElementById('mobileDrawerCloseBtn');
-      var drawerBackdrop = document.getElementById('mobileDrawerBackdrop');
-      var drawer = document.getElementById('mobileNavDrawer');
+      // Mobile Sticky Bottom Action Bar Scroll Controller
+      var stickyBar = document.getElementById('pdpMobileStickyBar');
+      var footer = document.querySelector('.site-footer');
 
-      if (drawerOpenBtn && drawer && drawerBackdrop) {
-        drawerOpenBtn.addEventListener('click', function() {
-          drawer.classList.add('open');
-          drawerBackdrop.classList.add('open');
-          document.body.style.overflow = 'hidden';
-        });
+      function updateStickyBar() {
+        if (!stickyBar) return;
+        var isMobile = window.innerWidth <= 768;
+        if (!isMobile) {
+          stickyBar.classList.remove('visible');
+          return;
+        }
+
+        var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollY > 380) {
+          stickyBar.classList.add('visible');
+        } else {
+          stickyBar.classList.remove('visible');
+        }
+
+        // Hide when near footer
+        if (footer) {
+          var footerRect = footer.getBoundingClientRect();
+          if (footerRect.top <= window.innerHeight) {
+            stickyBar.classList.add('hidden-by-footer');
+          } else {
+            stickyBar.classList.remove('hidden-by-footer');
+          }
+        }
       }
+
+      window.addEventListener('scroll', updateStickyBar, { passive: true });
+      window.addEventListener('resize', updateStickyBar, { passive: true });
+      updateStickyBar();
+
+      // Mobile Navigation Drawer Open / Close
+      var menuBtn = document.getElementById('mobileMenuBtn');
+      var drawer = document.getElementById('mobileNavDrawer');
+      var backdrop = document.getElementById('mobileNavBackdrop');
+      var drawerCloseBtn = document.getElementById('mobileNavCloseBtn');
+      var desktopDropdown = document.getElementById('desktopCategoryDropdown');
+
+      function openDrawer() {
+        if (window.innerWidth <= 768) {
+          if (drawer) {
+            drawer.classList.add('active');
+            drawer.classList.add('open');
+          }
+          if (backdrop) {
+            backdrop.classList.add('active');
+            backdrop.classList.add('open');
+          }
+          document.body.style.overflow = 'hidden';
+        } else {
+          // Toggle desktop categories dropdown
+          if (desktopDropdown) desktopDropdown.classList.toggle('open');
+        }
+      }
+
       function closeDrawer() {
-        if (drawer) drawer.classList.remove('open');
-        if (drawerBackdrop) drawerBackdrop.classList.remove('open');
+        if (drawer) {
+          drawer.classList.remove('active');
+          drawer.classList.remove('open');
+        }
+        if (backdrop) {
+          backdrop.classList.remove('active');
+          backdrop.classList.remove('open');
+        }
         document.body.style.overflow = '';
       }
-      if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
-      if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
 
-      // Account & Help dropdown toggles
-      function setupDropdown(btnId, menuId) {
-        var btn = document.getElementById(btnId);
-        var menu = document.getElementById(menuId);
-        if (!btn || !menu) return;
-        btn.addEventListener('click', function(e) {
+      if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+      if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+      if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+      // Account & Help Dropdown Navigation
+      var accountBtn = document.getElementById('accountMenuBtn');
+      var accountMenu = document.getElementById('accountMenu');
+      var helpBtn = document.getElementById('helpMenuBtn');
+      var helpMenu = document.getElementById('helpMenu');
+
+      if (accountBtn && accountMenu) {
+        accountBtn.addEventListener('click', function(e) {
           e.stopPropagation();
-          var isOpen = menu.classList.contains('show');
-          document.querySelectorAll('.dropdown-menu').forEach(function(m) { m.classList.remove('show'); });
-          if (!isOpen) menu.classList.add('show');
+          var isOpen = accountMenu.classList.contains('show');
+          if (helpMenu) helpMenu.classList.remove('show');
+          if (isOpen) accountMenu.classList.remove('show');
+          else accountMenu.classList.add('show');
         });
       }
-      setupDropdown('accountMenuBtn', 'accountMenu');
-      setupDropdown('helpMenuBtn', 'helpMenu');
 
-      document.addEventListener('click', function() {
-        document.querySelectorAll('.dropdown-menu').forEach(function(m) { m.classList.remove('show'); });
+      if (helpBtn && helpMenu) {
+        helpBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var isOpen = helpMenu.classList.contains('show');
+          if (accountMenu) accountMenu.classList.remove('show');
+          if (isOpen) helpMenu.classList.remove('show');
+          else helpMenu.classList.add('show');
+        });
+      }
+
+      document.addEventListener('click', function(e) {
+        if (accountMenu && !accountMenu.contains(e.target)) accountMenu.classList.remove('show');
+        if (helpMenu && !helpMenu.contains(e.target)) helpMenu.classList.remove('show');
+        if (desktopDropdown && !desktopDropdown.contains(e.target) && e.target !== menuBtn && !menuBtn.contains(e.target)) {
+          desktopDropdown.classList.remove('open');
+        }
       });
 
-      // Initial badges update
+      // Initial Badges Sync
       updateBadges();
     });
   </script>
