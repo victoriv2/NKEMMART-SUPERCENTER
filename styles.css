@@ -6226,20 +6226,21 @@ body.modal-open {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #f8fafc;
+  background-color: #ffffff;
   border: 1.5px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 4px;
+  border-radius: 10px;
+  padding: 3px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
 }
 
 .pdp-main-qty-btn {
   background-color: var(--primary-green);
   border: none;
   color: var(--white);
-  width: 40px;
-  height: 40px;
-  border-radius: 6px;
+  width: 44px;
+  height: 42px;
+  border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6247,6 +6248,14 @@ body.modal-open {
   box-shadow: 0 2px 5px rgba(0, 168, 89, 0.25);
   transition: background-color 0.15s, transform 0.1s;
   flex-shrink: 0;
+}
+
+.pdp-main-qty-btn.pdp-main-dec {
+  margin-left: 1px;
+}
+
+.pdp-main-qty-btn.pdp-main-inc {
+  margin-right: 1px;
 }
 
 .pdp-main-qty-btn:hover {
@@ -6666,6 +6675,12 @@ body.modal-open {
 
   .pdp-main-stepper {
     height: 46px;
+    padding: 3px;
+  }
+
+  .pdp-main-stepper .pdp-main-qty-btn {
+    height: 40px;
+    width: 42px;
   }
 
   .pdp-wishlist-toggle-btn {
@@ -7885,25 +7900,50 @@ body.modal-open {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #f8fafc;
+  background-color: #ffffff;
   border: 1.5px solid #cbd5e1;
-  border-radius: 6px;
+  border-radius: 9px;
   padding: 3px;
+  box-sizing: border-box;
 }
 
 .pdp-sticky-qty-btn {
   background-color: var(--primary-green);
   border: none;
   color: var(--white);
-  width: 38px;
+  width: 42px;
   height: 38px;
-  border-radius: 5px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
   transition: background-color 0.15s;
+}
+
+.pdp-sticky-qty-btn.pdp-sticky-dec {
+  margin-left: 1px;
+}
+
+.pdp-sticky-qty-btn.pdp-sticky-inc {
+  margin-right: 1px;
+}
+
+.pdp-current-location.pdp-loc-unset {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.pdp-option-fee.pdp-fee-unset {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pdp-loc-trigger-text.placeholder {
+  color: #94a3b8;
+  font-weight: 500;
 }
 
 .pdp-sticky-qty-btn:active {

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Product Details - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=9.5">
+  <link rel="stylesheet" href="styles.css?v=9.6">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body class="pdp-page">
@@ -327,10 +327,10 @@
               <svg class="pdp-delivery-pin-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
               <div>
                 <span class="pdp-delivery-label">Delivery Destination</span>
-                <div class="pdp-current-location" id="pdpCurrentLocationText">Lagos (Ikeja / Mainland)</div>
+                <div class="pdp-current-location pdp-loc-unset" id="pdpCurrentLocationText">Select delivery destination</div>
               </div>
             </div>
-            <button type="button" class="pdp-change-loc-btn" id="pdpOpenLocationModalBtn" aria-label="Change delivery location">Change</button>
+            <button type="button" class="pdp-change-loc-btn" id="pdpOpenLocationModalBtn" aria-label="Select delivery location">Select</button>
           </div>
 
           <div class="pdp-delivery-options">
@@ -342,9 +342,9 @@
               <div class="pdp-option-details">
                 <div class="pdp-option-row">
                   <span class="pdp-option-name">Doorstep Delivery</span>
-                  <span class="pdp-option-fee" id="pdpDoorstepFee">₦ 1,500</span>
+                  <span class="pdp-option-fee pdp-fee-unset" id="pdpDoorstepFee">Select location</span>
                 </div>
-                <span class="pdp-option-sub" id="pdpDoorstepTime">Delivery within 24 - 48 Hours</span>
+                <span class="pdp-option-sub" id="pdpDoorstepTime">Select your State and LGA to view shipping rates & transit schedules</span>
               </div>
             </div>
 
@@ -916,10 +916,10 @@
           <button type="button" class="pdp-loc-custom-trigger" id="pdpModalStateTrigger" aria-haspopup="dialog" aria-expanded="false" aria-labelledby="pdpStateFieldLabel pdpModalStateDisplay">
             <div class="pdp-loc-trigger-content">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <span class="pdp-loc-trigger-text" id="pdpModalStateDisplay">Lagos</span>
+              <span class="pdp-loc-trigger-text placeholder" id="pdpModalStateDisplay">Select State</span>
             </div>
             <span class="pdp-loc-trigger-action">
-              <span>Change</span>
+              <span>Select</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </span>
           </button>
@@ -930,7 +930,7 @@
           <button type="button" class="pdp-loc-custom-trigger" id="pdpModalCityTrigger" aria-haspopup="dialog" aria-expanded="false" aria-labelledby="pdpLgaFieldLabel pdpModalCityDisplay">
             <div class="pdp-loc-trigger-content">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-              <span class="pdp-loc-trigger-text" id="pdpModalCityDisplay">Ikeja / Mainland</span>
+              <span class="pdp-loc-trigger-text placeholder" id="pdpModalCityDisplay">Select LGA / Area</span>
             </div>
             <span class="pdp-loc-trigger-action">
               <span>Select</span>
@@ -942,11 +942,11 @@
         <div class="pdp-loc-summary-card">
           <div class="pdp-loc-rate-row">
             <span class="pdp-loc-rate-label">Doorstep Delivery:</span>
-            <strong class="pdp-loc-rate-val" id="pdpModalRateCost">₦ 1,500</strong>
+            <strong class="pdp-loc-rate-val" id="pdpModalRateCost">--</strong>
           </div>
           <div class="pdp-loc-rate-row">
             <span class="pdp-loc-rate-label">Estimated Transit Time:</span>
-            <span class="pdp-loc-rate-val" id="pdpModalRateTime">Within 24 - 48 Hours</span>
+            <span class="pdp-loc-rate-val" id="pdpModalRateTime">Select your state to view delivery schedule</span>
           </div>
         </div>
       </div>
@@ -2447,23 +2447,48 @@
       } catch (e) {
         userLocation = null;
       }
-      if (!userLocation || !userLocation.stateKey || !NIGERIA_LOCATIONS[userLocation.stateKey]) {
-        userLocation = {
-          stateKey: 'lagos',
-          stateName: 'Lagos',
-          city: 'Ikeja (Alausa / GRA / Airport)',
-          cost: '₦ 1,500',
-          time: 'Within 24 - 48 Hours'
-        };
+      if (userLocation && (!userLocation.stateKey || !NIGERIA_LOCATIONS[userLocation.stateKey])) {
+        userLocation = null;
       }
 
       function updateLocationBox(loc) {
         var locText = document.getElementById('pdpCurrentLocationText');
         var feeText = document.getElementById('pdpDoorstepFee');
         var timeText = document.getElementById('pdpDoorstepTime');
-        if (locText) locText.textContent = loc.stateName + ' (' + loc.city + ')';
-        if (feeText) feeText.textContent = loc.cost;
-        if (timeText) timeText.textContent = 'Delivery ' + loc.time.toLowerCase();
+        var changeBtn = document.getElementById('pdpOpenLocationModalBtn');
+
+        if (!loc || !loc.stateKey) {
+          if (locText) {
+            locText.textContent = 'Select delivery destination';
+            locText.classList.add('pdp-loc-unset');
+          }
+          if (feeText) {
+            feeText.textContent = 'Select location';
+            feeText.classList.add('pdp-fee-unset');
+          }
+          if (timeText) {
+            timeText.textContent = 'Select your State and LGA to view shipping rates & transit schedules';
+          }
+          if (changeBtn) {
+            changeBtn.textContent = 'Select';
+          }
+          return;
+        }
+
+        if (locText) {
+          locText.textContent = loc.stateName + (loc.city ? ' (' + loc.city + ')' : '');
+          locText.classList.remove('pdp-loc-unset');
+        }
+        if (feeText) {
+          feeText.textContent = loc.cost || '₦ 1,500';
+          feeText.classList.remove('pdp-fee-unset');
+        }
+        if (timeText) {
+          timeText.textContent = 'Delivery ' + (loc.time ? loc.time.toLowerCase() : 'within 24 - 48 hours');
+        }
+        if (changeBtn) {
+          changeBtn.textContent = 'Change';
+        }
       }
       updateLocationBox(userLocation);
 
@@ -2496,13 +2521,37 @@
       var lgaListContainer = document.getElementById('pdpLgaList');
       var lgaModalSubtitle = document.getElementById('pdpLgaModalSubtitle');
 
-      var tempSelectedStateKey = userLocation.stateKey || 'lagos';
-      var tempSelectedLga = userLocation.city || 'Ikeja / Mainland';
+      var tempSelectedStateKey = (userLocation && userLocation.stateKey) ? userLocation.stateKey : '';
+      var tempSelectedLga = (userLocation && userLocation.city) ? userLocation.city : '';
 
       function syncModalDisplay() {
-        var stateData = NIGERIA_LOCATIONS[tempSelectedStateKey] || NIGERIA_LOCATIONS.lagos;
-        if (modalStateDisplay) modalStateDisplay.textContent = stateData.name;
-        if (modalCityDisplay) modalCityDisplay.textContent = tempSelectedLga;
+        if (!tempSelectedStateKey || !NIGERIA_LOCATIONS[tempSelectedStateKey]) {
+          if (modalStateDisplay) {
+            modalStateDisplay.textContent = 'Select State';
+            modalStateDisplay.classList.add('placeholder');
+          }
+          if (modalCityDisplay) {
+            modalCityDisplay.textContent = 'Select LGA / Area';
+            modalCityDisplay.classList.add('placeholder');
+          }
+          if (modalRateCost) modalRateCost.textContent = '--';
+          if (modalRateTime) modalRateTime.textContent = 'Select your state to view delivery schedule';
+          return;
+        }
+
+        var stateData = NIGERIA_LOCATIONS[tempSelectedStateKey];
+        if (modalStateDisplay) {
+          modalStateDisplay.textContent = stateData.name;
+          modalStateDisplay.classList.remove('placeholder');
+        }
+        if (modalCityDisplay) {
+          modalCityDisplay.textContent = tempSelectedLga || 'Select LGA / Area';
+          if (tempSelectedLga) {
+            modalCityDisplay.classList.remove('placeholder');
+          } else {
+            modalCityDisplay.classList.add('placeholder');
+          }
+        }
         if (modalRateCost) modalRateCost.textContent = stateData.cost;
         if (modalRateTime) modalRateTime.textContent = stateData.time;
       }
@@ -2701,7 +2750,14 @@
         modalStateTrigger.addEventListener('click', openStatePicker);
       }
       if (modalCityTrigger) {
-        modalCityTrigger.addEventListener('click', openLgaPicker);
+        modalCityTrigger.addEventListener('click', function() {
+          if (!tempSelectedStateKey) {
+            showToast('Please select your state first', null, null);
+            openStatePicker();
+            return;
+          }
+          openLgaPicker();
+        });
       }
 
       // Sub-Modal Close Buttons
@@ -2784,8 +2840,8 @@
 
       function openLocationModal() {
         if (!locModal) return;
-        tempSelectedStateKey = userLocation.stateKey || 'lagos';
-        tempSelectedLga = userLocation.city || 'Ikeja / Mainland';
+        tempSelectedStateKey = (userLocation && userLocation.stateKey) ? userLocation.stateKey : '';
+        tempSelectedLga = (userLocation && userLocation.city) ? userLocation.city : '';
         syncModalDisplay();
         locModal.classList.add('open');
         locModal.setAttribute('aria-hidden', 'false');
@@ -2813,12 +2869,16 @@
 
       if (applyLocBtn) {
         applyLocBtn.addEventListener('click', function() {
-          var stateKey = tempSelectedStateKey || 'lagos';
-          var stateData = NIGERIA_LOCATIONS[stateKey] || NIGERIA_LOCATIONS.lagos;
-          var lgaName = tempSelectedLga || (stateData.lgas[0] || 'Urban Area');
+          if (!tempSelectedStateKey || !NIGERIA_LOCATIONS[tempSelectedStateKey]) {
+            showToast('Please select a delivery state first', null, null);
+            openStatePicker();
+            return;
+          }
+          var stateData = NIGERIA_LOCATIONS[tempSelectedStateKey];
+          var lgaName = tempSelectedLga || (stateData.lgas && stateData.lgas[0] ? stateData.lgas[0] : 'Urban Area');
 
           userLocation = {
-            stateKey: stateKey,
+            stateKey: tempSelectedStateKey,
             stateName: stateData.name,
             city: lgaName,
             cost: stateData.cost,
