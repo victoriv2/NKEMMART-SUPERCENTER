@@ -9,18 +9,43 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
   <style>
+    html {
+      height: 100%;
+    }
+
     body {
       background-color: #f1f5f9;
+      min-height: 100%;
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
+      margin: 0;
+      padding: 0;
+      padding-bottom: 0 !important;
     }
 
     .auth-header {
       background-color: #ffffff;
-      padding: 16px 24px;
+      padding: 14px 20px;
       border-bottom: 1px solid #e2e8f0;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
+      will-change: transform;
+    }
+
+    .auth-header.header-hidden {
+      transform: translateY(-100%);
+      box-shadow: none;
+    }
+
+    .auth-header.header-scrolled-up {
+      transform: translateY(0);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
     }
 
     .auth-header-inner {
@@ -499,6 +524,19 @@
     }
 
     @media (max-width: 480px) {
+      body {
+        padding-bottom: 0 !important;
+      }
+      .auth-header {
+        padding: 10px 14px;
+      }
+      .auth-logo-link img {
+        height: 34px;
+      }
+      .auth-back-link {
+        padding: 6px 10px;
+        font-size: 12.5px;
+      }
       .auth-page-main {
         padding: 20px 12px;
       }
@@ -516,11 +554,42 @@
         gap: 8px;
         align-items: flex-start;
       }
+      .auth-footer {
+        padding: 18px 12px;
+        margin-top: auto;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- Top Announcement / Utility Ribbon -->
+  <aside class="top-bar" aria-label="Announcement Bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-left">
+        <span class="doorstep-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          Doorstep Delivery
+        </span>
+        <span>We deliver all across Nigeria!</span>
+        <span class="top-bar-slogan">"Everything Dey™"</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="sell.html" class="top-bar-link">Sell on Nkemmart</a>
+        <span class="top-bar-divider">|</span>
+        <a href="tel:08155608447" class="top-bar-link">Call: 08155608447</a>
+        <span class="top-bar-divider">|</span>
+        <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="top-bar-link">WhatsApp: 07042087633</a>
+        <span class="top-bar-divider">|</span>
+        <span class="top-bar-link" style="color: #fff; font-weight: 600;">₦ NGN</span>
+      </div>
+    </div>
+  </aside>
 
   <!-- Dedicated Auth Header -->
   <header class="auth-header" role="banner">
@@ -976,6 +1045,45 @@
           btn.textContent = 'Send Reset Link';
         }
       });
+
+      // Smart Sticky Header for Auth Page (Hide on scroll down, show on scroll up)
+      var authHeader = document.querySelector('.auth-header');
+      var lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      var scrollTolerance = 5;
+
+      window.addEventListener('scroll', function() {
+        var currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+        if (currentScrollY < 0) currentScrollY = 0;
+
+        if (currentScrollY <= 25) {
+          if (authHeader) {
+            authHeader.classList.remove('header-hidden');
+            authHeader.classList.remove('header-scrolled-up');
+          }
+          lastScrollY = currentScrollY;
+          return;
+        }
+
+        var scrollDelta = currentScrollY - lastScrollY;
+        if (Math.abs(scrollDelta) < scrollTolerance) return;
+
+        // Scrolling DOWN -> Hide header to maximize screen space for auth forms
+        if (scrollDelta > 0 && currentScrollY > 70) {
+          if (authHeader && !authHeader.classList.contains('header-hidden')) {
+            authHeader.classList.add('header-hidden');
+            authHeader.classList.remove('header-scrolled-up');
+          }
+        } 
+        // Scrolling UP -> Reveal header immediately
+        else if (scrollDelta < 0) {
+          if (authHeader && !authHeader.classList.contains('header-scrolled-up')) {
+            authHeader.classList.remove('header-hidden');
+            authHeader.classList.add('header-scrolled-up');
+          }
+        }
+
+        lastScrollY = currentScrollY;
+      }, { passive: true });
     });
   </script>
 
