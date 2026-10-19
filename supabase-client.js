@@ -70,11 +70,36 @@ async function getCurrentProfile() {
     const isOwner = user.email && user.email.toLowerCase() === 'nkemmart.supercenter@gmail.com';
     const role = (profile && profile.role) || (isOwner ? 'admin' : 'customer');
 
+    const stateName = (profile && profile.state) || user.user_metadata?.state || '';
+    const stateKey = (profile && profile.state_key) || user.user_metadata?.state_key || '';
+    const lga = (profile && profile.lga) || user.user_metadata?.lga || '';
+
+    // If user profile has state & LGA, sync to localStorage user location
+    if (stateKey && typeof window !== 'undefined') {
+      try {
+        const locations = window.NIGERIA_LOCATIONS || null;
+        const stateData = locations ? locations[stateKey] : null;
+        const locObj = {
+          stateKey: stateKey,
+          stateName: (stateData && stateData.name) || stateName || stateKey,
+          city: lga || '',
+          cost: (stateData && stateData.cost) || '₦ 2,500',
+          time: (stateData && stateData.time) || 'Within 48 - 72 Hours'
+        };
+        localStorage.setItem('nkemmart_user_location', JSON.stringify(locObj));
+      } catch (locErr) {
+        // Silent fallback
+      }
+    }
+
     return {
       id: user.id,
       email: user.email,
       full_name: (profile && profile.full_name) || user.user_metadata?.full_name || user.email.split('@')[0],
       phone: (profile && profile.phone) || user.user_metadata?.phone || '',
+      state: stateName,
+      state_key: stateKey,
+      lga: lga,
       role: role,
       avatar_url: profile?.avatar_url || null,
       created_at: profile?.created_at || user.created_at
@@ -85,26 +110,50 @@ async function getCurrentProfile() {
   }
 }
 
-async function signUpUser(email, password, { fullName, phone }) {
+async function signUpUser(email, password, { fullName, phone, state, stateKey, lga }) {
   const client = getSupabase();
   if (!client) throw new Error('Supabase client unavailable');
 
   const isOwner = email.trim().toLowerCase() === 'nkemmart.supercenter@gmail.com';
   const role = isOwner ? 'admin' : 'customer';
 
+  const metadata = {
+    full_name: fullName.trim(),
+    phone: (phone || '').trim(),
+    state: (state || '').trim(),
+    state_key: (stateKey || '').trim(),
+    lga: (lga || '').trim(),
+    role: role
+  };
+
   const { data, error } = await client.auth.signUp({
     email: email.trim(),
     password: password,
     options: {
-      data: {
-        full_name: fullName.trim(),
-        phone: (phone || '').trim(),
-        role: role
-      }
+      data: metadata
     }
   });
 
   if (error) throw error;
+
+  // Persist chosen location immediately to localStorage
+  if (stateKey && typeof window !== 'undefined') {
+    try {
+      const locations = window.NIGERIA_LOCATIONS || null;
+      const stateData = locations ? locations[stateKey] : null;
+      const locObj = {
+        stateKey: stateKey,
+        stateName: (stateData && stateData.name) || state || stateKey,
+        city: lga || '',
+        cost: (stateData && stateData.cost) || '₦ 2,500',
+        time: (stateData && stateData.time) || 'Within 48 - 72 Hours'
+      };
+      localStorage.setItem('nkemmart_user_location', JSON.stringify(locObj));
+    } catch (e) {
+      // Storage fallback
+    }
+  }
+
   return data;
 }
 

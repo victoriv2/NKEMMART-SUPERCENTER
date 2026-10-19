@@ -8,6 +8,7 @@
   <!-- Supabase JS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
+  <script src="taxonomy.js?v=3.2"></script>
   <style>
     html {
       height: 100%;
@@ -277,6 +278,38 @@
     .auth-input:focus {
       border-color: #008751;
       box-shadow: 0 0 0 3px rgba(0, 135, 81, 0.15);
+    }
+
+    .auth-select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-color: #ffffff;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    .auth-select:disabled {
+      background-color: #f8fafc;
+      color: #94a3b8;
+      cursor: not-allowed;
+      border-color: #e2e8f0;
+    }
+
+    .auth-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 520px) {
+      .auth-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
     }
 
     .auth-password-toggle {
@@ -630,6 +663,7 @@
         <h2 class="auth-user-name" id="activeUserName">Customer</h2>
         <p class="auth-user-email" id="activeUserEmail">user@example.com</p>
         <span class="auth-user-role-pill role-customer" id="activeUserRole">Customer</span>
+        <div id="activeUserLocation" style="font-size: 12px; color: #475569; margin-top: -12px; margin-bottom: 16px; display: none;"></div>
 
         <div class="auth-session-actions">
           <a href="index.html" class="auth-action-link btn-primary-action">Continue Shopping</a>
@@ -711,6 +745,29 @@
               <div class="auth-input-wrapper">
                 <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                 <input type="tel" id="regPhone" class="auth-input" placeholder="e.g. 08155608447" autocomplete="tel">
+              </div>
+            </div>
+
+            <!-- State and Local Government (LGA) Selection -->
+            <div class="auth-form-row">
+              <div class="auth-form-group">
+                <label for="regState" class="auth-label">Delivery State</label>
+                <div class="auth-input-wrapper">
+                  <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                  <select id="regState" class="auth-input auth-select" required>
+                    <option value="" disabled selected>Select State</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="auth-form-group">
+                <label for="regLga" class="auth-label">Local Government (LGA)</label>
+                <div class="auth-input-wrapper">
+                  <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 12 8"></polygon></svg>
+                  <select id="regLga" class="auth-input auth-select" required disabled>
+                    <option value="" disabled selected>Select State first</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -948,12 +1005,64 @@
           document.getElementById('activeAdminBtn').style.display = 'block';
         }
 
+        const activeUserLoc = document.getElementById('activeUserLocation');
+        if (activeUserLoc && (existingProfile.state || existingProfile.lga)) {
+          activeUserLoc.textContent = 'Default Destination: ' + (existingProfile.lga ? existingProfile.lga + ', ' : '') + (existingProfile.state || '');
+          activeUserLoc.style.display = 'block';
+        }
+
         document.getElementById('activeSignOutBtn').addEventListener('click', async () => {
           await signOutUser();
           window.location.reload();
         });
         return;
       }
+
+      // Populate States and Local Governments (LGAs) for Registration
+      const regStateSelect = document.getElementById('regState');
+      const regLgaSelect = document.getElementById('regLga');
+
+      function initLocationDropdowns() {
+        if (!regStateSelect || !regLgaSelect) return;
+        const locations = window.NIGERIA_LOCATIONS || {};
+        
+        // Populate States in alphabetical order
+        const stateKeys = Object.keys(locations).sort((a, b) => {
+          return locations[a].name.localeCompare(locations[b].name);
+        });
+
+        regStateSelect.innerHTML = '<option value="" disabled selected>Select State</option>';
+        stateKeys.forEach(key => {
+          const opt = document.createElement('option');
+          opt.value = key;
+          opt.textContent = locations[key].name;
+          regStateSelect.appendChild(opt);
+        });
+
+        regStateSelect.addEventListener('change', () => {
+          const selectedKey = regStateSelect.value;
+          const selectedState = locations[selectedKey];
+          
+          if (!selectedState || !selectedState.lgas || selectedState.lgas.length === 0) {
+            regLgaSelect.innerHTML = '<option value="" disabled selected>No LGAs available</option>';
+            regLgaSelect.disabled = true;
+            return;
+          }
+
+          regLgaSelect.disabled = false;
+          regLgaSelect.innerHTML = '<option value="" disabled selected>Select Local Government Area</option>';
+          
+          const sortedLgas = [...selectedState.lgas].sort((a, b) => a.localeCompare(b));
+          sortedLgas.forEach(lga => {
+            const opt = document.createElement('option');
+            opt.value = lga;
+            opt.textContent = lga;
+            regLgaSelect.appendChild(opt);
+          });
+        });
+      }
+
+      initLocationDropdowns();
 
       // Handle Sign In Submit
       signInForm.addEventListener('submit', async (e) => {
@@ -990,6 +1099,22 @@
         const pass = document.getElementById('regPassword').value;
         const confirmPass = document.getElementById('regConfirmPassword').value;
 
+        const stateKey = regStateSelect ? regStateSelect.value : '';
+        const lga = regLgaSelect ? regLgaSelect.value : '';
+        const locations = window.NIGERIA_LOCATIONS || {};
+        const stateObj = locations[stateKey] || null;
+        const stateName = stateObj ? stateObj.name : '';
+
+        if (!stateKey) {
+          showAlert('Please select your delivery state.');
+          return;
+        }
+
+        if (!lga) {
+          showAlert('Please select your Local Government Area (LGA).');
+          return;
+        }
+
         if (pass.length < 6) {
           showAlert('Password must be at least 6 characters long.');
           return;
@@ -1004,7 +1129,26 @@
         submitBtn.querySelector('span').textContent = 'Creating account...';
 
         try {
-          const res = await signUpUser(email, pass, { fullName, phone });
+          const res = await signUpUser(email, pass, { 
+            fullName, 
+            phone,
+            state: stateName,
+            stateKey: stateKey,
+            lga: lga 
+          });
+
+          // Save default location to localStorage immediately
+          if (stateObj) {
+            const defaultLoc = {
+              stateKey: stateKey,
+              stateName: stateName,
+              city: lga,
+              cost: stateObj.cost || '₦ 2,500',
+              time: stateObj.time || 'Within 48 - 72 Hours'
+            };
+            localStorage.setItem('nkemmart_user_location', JSON.stringify(defaultLoc));
+          }
+
           showAlert('Account created successfully! Redirecting...', false);
           setTimeout(() => {
             window.location.href = redirectUrl;

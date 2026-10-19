@@ -2296,7 +2296,7 @@
       if (stickyWishBtn) stickyWishBtn.addEventListener('click', handleWishlistToggle);
 
       // Delivery Location Modal & All 36 States + FCT Local Government Areas
-      var NIGERIA_LOCATIONS = {
+      var NIGERIA_LOCATIONS = window.NIGERIA_LOCATIONS || {
         "lagos": {
           name: "Lagos",
           cost: "₦ 1,500",
@@ -2571,6 +2571,40 @@
         }
       }
       updateLocationBox(userLocation);
+
+      // Default to logged-in user profile location if available
+      if (typeof getCurrentProfile === 'function') {
+        getCurrentProfile().then(function(profile) {
+          if (profile && (profile.state_key || profile.state)) {
+            var stKey = profile.state_key;
+            if (!stKey && profile.state) {
+              for (var k in NIGERIA_LOCATIONS) {
+                if (NIGERIA_LOCATIONS[k].name.toLowerCase() === profile.state.toLowerCase()) {
+                  stKey = k;
+                  break;
+                }
+              }
+            }
+            if (stKey && NIGERIA_LOCATIONS[stKey]) {
+              var stData = NIGERIA_LOCATIONS[stKey];
+              // If userLocation was not yet customized or is unset, use user default
+              if (!userLocation || !userLocation.stateKey) {
+                userLocation = {
+                  stateKey: stKey,
+                  stateName: stData.name,
+                  city: profile.lga || (stData.lgas && stData.lgas[0]) || '',
+                  cost: stData.cost,
+                  time: stData.time
+                };
+                try {
+                  localStorage.setItem('nkemmart_user_location', JSON.stringify(userLocation));
+                } catch (e) {}
+                updateLocationBox(userLocation);
+              }
+            }
+          }
+        }).catch(function() {});
+      }
 
       var locModal = document.getElementById('pdpLocationModal');
       var openLocModalBtn = document.getElementById('pdpOpenLocationModalBtn');
