@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <title>Admin Command Center - NKEMMART SUPERCENTER</title>
+  <link rel="stylesheet" href="styles.css?v=9.9">
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="taxonomy.js?v=3.1"></script>
+  <style>
+    :root {
+      --admin-navy: #091e3a;
+      --admin-navy-dark: #061528;
+      --admin-green: #00a859;
+      --admin-gold: #f59e0b;
+      --admin-sidebar-width: 260px;
+      --admin-bg: #f8fafc;
+      --admin-border: #e2e8f0;
+      --admin-card: #ffffff;
+      --admin-text-main: #0f172a;
+      --admin-text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--admin-bg);
+      color: var(--admin-text-main);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Auth Gate Overlay */
+    .admin-gate-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 30, 58, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .admin-gate-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 32px 28px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .admin-gate-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #fef2f2;
+      color: #ef4444;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .admin-gate-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--admin-navy);
+      margin: 0 0 8px 0;
+    }
+
+    .admin-gate-desc {
+      font-size: 13.5px;
+      color: var(--admin-text-muted);
+      line-height: 1.5;
+      margin: 0 0 22px 0;
+    }
+
+    .admin-gate-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: opacity 0.15s;
+    }
+
+    .admin-gate-btn.primary {
+      background: var(--admin-green);
+      color: #ffffff;
+      border: none;
+    }
+
+    .admin-gate-btn.demo {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Sidebar Layout */
+    .admin-sidebar {
+      width: var(--admin-sidebar-width);
+      background-color: var(--admin-navy);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+      z-index: 1000;
+    }
+
+    .admin-sidebar-header {
+      padding: 20px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .admin-sidebar-logo {
+      height: 34px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .admin-sidebar-brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .admin-brand-name {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+    }
+
+    .admin-brand-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--admin-green);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .admin-nav-list {
+      list-style: none;
+      padding: 16px 12px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .admin-nav-item {
+      display: block;
+    }
+
+    .admin-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 8px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+
+    .admin-nav-link:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .admin-nav-link.active {
+      color: #ffffff;
+      background: var(--admin-green);
+      font-weight: 700;
+    }
+
+    .admin-nav-link svg {
+      flex-shrink: 0;
+    }
+
+    .admin-nav-badge {
+      margin-left: auto;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .admin-sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .admin-user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .admin-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--admin-green);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .admin-user-details {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .admin-user-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .admin-user-sub {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .admin-signout-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .admin-signout-btn:hover {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* Main Content Area */
+    .admin-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow-y: auto;
+    }
+
+    .admin-topbar {
+      height: 64px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--admin-border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .admin-menu-toggle {
+      display: none;
+      background: none;
+      border: 1px solid var(--admin-border);
+      border-radius: 6px;
+      padding: 6px;
+      cursor: pointer;
+      color: var(--admin-text-main);
+    }
+
+    .admin-page-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--admin-navy);
+      margin: 0;
+    }
+
+    .admin-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .admin-cloud-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .cloud-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+
+    .admin-view-store-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: #f1f5f9;
+      color: var(--admin-navy);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      transition: background 0.15s;
+    }
+
+    .admin-view-store-link:hover {
+      background: #e2e8f0;
+    }
+
+    /* Content Area */
+    .admin-content {
+      padding: 24px;
+      flex: 1;
+    }
+
+    /* Stats Grid */
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .admin-stat-card {
+      background: var(--admin-card);
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .admin-stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .stat-blue { background: #eff6ff; color: #2563eb; }
+    .stat-green { background: #f0fdf4; color: #16a34a; }
+    .stat-gold { background: #fffbeb; color: #d97706; }
+    .stat-purple { background: #faf5ff; color: #9333ea; }
+
+    .admin-stat-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .admin-stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--admin-text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .admin-stat-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--admin-navy);
+    }
+
+    /* Action Bar */
+    .admin-action-bar {
+      background: var(--admin-card);
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .admin-filters-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .admin-search-input {
+      flex: 1;
+      max-width: 320px;
+      padding: 9px 12px;
+      border: 1px solid var(--admin-border);
+      border-radius: 7px;
+      font-size: 13.5px;
+      outline: none;
+    }
+
+    .admin-search-input:focus {
+      border-color: var(--admin-green);
+    }
+
+    .admin-select {
+      padding: 9px 12px;
+      border: 1px solid var(--admin-border);
+      border-radius: 7px;
+      font-size: 13.5px;
+      outline: none;
+      background: #ffffff;
+      color: var(--admin-text-main);
+      cursor: pointer;
+    }
+
+    .admin-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s;
+    }
+
+    .admin-btn:hover {
+      opacity: 0.92;
+    }
+
+    .btn-green {
+      background: var(--admin-green);
+      color: #ffffff;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--admin-border);
+    }
+
+    /* Data Table Card */
+    .admin-table-card {
+      background: var(--admin-card);
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .admin-table-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--admin-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-table-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--admin-navy);
+      margin: 0;
+    }
+
+    .admin-table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .admin-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 700;
+      color: var(--admin-text-muted);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--admin-border);
+    }
+
+    .admin-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--admin-border);
+      vertical-align: middle;
+    }
+
+    .admin-table tr:hover td {
+      background-color: #fbfcfe;
+    }
+
+    .product-row-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .product-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: #f1f5f9;
+      border: 1px solid var(--admin-border);
+      flex-shrink: 0;
+    }
+
+    .product-row-title {
+      font-weight: 700;
+      color: var(--admin-navy);
+      display: block;
+      margin-bottom: 2px;
+      max-width: 260px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .product-row-id {
+      font-size: 11px;
+      color: var(--admin-text-muted);
+    }
+
+    .stock-chip {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+
+    .stock-in { background: #dcfce7; color: #15803d; }
+    .stock-low { background: #fef3c7; color: #b45309; }
+    .stock-out { background: #fee2e2; color: #b91c1c; }
+
+    .action-btn-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .table-icon-btn {
+      background: #f1f5f9;
+      border: 1px solid var(--admin-border);
+      border-radius: 6px;
+      padding: 6px;
+      cursor: pointer;
+      color: #475569;
+      transition: all 0.15s;
+    }
+
+    .table-icon-btn:hover {
+      background: #e2e8f0;
+      color: var(--admin-navy);
+    }
+
+    .table-icon-btn.delete:hover {
+      background: #fee2e2;
+      color: #ef4444;
+      border-color: #fecaca;
+    }
+
+    /* Modal Form */
+    .admin-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 30, 58, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .admin-modal.open {
+      display: flex;
+    }
+
+    .admin-modal-card {
+      background: #ffffff;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+
+    .admin-modal-header {
+      padding: 18px 24px;
+      background: var(--admin-navy);
+      color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-modal-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .admin-modal-close {
+      background: none;
+      border: none;
+      color: #cbd5e1;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .admin-modal-body {
+      padding: 22px 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-field {
+      margin-bottom: 14px;
+    }
+
+    .form-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 5px;
+    }
+
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--admin-border);
+      border-radius: 7px;
+      font-size: 13.5px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+      border-color: var(--admin-green);
+    }
+
+    .admin-modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--admin-border);
+      background: #f8fafc;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .admin-sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+      }
+      .admin-sidebar.open {
+        transform: translateX(0);
+      }
+      .admin-menu-toggle {
+        display: block;
+      }
+      .form-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ADMIN AUTH GATE OVERLAY -->
+  <div class="admin-gate-overlay" id="adminGateOverlay" style="display: none;">
+    <div class="admin-gate-card">
+      <div class="admin-gate-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      </div>
+      <h2 class="admin-gate-title">Administrator Verification Required</h2>
+      <p class="admin-gate-desc">
+        Access to the NKEMMART Supercenter Command Center is restricted to authenticated administrator accounts.
+      </p>
+      <a href="auth.html?redirect=admin.html" class="admin-gate-btn primary">Sign In as Admin</a>
+      <button type="button" class="admin-gate-btn demo" id="gateDemoAccessBtn">Preview Admin Controls (Demo Mode)</button>
+    </div>
+  </div>
+
+  <!-- ADMIN SIDEBAR -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-header">
+      <img src="logo/LOGO.png" alt="NKEMMART Logo" class="admin-sidebar-logo">
+      <div class="admin-sidebar-brand">
+        <span class="admin-brand-name">NKEMMART</span>
+        <span class="admin-brand-tag">Command Center</span>
+      </div>
+    </div>
+
+    <ul class="admin-nav-list">
+      <li class="admin-nav-item">
+        <a href="#overview" class="admin-nav-link active" data-tab="overview">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Overview</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="#products" class="admin-nav-link" data-tab="products">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span>Products Catalog</span>
+          <span class="admin-nav-badge" id="sidebarProductCount">0</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="#orders" class="admin-nav-link" data-tab="orders">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span>Orders</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="#categories" class="admin-nav-link" data-tab="categories">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+          <span>Categories</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
+        <a href="#settings" class="admin-nav-link" data-tab="settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Cloud & Database</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="admin-sidebar-footer">
+      <div class="admin-user-info">
+        <div class="admin-avatar" id="adminUserAvatar">A</div>
+        <div class="admin-user-details">
+          <span class="admin-user-title" id="adminUserName">Admin Officer</span>
+          <span class="admin-user-sub" id="adminUserRole">Master Admin</span>
+        </div>
+      </div>
+      <button type="button" class="admin-signout-btn" id="adminSignOutBtn" title="Sign Out">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN VIEWPORT -->
+  <main class="admin-main">
+
+    <!-- Top Bar -->
+    <header class="admin-topbar">
+      <div class="admin-topbar-left">
+        <button type="button" class="admin-menu-toggle" id="adminMenuToggle" aria-label="Toggle sidebar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <h1 class="admin-page-title" id="adminSectionHeading">Dashboard Overview</h1>
+      </div>
+
+      <div class="admin-topbar-right">
+        <div class="admin-cloud-pill">
+          <span class="cloud-dot"></span>
+          <span>Supabase Connected</span>
+        </div>
+        <a href="index.html" class="admin-view-store-link" target="_blank">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          <span>Live Store</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Content Workspace -->
+    <div class="admin-content">
+
+      <!-- Stats Cards -->
+      <section class="admin-stats-grid">
+        <div class="admin-stat-card">
+          <div class="admin-stat-icon stat-blue">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          </div>
+          <div class="admin-stat-info">
+            <span class="admin-stat-label">Total Products</span>
+            <span class="admin-stat-val" id="statTotalProducts">0</span>
+          </div>
+        </div>
+
+        <div class="admin-stat-card">
+          <div class="admin-stat-icon stat-green">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          <div class="admin-stat-info">
+            <span class="admin-stat-label">Catalog Value</span>
+            <span class="admin-stat-val" id="statCatalogValue">₦0</span>
+          </div>
+        </div>
+
+        <div class="admin-stat-card">
+          <div class="admin-stat-icon stat-gold">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          </div>
+          <div class="admin-stat-info">
+            <span class="admin-stat-label">Low Stock Alerts</span>
+            <span class="admin-stat-val" id="statLowStock">0</span>
+          </div>
+        </div>
+
+        <div class="admin-stat-card">
+          <div class="admin-stat-icon stat-purple">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          </div>
+          <div class="admin-stat-info">
+            <span class="admin-stat-label">Verified Listings</span>
+            <span class="admin-stat-val" id="statVerifiedCount">0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Action & Filter Bar -->
+      <section class="admin-action-bar">
+        <div class="admin-filters-group">
+          <input type="text" class="admin-search-input" id="adminSearchInput" placeholder="Search products by title or brand...">
+          <select class="admin-select" id="adminCategoryFilter">
+            <option value="all">All Categories</option>
+            <option value="vehicles">Vehicles</option>
+            <option value="appliances">Appliances</option>
+            <option value="phones">Phones & Tablets</option>
+            <option value="electronics">Electronics</option>
+            <option value="fashion">Fashion</option>
+            <option value="beauty">Health & Beauty</option>
+            <option value="home">Home & Office</option>
+            <option value="computing">Computing</option>
+            <option value="supermarket">Supermarket</option>
+            <option value="baby">Baby Products</option>
+            <option value="gaming">Gaming</option>
+            <option value="sports">Sports & Fitness</option>
+            <option value="services">Services</option>
+          </select>
+        </div>
+
+        <div class="admin-btn-group">
+          <button type="button" class="admin-btn btn-secondary" id="adminSyncSupabaseBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            <span>Sync to Supabase</span>
+          </button>
+          <button type="button" class="admin-btn btn-green" id="adminAddProductBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Add New Product</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Products Catalog Table -->
+      <section class="admin-table-card">
+        <div class="admin-table-header">
+          <h2 class="admin-table-title">Product Catalog Inventory</h2>
+          <span style="font-size: 12px; color: var(--admin-text-muted);" id="tableCountSummary">Showing all items</span>
+        </div>
+
+        <div class="admin-table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Rating</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminProductsTbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ADD / EDIT PRODUCT MODAL -->
+  <div class="admin-modal" id="productModal" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title" id="productModalTitle">Add New Product</h3>
+        <button type="button" class="admin-modal-close" id="closeProductModal">&times;</button>
+      </div>
+
+      <form id="productModalForm">
+        <div class="admin-modal-body">
+          <input type="hidden" id="modalProductId">
+
+          <div class="form-field">
+            <label for="modalProductTitle">Product Title</label>
+            <input type="text" id="modalProductTitle" placeholder="e.g. iPhone 15 Pro Max 256GB Natural Titanium" required>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label for="modalProductCategory">Category</label>
+              <select id="modalProductCategory" required>
+                <option value="phones">Phones & Tablets</option>
+                <option value="appliances">Appliances</option>
+                <option value="electronics">Electronics</option>
+                <option value="vehicles">Vehicles</option>
+                <option value="fashion">Fashion</option>
+                <option value="beauty">Health & Beauty</option>
+                <option value="home">Home & Office</option>
+                <option value="computing">Computing</option>
+                <option value="supermarket">Supermarket</option>
+                <option value="baby">Baby Products</option>
+                <option value="gaming">Gaming</option>
+                <option value="sports">Sports & Fitness</option>
+                <option value="services">Services</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="modalProductBrand">Brand Name</label>
+              <input type="text" id="modalProductBrand" placeholder="e.g. Apple, Samsung, LG">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label for="modalProductPrice">Selling Price (₦)</label>
+              <input type="number" id="modalProductPrice" placeholder="e.g. 1500000" required min="100">
+            </div>
+
+            <div class="form-field">
+              <label for="modalProductOldPrice">Original / Old Price (₦)</label>
+              <input type="number" id="modalProductOldPrice" placeholder="e.g. 1750000">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label for="modalProductStock">Stock Quantity</label>
+              <input type="number" id="modalProductStock" placeholder="50" value="50" min="0">
+            </div>
+
+            <div class="form-field">
+              <label for="modalProductDiscount">Discount (%)</label>
+              <input type="number" id="modalProductDiscount" placeholder="10" value="0" min="0" max="99">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="modalProductImage">Image URL</label>
+            <input type="text" id="modalProductImage" placeholder="images/subcategories/sub_smartphones.jpg or https://..." required>
+          </div>
+
+          <div class="form-field">
+            <label for="modalProductDesc">Brief Product Description</label>
+            <textarea id="modalProductDesc" rows="3" placeholder="Describe the item, features, warranty, and contents..."></textarea>
+          </div>
+        </div>
+
+        <div class="admin-modal-footer">
+          <button type="button" class="admin-btn btn-secondary" id="cancelProductModal">Cancel</button>
+          <button type="submit" class="admin-btn btn-green" id="saveProductModalBtn">Save Product to Catalog</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let adminProducts = [];
+    let currentEditingId = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Auth Verification
+      const gateOverlay = document.getElementById('adminGateOverlay');
+      const gateDemoBtn = document.getElementById('gateDemoAccessBtn');
+      const adminUserName = document.getElementById('adminUserName');
+      const adminUserAvatar = document.getElementById('adminUserAvatar');
+      const adminUserRole = document.getElementById('adminUserRole');
+
+      const profile = await getCurrentProfile();
+      if (!profile || profile.role !== 'admin') {
+        gateOverlay.style.display = 'flex';
+      } else {
+        gateOverlay.style.display = 'none';
+        adminUserName.textContent = profile.full_name || profile.email;
+        adminUserAvatar.textContent = (profile.full_name || profile.email).charAt(0).toUpperCase();
+        adminUserRole.textContent = profile.role.toUpperCase();
+      }
+
+      gateDemoBtn.addEventListener('click', () => {
+        gateOverlay.style.display = 'none';
+        adminUserName.textContent = 'Admin (Demo Mode)';
+        adminUserAvatar.textContent = 'D';
+      });
+
+      // Sign out
+      document.getElementById('adminSignOutBtn').addEventListener('click', async () => {
+        await signOutUser();
+        window.location.href = 'auth.html';
+      });
+
+      // Mobile Menu Toggle
+      const adminSidebar = document.getElementById('adminSidebar');
+      document.getElementById('adminMenuToggle').addEventListener('click', () => {
+        adminSidebar.classList.toggle('open');
+      });
+
+      // Load products from taxonomy catalog + local storage cache
+      loadProductsCatalog();
+
+      // Search & Filters
+      document.getElementById('adminSearchInput').addEventListener('input', renderProductsTable);
+      document.getElementById('adminCategoryFilter').addEventListener('change', renderProductsTable);
+
+      // Product Modal Actions
+      const productModal = document.getElementById('productModal');
+      const productForm = document.getElementById('productModalForm');
+
+      document.getElementById('adminAddProductBtn').addEventListener('click', () => {
+        currentEditingId = null;
+        document.getElementById('productModalTitle').textContent = 'Add New Product';
+        productForm.reset();
+        document.getElementById('modalProductId').value = '';
+        productModal.classList.add('open');
+      });
+
+      document.getElementById('closeProductModal').addEventListener('click', () => {
+        productModal.classList.remove('open');
+      });
+
+      document.getElementById('cancelProductModal').addEventListener('click', () => {
+        productModal.classList.remove('open');
+      });
+
+      productForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        saveProductFromModal();
+      });
+
+      // Sync to Supabase button
+      document.getElementById('adminSyncSupabaseBtn').addEventListener('click', syncAllToSupabase);
+    });
+
+    function loadProductsCatalog() {
+      // Priority: localStorage cache > taxonomy CATALOG_PRODUCTS
+      const cached = localStorage.getItem('nkemmart_admin_products');
+      if (cached) {
+        try {
+          adminProducts = JSON.parse(cached);
+        } catch (e) {
+          adminProducts = [];
+        }
+      }
+
+      if (!adminProducts || adminProducts.length === 0) {
+        if (typeof CATALOG_PRODUCTS !== 'undefined' && Array.isArray(CATALOG_PRODUCTS)) {
+          adminProducts = JSON.parse(JSON.stringify(CATALOG_PRODUCTS));
+        } else {
+          adminProducts = [];
+        }
+        saveProductsLocal();
+      }
+
+      updateStats();
+      renderProductsTable();
+    }
+
+    function saveProductsLocal() {
+      localStorage.setItem('nkemmart_admin_products', JSON.stringify(adminProducts));
+    }
+
+    function updateStats() {
+      const totalCount = adminProducts.length;
+      document.getElementById('statTotalProducts').textContent = totalCount.toLocaleString();
+      document.getElementById('sidebarProductCount').textContent = totalCount;
+
+      let totalValuation = 0;
+      let lowStockCount = 0;
+      let verifiedCount = 0;
+
+      adminProducts.forEach(p => {
+        const price = Number(p.price) || 0;
+        const stock = Number(p.stock !== undefined ? p.stock : 25);
+        totalValuation += price * stock;
+        if (stock < 10) lowStockCount++;
+        if (p.verified !== false) verifiedCount++;
+      });
+
+      document.getElementById('statCatalogValue').textContent = '₦' + totalValuation.toLocaleString();
+      document.getElementById('statLowStock').textContent = lowStockCount;
+      document.getElementById('statVerifiedCount').textContent = verifiedCount;
+    }
+
+    function renderProductsTable() {
+      const tbody = document.getElementById('adminProductsTbody');
+      const searchVal = document.getElementById('adminSearchInput').value.trim().toLowerCase();
+      const catVal = document.getElementById('adminCategoryFilter').value;
+
+      const filtered = adminProducts.filter(p => {
+        const matchesSearch = !searchVal || 
+          (p.title && p.title.toLowerCase().includes(searchVal)) ||
+          (p.brand && p.brand.toLowerCase().includes(searchVal)) ||
+          (p.id && String(p.id).toLowerCase().includes(searchVal));
+        const matchesCat = catVal === 'all' || p.category === catVal || p.category_id === catVal;
+        return matchesSearch && matchesCat;
+      });
+
+      document.getElementById('tableCountSummary').textContent = `Showing ${filtered.length} of ${adminProducts.length} items`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 36px 16px; color: #64748b;">
+              No products found matching your search or category filter.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => {
+        const stock = Number(p.stock !== undefined ? p.stock : 25);
+        let stockClass = 'stock-in';
+        let stockLabel = `${stock} in stock`;
+        if (stock === 0) {
+          stockClass = 'stock-out';
+          stockLabel = 'Out of Stock';
+        } else if (stock < 10) {
+          stockClass = 'stock-low';
+          stockLabel = `Low: ${stock} left`;
+        }
+
+        const priceFormatted = '₦' + Number(p.price).toLocaleString();
+        const oldPriceFormatted = p.oldPrice || p.old_price ? '₦' + Number(p.oldPrice || p.old_price).toLocaleString() : '';
+        const discountBadge = p.discount ? `<span style="font-size: 10px; color: #ef4444; font-weight: 700; margin-left: 4px;">-${p.discount}%</span>` : '';
+
+        return `
+          <tr>
+            <td>
+              <div class="product-row-info">
+                <img src="${escapeHtml(p.image || 'images/subcategories/sub_smartphones.jpg')}" alt="${escapeHtml(p.title)}" class="product-thumb" onerror="this.src='images/subcategories/sub_smartphones.jpg'">
+                <div>
+                  <span class="product-row-title" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</span>
+                  <span class="product-row-id">${p.brand ? escapeHtml(p.brand) + ' &bull; ' : ''}ID: ${escapeHtml(p.id)}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span style="font-weight: 600; text-transform: capitalize; color: #334155;">${escapeHtml(p.category || p.category_id || 'general')}</span>
+            </td>
+            <td>
+              <div style="font-weight: 700; color: #091e3a;">${priceFormatted} ${discountBadge}</div>
+              ${oldPriceFormatted ? `<div style="font-size: 11px; text-decoration: line-through; color: #94a3b8;">${oldPriceFormatted}</div>` : ''}
+            </td>
+            <td>
+              <span class="stock-chip ${stockClass}">${stockLabel}</span>
+            </td>
+            <td>
+              <span style="font-weight: 700; color: #f59e0b;">★ ${p.rating || 4.8}</span>
+              <span style="font-size: 11px; color: #94a3b8;">(${p.reviewsCount || p.reviews_count || 12})</span>
+            </td>
+            <td>
+              <div class="action-btn-row">
+                <button type="button" class="table-icon-btn" onclick="editProduct('${p.id}')" title="Edit Product">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </button>
+                <a href="product.html?id=${p.id}" target="_blank" class="table-icon-btn" title="View on Live Store">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+                <button type="button" class="table-icon-btn delete" onclick="deleteProduct('${p.id}')" title="Delete Product">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    window.editProduct = function(productId) {
+      const p = adminProducts.find(item => String(item.id) === String(productId));
+      if (!p) return;
+
+      currentEditingId = p.id;
+      document.getElementById('productModalTitle').textContent = 'Edit Product';
+      document.getElementById('modalProductId').value = p.id;
+      document.getElementById('modalProductTitle').value = p.title || '';
+      document.getElementById('modalProductCategory').value = p.category || p.category_id || 'phones';
+      document.getElementById('modalProductBrand').value = p.brand || '';
+      document.getElementById('modalProductPrice').value = p.price || '';
+      document.getElementById('modalProductOldPrice').value = p.oldPrice || p.old_price || '';
+      document.getElementById('modalProductStock').value = p.stock !== undefined ? p.stock : 25;
+      document.getElementById('modalProductDiscount').value = p.discount || 0;
+      document.getElementById('modalProductImage').value = p.image || '';
+      document.getElementById('modalProductDesc').value = p.description || '';
+
+      document.getElementById('productModal').classList.add('open');
+    };
+
+    window.deleteProduct = function(productId) {
+      const p = adminProducts.find(item => String(item.id) === String(productId));
+      if (!p) return;
+
+      if (confirm(`Are you sure you want to remove "${p.title}" from the catalog?`)) {
+        adminProducts = adminProducts.filter(item => String(item.id) !== String(productId));
+        saveProductsLocal();
+        updateStats();
+        renderProductsTable();
+
+        // Also delete from Supabase if connected
+        const client = getSupabase();
+        if (client) {
+          client.from('products').delete().eq('id', productId).then(() => {
+            console.log('Deleted product from Supabase:', productId);
+          });
+        }
+      }
+    };
+
+    function saveProductFromModal() {
+      const title = document.getElementById('modalProductTitle').value.trim();
+      const category = document.getElementById('modalProductCategory').value;
+      const brand = document.getElementById('modalProductBrand').value.trim();
+      const price = Number(document.getElementById('modalProductPrice').value);
+      const oldPrice = Number(document.getElementById('modalProductOldPrice').value) || null;
+      const stock = Number(document.getElementById('modalProductStock').value) || 0;
+      const discount = Number(document.getElementById('modalProductDiscount').value) || 0;
+      const image = document.getElementById('modalProductImage').value.trim();
+      const description = document.getElementById('modalProductDesc').value.trim();
+
+      if (currentEditingId) {
+        // Update existing
+        const idx = adminProducts.findIndex(p => String(p.id) === String(currentEditingId));
+        if (idx !== -1) {
+          adminProducts[idx] = {
+            ...adminProducts[idx],
+            title,
+            category,
+            category_id: category,
+            brand,
+            price,
+            oldPrice,
+            old_price: oldPrice,
+            stock,
+            discount,
+            image,
+            description,
+            updated_at: new Date().toISOString()
+          };
+        }
+      } else {
+        // Create new
+        const newId = 'prod_' + Date.now().toString(36);
+        const newProd = {
+          id: newId,
+          title,
+          category,
+          category_id: category,
+          brand,
+          price,
+          oldPrice,
+          old_price: oldPrice,
+          stock,
+          discount,
+          image,
+          description,
+          rating: 5.0,
+          reviewsCount: 1,
+          verified: true,
+          created_at: new Date().toISOString()
+        };
+        adminProducts.unshift(newProd);
+      }
+
+      saveProductsLocal();
+      updateStats();
+      renderProductsTable();
+      document.getElementById('productModal').classList.remove('open');
+
+      // Sync updated/created item to Supabase in background
+      const client = getSupabase();
+      if (client) {
+        const itemToSave = currentEditingId ? adminProducts.find(p => p.id === currentEditingId) : adminProducts[0];
+        client.from('products').upsert({
+          id: itemToSave.id,
+          title: itemToSave.title,
+          category_id: itemToSave.category || itemToSave.category_id,
+          brand: itemToSave.brand,
+          price: itemToSave.price,
+          old_price: itemToSave.oldPrice || itemToSave.old_price,
+          stock: itemToSave.stock,
+          discount: itemToSave.discount,
+          image: itemToSave.image,
+          description: itemToSave.description,
+          verified: true
+        }).then(({ error }) => {
+          if (error) console.warn('Supabase upsert note:', error.message);
+        });
+      }
+    }
+
+    async function syncAllToSupabase() {
+      const client = getSupabase();
+      if (!client) {
+        alert('Supabase client is not available.');
+        return;
+      }
+
+      const btn = document.getElementById('adminSyncSupabaseBtn');
+      btn.disabled = true;
+      btn.querySelector('span').textContent = 'Syncing...';
+
+      try {
+        const payload = adminProducts.map(p => ({
+          id: String(p.id),
+          title: p.title || 'Untitled Product',
+          category_id: p.category || p.category_id || 'phones',
+          brand: p.brand || '',
+          price: Number(p.price) || 0,
+          old_price: Number(p.oldPrice || p.old_price) || null,
+          stock: Number(p.stock !== undefined ? p.stock : 25),
+          discount: Number(p.discount) || 0,
+          image: p.image || '',
+          description: p.description || '',
+          rating: Number(p.rating) || 4.8,
+          reviews_count: Number(p.reviewsCount || p.reviews_count) || 12,
+          verified: p.verified !== false
+        }));
+
+        const { error } = await client.from('products').upsert(payload, { onConflict: 'id' });
+        if (error) throw error;
+        alert(`Successfully synced ${payload.length} products to Supabase cloud!`);
+      } catch (err) {
+        alert('Sync error: ' + (err.message || 'Check connection'));
+      } finally {
+        btn.disabled = false;
+        btn.querySelector('span').textContent = 'Sync to Supabase';
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>

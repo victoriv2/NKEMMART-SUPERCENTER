@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart - NKEMMART SUPERCENTER</title>
   <link rel="stylesheet" href="styles.css?v=9.9">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
 </head>
 <body>
 
@@ -147,11 +149,11 @@
             </svg>
           </button>
           
-          <div class="dropdown-menu">
+          <div class="dropdown-menu" id="accountMenu">
             <div class="dropdown-header">
-              <a href="index.html#signin" class="sign-in-btn">SIGN IN</a>
+              <a href="auth.html" class="sign-in-btn">SIGN IN</a>
             </div>
-            <a href="index.html#account" class="dropdown-item">
+            <a href="auth.html" class="dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
               My Account
             </a>

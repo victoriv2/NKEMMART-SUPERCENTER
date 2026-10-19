@@ -1,0 +1,231 @@
+/**
+ * NKEMMART SUPERCENTER - SUPABASE CLIENT & AUTH HELPER
+ * Project: nkemmart.supercenter@gmail.com's Project
+ * Region: eu-west-1
+ */
+
+const SUPABASE_CONFIG = {
+  url: 'https://ykwhhgajybhbmkqkmzhm.supabase.co',
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlrd2hoZ2FqeWJoYm1rcWttemhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MTI5NzksImV4cCI6MjEwNzk4ODk3OX0.d-qkmKCGE1bbMBNZb7ROnMXC1t1RcPweeXD4Hg0atBM'
+};
+
+// Initialize Supabase Client
+let _supabaseInstance = null;
+
+function getSupabase() {
+  if (_supabaseInstance) return _supabaseInstance;
+  if (typeof supabase !== 'undefined' && supabase.createClient) {
+    _supabaseInstance = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+    return _supabaseInstance;
+  }
+  console.warn('Supabase JS library not loaded. Make sure @supabase/supabase-js is included via script tag.');
+  return null;
+}
+
+// Authentication Helpers
+async function getCurrentUser() {
+  const client = getSupabase();
+  if (!client) return null;
+  try {
+    const { data: { user }, error } = await client.auth.getUser();
+    if (error) return null;
+    return user;
+  } catch (err) {
+    console.error('Error getting current user:', err);
+    return null;
+  }
+}
+
+async function getCurrentSession() {
+  const client = getSupabase();
+  if (!client) return null;
+  try {
+    const { data: { session }, error } = await client.auth.getSession();
+    if (error) return null;
+    return session;
+  } catch (err) {
+    console.error('Error getting session:', err);
+    return null;
+  }
+}
+
+async function getCurrentProfile() {
+  const client = getSupabase();
+  if (!client) return null;
+  try {
+    const user = await getCurrentUser();
+    if (!user) return null;
+
+    const { data: profile, error } = await client
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      console.warn('Profile fetch note:', error.message);
+    }
+
+    // Default admin detection for store owner
+    const isOwner = user.email && user.email.toLowerCase() === 'nkemmart.supercenter@gmail.com';
+    const role = (profile && profile.role) || (isOwner ? 'admin' : 'customer');
+
+    return {
+      id: user.id,
+      email: user.email,
+      full_name: (profile && profile.full_name) || user.user_metadata?.full_name || user.email.split('@')[0],
+      phone: (profile && profile.phone) || user.user_metadata?.phone || '',
+      role: role,
+      avatar_url: profile?.avatar_url || null,
+      created_at: profile?.created_at || user.created_at
+    };
+  } catch (err) {
+    console.error('Error fetching profile:', err);
+    return null;
+  }
+}
+
+async function signUpUser(email, password, { fullName, phone }) {
+  const client = getSupabase();
+  if (!client) throw new Error('Supabase client unavailable');
+
+  const isOwner = email.trim().toLowerCase() === 'nkemmart.supercenter@gmail.com';
+  const role = isOwner ? 'admin' : 'customer';
+
+  const { data, error } = await client.auth.signUp({
+    email: email.trim(),
+    password: password,
+    options: {
+      data: {
+        full_name: fullName.trim(),
+        phone: (phone || '').trim(),
+        role: role
+      }
+    }
+  });
+
+  if (error) throw error;
+  return data;
+}
+
+async function signInUser(email, password) {
+  const client = getSupabase();
+  if (!client) throw new Error('Supabase client unavailable');
+
+  const { data, error } = await client.auth.signInWithPassword({
+    email: email.trim(),
+    password: password
+  });
+
+  if (error) throw error;
+  return data;
+}
+
+async function signOutUser() {
+  const client = getSupabase();
+  if (!client) return;
+  const { error } = await client.auth.signOut();
+  if (error) console.error('Sign out error:', error);
+}
+
+async function resetPasswordForEmail(email) {
+  const client = getSupabase();
+  if (!client) throw new Error('Supabase client unavailable');
+
+  const { data, error } = await client.auth.resetPasswordForEmail(email.trim(), {
+    redirectTo: window.location.origin + '/auth.html#reset'
+  });
+
+  if (error) throw error;
+  return data;
+}
+
+function onAuthChange(callback) {
+  const client = getSupabase();
+  if (!client) return { unsubscribe: () => {} };
+
+  const { data: { subscription } } = client.auth.onAuthStateChange((event, session) => {
+    if (typeof callback === 'function') {
+      callback(event, session);
+    }
+  });
+
+  return subscription;
+}
+
+// Global Auth UI Bar Update Helper (updates Account dropdowns across the site)
+async function updateSiteAccountMenu() {
+  try {
+    const profile = await getCurrentProfile();
+    const accountButtons = document.querySelectorAll('#accountMenuBtn, .account-btn-header');
+    const accountDropdowns = document.querySelectorAll('#accountMenu, .account-dropdown-menu');
+
+    if (profile) {
+      accountButtons.forEach(btn => {
+        const textSpan = btn.querySelector('span:not(.chevron-icon)');
+        if (textSpan) {
+          const firstName = profile.full_name ? profile.full_name.split(' ')[0] : 'Account';
+          textSpan.textContent = firstName.length > 10 ? firstName.substring(0, 9) + '...' : firstName;
+        }
+      });
+
+      accountDropdowns.forEach(menu => {
+        let adminItemHtml = '';
+        if (profile.role === 'admin') {
+          adminItemHtml = `
+            <a href="admin.html" class="dropdown-item" style="color: #00a859; font-weight: 700; background: rgba(0, 168, 89, 0.08);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+              <span>Admin Portal</span>
+            </a>
+            <div class="dropdown-divider"></div>
+          `;
+        }
+
+        menu.innerHTML = `
+          <div style="padding: 10px 14px; border-bottom: 1px solid #f1f5f9; background: #f8fafc;">
+            <div style="font-size: 13px; font-weight: 700; color: #091e3a;">${escapeHtml(profile.full_name)}</div>
+            <div style="font-size: 11px; color: #64748b;">${escapeHtml(profile.email)}</div>
+            <span style="display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; margin-top: 4px; background: ${profile.role === 'admin' ? '#dcfce7; color: #15803d;' : '#e0f2fe; color: #0369a1;'}">${profile.role}</span>
+          </div>
+          ${adminItemHtml}
+          <a href="index.html#orders" class="dropdown-item">My Orders</a>
+          <a href="saved-items.html" class="dropdown-item">Saved Items</a>
+          <a href="cart.html" class="dropdown-item">Shopping Cart</a>
+          <div class="dropdown-divider"></div>
+          <button type="button" class="dropdown-item" id="siteSignOutBtn" style="color: #ef4444; width: 100%; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <span>Sign Out</span>
+          </button>
+        `;
+
+        const signOutBtn = menu.querySelector('#siteSignOutBtn');
+        if (signOutBtn) {
+          signOutBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await signOutUser();
+            window.location.reload();
+          });
+        }
+      });
+    }
+  } catch (e) {
+    console.warn('Error updating account menu:', e);
+  }
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// Auto update menu on DOM load if Supabase is active
+if (typeof document !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(updateSiteAccountMenu, 300);
+  });
+}

@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <title>Account Sign In & Sign Up - NKEMMART SUPERCENTER</title>
+  <link rel="stylesheet" href="styles.css?v=9.9">
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <style>
+    body {
+      background-color: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .auth-header {
+      background-color: #091e3a;
+      padding: 14px 20px;
+      border-bottom: 2px solid #00a859;
+    }
+
+    .auth-header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .auth-logo-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .auth-logo-link img {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .auth-back-link {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+
+    .auth-back-link:hover {
+      color: #ffffff;
+    }
+
+    .auth-page-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 36px 16px;
+    }
+
+    .auth-card {
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(9, 30, 58, 0.08);
+      border: 1px solid #e2e8f0;
+      width: 100%;
+      max-width: 460px;
+      overflow: hidden;
+    }
+
+    .auth-card-top {
+      background: linear-gradient(135deg, #091e3a 0%, #0d2b52 100%);
+      padding: 26px 24px 20px 24px;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    .auth-card-badge {
+      display: inline-block;
+      background-color: #00a859;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .auth-card-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin: 0 0 6px 0;
+      letter-spacing: -0.2px;
+    }
+
+    .auth-card-subtitle {
+      font-size: 13px;
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1px solid #e2e8f0;
+      background-color: #f8fafc;
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      padding: 14px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #64748b;
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .auth-tab-btn.active {
+      color: #091e3a;
+      background-color: #ffffff;
+      border-bottom-color: #00a859;
+    }
+
+    .auth-card-body {
+      padding: 26px 24px;
+    }
+
+    .auth-alert {
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.4;
+      margin-bottom: 18px;
+      display: none;
+    }
+
+    .auth-alert.error {
+      background-color: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      display: block;
+    }
+
+    .auth-alert.success {
+      background-color: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #15803d;
+      display: block;
+    }
+
+    .auth-form-group {
+      margin-bottom: 16px;
+    }
+
+    .auth-label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .auth-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .auth-input-icon {
+      position: absolute;
+      left: 12px;
+      color: #94a3b8;
+      pointer-events: none;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 11px 40px 11px 38px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #0f172a;
+      box-sizing: border-box;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .auth-input:focus {
+      border-color: #00a859;
+      box-shadow: 0 0 0 3px rgba(0, 168, 89, 0.15);
+    }
+
+    .auth-password-toggle {
+      position: absolute;
+      right: 10px;
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-password-toggle:hover {
+      color: #334155;
+    }
+
+    .auth-row-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      margin-bottom: 20px;
+    }
+
+    .auth-checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #475569;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .auth-forgot-link {
+      color: #008744;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .auth-forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    .auth-submit-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #00a859 0%, #008744 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .auth-submit-btn:hover {
+      opacity: 0.95;
+    }
+
+    .auth-submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .auth-switch-note {
+      text-align: center;
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 18px;
+    }
+
+    .auth-switch-link {
+      color: #008744;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .auth-switch-link:hover {
+      text-decoration: underline;
+    }
+
+    .password-strength-wrap {
+      margin-top: 6px;
+      display: none;
+    }
+
+    .password-strength-bar {
+      height: 4px;
+      border-radius: 2px;
+      background-color: #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+
+    .password-strength-fill {
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s, background-color 0.3s;
+    }
+
+    .password-strength-text {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .auth-badges-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 11.5px;
+      color: #64748b;
+    }
+
+    .auth-badge-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Active User State Overlay */
+    .auth-active-session {
+      display: none;
+      text-align: center;
+      padding: 12px 6px;
+    }
+
+    .auth-user-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #091e3a;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      border: 3px solid #00a859;
+    }
+
+    .auth-user-name {
+      font-size: 18px;
+      font-weight: 800;
+      color: #091e3a;
+      margin: 0 0 4px 0;
+    }
+
+    .auth-user-email {
+      font-size: 13px;
+      color: #64748b;
+      margin: 0 0 10px 0;
+    }
+
+    .auth-user-role-pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    .role-customer {
+      background-color: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .role-admin {
+      background-color: #dcfce7;
+      color: #15803d;
+    }
+
+    .auth-session-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .auth-action-link {
+      display: block;
+      padding: 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .btn-primary-action {
+      background: #00a859;
+      color: #ffffff;
+    }
+
+    .btn-admin-action {
+      background: #091e3a;
+      color: #ffffff;
+    }
+
+    .btn-signout-action {
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Modal for Password Reset */
+    .auth-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 30, 58, 0.6);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .auth-modal.open {
+      display: flex;
+    }
+
+    .auth-modal-dialog {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 24px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Minimal Header -->
+  <header class="auth-header" role="banner">
+    <div class="auth-header-inner">
+      <a href="index.html" class="auth-logo-link" title="NKEMMART SUPERCENTER Homepage">
+        <img src="logo/LOGO.png" alt="NKEMMART Logo">
+        <span>NKEMMART SUPERCENTER</span>
+      </a>
+      <a href="index.html" class="auth-back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        <span>Back to Store</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Auth Content Container -->
+  <main class="auth-page-main">
+    <div class="auth-card">
+
+      <div class="auth-card-top">
+        <span class="auth-card-badge">NKEMMART ACCOUNT</span>
+        <h1 class="auth-card-title" id="authTitle">Welcome Back</h1>
+        <p class="auth-card-subtitle" id="authSubtitle">Log in to manage orders, wishlist, and shopping cart.</p>
+      </div>
+
+      <!-- Logged-in State (If session active) -->
+      <div class="auth-card-body auth-active-session" id="authActiveSession">
+        <div class="auth-user-avatar" id="activeUserAvatar">U</div>
+        <h2 class="auth-user-name" id="activeUserName">Customer</h2>
+        <p class="auth-user-email" id="activeUserEmail">user@example.com</p>
+        <span class="auth-user-role-pill role-customer" id="activeUserRole">Customer</span>
+
+        <div class="auth-session-actions">
+          <a href="index.html" class="auth-action-link btn-primary-action">Continue Shopping</a>
+          <a href="admin.html" class="auth-action-link btn-admin-action" id="activeAdminBtn" style="display: none;">Access Admin Portal</a>
+          <button type="button" class="auth-action-link btn-signout-action" id="activeSignOutBtn">Sign Out of Account</button>
+        </div>
+      </div>
+
+      <!-- Authentication Forms (Sign In & Register) -->
+      <div id="authFormsContainer">
+        <!-- Tabs -->
+        <div class="auth-tabs" role="tablist">
+          <button type="button" class="auth-tab-btn active" id="tabSignIn" role="tab" aria-selected="true">Sign In</button>
+          <button type="button" class="auth-tab-btn" id="tabRegister" role="tab" aria-selected="false">Create Account</button>
+        </div>
+
+        <div class="auth-card-body">
+          <div class="auth-alert" id="authAlert" role="alert"></div>
+
+          <!-- SIGN IN FORM -->
+          <form id="signInForm">
+            <div class="auth-form-group">
+              <label for="loginEmail" class="auth-label">Email Address</label>
+              <div class="auth-input-wrapper">
+                <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <input type="email" id="loginEmail" class="auth-input" placeholder="name@example.com" required autocomplete="email">
+              </div>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="loginPassword" class="auth-label">Password</label>
+              <div class="auth-input-wrapper">
+                <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <input type="password" id="loginPassword" class="auth-input" placeholder="Enter your password" required autocomplete="current-password">
+                <button type="button" class="auth-password-toggle" id="toggleLoginPassword" aria-label="Toggle password visibility">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="auth-row-options">
+              <label class="auth-checkbox-label">
+                <input type="checkbox" id="rememberMe" checked>
+                <span>Remember me</span>
+              </label>
+              <a href="#" class="auth-forgot-link" id="openForgotModal">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="auth-submit-btn" id="loginSubmitBtn">
+              <span>Sign In to Supercenter</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+
+            <p class="auth-switch-note">
+              Don't have an account? <span class="auth-switch-link" id="linkToRegister">Create one now</span>
+            </p>
+          </form>
+
+          <!-- REGISTER FORM -->
+          <form id="registerForm" style="display: none;">
+            <div class="auth-form-group">
+              <label for="regFullName" class="auth-label">Full Name</label>
+              <div class="auth-input-wrapper">
+                <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <input type="text" id="regFullName" class="auth-input" placeholder="e.g. Victor Okafor" required autocomplete="name">
+              </div>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="regEmail" class="auth-label">Email Address</label>
+              <div class="auth-input-wrapper">
+                <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <input type="email" id="regEmail" class="auth-input" placeholder="name@example.com" required autocomplete="email">
+              </div>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="regPhone" class="auth-label">Phone Number (Optional)</label>
+              <div class="auth-input-wrapper">
+                <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <input type="tel" id="regPhone" class="auth-input" placeholder="e.g. 08155608447" autocomplete="tel">
+              </div>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="regPassword" class="auth-label">Create Password</label>
+              <div class="auth-input-wrapper">
+                <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <input type="password" id="regPassword" class="auth-input" placeholder="At least 6 characters" required autocomplete="new-password">
+                <button type="button" class="auth-password-toggle" id="toggleRegPassword" aria-label="Toggle password visibility">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+              <div class="password-strength-wrap" id="passwordStrengthWrap">
+                <div class="password-strength-bar">
+                  <div class="password-strength-fill" id="passwordStrengthFill"></div>
+                </div>
+                <div class="password-strength-text" id="passwordStrengthText">Password strength</div>
+              </div>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="regConfirmPassword" class="auth-label">Confirm Password</label>
+              <div class="auth-input-wrapper">
+                <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <input type="password" id="regConfirmPassword" class="auth-input" placeholder="Re-enter password" required autocomplete="new-password">
+              </div>
+            </div>
+
+            <div class="auth-row-options">
+              <label class="auth-checkbox-label">
+                <input type="checkbox" id="regTerms" required>
+                <span>I agree to NKEMMART terms and privacy policy</span>
+              </label>
+            </div>
+
+            <button type="submit" class="auth-submit-btn" id="regSubmitBtn">
+              <span>Create Free Account</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+
+            <p class="auth-switch-note">
+              Already have an account? <span class="auth-switch-link" id="linkToSignIn">Sign In</span>
+            </p>
+          </form>
+
+          <!-- Trust Badges -->
+          <div class="auth-badges-row">
+            <span class="auth-badge-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00a859" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <span>256-Bit SSL Encrypted</span>
+            </span>
+            <span class="auth-badge-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00a859" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>Verified Supercenter</span>
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Forgot Password Modal -->
+  <div class="auth-modal" id="forgotModal" role="dialog" aria-modal="true" aria-labelledby="forgotTitle">
+    <div class="auth-modal-dialog">
+      <h3 id="forgotTitle" style="font-size: 18px; font-weight: 800; color: #091e3a; margin: 0 0 8px 0;">Reset Your Password</h3>
+      <p style="font-size: 13px; color: #64748b; margin: 0 0 16px 0;">Enter your registered email address and we'll send you instructions to reset your password.</p>
+      
+      <div class="auth-alert" id="forgotAlert"></div>
+
+      <form id="forgotForm">
+        <div class="auth-form-group">
+          <label for="forgotEmail" class="auth-label">Email Address</label>
+          <div class="auth-input-wrapper">
+            <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <input type="email" id="forgotEmail" class="auth-input" placeholder="name@example.com" required>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 18px;">
+          <button type="button" id="closeForgotModal" style="flex: 1; padding: 11px; background: #f1f5f9; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; color: #475569;">Cancel</button>
+          <button type="submit" id="forgotSubmitBtn" style="flex: 2; padding: 11px; background: #00a859; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; color: #ffffff;">Send Reset Link</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const tabSignIn = document.getElementById('tabSignIn');
+      const tabRegister = document.getElementById('tabRegister');
+      const signInForm = document.getElementById('signInForm');
+      const registerForm = document.getElementById('registerForm');
+      const authTitle = document.getElementById('authTitle');
+      const authSubtitle = document.getElementById('authSubtitle');
+      const authAlert = document.getElementById('authAlert');
+      const authFormsContainer = document.getElementById('authFormsContainer');
+      const authActiveSession = document.getElementById('authActiveSession');
+
+      // Check URL parameters (redirect, mode)
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectUrl = urlParams.get('redirect') || 'index.html';
+      const mode = urlParams.get('mode');
+
+      function switchTab(isRegister) {
+        clearAlert();
+        if (isRegister) {
+          tabSignIn.classList.remove('active');
+          tabRegister.classList.add('active');
+          tabSignIn.setAttribute('aria-selected', 'false');
+          tabRegister.setAttribute('aria-selected', 'true');
+          signInForm.style.display = 'none';
+          registerForm.style.display = 'block';
+          authTitle.textContent = 'Create an Account';
+          authSubtitle.textContent = 'Join NKEMMART for faster checkout, order tracking, and exclusive deals.';
+        } else {
+          tabRegister.classList.remove('active');
+          tabSignIn.classList.add('active');
+          tabRegister.setAttribute('aria-selected', 'false');
+          tabSignIn.setAttribute('aria-selected', 'true');
+          registerForm.style.display = 'none';
+          signInForm.style.display = 'block';
+          authTitle.textContent = 'Welcome Back';
+          authSubtitle.textContent = 'Log in to manage orders, wishlist, and shopping cart.';
+        }
+      }
+
+      tabSignIn.addEventListener('click', () => switchTab(false));
+      tabRegister.addEventListener('click', () => switchTab(true));
+      document.getElementById('linkToRegister').addEventListener('click', () => switchTab(true));
+      document.getElementById('linkToSignIn').addEventListener('click', () => switchTab(false));
+
+      if (mode === 'register') {
+        switchTab(true);
+      }
+
+      // Password toggles
+      function setupPasswordToggle(btnId, inputId) {
+        const btn = document.getElementById(btnId);
+        const input = document.getElementById(inputId);
+        if (!btn || !input) return;
+        btn.addEventListener('click', () => {
+          const isPass = input.type === 'password';
+          input.type = isPass ? 'text' : 'password';
+          btn.innerHTML = isPass
+            ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>'
+            : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+        });
+      }
+      setupPasswordToggle('toggleLoginPassword', 'loginPassword');
+      setupPasswordToggle('toggleRegPassword', 'regPassword');
+
+      // Live Password Strength Indicator
+      const regPasswordInput = document.getElementById('regPassword');
+      const strengthWrap = document.getElementById('passwordStrengthWrap');
+      const strengthFill = document.getElementById('passwordStrengthFill');
+      const strengthText = document.getElementById('passwordStrengthText');
+
+      regPasswordInput.addEventListener('input', () => {
+        const val = regPasswordInput.value;
+        if (!val) {
+          strengthWrap.style.display = 'none';
+          return;
+        }
+        strengthWrap.style.display = 'block';
+        let score = 0;
+        if (val.length >= 6) score += 1;
+        if (val.length >= 10) score += 1;
+        if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score += 1;
+        if (/[0-9]/.test(val) || /[^A-Za-z0-9]/.test(val)) score += 1;
+
+        if (score <= 1) {
+          strengthFill.style.width = '25%';
+          strengthFill.style.backgroundColor = '#ef4444';
+          strengthText.textContent = 'Weak password';
+          strengthText.style.color = '#ef4444';
+        } else if (score === 2) {
+          strengthFill.style.width = '50%';
+          strengthFill.style.backgroundColor = '#f59e0b';
+          strengthText.textContent = 'Fair password';
+          strengthText.style.color = '#f59e0b';
+        } else if (score === 3) {
+          strengthFill.style.width = '75%';
+          strengthFill.style.backgroundColor = '#3b82f6';
+          strengthText.textContent = 'Good password';
+          strengthText.style.color = '#3b82f6';
+        } else {
+          strengthFill.style.width = '100%';
+          strengthFill.style.backgroundColor = '#00a859';
+          strengthText.textContent = 'Strong password';
+          strengthText.style.color = '#00a859';
+        }
+      });
+
+      function showAlert(msg, isError = true) {
+        authAlert.className = 'auth-alert ' + (isError ? 'error' : 'success');
+        authAlert.textContent = msg;
+        authAlert.style.display = 'block';
+      }
+
+      function clearAlert() {
+        authAlert.style.display = 'none';
+        authAlert.textContent = '';
+      }
+
+      // Check current session
+      const existingProfile = await getCurrentProfile();
+      if (existingProfile) {
+        authFormsContainer.style.display = 'none';
+        authActiveSession.style.display = 'block';
+        authTitle.textContent = 'Active Account';
+        authSubtitle.textContent = 'You are currently signed in.';
+        document.getElementById('activeUserAvatar').textContent = existingProfile.full_name.charAt(0).toUpperCase();
+        document.getElementById('activeUserName').textContent = existingProfile.full_name;
+        document.getElementById('activeUserEmail').textContent = existingProfile.email;
+        
+        const rolePill = document.getElementById('activeUserRole');
+        rolePill.textContent = existingProfile.role.toUpperCase();
+        rolePill.className = 'auth-user-role-pill ' + (existingProfile.role === 'admin' ? 'role-admin' : 'role-customer');
+
+        if (existingProfile.role === 'admin') {
+          document.getElementById('activeAdminBtn').style.display = 'block';
+        }
+
+        document.getElementById('activeSignOutBtn').addEventListener('click', async () => {
+          await signOutUser();
+          window.location.reload();
+        });
+        return;
+      }
+
+      // Handle Sign In Submit
+      signInForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearAlert();
+        const submitBtn = document.getElementById('loginSubmitBtn');
+        const email = document.getElementById('loginEmail').value;
+        const pass = document.getElementById('loginPassword').value;
+
+        submitBtn.disabled = true;
+        submitBtn.querySelector('span').textContent = 'Signing in...';
+
+        try {
+          const res = await signInUser(email, pass);
+          showAlert('Signed in successfully! Redirecting...', false);
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 800);
+        } catch (err) {
+          showAlert(err.message || 'Failed to sign in. Please check your credentials.');
+          submitBtn.disabled = false;
+          submitBtn.querySelector('span').textContent = 'Sign In to Supercenter';
+        }
+      });
+
+      // Handle Register Submit
+      registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearAlert();
+        const submitBtn = document.getElementById('regSubmitBtn');
+        const fullName = document.getElementById('regFullName').value;
+        const email = document.getElementById('regEmail').value;
+        const phone = document.getElementById('regPhone').value;
+        const pass = document.getElementById('regPassword').value;
+        const confirmPass = document.getElementById('regConfirmPassword').value;
+
+        if (pass.length < 6) {
+          showAlert('Password must be at least 6 characters long.');
+          return;
+        }
+
+        if (pass !== confirmPass) {
+          showAlert('Passwords do not match. Please re-enter.');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.querySelector('span').textContent = 'Creating account...';
+
+        try {
+          const res = await signUpUser(email, pass, { fullName, phone });
+          showAlert('Account created successfully! Redirecting...', false);
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 1000);
+        } catch (err) {
+          showAlert(err.message || 'Registration failed. Please try again.');
+          submitBtn.disabled = false;
+          submitBtn.querySelector('span').textContent = 'Create Free Account';
+        }
+      });
+
+      // Forgot Password Modal
+      const forgotModal = document.getElementById('forgotModal');
+      const forgotAlert = document.getElementById('forgotAlert');
+      const forgotForm = document.getElementById('forgotForm');
+
+      document.getElementById('openForgotModal').addEventListener('click', (e) => {
+        e.preventDefault();
+        forgotModal.classList.add('open');
+      });
+
+      document.getElementById('closeForgotModal').addEventListener('click', () => {
+        forgotModal.classList.remove('open');
+      });
+
+      forgotForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('forgotEmail').value;
+        const btn = document.getElementById('forgotSubmitBtn');
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+
+        try {
+          await resetPasswordForEmail(email);
+          forgotAlert.className = 'auth-alert success';
+          forgotAlert.textContent = 'Password reset instructions have been sent to your email.';
+          forgotAlert.style.display = 'block';
+        } catch (err) {
+          forgotAlert.className = 'auth-alert error';
+          forgotAlert.textContent = err.message || 'Error sending reset email.';
+          forgotAlert.style.display = 'block';
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Send Reset Link';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
