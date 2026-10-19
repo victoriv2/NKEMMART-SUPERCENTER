@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Product Details - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=8.5">
+  <link rel="stylesheet" href="styles.css?v=8.6">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body class="pdp-page">
@@ -1646,19 +1646,22 @@
       var recGrid = document.getElementById('pdpRecommendationsGrid');
       if (recGrid) {
         recGrid.innerHTML = '';
+        var saved = getSaved();
+        var savedIds = saved.map(function(s) { return s.id; });
         var related = CATALOG_PRODUCTS.filter(function(p) { return p.id !== activeProduct.id; }).slice(0, 4);
         related.forEach(function(prod) {
+          var isSaved = savedIds.indexOf(prod.id) > -1;
           var card = document.createElement('article');
           card.className = 'rec-card';
           card.setAttribute('data-id', prod.id);
           card.innerHTML = 
             '<div class="rec-card-media">' +
               '<a href="product.html?id=' + encodeURIComponent(prod.id) + '">' +
-                '<img src="' + prod.image + '" alt="' + prod.title + '" class="rec-card-img">' +
+                '<img src="' + prod.image + '" alt="' + prod.title + '" class="rec-card-img" loading="lazy">' +
               '</a>' +
               '<span class="rec-discount-badge">' + (prod.discount || '-20%') + '</span>' +
-              '<button type="button" class="rec-wishlist-btn" data-wish-id="' + prod.id + '" aria-label="Save item">' +
-                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
+              '<button type="button" class="rec-wishlist-btn' + (isSaved ? ' active' : '') + '" data-wish-id="' + prod.id + '" aria-label="Save item">' +
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="' + (isSaved ? '#ef4444' : 'none') + '" stroke="' + (isSaved ? '#ef4444' : 'currentColor') + '" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
               '</button>' +
             '</div>' +
             '<div class="rec-card-body">' +
@@ -1666,6 +1669,7 @@
               '<div class="rec-card-price-row">' +
                 '<span class="rec-card-price">' + formatNaira(prod.price) + '</span>' +
                 '<span class="rec-card-orig-price">' + formatNaira(prod.originalPrice) + '</span>' +
+                '<span class="rec-card-discount">' + (prod.discount || '-20%') + '</span>' +
               '</div>' +
               '<button type="button" class="rec-card-btn" data-rec-id="' + prod.id + '">Add to cart</button>' +
             '</div>';
@@ -1706,10 +1710,12 @@
             if (!target) return;
             var saved = getSaved();
             var sIdx = saved.findIndex(function(it) { return it.id === target.id; });
+            var svg = recWish.querySelector('svg');
             if (sIdx > -1) {
               saved.splice(sIdx, 1);
               saveSaved(saved);
               recWish.classList.remove('active');
+              if (svg) { svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor'); }
               showToast('Removed from saved items', null, null);
             } else {
               saved.unshift({
@@ -1722,7 +1728,8 @@
               });
               saveSaved(saved);
               recWish.classList.add('active');
-              showToast('Added to saved items', 'VIEW SAVED', 'saved-items.html');
+              if (svg) { svg.setAttribute('fill', '#ef4444'); svg.setAttribute('stroke', '#ef4444'); }
+              showToast(target.title.substring(0, 22) + '... added to saved items', 'VIEW SAVED', 'saved-items.html');
             }
             updateBadges();
           }

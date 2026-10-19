@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=8.5">
+  <link rel="stylesheet" href="styles.css?v=8.6">
 </head>
 <body>
 
@@ -927,10 +927,11 @@
           card.innerHTML = 
             '<div class="rec-card-media">' +
               '<a href="product.html?id=' + encodeURIComponent(p.id) + '">' +
-                '<img src="' + p.image + '" alt="' + p.title + '" class="rec-card-img">' +
+                '<img src="' + p.image + '" alt="' + p.title + '" class="rec-card-img" loading="lazy">' +
               '</a>' +
-              '<button type="button" class="wishlist-btn ' + (isSaved ? 'active' : '') + '" data-rec-wish="' + p.id + '" aria-label="Toggle wishlist" style="position: absolute; bottom: 8px; right: 8px;">' +
-                '<svg width="15" height="15" viewBox="0 0 24 24" fill="' + (isSaved ? '#ef4444' : 'none') + '" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
+              '<span class="rec-discount-badge">-' + discountPercent + '%</span>' +
+              '<button type="button" class="rec-wishlist-btn' + (isSaved ? ' active' : '') + '" data-rec-wish="' + p.id + '" aria-label="Toggle wishlist">' +
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="' + (isSaved ? '#ef4444' : 'none') + '" stroke="' + (isSaved ? '#ef4444' : 'currentColor') + '" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
               '</button>' +
             '</div>' +
             '<div class="rec-card-body">' +
@@ -1097,7 +1098,7 @@
           }
 
           // 4. Wishlist Heart Toggle
-          var wishBtn = e.target.closest('.wishlist-btn');
+          var wishBtn = e.target.closest('.wishlist-btn, .rec-wishlist-btn');
           if (wishBtn) {
             var prodId = wishBtn.getAttribute('data-rec-wish');
             var product = CATALOG_PRODUCTS.find(function(p) { return p.id === prodId; });
