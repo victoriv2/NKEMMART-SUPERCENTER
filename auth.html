@@ -1077,6 +1077,7 @@
 
         try {
           const res = await signInUser(email, pass);
+          await getCurrentProfile();
           showAlert('Signed in successfully! Redirecting...', false);
           setTimeout(() => {
             window.location.href = redirectUrl;

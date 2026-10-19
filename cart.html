@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css?v=18.0">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
+  <script src="taxonomy.js?v=3.2"></script>
 </head>
 <body>
 
@@ -358,8 +359,8 @@
             </div>
 
             <div class="summary-row">
-              <span class="summary-row-label">Delivery Note</span>
-              <span class="summary-row-val highlight-green">Calculated at Checkout</span>
+              <span class="summary-row-label" id="summaryDeliveryLabel">Delivery Note</span>
+              <span class="summary-row-val highlight-green" id="summaryDeliveryVal">Calculated at Checkout</span>
             </div>
           </div>
 
@@ -1034,6 +1035,30 @@
 
         var checkoutBtnAmount = document.getElementById('btnCheckoutAmount');
         if (checkoutBtnAmount) checkoutBtnAmount.textContent = formatNaira(grandTotal);
+
+        // Display user default delivery destination & fee if available
+        var userLoc = null;
+        try {
+          userLoc = JSON.parse(localStorage.getItem('nkemmart_user_location'));
+        } catch (e) {
+          userLoc = null;
+        }
+
+        var deliveryRowLabel = document.getElementById('summaryDeliveryLabel');
+        var deliveryRowVal = document.getElementById('summaryDeliveryVal');
+        var summarySubtext = document.querySelector('.summary-subtext');
+
+        if (userLoc && userLoc.stateName) {
+          if (deliveryRowLabel) {
+            deliveryRowLabel.textContent = 'Delivery to ' + userLoc.stateName + (userLoc.city ? ' (' + userLoc.city + ')' : '');
+          }
+          if (deliveryRowVal) {
+            deliveryRowVal.textContent = userLoc.cost || 'Calculated at Checkout';
+          }
+          if (summarySubtext) {
+            summarySubtext.textContent = 'Doorstep shipping to ' + userLoc.stateName + ' is ' + (userLoc.cost || 'calculated at checkout');
+          }
+        }
 
         // Render recommended products
         renderRecommendations(cart);

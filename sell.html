@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css?v=18.0">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
+  <script src="taxonomy.js?v=3.2"></script>
   <style>
     .sell-page-wrap {
       max-width: 1200px;
@@ -737,9 +738,19 @@
             </select>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="vLocation">City and State *</label>
-            <input type="text" id="vLocation" class="form-input" placeholder="e.g. Ikeja, Lagos State" required>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="vState">Business State *</label>
+              <select id="vState" class="form-select" required>
+                <option value="" disabled selected>Select State</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="vLga">Local Government (LGA) *</label>
+              <select id="vLga" class="form-select" required disabled>
+                <option value="" disabled selected>Select State first</option>
+              </select>
+            </div>
           </div>
 
           <div class="form-group">
@@ -1177,6 +1188,62 @@
       });
     })();
 
+    // Vendor Location Dropdowns Initialization
+    (function initVendorLocations() {
+      var stateSelect = document.getElementById('vState');
+      var lgaSelect = document.getElementById('vLga');
+      if (!stateSelect || !lgaSelect) return;
+
+      var locations = window.NIGERIA_LOCATIONS || {};
+      var stateKeys = Object.keys(locations).sort(function(a, b) {
+        return locations[a].name.localeCompare(locations[b].name);
+      });
+
+      stateSelect.innerHTML = '<option value="" disabled selected>Select State</option>';
+      stateKeys.forEach(function(k) {
+        var opt = document.createElement('option');
+        opt.value = k;
+        opt.textContent = locations[k].name;
+        stateSelect.appendChild(opt);
+      });
+
+      function onVendorStateChange(stateKey, preselectedLga) {
+        var stateData = locations[stateKey];
+        if (!stateData) {
+          lgaSelect.innerHTML = '<option value="" disabled selected>Select State first</option>';
+          lgaSelect.disabled = true;
+          return;
+        }
+
+        lgaSelect.disabled = false;
+        lgaSelect.innerHTML = '<option value="" disabled selected>Select Local Government Area</option>';
+        var sortedLgas = [...(stateData.lgas || [])].sort(function(a, b) { return a.localeCompare(b); });
+        sortedLgas.forEach(function(lga) {
+          var opt = document.createElement('option');
+          opt.value = lga;
+          opt.textContent = lga;
+          lgaSelect.appendChild(opt);
+        });
+
+        if (preselectedLga) {
+          lgaSelect.value = preselectedLga;
+        }
+      }
+
+      stateSelect.addEventListener('change', function() {
+        onVendorStateChange(stateSelect.value, null);
+      });
+
+      // Pre-fill from user default location if available
+      try {
+        var savedLoc = JSON.parse(localStorage.getItem('nkemmart_user_location'));
+        if (savedLoc && savedLoc.stateKey && locations[savedLoc.stateKey]) {
+          stateSelect.value = savedLoc.stateKey;
+          onVendorStateChange(savedLoc.stateKey, savedLoc.city);
+        }
+      } catch (e) {}
+    })();
+
     function handleVendorSubmit(e) {
       e.preventDefault();
       var store = document.getElementById('vStoreName').value;
@@ -1184,7 +1251,16 @@
       var phone = document.getElementById('vPhone').value;
       var email = document.getElementById('vEmail').value;
       var cat = document.getElementById('vCategory').value;
-      var loc = document.getElementById('vLocation').value;
+
+      var stateSelect = document.getElementById('vState');
+      var lgaSelect = document.getElementById('vLga');
+      var stateKey = stateSelect ? stateSelect.value : '';
+      var locations = window.NIGERIA_LOCATIONS || {};
+      var stateObj = locations[stateKey] || null;
+      var stateName = stateObj ? stateObj.name : stateKey;
+      var lgaName = lgaSelect ? lgaSelect.value : '';
+      var loc = (lgaName ? lgaName + ', ' : '') + stateName;
+
       var details = document.getElementById('vDetails').value;
 
       var msg = 'VENDOR APPLICATION RECEIVED\n\n' +

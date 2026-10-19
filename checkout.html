@@ -8,6 +8,7 @@
   <!-- Supabase JS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
+  <script src="taxonomy.js?v=3.2"></script>
   <style>
     body {
       background-color: #f8fafc;
@@ -656,27 +657,16 @@
 
           <div class="form-grid-2">
             <div class="form-field">
-              <label for="checkoutState">State *</label>
+              <label for="checkoutState">Delivery State *</label>
               <select id="checkoutState" required>
-                <option value="">Select State</option>
-                <option value="Lagos">Lagos</option>
-                <option value="Abuja (FCT)">Abuja (FCT)</option>
-                <option value="Rivers">Rivers (Port Harcourt)</option>
-                <option value="Anambra">Anambra (Onitsha/Awka)</option>
-                <option value="Enugu">Enugu</option>
-                <option value="Oyo">Oyo (Ibadan)</option>
-                <option value="Kano">Kano</option>
-                <option value="Delta">Delta (Asaba/Warri)</option>
-                <option value="Imo">Imo (Owerri)</option>
-                <option value="Edo">Edo (Benin City)</option>
-                <option value="Ogun">Ogun</option>
-                <option value="Kaduna">Kaduna</option>
-                <option value="Other">Other States Nationwide</option>
+                <option value="" disabled selected>Select State</option>
               </select>
             </div>
             <div class="form-field">
-              <label for="checkoutCity">City / Town / LGA *</label>
-              <input type="text" id="checkoutCity" placeholder="e.g. Ikeja, Lekki, or Onitsha" required>
+              <label for="checkoutCity">Local Government Area (LGA) *</label>
+              <select id="checkoutCity" required disabled>
+                <option value="" disabled selected>Select State first</option>
+              </select>
             </div>
           </div>
 
@@ -686,9 +676,9 @@
             <div class="radio-circle"></div>
             <div class="radio-option-info">
               <span class="radio-option-title">Doorstep Delivery</span>
-              <span class="radio-option-sub">Dispatched directly to your address within 24-48 hours</span>
+              <span class="radio-option-sub" id="checkoutDoorstepSub">Dispatched directly to your address within 24-48 hours</span>
             </div>
-            <span class="radio-option-fee">₦2,500</span>
+            <span class="radio-option-fee" id="checkoutDoorstepFee">₦2,500</span>
           </div>
 
           <div class="delivery-radio-option" id="optPickup">
@@ -1092,8 +1082,79 @@
       const checkoutTotalCount = document.getElementById('checkoutTotalCount');
 
       let deliveryFee = 2500;
+      let currentBaseDeliveryFee = 2500;
       let selectedDeliveryMethod = 'doorstep';
       let selectedPaymentMethod = 'pay_on_delivery';
+
+      const stateSelect = document.getElementById('checkoutState');
+      const citySelect = document.getElementById('checkoutCity');
+      const doorstepFeeBadge = document.getElementById('checkoutDoorstepFee');
+      const doorstepSubBadge = document.getElementById('checkoutDoorstepSub');
+      const locations = window.NIGERIA_LOCATIONS || {};
+
+      function parseCostNumber(costStr) {
+        if (!costStr) return 2500;
+        var clean = String(costStr).replace(/[^0-9]/g, '');
+        return clean ? parseInt(clean, 10) : 2500;
+      }
+
+      function populateStateDropdown() {
+        if (!stateSelect) return;
+        const stateKeys = Object.keys(locations).sort((a, b) => locations[a].name.localeCompare(locations[b].name));
+        stateSelect.innerHTML = '<option value="" disabled selected>Select State</option>';
+        stateKeys.forEach(k => {
+          const opt = document.createElement('option');
+          opt.value = k;
+          opt.textContent = locations[k].name;
+          stateSelect.appendChild(opt);
+        });
+      }
+
+      function onStateSelect(stateKey, preselectedLga) {
+        const stateData = locations[stateKey];
+        if (!stateData) {
+          if (citySelect) {
+            citySelect.innerHTML = '<option value="" disabled selected>Select State first</option>';
+            citySelect.disabled = true;
+          }
+          return;
+        }
+
+        if (citySelect) {
+          citySelect.disabled = false;
+          citySelect.innerHTML = '<option value="" disabled selected>Select Local Government Area</option>';
+          const sortedLgas = [...(stateData.lgas || [])].sort((a, b) => a.localeCompare(b));
+          sortedLgas.forEach(lga => {
+            const opt = document.createElement('option');
+            opt.value = lga;
+            opt.textContent = lga;
+            citySelect.appendChild(opt);
+          });
+          if (preselectedLga) {
+            citySelect.value = preselectedLga;
+          }
+        }
+
+        currentBaseDeliveryFee = parseCostNumber(stateData.cost);
+        if (selectedDeliveryMethod === 'doorstep') {
+          deliveryFee = currentBaseDeliveryFee;
+        }
+        if (doorstepFeeBadge) {
+          doorstepFeeBadge.textContent = stateData.cost || ('₦' + currentBaseDeliveryFee.toLocaleString());
+        }
+        if (doorstepSubBadge && stateData.time) {
+          doorstepSubBadge.textContent = 'Dispatched directly to your address (' + stateData.time + ')';
+        }
+        updateTotals();
+      }
+
+      populateStateDropdown();
+
+      if (stateSelect) {
+        stateSelect.addEventListener('change', () => {
+          onStateSelect(stateSelect.value, null);
+        });
+      }
 
       // Load cart items
       let cart = [];
@@ -1115,6 +1176,31 @@
         if (profile.full_name) document.getElementById('checkoutFullName').value = profile.full_name;
         if (profile.email) document.getElementById('checkoutEmail').value = profile.email;
         if (profile.phone) document.getElementById('checkoutPhone').value = profile.phone;
+      }
+
+      // Check saved default location and pre-select
+      let savedLoc = null;
+      try {
+        savedLoc = JSON.parse(localStorage.getItem('nkemmart_user_location'));
+      } catch (e) {
+        savedLoc = null;
+      }
+
+      let defaultStateKey = (savedLoc && savedLoc.stateKey) || (profile && profile.state_key) || '';
+      let defaultLga = (savedLoc && savedLoc.city) || (profile && profile.lga) || '';
+
+      if (!defaultStateKey && profile && profile.state) {
+        for (let k in locations) {
+          if (locations[k].name.toLowerCase() === profile.state.toLowerCase()) {
+            defaultStateKey = k;
+            break;
+          }
+        }
+      }
+
+      if (defaultStateKey && locations[defaultStateKey]) {
+        stateSelect.value = defaultStateKey;
+        onStateSelect(defaultStateKey, defaultLga);
       }
 
       // Render items & totals
@@ -1155,7 +1241,7 @@
       optDoorstep.addEventListener('click', () => {
         optDoorstep.classList.add('selected');
         optPickup.classList.remove('selected');
-        deliveryFee = 2500;
+        deliveryFee = currentBaseDeliveryFee;
         selectedDeliveryMethod = 'doorstep';
         updateTotals();
       });
@@ -1197,8 +1283,25 @@
         const phone = document.getElementById('checkoutPhone').value.trim();
         const email = document.getElementById('checkoutEmail').value.trim();
         const street = document.getElementById('checkoutStreet').value.trim();
-        const state = document.getElementById('checkoutState').value;
-        const city = document.getElementById('checkoutCity').value.trim();
+
+        const stateKey = stateSelect ? stateSelect.value : '';
+        const stateObj = locations[stateKey] || null;
+        const stateName = stateObj ? stateObj.name : stateKey;
+        const lgaName = citySelect ? citySelect.value : '';
+
+        // Persist confirmed location to localStorage
+        if (stateObj) {
+          try {
+            const locObj = {
+              stateKey: stateKey,
+              stateName: stateName,
+              city: lgaName,
+              cost: stateObj.cost || ('₦ ' + deliveryFee.toLocaleString()),
+              time: stateObj.time || 'Within 48 - 72 Hours'
+            };
+            localStorage.setItem('nkemmart_user_location', JSON.stringify(locObj));
+          } catch (e) {}
+        }
 
         const orderId = 'NKM-' + Math.floor(100000 + Math.random() * 900000);
         const grandTotal = subtotal + deliveryFee;
@@ -1209,8 +1312,8 @@
           customer_phone: phone,
           customer_email: email,
           delivery_address: street,
-          city: city,
-          state: state,
+          city: lgaName,
+          state: stateName,
           items: cart,
           subtotal: subtotal,
           delivery_fee: deliveryFee,
