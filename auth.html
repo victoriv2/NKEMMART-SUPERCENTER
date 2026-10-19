@@ -17,13 +17,14 @@
     }
 
     .auth-header {
-      background-color: #091e3a;
-      padding: 14px 20px;
-      border-bottom: 2px solid #00a859;
+      background-color: #ffffff;
+      padding: 16px 24px;
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
     .auth-header-inner {
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
@@ -33,33 +34,77 @@
     .auth-logo-link {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
       text-decoration: none;
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 16px;
-      letter-spacing: 0.5px;
     }
 
     .auth-logo-link img {
-      height: 38px;
+      height: 42px;
       width: auto;
       object-fit: contain;
     }
 
     .auth-back-link {
-      color: #94a3b8;
+      color: #008751;
       text-decoration: none;
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: color 0.15s;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid #008751;
+      transition: all 0.2s ease;
     }
 
     .auth-back-link:hover {
+      background-color: #008751;
       color: #ffffff;
+    }
+
+    .auth-footer {
+      background-color: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      padding: 24px 16px;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .auth-footer-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .auth-footer-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .auth-footer-links a {
+      color: #64748b;
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.15s;
+    }
+
+    .auth-footer-links a:hover {
+      color: #008751;
+      text-decoration: underline;
+    }
+
+    .auth-footer-sep {
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+
+    .auth-footer-copy {
+      color: #94a3b8;
+      font-size: 12px;
+      margin: 0;
     }
 
     .auth-page-main {
@@ -81,7 +126,7 @@
     }
 
     .auth-card-top {
-      background: #008043;
+      background: #008751;
       padding: 26px 24px 20px 24px;
       color: #ffffff;
       text-align: center;
@@ -89,7 +134,7 @@
 
     .auth-card-badge {
       display: inline-block;
-      background-color: #00a859;
+      background-color: rgba(255, 255, 255, 0.22);
       color: #ffffff;
       font-size: 11px;
       font-weight: 800;
@@ -136,7 +181,7 @@
     .auth-tab-btn.active {
       color: #091e3a;
       background-color: #ffffff;
-      border-bottom-color: #00a859;
+      border-bottom-color: #008751;
     }
 
     .auth-card-body {
@@ -205,8 +250,8 @@
     }
 
     .auth-input:focus {
-      border-color: #00a859;
-      box-shadow: 0 0 0 3px rgba(0, 168, 89, 0.15);
+      border-color: #008751;
+      box-shadow: 0 0 0 3px rgba(0, 135, 81, 0.15);
     }
 
     .auth-password-toggle {
@@ -244,7 +289,7 @@
     }
 
     .auth-forgot-link {
-      color: #008744;
+      color: #008751;
       text-decoration: none;
       font-weight: 700;
     }
@@ -256,7 +301,7 @@
     .auth-submit-btn {
       width: 100%;
       padding: 13px;
-      background: #008043;
+      background: #008751;
       color: #ffffff;
       border: none;
       border-radius: 8px;
@@ -359,7 +404,7 @@
       font-size: 24px;
       font-weight: 800;
       margin-bottom: 12px;
-      border: 3px solid #00a859;
+      border: 3px solid #008751;
     }
 
     .auth-user-name {
@@ -412,7 +457,7 @@
     }
 
     .btn-primary-action {
-      background: #00a859;
+      background: #008751;
       color: #ffffff;
     }
 
@@ -476,213 +521,23 @@
 </head>
 <body>
 
-  <!-- Top Announcement / Utility Ribbon (Desktop) -->
-  <aside class="top-bar" aria-label="Announcement Bar">
-    <div class="top-bar-inner">
-      <div class="top-bar-left">
-        <span class="doorstep-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="1" y="3" width="15" height="13"></rect>
-            <polygon points="16 8 20 8 23 11 23 16 16 8"></polygon>
-            <circle cx="5.5" cy="18.5" r="2.5"></circle>
-            <circle cx="18.5" cy="18.5" r="2.5"></circle>
-          </svg>
-          Doorstep Delivery
-        </span>
-        <span>We deliver all across Nigeria!</span>
-        <span class="top-bar-slogan">"Everything Dey™"</span>
-      </div>
-      <div class="top-bar-right">
-        <a href="sell.html" class="top-bar-link">Sell on Nkemmart</a>
-        <span class="top-bar-divider">|</span>
-        <a href="tel:08155608447" class="top-bar-link">Call: 08155608447</a>
-        <span class="top-bar-divider">|</span>
-        <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="top-bar-link">WhatsApp: 07042087633</a>
-        <span class="top-bar-divider">|</span>
-        <span class="top-bar-link" style="color: #fff; font-weight: 600;">₦ NGN</span>
-      </div>
-    </div>
-  </aside>
 
-  <!-- Sticky Header -->
-  <header class="main-header" role="banner">
-    <div class="header-container">
-      
-      <!-- Hamburger Menu & Desktop Categories Dropdown -->
-      <div class="header-menu-wrapper">
-        <button class="menu-btn" id="mobileMenuBtn" aria-label="Open categories menu" title="All Categories" type="button">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-
-        <!-- Desktop Categories Dropdown -->
-        <div class="desktop-category-dropdown" id="desktopCategoryDropdown">
-          <div class="category-dropdown-list">
-            <a href="category.html?cat=vehicles" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L18 11l-2.7-3.6a1 1 0 0 0-.8-.4H9.5a1 1 0 0 0-.8.4L6 11l-3.16.86a1 1 0 0 0-.84.99V16h3"></path><circle cx="6.5" cy="16.5" r="2.5"></circle><circle cx="16.5" cy="16.5" r="2.5"></circle></svg>
-              <span>Vehicles</span>
-            </a>
-            <a href="category.html?cat=appliances" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="10" x2="20" y2="10"></line></svg>
-              <span>Appliances</span>
-            </a>
-            <a href="category.html?cat=phones" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-              <span>Phones & Tablets</span>
-            </a>
-            <a href="category.html?cat=health-beauty" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path><path d="M19 3v4M21 5h-4"></path></svg>
-              <span>Health & Beauty</span>
-            </a>
-            <a href="category.html?cat=home-office" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-              <span>Home & Office</span>
-            </a>
-            <a href="category.html?cat=electronics" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
-              <span>Electronics</span>
-            </a>
-            <a href="category.html?cat=fashion" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.5a2 2 0 0 0 1.25 1.57L7 12v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-9l2.89-1.24a2 2 0 0 0 1.25-1.57l.58-3.5a2 2 0 0 0-1.34-2.23z"></path></svg>
-              <span>Fashion</span>
-            </a>
-            <a href="category.html?cat=supermarket" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 5-5 13-5 13S7 12 7 7a5 5 0 0 1 5-5z"></path></svg>
-              <span>Supermarket</span>
-            </a>
-            <a href="category.html?cat=computing" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-              <span>Computing</span>
-            </a>
-            <a href="category.html?cat=baby" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-              <span>Baby Products</span>
-            </a>
-            <a href="category.html?cat=gaming" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="6"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="11" r="1"></circle><circle cx="18" cy="13" r="1"></circle></svg>
-              <span>Gaming</span>
-            </a>
-            <a href="category.html?cat=other" class="category-dropdown-item">
-              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-              <span>Other categories</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Brand Logo -->
-      <a href="index.html" class="brand-link" title="NKEMMART SUPERCENTER - Home">
-        <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="brand-logo" />
+  <!-- Dedicated Auth Header -->
+  <header class="auth-header" role="banner">
+    <div class="auth-header-inner">
+      <a href="index.html" class="auth-logo-link" title="NKEMMART SUPERCENTER - Return to Store">
+        <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER">
       </a>
-
-      <!-- Search Bar -->
-      <div class="search-container">
-        <form class="search-form" action="category.html" method="GET" role="search">
-          <span class="search-icon" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </span>
-          <input 
-            type="search" 
-            name="q" 
-            class="search-input" 
-            placeholder="Search products, brands and categories" 
-            autocomplete="off"
-            aria-label="Search products, brands and categories"
-          />
-          <button type="submit" class="search-button">Search</button>
-        </form>
-      </div>
-
-      <!-- Action Navigation (Account, Help, Cart) -->
-      <nav class="header-actions" aria-label="User navigation">
-        
-        <!-- Account Dropdown -->
-        <div class="action-item">
-          <button class="action-btn" aria-haspopup="true" aria-expanded="false" type="button">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <span>Account</span>
-            <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-          
-          <div class="dropdown-menu" id="accountMenu">
-            <div class="dropdown-header">
-              <a href="auth.html" class="sign-in-btn">SIGN IN</a>
-            </div>
-            <a href="auth.html" class="dropdown-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-              My Account
-            </a>
-            <a href="orders.html" class="dropdown-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-              Orders
-            </a>
-            <a href="saved-items.html" class="dropdown-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-              <span>Saved Items</span>
-              <span class="cart-badge" id="dropdownSavedBadge" style="display: none;"></span>
-            </a>
-            <a href="cart.html" class="dropdown-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-              <span>Shopping Cart</span>
-              <span class="cart-badge" id="dropdownCartBadge" style="display: none;"></span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Help Dropdown -->
-        <div class="action-item">
-          <button class="action-btn" aria-haspopup="true" aria-expanded="false" type="button">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-              <line x1="12" y1="17" x2="12.01" y2="17"></line>
-            </svg>
-            <span>Help</span>
-            <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-          
-          <div class="dropdown-menu">
-            <a href="help.html#faqs" class="dropdown-item">Help Center &amp; FAQs</a>
-            <a href="orders.html" class="dropdown-item">Place &amp; Track Order</a>
-            <a href="help.html#cancellations" class="dropdown-item">Order Cancellation</a>
-            <a href="help.html#returns" class="dropdown-item">Returns &amp; Refunds</a>
-            <div class="dropdown-divider"></div>
-            <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="dropdown-item" style="color: var(--primary-green); font-weight: 600;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              <span>Live Chat Support</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Cart Button -->
-        <a href="cart.html" class="cart-link" aria-label="Shopping Cart">
-          <div class="cart-icon-wrapper">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="9" cy="21" r="1"></circle>
-              <circle cx="20" cy="21" r="1"></circle>
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-            </svg>
-            <span class="cart-badge" id="headerCartBadge" style="display: none;"></span>
-          </div>
-          <span>Cart</span>
-        </a>
-
-      </nav>
+      <a href="index.html" class="auth-back-link" title="Return to store">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Back to Store</span>
+      </a>
     </div>
   </header>
+
 
   <!-- Auth Content Container -->
   <main class="auth-page-main">
@@ -812,7 +667,7 @@
             <div class="auth-row-options">
               <label class="auth-checkbox-label">
                 <input type="checkbox" id="regTerms" required>
-                <span>I agree to NKEMMART <a href="terms.html" target="_blank" style="color: #008043; text-decoration: underline;">Terms of Service</a> and <a href="terms.html#privacy" target="_blank" style="color: #008043; text-decoration: underline;">Privacy Policy</a></span>
+                <span>I agree to NKEMMART <a href="terms.html" target="_blank" style="color: #008751; text-decoration: underline;">Terms of Service</a> and <a href="terms.html#privacy" target="_blank" style="color: #008751; text-decoration: underline;">Privacy Policy</a></span>
               </label>
             </div>
 
@@ -829,11 +684,11 @@
           <!-- Trust Badges -->
           <div class="auth-badges-row">
             <span class="auth-badge-item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00a859" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#008751" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
               <span>256-Bit SSL Encrypted</span>
             </span>
             <span class="auth-badge-item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00a859" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#008751" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
               <span>Verified Supercenter</span>
             </span>
           </div>
@@ -842,309 +697,21 @@
       </div>
 
     </div>
+  </main>
 
-  <!-- SITE FOOTER -->
-  <footer class="site-footer">
-    <!-- Newsletter Strip -->
-    <div class="footer-newsletter-wrap">
-      <div class="footer-newsletter-inner">
-        <div class="footer-newsletter-text">
-          <span class="footer-newsletter-badge">Stay Updated</span>
-          <h3>BE THE FIRST TO KNOW</h3>
-          <p>Subscribe to our newsletter to receive daily flash sale discounts, price cuts, and exclusive coupon codes.</p>
-        </div>
-        <form class="footer-newsletter-form" onsubmit="event.preventDefault(); var inp = this.querySelector('input'); if (inp && inp.value) { alert('Thank you for subscribing to NKEMMART updates with: ' + inp.value); inp.value = ''; }">
-          <input type="email" class="footer-newsletter-input" placeholder="Enter your email address" required aria-label="Enter your email address">
-          <button type="submit" class="footer-newsletter-btn">
-            <span>Subscribe</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
-        </form>
+  <!-- Dedicated Auth Footer -->
+  <footer class="auth-footer" role="contentinfo">
+    <div class="auth-footer-inner">
+      <div class="auth-footer-links">
+        <a href="terms.html">Terms of Service</a>
+        <span class="auth-footer-sep">&bull;</span>
+        <a href="terms.html#privacy">Privacy Policy</a>
+        <span class="auth-footer-sep">&bull;</span>
+        <a href="help.html">Help Center</a>
       </div>
-    </div>
-
-    <!-- Main Footer Columns -->
-    <div class="footer-main">
-      <div class="footer-col">
-        <div class="footer-brand-title">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00a859" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          <span>NKEMMART SUPERCENTER</span>
-        </div>
-        <p class="footer-brand-desc">
-          Life is easier when everything you need is within reach! Welcome to NKEMMART SUPERCENTER, your trusted destination for everyday essentials, lifestyle products, electronics, fashion, building materials, properties, repair services, cleaning services, and so much more. At NKEMMART, EVERYTHING DEY!
-        </p>
-        <div class="footer-contact-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-          <a href="tel:08155608447" class="footer-contact-link">Call: 08155608447 (Mon-Sat: 8am-8pm)</a>
-        </div>
-        <div class="footer-contact-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="footer-contact-link">WhatsApp: 07042087633 (Chat & Orders)</a>
-        </div>
-        <div class="footer-contact-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          <a href="mailto:support@nkemmart.com" class="footer-contact-link">Email: support@nkemmart.com</a>
-        </div>
-      </div>
-
-      <div class="footer-col">
-        <h4 class="footer-col-heading">Customer Care</h4>
-        <ul class="footer-links-list">
-          <li><a href="help.html#faqs" class="footer-link">Help Center & FAQs</a></li>
-          <li><a href="orders.html" class="footer-link">Track Your Order</a></li>
-          <li><a href="cart.html" class="footer-link">Shopping Cart</a></li>
-          <li><a href="saved-items.html" class="footer-link">Saved Items</a></li>
-          <li><a href="help.html#returns" class="footer-link">Returns & Refunds</a></li>
-          <li><a href="help.html#cancellations" class="footer-link">Order Cancellation</a></li>
-          <li><a href="help.html#contact" class="footer-link">Contact Support</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4 class="footer-col-heading">About Nkemmart</h4>
-        <ul class="footer-links-list">
-          <li><a href="index.html" class="footer-link">About Us</a></li>
-          <li><a href="category.html?cat=appliances" class="footer-link">Appliances & Electronics</a></li>
-          <li><a href="category.html?cat=supermarket" class="footer-link">Supermarket & Groceries</a></li>
-          <li><a href="category.html?cat=phones" class="footer-link">Phones & Tablets</a></li>
-          <li><a href="terms.html" class="footer-link">Terms and Conditions</a></li>
-          <li><a href="terms.html#privacy" class="footer-link">Privacy Notice</a></li>
-          <li><a href="help.html#careers" class="footer-link">Careers at Nkemmart</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4 class="footer-col-heading">Sell & Partner</h4>
-        <ul class="footer-links-list">
-          <li><a href="sell.html" class="footer-link">Sell on Nkemmart</a></li>
-          <li><a href="sell.html" class="footer-link">Vendor Hub & Merchant Center</a></li>
-          <li><a href="help.html#careers" class="footer-link">Logistics Partner Program</a></li>
-          <li><a href="sell.html#bulk" class="footer-link">Corporate & Bulk Purchasing</a></li>
-          <li><a href="help.html#service-center" class="footer-link">Service Center Network</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Trust & Payment Guarantee Strip -->
-    <div class="footer-trust-strip">
-      <div class="footer-trust-inner">
-        <div class="footer-trust-perks">
-          <div class="footer-trust-perk">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span>100% Genuine Products</span>
-          </div>
-          <div class="footer-trust-perk">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            <span>Fast Nationwide Delivery</span>
-          </div>
-          <div class="footer-trust-perk">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-            <span>Secure Bank-Grade Payment</span>
-          </div>
-        </div>
-
-        <div class="footer-payment-group">
-          <span class="footer-payment-label">Accepted Payments:</span>
-          <span class="footer-payment-pill">
-            <svg class="payment-icon" width="18" height="12" viewBox="0 0 24 15" fill="none">
-              <circle cx="7.5" cy="7.5" r="5.5" fill="#eb001b"/>
-              <circle cx="16.5" cy="7.5" r="5.5" fill="#f79e1b"/>
-              <path d="M12 3.7a5.5 5.5 0 0 1 0 7.6 5.5 5.5 0 0 1 0-7.6z" fill="#ff5f00"/>
-            </svg>
-            MASTERCARD
-          </span>
-          <span class="footer-payment-pill">
-            <svg class="payment-icon" width="18" height="12" viewBox="0 0 24 15" fill="none">
-              <rect width="24" height="15" rx="2" fill="#1434cb"/>
-              <text x="12" y="10.5" font-family="-apple-system, sans-serif" font-weight="900" font-style="italic" font-size="7.5" fill="#ffffff" text-anchor="middle" letter-spacing="-0.4">VISA</text>
-            </svg>
-            VISA
-          </span>
-          <span class="footer-payment-pill">
-            <svg class="payment-icon" width="16" height="12" viewBox="0 0 22 15" fill="none">
-              <rect width="22" height="15" rx="2.5" fill="#0c4a85"/>
-              <path d="M4.5 4L8.5 11L12.5 4" stroke="#ed1c24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="16.5" cy="7.5" r="2.5" fill="#ffffff"/>
-            </svg>
-            VERVE
-          </span>
-          <span class="footer-payment-pill">
-            <svg class="payment-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 3l9 5H3l9-5z"></path>
-            </svg>
-            BANK TRANSFER
-          </span>
-          <span class="footer-payment-pill">
-            <svg class="payment-icon" width="15" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="6" width="20" height="12" rx="2"></rect>
-              <circle cx="12" cy="12" r="2.5"></circle>
-              <path d="M6 12h.01M18 12h.01"></path>
-            </svg>
-            PAY ON DELIVERY
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bottom Legal Copyright Bar -->
-    <div class="footer-bottom-bar">
-      <div class="footer-bottom-inner">
-        <span>Copyright &copy; 2026 NKEMMART SUPERCENTER. All Rights Reserved.</span>
-        <div class="footer-legal-links">
-          <a href="terms.html">Terms of Service</a>
-          <a href="terms.html#privacy">Privacy Policy</a>
-          <a href="terms.html#cookies">Cookie Notice</a>
-        </div>
-      </div>
+      <p class="auth-footer-copy">Copyright &copy; 2026 NKEMMART SUPERCENTER. All Rights Reserved.</p>
     </div>
   </footer>
-
-  <!-- Back to Top Button -->
-  <a href="#" class="back-to-top-btn" title="Back to top" aria-label="Back to top">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-      <polyline points="18 15 12 9 6 15"></polyline>
-    </svg>
-  </a>
-
-  <!-- Mobile Navigation Drawer & Backdrop -->
-  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
-  <aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Navigation">
-    <div class="mobile-nav-header">
-      <button class="mobile-nav-close" id="mobileNavCloseBtn" aria-label="Close menu" type="button">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-      <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="mobile-nav-logo">
-    </div>
-
-    <!-- Need Help Section -->
-    <div class="mobile-nav-section">
-      <a href="help.html" class="mobile-nav-link-row">
-        <span>NEED HELP?</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-      </a>
-    </div>
-
-    <!-- My Account Section -->
-    <div class="mobile-nav-section">
-      <div class="mobile-section-header">
-        <span class="mobile-section-title">MY ACCOUNT</span>
-      </div>
-      <div class="mobile-sub-nav-list">
-        <a href="orders.html" class="mobile-sub-nav-item">
-          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-          <span>Orders</span>
-        </a>
-        <a href="saved-items.html" class="mobile-sub-nav-item">
-          <span style="position: relative; display: inline-flex; align-items: center;">
-            <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-            <span class="cart-badge" id="mobileSavedBadge" style="display: none; background-color: #ef4444;">0</span>
-          </span>
-          <span>Saved Items</span>
-        </a>
-        <a href="cart.html" class="mobile-sub-nav-item">
-          <span style="position: relative; display: inline-flex; align-items: center;">
-            <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-            <span class="cart-badge" id="mobileCartBadge" style="display: none;">0</span>
-          </span>
-          <span>Shopping Cart</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Our Categories Section -->
-    <div class="mobile-nav-section">
-      <div class="mobile-section-header">
-        <span class="mobile-section-title">OUR CATEGORIES</span>
-      </div>
-      <div class="mobile-categories-list">
-        <a href="category.html?cat=vehicles" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L18 11l-2.7-3.6a1 1 0 0 0-.8-.4H9.5a1 1 0 0 0-.8.4L6 11l-3.16.86a1 1 0 0 0-.84.99V16h3"></path><circle cx="6.5" cy="16.5" r="2.5"></circle><circle cx="16.5" cy="16.5" r="2.5"></circle></svg>
-          <span>Vehicles</span>
-        </a>
-        <a href="category.html?cat=appliances" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="10" x2="20" y2="10"></line></svg>
-          <span>Appliances</span>
-        </a>
-        <a href="category.html?cat=phones" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-          <span>Phones & Tablets</span>
-        </a>
-        <a href="category.html?cat=health-beauty" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path><path d="M19 3v4M21 5h-4"></path></svg>
-          <span>Health & Beauty</span>
-        </a>
-        <a href="category.html?cat=home-office" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-          <span>Home & Office</span>
-        </a>
-        <a href="category.html?cat=electronics" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
-          <span>Electronics</span>
-        </a>
-        <a href="category.html?cat=fashion" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.5a2 2 0 0 0 1.25 1.57L7 12v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-9l2.89-1.24a2 2 0 0 0 1.25-1.57l.58-3.5a2 2 0 0 0-1.34-2.23z"></path></svg>
-          <span>Fashion</span>
-        </a>
-        <a href="category.html?cat=supermarket" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 5-5 13-5 13S7 12 7 7a5 5 0 0 1 5-5z"></path></svg>
-          <span>Supermarket</span>
-        </a>
-        <a href="category.html?cat=computing" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-          <span>Computing</span>
-        </a>
-        <a href="category.html?cat=baby" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-          <span>Baby Products</span>
-        </a>
-        <a href="category.html?cat=gaming" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="6"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="11" r="1"></circle><circle cx="18" cy="13" r="1"></circle></svg>
-          <span>Gaming</span>
-        </a>
-        <a href="category.html?cat=other" class="mobile-category-item">
-          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-          <span>Other categories</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Our Services Section -->
-    <div class="mobile-nav-section">
-      <div class="mobile-section-header">
-        <span class="mobile-section-title">OUR SERVICES</span>
-      </div>
-      <div class="mobile-services-list">
-        <a href="help.html#service-center" class="mobile-service-item">
-          <svg class="mobile-service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-          </svg>
-          <span>Service Center</span>
-        </a>
-        <a href="tel:08155608447" class="mobile-service-item">
-          <svg class="mobile-service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-          </svg>
-          <span>Call: 08155608447</span>
-        </a>
-        <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="mobile-service-item">
-          <svg class="mobile-service-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-          </svg>
-          <span>WhatsApp: 07042087633</span>
-        </a>
-        <a href="help.html#contact" class="mobile-service-item">
-          <svg class="mobile-service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline>
-          </svg>
-          <span>Contact Support</span>
-        </a>
-      </div>
-    </div>
-  </aside>
-
   <!-- Forgot Password Modal -->
   <div class="auth-modal" id="forgotModal" role="dialog" aria-modal="true" aria-labelledby="forgotTitle">
     <div class="auth-modal-dialog">
@@ -1163,7 +730,7 @@
         </div>
         <div style="display: flex; gap: 10px; margin-top: 18px;">
           <button type="button" id="closeForgotModal" style="flex: 1; padding: 11px; background: #f1f5f9; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; color: #475569;">Cancel</button>
-          <button type="submit" id="forgotSubmitBtn" style="flex: 2; padding: 11px; background: #00a859; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; color: #ffffff;">Send Reset Link</button>
+          <button type="submit" id="forgotSubmitBtn" style="flex: 2; padding: 11px; background: #008751; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; color: #ffffff;">Send Reset Link</button>
         </div>
       </form>
     </div>
@@ -1270,9 +837,9 @@
           strengthText.style.color = '#3b82f6';
         } else {
           strengthFill.style.width = '100%';
-          strengthFill.style.backgroundColor = '#00a859';
+          strengthFill.style.backgroundColor = '#008751';
           strengthText.textContent = 'Strong password';
-          strengthText.style.color = '#00a859';
+          strengthText.style.color = '#008751';
         }
       });
 
@@ -1410,69 +977,6 @@
         }
       });
     });
-
-    // Header Cart Badge Counter
-    try {
-      var cartData = JSON.parse(localStorage.getItem('nkemmart_cart') || '[]');
-      var totalQty = cartData.reduce(function(acc, item) { return acc + (item.qty || 1); }, 0);
-      var badge = document.getElementById('headerCartBadge');
-      if (badge) {
-        badge.textContent = totalQty;
-        badge.style.display = totalQty > 0 ? 'flex' : 'none';
-      }
-    } catch(e) {}
-
-    // Mobile Drawer and Dropdown Handler
-    (function() {
-      var mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      var mobileNavDrawer = document.getElementById('mobileNavDrawer');
-      var mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
-      var mobileNavCloseBtn = document.getElementById('mobileNavCloseBtn');
-      var desktopCategoryDropdown = document.getElementById('desktopCategoryDropdown');
-
-      function openMobileDrawer() {
-        if (window.innerWidth <= 860) {
-          if (mobileNavDrawer && mobileNavBackdrop) {
-            mobileNavDrawer.classList.add('open');
-            mobileNavBackdrop.classList.add('open');
-            document.body.style.overflow = 'hidden';
-          }
-        } else {
-          if (desktopCategoryDropdown) {
-            desktopCategoryDropdown.classList.toggle('open');
-          }
-        }
-      }
-
-      function closeMobileDrawer() {
-        if (mobileNavDrawer && mobileNavBackdrop) {
-          mobileNavDrawer.classList.remove('open');
-          mobileNavBackdrop.classList.remove('open');
-          document.body.style.overflow = '';
-        }
-      }
-
-      if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          openMobileDrawer();
-        });
-      }
-
-      if (mobileNavCloseBtn) {
-        mobileNavCloseBtn.addEventListener('click', closeMobileDrawer);
-      }
-
-      if (mobileNavBackdrop) {
-        mobileNavBackdrop.addEventListener('click', closeMobileDrawer);
-      }
-
-      document.addEventListener('click', function(e) {
-        if (desktopCategoryDropdown && !desktopCategoryDropdown.contains(e.target) && mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
-          desktopCategoryDropdown.classList.remove('open');
-        }
-      });
-    })();
   </script>
 
 </body>
