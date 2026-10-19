@@ -4754,7 +4754,6 @@ body.drawer-open,
 html.modal-open,
 body.modal-open {
   overflow: hidden !important;
-  touch-action: none;
   overscroll-behavior: none !important;
 }
 
@@ -7294,6 +7293,66 @@ body.modal-open {
   font-size: 13px;
   font-weight: 700;
   color: #475569;
+}
+
+.pdp-lightbox-thumbnails {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pdp-lightbox-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  background-color: #ffffff;
+  padding: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.18s ease;
+}
+
+.pdp-lightbox-thumb:hover {
+  border-color: #94a3b8;
+  transform: translateY(-2px);
+}
+
+.pdp-lightbox-thumb.active {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 2px rgba(0, 168, 89, 0.3);
+}
+
+.pdp-lightbox-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .pdp-lightbox-content {
+    padding: 16px 10px;
+    max-width: 95vw;
+    max-height: 90vh;
+  }
+  .pdp-lightbox-img {
+    max-height: 52vh;
+  }
+  .pdp-lightbox-thumb {
+    width: 46px;
+    height: 46px;
+  }
 }
 
 /* Interactive Review Modal & Form */

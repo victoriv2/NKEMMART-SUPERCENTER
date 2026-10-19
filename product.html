@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Product Details - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=9.2">
+  <link rel="stylesheet" href="styles.css?v=9.3">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body class="pdp-page">
@@ -898,6 +898,7 @@
       </button>
 
       <div class="pdp-lightbox-counter" id="pdpLightboxCounter">1 / 4</div>
+      <div class="pdp-lightbox-thumbnails" id="pdpLightboxThumbnails" aria-label="Sub images gallery"></div>
     </div>
   </div>
 
@@ -1060,6 +1061,12 @@
           originalPrice: 12000,
           discount: '-36%',
           image: 'images/product_powerbank.jpg',
+          images: [
+            'images/product_powerbank.jpg',
+            'images/product_powerbank_angle2.jpg',
+            'images/product_powerbank_angle3.jpg',
+            'images/product_powerbank_angle4.jpg'
+          ],
           brand: 'Ace Elec',
           categoryKey: 'phones',
           categoryName: 'Phones & Tablets',
@@ -1091,6 +1098,12 @@
           originalPrice: 26386,
           discount: '-21%',
           image: 'images/product_blender.webp',
+          images: [
+            'images/product_blender.webp',
+            'images/subcategories/appliances_kitchen.jpg',
+            'images/product_airfryer.jpg',
+            'images/product_kettle.webp'
+          ],
           brand: 'Silver Crest',
           categoryKey: 'appliances',
           categoryName: 'Appliances',
@@ -1122,6 +1135,11 @@
           originalPrice: 7117,
           discount: '-16%',
           image: 'images/product_iron.jpg',
+          images: [
+            'images/product_iron.jpg',
+            'images/subcategories/appliances_garment.jpg',
+            'images/subcategories/home_kitchen_dining.jpg'
+          ],
           brand: 'Hansen',
           categoryKey: 'appliances',
           categoryName: 'Appliances',
@@ -1151,6 +1169,11 @@
           originalPrice: 20060,
           discount: '-15%',
           image: 'images/product_fan.webp',
+          images: [
+            'images/product_fan.webp',
+            'images/subcategories/appliances_climate.jpg',
+            'images/subcategories/home_office_furniture.jpg'
+          ],
           brand: 'Hansen',
           categoryKey: 'appliances',
           categoryName: 'Appliances',
@@ -1180,6 +1203,11 @@
           originalPrice: 7229,
           discount: '-12%',
           image: 'images/product_kettle.webp',
+          images: [
+            'images/product_kettle.webp',
+            'images/subcategories/appliances_kitchen.jpg',
+            'images/subcategories/home_kitchen_dining.jpg'
+          ],
           brand: 'Syinix',
           categoryKey: 'appliances',
           categoryName: 'Appliances',
@@ -1209,6 +1237,11 @@
           originalPrice: 44000,
           discount: '-30%',
           image: 'images/product_airfryer.jpg',
+          images: [
+            'images/product_airfryer.jpg',
+            'images/subcategories/appliances_kitchen.jpg',
+            'images/product_blender.webp'
+          ],
           brand: 'Silver Crest',
           categoryKey: 'appliances',
           categoryName: 'Appliances',
@@ -1239,6 +1272,11 @@
           originalPrice: 71550,
           discount: '-22%',
           image: 'images/product_microwave.jpg',
+          images: [
+            'images/product_microwave.jpg',
+            'images/subcategories/appliances_large.jpg',
+            'images/subcategories/appliances_kitchen.jpg'
+          ],
           brand: 'Maxi',
           categoryKey: 'appliances',
           categoryName: 'Appliances',
@@ -1269,6 +1307,11 @@
           originalPrice: 171000,
           discount: '-40%',
           image: 'images/product_tv.jpg',
+          images: [
+            'images/product_tv.jpg',
+            'images/subcategories/electronics_tv.jpg',
+            'images/subcategories/electronics_audio.jpg'
+          ],
           brand: 'Hikers',
           categoryKey: 'electronics',
           categoryName: 'Electronics',
@@ -1600,10 +1643,53 @@
       var imageCounter = document.getElementById('pdpImageCounter');
 
       var lightboxModal = document.getElementById('pdpLightboxModal');
+      var lightboxContent = document.querySelector('.pdp-lightbox-content');
       var lightboxImg = document.getElementById('pdpLightboxImg');
+      var lightboxClose = document.getElementById('pdpLightboxCloseBtn');
       var lightboxPrevBtn = document.getElementById('pdpLightboxPrevBtn');
       var lightboxNextBtn = document.getElementById('pdpLightboxNextBtn');
       var lightboxCounter = document.getElementById('pdpLightboxCounter');
+      var lightboxThumbStrip = document.getElementById('pdpLightboxThumbnails');
+
+      var suppressNextMainImgClick = false;
+
+      function renderLightboxThumbnails() {
+        if (!lightboxThumbStrip) return;
+        lightboxThumbStrip.innerHTML = '';
+        productImages.forEach(function(src, idx) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'pdp-lightbox-thumb' + (idx === currentImageIndex ? ' active' : '');
+          btn.setAttribute('aria-label', 'View angle ' + (idx + 1));
+          btn.innerHTML = '<img src="' + src + '" alt="Angle ' + (idx + 1) + '">';
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            switchGalleryImage(idx);
+          });
+          lightboxThumbStrip.appendChild(btn);
+        });
+      }
+
+      function openLightbox() {
+        if (!lightboxModal) return;
+        if (lightboxImg) {
+          lightboxImg.src = productImages[currentImageIndex] || (mainImg ? mainImg.src : '');
+        }
+        if (lightboxCounter) {
+          lightboxCounter.textContent = (currentImageIndex + 1) + ' / ' + productImages.length;
+        }
+        renderLightboxThumbnails();
+        lightboxModal.classList.add('open');
+        lightboxModal.setAttribute('aria-hidden', 'false');
+        lockBodyScroll();
+      }
+
+      function closeLightbox() {
+        if (!lightboxModal) return;
+        lightboxModal.classList.remove('open');
+        lightboxModal.setAttribute('aria-hidden', 'true');
+        unlockBodyScroll();
+      }
 
       function switchGalleryImage(newIndex, animDirection) {
         if (!productImages || productImages.length === 0) return;
@@ -1658,6 +1744,17 @@
         }
         if (lightboxCounter) {
           lightboxCounter.textContent = (currentImageIndex + 1) + ' / ' + productImages.length;
+        }
+        if (lightboxThumbStrip) {
+          var lbThumbs = lightboxThumbStrip.querySelectorAll('.pdp-lightbox-thumb');
+          lbThumbs.forEach(function(th, idx) {
+            if (idx === currentImageIndex) {
+              th.classList.add('active');
+              th.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            } else {
+              th.classList.remove('active');
+            }
+          });
         }
       }
 
@@ -1734,7 +1831,7 @@
         });
       }
 
-      function attachImageSwipe(element, onSwipeLeft, onSwipeRight) {
+      function attachImageSwipe(element, onSwipeLeft, onSwipeRight, isMainImg) {
         if (!element) return;
         var startX = 0;
         var startY = 0;
@@ -1742,6 +1839,9 @@
         var hasMoved = false;
 
         element.addEventListener('touchstart', function(e) {
+          if (e.target.closest('button, .pdp-gallery-arrow, .pdp-lightbox-close, .pdp-lightbox-thumb, .pdp-thumb-item, .pdp-gallery-dot')) {
+            return;
+          }
           if (e.touches && e.touches.length === 1) {
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
@@ -1756,23 +1856,36 @@
           var diffY = e.touches[0].clientY - startY;
           if (Math.abs(diffX) > 10 && Math.abs(diffX) > Math.abs(diffY)) {
             hasMoved = true;
+            if (isMainImg) suppressNextMainImgClick = true;
           }
         }, { passive: true });
 
         element.addEventListener('touchend', function(e) {
           if (!isDragging) return;
           isDragging = false;
-          if (!hasMoved && (!e.changedTouches || e.changedTouches.length === 0)) return;
+          if (!hasMoved || !e.changedTouches || e.changedTouches.length === 0) return;
           var endX = e.changedTouches[0].clientX;
           var endY = e.changedTouches[0].clientY;
           var deltaX = endX - startX;
           var deltaY = endY - startY;
 
-          if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (Math.abs(deltaX) > 28 && Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (isMainImg) {
+              suppressNextMainImgClick = true;
+              setTimeout(function() {
+                suppressNextMainImgClick = false;
+              }, 300);
+            }
             if (deltaX < 0) {
               onSwipeLeft();
             } else {
               onSwipeRight();
+            }
+          } else {
+            if (isMainImg) {
+              setTimeout(function() {
+                suppressNextMainImgClick = false;
+              }, 120);
             }
           }
         }, { passive: true });
@@ -1782,19 +1895,41 @@
         switchGalleryImage(currentImageIndex + 1, 'next');
       }, function() {
         switchGalleryImage(currentImageIndex - 1, 'prev');
-      });
+      }, true);
 
-      attachImageSwipe(lightboxModal, function() {
-        switchGalleryImage(currentImageIndex + 1, 'next');
-      }, function() {
-        switchGalleryImage(currentImageIndex - 1, 'prev');
-      });
+      if (lightboxContent) {
+        attachImageSwipe(lightboxContent, function() {
+          switchGalleryImage(currentImageIndex + 1, 'next');
+        }, function() {
+          switchGalleryImage(currentImageIndex - 1, 'prev');
+        }, false);
+      }
+
+      if (mainImgWrap) {
+        mainImgWrap.style.cursor = 'zoom-in';
+        mainImgWrap.addEventListener('click', function(e) {
+          if (suppressNextMainImgClick) return;
+          if (e.target.closest('.pdp-discount-badge') || e.target.closest('.pdp-verified-badge') || e.target.closest('.pdp-gallery-arrow') || e.target.closest('.pdp-image-counter') || e.target.closest('.pdp-gallery-dot')) return;
+          openLightbox();
+        });
+      }
+
+      if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+      if (lightboxModal) {
+        lightboxModal.addEventListener('click', function(e) {
+          if (e.target === lightboxModal) closeLightbox();
+        });
+      }
 
       document.addEventListener('keydown', function(e) {
         if (e.key === 'ArrowLeft') {
           switchGalleryImage(currentImageIndex - 1, 'prev');
         } else if (e.key === 'ArrowRight') {
           switchGalleryImage(currentImageIndex + 1, 'next');
+        } else if (e.key === 'Escape') {
+          if (lightboxModal && lightboxModal.classList.contains('open')) {
+            closeLightbox();
+          }
         }
       });
 
@@ -2052,34 +2187,6 @@
 
       if (wishBtn) wishBtn.addEventListener('click', handleWishlistToggle);
       if (stickyWishBtn) stickyWishBtn.addEventListener('click', handleWishlistToggle);
-
-      // Lightbox Image Zoom Modal
-      if (mainImgWrap && lightboxModal && lightboxImg) {
-        mainImgWrap.style.cursor = 'zoom-in';
-        mainImgWrap.addEventListener('click', function(e) {
-          if (e.target.closest('.pdp-discount-badge') || e.target.closest('.pdp-verified-badge') || e.target.closest('.pdp-gallery-arrow') || e.target.closest('.pdp-image-counter')) return;
-          lightboxImg.src = (productImages && productImages[currentImageIndex]) || mainImg.src;
-          if (lightboxCounter) {
-            lightboxCounter.textContent = (currentImageIndex + 1) + ' / ' + (productImages ? productImages.length : 1);
-          }
-          lightboxModal.classList.add('open');
-          lockBodyScroll();
-        });
-      }
-
-      function closeLightbox() {
-        if (lightboxModal) {
-          lightboxModal.classList.remove('open');
-          unlockBodyScroll();
-        }
-      }
-
-      if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
-      if (lightboxModal) {
-        lightboxModal.addEventListener('click', function(e) {
-          if (e.target === lightboxModal) closeLightbox();
-        });
-      }
 
       // Delivery Location Modal & All 36 States + FCT Local Government Areas
       var NIGERIA_LOCATIONS = {
