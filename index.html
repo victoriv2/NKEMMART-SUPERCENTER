@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>NKEMMART SUPERCENTER - Online Shopping | Supermarket</title>
-  <link rel="stylesheet" href="styles.css?v=9.1">
+  <link rel="stylesheet" href="styles.css?v=9.2">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -1774,16 +1774,41 @@
         drawerBody.innerHTML = desktopSidebar.innerHTML;
       }
 
+      var mobileNavScrollY = 0;
+      var mobileNavHistoryPushed = false;
+
+      function lockBodyForNav() {
+        mobileNavScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        document.body.style.position = 'fixed';
+        document.body.style.top = -mobileNavScrollY + 'px';
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+        document.body.classList.add('modal-open');
+        document.body.classList.add('drawer-open');
+      }
+
+      function unlockBodyForNav() {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        document.body.classList.remove('modal-open');
+        document.body.classList.remove('drawer-open');
+        window.scrollTo(0, mobileNavScrollY);
+      }
+
       function openDrawer() {
         filterDrawer.classList.add('active');
         filterBackdrop.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        lockBodyForNav();
       }
 
       function closeDrawer() {
         filterDrawer.classList.remove('active');
         filterBackdrop.classList.remove('active');
-        document.body.style.overflow = '';
+        unlockBodyForNav();
       }
 
       if (mobileFilterBtn) mobileFilterBtn.addEventListener('click', openDrawer);
@@ -1799,29 +1824,6 @@
       var desktopCategoryDropdown = document.getElementById('desktopCategoryDropdown');
       var mobileAccountToggle = document.getElementById('mobileAccountToggle');
       var mobileAccountSection = document.getElementById('mobileAccountSection');
-
-      var mobileNavScrollY = 0;
-      var mobileNavHistoryPushed = false;
-
-      function lockBodyForNav() {
-        mobileNavScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-        document.body.style.position = 'fixed';
-        document.body.style.top = -mobileNavScrollY + 'px';
-        document.body.style.left = '0';
-        document.body.style.right = '0';
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
-      }
-
-      function unlockBodyForNav() {
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.left = '';
-        document.body.style.right = '';
-        document.body.style.width = '';
-        document.body.style.overflow = '';
-        window.scrollTo(0, mobileNavScrollY);
-      }
 
       function openMobileNav() {
         if (typeof closeAllPopups === 'function') {

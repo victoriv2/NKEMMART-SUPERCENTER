@@ -4750,7 +4750,9 @@ body {
    ======================================================== */
 /* Lock background scrolling completely when drawer/modal is open */
 html.drawer-open,
-body.drawer-open {
+body.drawer-open,
+html.modal-open,
+body.modal-open {
   overflow: hidden !important;
   touch-action: none;
   overscroll-behavior: none !important;
@@ -5906,6 +5908,86 @@ body.drawer-open {
   gap: 4px;
 }
 
+.pdp-gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid #cbd5e1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #1e293b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+  z-index: 10;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.pdp-gallery-arrow:hover {
+  background-color: #ffffff;
+  color: var(--primary-green);
+  border-color: var(--primary-green);
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 4px 12px rgba(0, 168, 89, 0.25);
+}
+
+.pdp-gallery-arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.pdp-gallery-arrow.prev {
+  left: 10px;
+}
+
+.pdp-gallery-arrow.next {
+  right: 10px;
+}
+
+.pdp-image-counter {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background-color: rgba(15, 23, 42, 0.72);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+  z-index: 5;
+  user-select: none;
+  backdrop-filter: blur(2px);
+}
+
+.pdp-gallery-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+
+.pdp-gallery-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pdp-gallery-dot.active {
+  width: 22px;
+  border-radius: 4px;
+  background-color: var(--primary-green);
+}
+
 .pdp-thumbnail-strip {
   display: flex;
   gap: 10px;
@@ -6744,6 +6826,13 @@ body.drawer-open {
   align-items: center;
   gap: 8px;
   min-width: 0;
+  flex: 1;
+}
+
+.pdp-delivery-title-wrap > div {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
 }
 
 .pdp-delivery-pin-icon {
@@ -6777,10 +6866,11 @@ body.drawer-open {
   color: var(--primary-blue);
   font-size: 12px;
   font-weight: 700;
-  padding: 5px 10px;
+  padding: 5px 12px;
   border-radius: 6px;
   cursor: pointer;
   flex-shrink: 0;
+  margin-left: 8px;
   transition: all 0.15s ease;
 }
 
@@ -7177,6 +7267,33 @@ body.drawer-open {
 
 .pdp-lightbox-close:hover {
   background: #e2e8f0;
+}
+
+.pdp-lightbox-content .pdp-gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+  z-index: 20;
+}
+
+.pdp-lightbox-content .pdp-gallery-arrow.prev {
+  left: 12px;
+}
+
+.pdp-lightbox-content .pdp-gallery-arrow.next {
+  right: 12px;
+}
+
+.pdp-lightbox-counter {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
 }
 
 /* Interactive Review Modal & Form */

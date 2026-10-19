@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Saved Items - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=9.1">
+  <link rel="stylesheet" href="styles.css?v=9.2">
 </head>
 <body>
 
@@ -1192,6 +1192,29 @@
         });
       }
 
+      // Body Scroll Lock for Modals & Drawers
+      var modalScrollY = 0;
+      function lockBodyScroll() {
+        modalScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        document.body.style.position = 'fixed';
+        document.body.style.top = -modalScrollY + 'px';
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+        document.body.classList.add('modal-open');
+      }
+
+      function unlockBodyScroll() {
+        if (!document.body.classList.contains('modal-open')) return;
+        document.body.classList.remove('modal-open');
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        window.scrollTo(0, modalScrollY);
+      }
+
       // Mobile Navigation Drawer
       var mobileMenuBtn = document.getElementById('mobileMenuBtn');
       var mobileNavDrawer = document.getElementById('mobileNavDrawer');
@@ -1202,7 +1225,7 @@
         if (mobileNavDrawer && mobileNavBackdrop) {
           mobileNavDrawer.classList.add('open');
           mobileNavBackdrop.classList.add('open');
-          document.body.style.overflow = 'hidden';
+          lockBodyScroll();
         }
       }
 
@@ -1210,7 +1233,7 @@
         if (mobileNavDrawer && mobileNavBackdrop) {
           mobileNavDrawer.classList.remove('open');
           mobileNavBackdrop.classList.remove('open');
-          document.body.style.overflow = '';
+          unlockBodyScroll();
         }
       }
 

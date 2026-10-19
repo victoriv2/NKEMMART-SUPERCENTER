@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Product Details - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=9.1">
+  <link rel="stylesheet" href="styles.css?v=9.2">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body class="pdp-page">
@@ -241,16 +241,31 @@
       
       <!-- 1. Left Gallery Card -->
       <div class="pdp-gallery-card">
-        <div class="pdp-main-image-wrap" id="pdpMainImageWrap">
+        <div class="pdp-main-image-wrap" id="pdpMainImageWrap" title="Click to view full-size image">
           <span class="pdp-discount-badge" id="pdpDiscountBadge">-20%</span>
+
+          <button type="button" class="pdp-gallery-arrow prev" id="pdpGalleryPrevBtn" aria-label="Previous product image">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+
           <img src="images/product_kettle.webp" alt="Product Image" class="pdp-main-image" id="pdpMainImg">
+
+          <button type="button" class="pdp-gallery-arrow next" id="pdpGalleryNextBtn" aria-label="Next product image">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+
           <span class="pdp-verified-badge">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
             <span>Verified Authentic</span>
           </span>
+
+          <span class="pdp-image-counter" id="pdpImageCounter">1 / 4</span>
         </div>
 
-        <!-- Image Thumbnails -->
+        <!-- Dot Indicators for mobile swipe -->
+        <div class="pdp-gallery-dots" id="pdpGalleryDots"></div>
+
+        <!-- Image Thumbnails Strip -->
         <div class="pdp-thumbnail-strip" id="pdpThumbnails">
           <!-- Dynamically populated or switchable -->
         </div>
@@ -871,7 +886,18 @@
       <button type="button" class="pdp-lightbox-close" id="pdpLightboxCloseBtn" aria-label="Close enlarged preview">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
+
+      <button type="button" class="pdp-gallery-arrow prev" id="pdpLightboxPrevBtn" aria-label="Previous image">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
       <img src="" alt="Enlarged Product View" class="pdp-lightbox-img" id="pdpLightboxImg">
+
+      <button type="button" class="pdp-gallery-arrow next" id="pdpLightboxNextBtn" aria-label="Next image">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+
+      <div class="pdp-lightbox-counter" id="pdpLightboxCounter">1 / 4</div>
     </div>
   </div>
 
@@ -962,6 +988,67 @@
   <!-- PDP Application Logic -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Body Scroll Lock for Modals & Drawers
+      var modalScrollY = 0;
+      function lockBodyScroll() {
+        modalScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        document.body.style.position = 'fixed';
+        document.body.style.top = -modalScrollY + 'px';
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+        document.body.classList.add('modal-open');
+      }
+
+      function unlockBodyScroll() {
+        if (!document.body.classList.contains('modal-open')) return;
+        document.body.classList.remove('modal-open');
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        window.scrollTo(0, modalScrollY);
+      }
+
+      // Smart Sticky Header (Hide on Scroll Down, Show on Scroll Up)
+      var mainHeader = document.querySelector('.main-header');
+      var lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      var scrollTolerance = 5;
+
+      window.addEventListener('scroll', function() {
+        var currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+        if (currentScrollY < 0) currentScrollY = 0;
+
+        if (currentScrollY <= 25) {
+          if (mainHeader) {
+            mainHeader.classList.remove('header-hidden');
+            mainHeader.classList.remove('header-scrolled-up');
+          }
+          lastScrollY = currentScrollY;
+          return;
+        }
+
+        var scrollDelta = currentScrollY - lastScrollY;
+        if (Math.abs(scrollDelta) < scrollTolerance) {
+          return;
+        }
+
+        if (scrollDelta > 0 && currentScrollY > 70) {
+          if (mainHeader && !mainHeader.classList.contains('header-hidden')) {
+            mainHeader.classList.add('header-hidden');
+            mainHeader.classList.remove('header-scrolled-up');
+          }
+        } else if (scrollDelta < 0) {
+          if (mainHeader && !mainHeader.classList.contains('header-scrolled-up')) {
+            mainHeader.classList.remove('header-hidden');
+            mainHeader.classList.add('header-scrolled-up');
+          }
+        }
+
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+
       var CART_KEY = 'nkemmart_cart';
       var SAVED_KEY = 'nkemmart_saved_items';
 
@@ -1488,32 +1575,228 @@
       if (bcCurrent) bcCurrent.textContent = activeProduct.title;
 
       // Update Media Gallery
-      var mainImg = document.getElementById('pdpMainImg');
-      if (mainImg) {
-        mainImg.src = activeProduct.image;
-        mainImg.alt = activeProduct.title;
-      }
       var discBadge = document.getElementById('pdpDiscountBadge');
       if (discBadge) discBadge.textContent = activeProduct.discount || '-20%';
 
-      // Thumbnails setup
+      var productImages = [];
+      if (Array.isArray(activeProduct.images) && activeProduct.images.length > 0) {
+        productImages = activeProduct.images.slice();
+      } else {
+        productImages = [
+          activeProduct.image,
+          activeProduct.image,
+          activeProduct.image,
+          activeProduct.image
+        ];
+      }
+
+      var currentImageIndex = 0;
+      var mainImg = document.getElementById('pdpMainImg');
+      var mainImgWrap = document.getElementById('pdpMainImageWrap');
+      var galleryPrevBtn = document.getElementById('pdpGalleryPrevBtn');
+      var galleryNextBtn = document.getElementById('pdpGalleryNextBtn');
+      var galleryDots = document.getElementById('pdpGalleryDots');
       var thumbStrip = document.getElementById('pdpThumbnails');
+      var imageCounter = document.getElementById('pdpImageCounter');
+
+      var lightboxModal = document.getElementById('pdpLightboxModal');
+      var lightboxImg = document.getElementById('pdpLightboxImg');
+      var lightboxPrevBtn = document.getElementById('pdpLightboxPrevBtn');
+      var lightboxNextBtn = document.getElementById('pdpLightboxNextBtn');
+      var lightboxCounter = document.getElementById('pdpLightboxCounter');
+
+      function switchGalleryImage(newIndex, animDirection) {
+        if (!productImages || productImages.length === 0) return;
+        if (newIndex < 0) {
+          newIndex = productImages.length - 1;
+        } else if (newIndex >= productImages.length) {
+          newIndex = 0;
+        }
+        currentImageIndex = newIndex;
+        var targetSrc = productImages[currentImageIndex];
+
+        if (mainImg) {
+          mainImg.style.transition = 'opacity 0.16s ease, transform 0.16s ease';
+          mainImg.style.opacity = '0.35';
+          mainImg.style.transform = animDirection === 'prev' ? 'translateX(10px) scale(0.97)' : (animDirection === 'next' ? 'translateX(-10px) scale(0.97)' : 'scale(0.97)');
+          setTimeout(function() {
+            mainImg.src = targetSrc;
+            mainImg.style.opacity = '1';
+            mainImg.style.transform = 'translateX(0) scale(1)';
+          }, 140);
+        }
+
+        if (imageCounter) {
+          imageCounter.textContent = (currentImageIndex + 1) + ' / ' + productImages.length;
+        }
+
+        if (thumbStrip) {
+          var thumbs = thumbStrip.querySelectorAll('.pdp-thumb-item');
+          thumbs.forEach(function(th, idx) {
+            if (idx === currentImageIndex) {
+              th.classList.add('active');
+              th.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            } else {
+              th.classList.remove('active');
+            }
+          });
+        }
+
+        if (galleryDots) {
+          var dots = galleryDots.querySelectorAll('.pdp-gallery-dot');
+          dots.forEach(function(d, idx) {
+            if (idx === currentImageIndex) {
+              d.classList.add('active');
+            } else {
+              d.classList.remove('active');
+            }
+          });
+        }
+
+        if (lightboxImg && lightboxModal && lightboxModal.classList.contains('open')) {
+          lightboxImg.src = targetSrc;
+        }
+        if (lightboxCounter) {
+          lightboxCounter.textContent = (currentImageIndex + 1) + ' / ' + productImages.length;
+        }
+      }
+
+      // Initial image
+      if (mainImg) {
+        mainImg.src = productImages[0];
+        mainImg.alt = activeProduct.title;
+      }
+      if (imageCounter) {
+        imageCounter.textContent = '1 / ' + productImages.length;
+      }
+
+      // Populate Thumbnails and Dots
       if (thumbStrip) {
         thumbStrip.innerHTML = '';
-        var thumbImages = [activeProduct.image, activeProduct.image, activeProduct.image, activeProduct.image];
-        thumbImages.forEach(function(src, idx) {
+        productImages.forEach(function(src, idx) {
           var btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'pdp-thumb-item' + (idx === 0 ? ' active' : '');
+          btn.setAttribute('aria-label', 'View angle ' + (idx + 1));
           btn.innerHTML = '<img src="' + src + '" alt="Angle ' + (idx + 1) + '">';
-          btn.addEventListener('click', function() {
-            document.querySelectorAll('.pdp-thumb-item').forEach(function(b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            if (mainImg) mainImg.src = src;
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            switchGalleryImage(idx);
           });
           thumbStrip.appendChild(btn);
         });
       }
+
+      if (galleryDots) {
+        galleryDots.innerHTML = '';
+        productImages.forEach(function(_, idx) {
+          var dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'pdp-gallery-dot' + (idx === 0 ? ' active' : '');
+          dot.setAttribute('aria-label', 'Go to image ' + (idx + 1));
+          dot.addEventListener('click', function(e) {
+            e.stopPropagation();
+            switchGalleryImage(idx);
+          });
+          galleryDots.appendChild(dot);
+        });
+      }
+
+      if (galleryPrevBtn) {
+        galleryPrevBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          switchGalleryImage(currentImageIndex - 1, 'prev');
+        });
+      }
+
+      if (galleryNextBtn) {
+        galleryNextBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          switchGalleryImage(currentImageIndex + 1, 'next');
+        });
+      }
+
+      if (lightboxPrevBtn) {
+        lightboxPrevBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          switchGalleryImage(currentImageIndex - 1, 'prev');
+        });
+      }
+
+      if (lightboxNextBtn) {
+        lightboxNextBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          switchGalleryImage(currentImageIndex + 1, 'next');
+        });
+      }
+
+      function attachImageSwipe(element, onSwipeLeft, onSwipeRight) {
+        if (!element) return;
+        var startX = 0;
+        var startY = 0;
+        var isDragging = false;
+        var hasMoved = false;
+
+        element.addEventListener('touchstart', function(e) {
+          if (e.touches && e.touches.length === 1) {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            isDragging = true;
+            hasMoved = false;
+          }
+        }, { passive: true });
+
+        element.addEventListener('touchmove', function(e) {
+          if (!isDragging || !e.touches || e.touches.length === 0) return;
+          var diffX = e.touches[0].clientX - startX;
+          var diffY = e.touches[0].clientY - startY;
+          if (Math.abs(diffX) > 10 && Math.abs(diffX) > Math.abs(diffY)) {
+            hasMoved = true;
+          }
+        }, { passive: true });
+
+        element.addEventListener('touchend', function(e) {
+          if (!isDragging) return;
+          isDragging = false;
+          if (!hasMoved && (!e.changedTouches || e.changedTouches.length === 0)) return;
+          var endX = e.changedTouches[0].clientX;
+          var endY = e.changedTouches[0].clientY;
+          var deltaX = endX - startX;
+          var deltaY = endY - startY;
+
+          if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (deltaX < 0) {
+              onSwipeLeft();
+            } else {
+              onSwipeRight();
+            }
+          }
+        }, { passive: true });
+      }
+
+      attachImageSwipe(mainImgWrap, function() {
+        switchGalleryImage(currentImageIndex + 1, 'next');
+      }, function() {
+        switchGalleryImage(currentImageIndex - 1, 'prev');
+      });
+
+      attachImageSwipe(lightboxModal, function() {
+        switchGalleryImage(currentImageIndex + 1, 'next');
+      }, function() {
+        switchGalleryImage(currentImageIndex - 1, 'prev');
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') {
+          switchGalleryImage(currentImageIndex - 1, 'prev');
+        } else if (e.key === 'ArrowRight') {
+          switchGalleryImage(currentImageIndex + 1, 'next');
+        }
+      });
 
       // Update Product Info
       var titleEl = document.getElementById('pdpProductTitle');
@@ -1771,25 +2054,23 @@
       if (stickyWishBtn) stickyWishBtn.addEventListener('click', handleWishlistToggle);
 
       // Lightbox Image Zoom Modal
-      var lightboxModal = document.getElementById('pdpLightboxModal');
-      var lightboxImg = document.getElementById('pdpLightboxImg');
-      var lightboxClose = document.getElementById('pdpLightboxCloseBtn');
-      var mainImgWrap = document.getElementById('pdpMainImageWrap');
-
       if (mainImgWrap && lightboxModal && lightboxImg) {
         mainImgWrap.style.cursor = 'zoom-in';
         mainImgWrap.addEventListener('click', function(e) {
-          if (e.target.closest('.pdp-discount-badge') || e.target.closest('.pdp-verified-badge')) return;
-          lightboxImg.src = mainImg.src;
+          if (e.target.closest('.pdp-discount-badge') || e.target.closest('.pdp-verified-badge') || e.target.closest('.pdp-gallery-arrow') || e.target.closest('.pdp-image-counter')) return;
+          lightboxImg.src = (productImages && productImages[currentImageIndex]) || mainImg.src;
+          if (lightboxCounter) {
+            lightboxCounter.textContent = (currentImageIndex + 1) + ' / ' + (productImages ? productImages.length : 1);
+          }
           lightboxModal.classList.add('open');
-          document.body.style.overflow = 'hidden';
+          lockBodyScroll();
         });
       }
 
       function closeLightbox() {
         if (lightboxModal) {
           lightboxModal.classList.remove('open');
-          document.body.style.overflow = '';
+          unlockBodyScroll();
         }
       }
 
@@ -2125,13 +2406,13 @@
         populateModalCities(currentKey, userLocation.city);
         updateModalRatePreview(currentKey);
         locModal.classList.add('open');
-        document.body.style.overflow = 'hidden';
+        lockBodyScroll();
       }
 
       function closeLocationModal() {
         if (!locModal) return;
         locModal.classList.remove('open');
-        document.body.style.overflow = '';
+        unlockBodyScroll();
       }
 
       if (openLocModalBtn) openLocModalBtn.addEventListener('click', openLocationModal);
@@ -2520,7 +2801,7 @@
             backdrop.classList.add('active');
             backdrop.classList.add('open');
           }
-          document.body.style.overflow = 'hidden';
+          lockBodyScroll();
         } else {
           // Toggle desktop categories dropdown
           if (desktopDropdown) desktopDropdown.classList.toggle('open');
@@ -2536,7 +2817,7 @@
           backdrop.classList.remove('active');
           backdrop.classList.remove('open');
         }
-        document.body.style.overflow = '';
+        unlockBodyScroll();
       }
 
       if (menuBtn) menuBtn.addEventListener('click', openDrawer);
