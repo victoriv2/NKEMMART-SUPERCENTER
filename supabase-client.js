@@ -268,15 +268,35 @@ function syncAllBadges() {
   }
 }
 
-// Auto update menu and badges on DOM load
+// Universal Back-to-Top Button Handler
+function initBackToTop() {
+  var btn = document.querySelector('.back-to-top-btn');
+  if (!btn || btn.dataset.initialized) return;
+  btn.dataset.initialized = 'true';
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 280) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  }, { passive: true });
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+// Auto update menu, badges, and back-to-top on DOM load
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       syncAllBadges();
+      initBackToTop();
       setTimeout(updateSiteAccountMenu, 300);
     });
   } else {
     syncAllBadges();
+    initBackToTop();
     setTimeout(updateSiteAccountMenu, 300);
   }
   window.addEventListener('storage', syncAllBadges);
