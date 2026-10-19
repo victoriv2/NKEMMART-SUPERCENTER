@@ -1,8 +1,8 @@
 :root {
-  --primary-blue: #0b4dbb;
-  --primary-blue-hover: #083c94;
-  --primary-green: #00a859;
-  --primary-green-hover: #008f4c;
+  --primary-blue: #008043;
+  --primary-blue-hover: #006b38;
+  --primary-green: #008043;
+  --primary-green-hover: #006b38;
   --accent-gold: #ffb800;
   --accent-gold-hover: #e5a500;
   --badge-red: #e53e3e;
@@ -342,8 +342,9 @@ body {
   color: #75757a;
 }
 
-.search-button {
-  background-color: var(--primary-blue);
+.search-button,
+.search-btn {
+  background-color: var(--primary-green);
   color: var(--white);
   border: none;
   border-radius: 22px;
@@ -356,11 +357,13 @@ body {
   flex-shrink: 0;
 }
 
-.search-button:hover {
-  background-color: var(--primary-blue-hover);
+.search-button:hover,
+.search-btn:hover {
+  background-color: var(--primary-green-hover);
 }
 
-.search-button:active {
+.search-button:active,
+.search-btn:active {
   transform: scale(0.98);
 }
 
@@ -373,7 +376,8 @@ body {
   flex-shrink: 0;
 }
 
-.action-item {
+.action-item,
+.header-action-wrapper {
   position: relative;
 }
 
@@ -396,14 +400,18 @@ body {
 
 .action-btn:hover {
   background-color: #f1f3f5;
-  color: var(--primary-blue);
+  color: var(--primary-green);
 }
 
-.chevron-icon {
+.chevron-icon,
+.dropdown-arrow {
   transition: transform 0.2s;
 }
 
-.action-item:hover .chevron-icon {
+.action-item:hover .chevron-icon,
+.action-item:hover .dropdown-arrow,
+.header-action-wrapper:hover .chevron-icon,
+.header-action-wrapper:hover .dropdown-arrow {
   transform: rotate(180deg);
 }
 
@@ -457,7 +465,8 @@ body {
 }
 
 /* Dropdown Menu */
-.dropdown-menu {
+.dropdown-menu,
+.action-dropdown {
   position: absolute;
   top: calc(100% + 6px);
   right: 0;
@@ -473,32 +482,39 @@ body {
   z-index: 100;
 }
 
-.action-item:hover .dropdown-menu {
+.action-item:hover .dropdown-menu,
+.action-item:hover .action-dropdown,
+.header-action-wrapper:hover .dropdown-menu,
+.header-action-wrapper:hover .action-dropdown {
   opacity: 1;
   visibility: visible;
 }
 
-.dropdown-header {
+.dropdown-header,
+.dropdown-auth-btn-wrap {
   padding: 10px 16px 12px;
   border-bottom: 1px solid #f0f0f0;
 }
 
-.sign-in-btn {
+.sign-in-btn,
+.dropdown-signin-btn {
   display: block;
   width: 100%;
-  background: var(--primary-blue);
-  color: var(--white);
+  background: var(--primary-green);
+  color: var(--white) !important;
   text-align: center;
   padding: 8px 12px;
   border-radius: 6px;
   font-size: 13px;
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: none !important;
   transition: background 0.2s;
+  box-sizing: border-box;
 }
 
-.sign-in-btn:hover {
-  background: var(--primary-blue-hover);
+.sign-in-btn:hover,
+.dropdown-signin-btn:hover {
+  background: var(--primary-green-hover);
 }
 
 .dropdown-item {
