@@ -115,7 +115,7 @@
 
       <!-- Search Bar -->
       <div class="search-container">
-        <form class="search-form" action="category.html" method="GET" role="search">
+        <form class="search-form" action="category.html" method="GET" role="search" onsubmit="if(!this.q.value.trim()){this.q.focus();return false;}">
           <span class="search-icon" aria-hidden="true">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"></circle>
@@ -129,6 +129,7 @@
             placeholder="Search products, brands and categories" 
             autocomplete="off"
             aria-label="Search products, brands and categories"
+            required
           />
           <button type="submit" class="search-button">Search</button>
         </form>
@@ -1011,14 +1012,16 @@
       
       // Parse URL parameters
       var urlParams = new URLSearchParams(window.location.search);
-      var currentCatKey = urlParams.get('cat') || 'vehicles';
+      var rawCat = urlParams.get('cat');
+      var searchQuery = (urlParams.get('q') || '').trim();
+      var currentCatKey = rawCat || (searchQuery ? '' : 'vehicles');
       var currentSubKey = urlParams.get('sub') || '';
 
-      if (!tax[currentCatKey]) {
+      if (currentCatKey && !tax[currentCatKey]) {
         currentCatKey = 'vehicles';
       }
 
-      var catData = tax[currentCatKey];
+      var catData = currentCatKey ? tax[currentCatKey] : null;
 
       // Update Header & Breadcrumbs
       var breadcrumbCat = document.getElementById('breadcrumbCatName');
@@ -1029,26 +1032,40 @@
       var catDesc = document.getElementById('catHeadingDesc');
       var badgeImg = document.getElementById('catBannerBadgeImg');
 
-      if (breadcrumbCat) breadcrumbCat.textContent = catData.name;
-      if (breadcrumbCatLink) breadcrumbCatLink.href = 'category.html?cat=' + encodeURIComponent(currentCatKey);
-      if (badgeImg) badgeImg.src = catData.icon;
-
-      if (currentSubKey) {
-        var subMatch = catData.subcategories.find(function(s) { return s.id === currentSubKey; });
-        if (subMatch) {
-          if (breadcrumbSubSep) breadcrumbSubSep.style.display = 'inline';
-          if (breadcrumbSub) {
-            breadcrumbSub.style.display = 'inline';
-            breadcrumbSub.textContent = subMatch.name;
-          }
-          if (catHeading) catHeading.textContent = subMatch.name;
-          if (catDesc) catDesc.textContent = 'Showing ' + subMatch.count + ' verified products';
-          if (badgeImg) badgeImg.src = subMatch.icon;
+      if (searchQuery && !currentCatKey) {
+        // Global Supercenter Search
+        if (breadcrumbCat) breadcrumbCat.textContent = 'All Departments';
+        if (breadcrumbCatLink) breadcrumbCatLink.href = 'category.html';
+        if (breadcrumbSubSep) breadcrumbSubSep.style.display = 'inline';
+        if (breadcrumbSub) {
+          breadcrumbSub.style.display = 'inline';
+          breadcrumbSub.textContent = 'Search: "' + searchQuery + '"';
         }
-      } else {
-        if (catHeading) catHeading.textContent = catData.name;
-        if (catDesc) catDesc.textContent = 'Explore over ' + catData.count + ' active listings in ' + catData.name;
+        if (catHeading) catHeading.textContent = 'Search results for: "' + searchQuery + '"';
+        if (catDesc) catDesc.textContent = 'Showing verified products matching "' + searchQuery + '" across all NKEMMART departments';
+        if (badgeImg) badgeImg.src = 'images/categories/cat_official.jpg';
+      } else if (catData) {
+        if (breadcrumbCat) breadcrumbCat.textContent = catData.name;
+        if (breadcrumbCatLink) breadcrumbCatLink.href = 'category.html?cat=' + encodeURIComponent(currentCatKey);
         if (badgeImg) badgeImg.src = catData.icon;
+
+        if (currentSubKey) {
+          var subMatch = catData.subcategories.find(function(s) { return s.id === currentSubKey; });
+          if (subMatch) {
+            if (breadcrumbSubSep) breadcrumbSubSep.style.display = 'inline';
+            if (breadcrumbSub) {
+              breadcrumbSub.style.display = 'inline';
+              breadcrumbSub.textContent = subMatch.name;
+            }
+            if (catHeading) catHeading.textContent = subMatch.name;
+            if (catDesc) catDesc.textContent = 'Showing ' + subMatch.count + ' verified products';
+            if (badgeImg) badgeImg.src = subMatch.icon;
+          }
+        } else {
+          if (catHeading) catHeading.textContent = catData.name;
+          if (catDesc) catDesc.textContent = 'Explore over ' + catData.count + ' active listings in ' + catData.name;
+          if (badgeImg) badgeImg.src = catData.icon;
+        }
       }
 
       // Populate Subcategories Strip
@@ -1056,26 +1073,43 @@
       if (subcatsGrid) {
         subcatsGrid.innerHTML = '';
         
-        // Add "All" card
-        var allCard = document.createElement('a');
-        allCard.href = 'category.html?cat=' + encodeURIComponent(currentCatKey);
-        allCard.className = 'cat-subcat-card' + (!currentSubKey ? ' active' : '');
-        allCard.innerHTML = 
-          '<div class="cat-subcat-card-thumb"><img src="' + catData.icon + '" alt="All"></div>' +
-          '<div class="cat-subcat-card-info"><div class="cat-subcat-card-name">All ' + catData.name + '</div><div class="cat-subcat-card-count">' + catData.count + ' ads</div></div>' +
-          '<svg class="cat-subcat-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
-        subcatsGrid.appendChild(allCard);
-
-        catData.subcategories.forEach(function(sub) {
-          var subCard = document.createElement('a');
-          subCard.href = 'category.html?cat=' + encodeURIComponent(currentCatKey) + '&sub=' + encodeURIComponent(sub.id);
-          subCard.className = 'cat-subcat-card' + (currentSubKey === sub.id ? ' active' : '');
-          subCard.innerHTML = 
-            '<div class="cat-subcat-card-thumb"><img src="' + sub.icon + '" alt="' + sub.name + '"></div>' +
-            '<div class="cat-subcat-card-info"><div class="cat-subcat-card-name">' + sub.name + '</div><div class="cat-subcat-card-count">' + sub.count + ' ads</div></div>' +
+        if (searchQuery && !currentCatKey) {
+          // In global search, show top departments quick jump pills in the strip
+          var topCats = ['phones', 'appliances', 'electronics', 'vehicles', 'fashion', 'supermarket', 'computing', 'health-beauty'];
+          topCats.forEach(function(k) {
+            var c = tax[k];
+            if (!c) return;
+            var cCard = document.createElement('a');
+            cCard.href = 'category.html?cat=' + encodeURIComponent(k) + (searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '');
+            cCard.className = 'cat-subcat-card';
+            cCard.innerHTML = 
+              '<div class="cat-subcat-card-thumb"><img src="' + c.icon + '" alt="' + c.name + '"></div>' +
+              '<div class="cat-subcat-card-info"><div class="cat-subcat-card-name">' + c.name + '</div><div class="cat-subcat-card-count">' + c.count + ' ads</div></div>' +
+              '<svg class="cat-subcat-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+            subcatsGrid.appendChild(cCard);
+          });
+        } else if (catData) {
+          // Add "All" card
+          var allCard = document.createElement('a');
+          allCard.href = 'category.html?cat=' + encodeURIComponent(currentCatKey);
+          allCard.className = 'cat-subcat-card' + (!currentSubKey ? ' active' : '');
+          allCard.innerHTML = 
+            '<div class="cat-subcat-card-thumb"><img src="' + catData.icon + '" alt="All"></div>' +
+            '<div class="cat-subcat-card-info"><div class="cat-subcat-card-name">All ' + catData.name + '</div><div class="cat-subcat-card-count">' + catData.count + ' ads</div></div>' +
             '<svg class="cat-subcat-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
-          subcatsGrid.appendChild(subCard);
-        });
+          subcatsGrid.appendChild(allCard);
+
+          catData.subcategories.forEach(function(sub) {
+            var subCard = document.createElement('a');
+            subCard.href = 'category.html?cat=' + encodeURIComponent(currentCatKey) + '&sub=' + encodeURIComponent(sub.id);
+            subCard.className = 'cat-subcat-card' + (currentSubKey === sub.id ? ' active' : '');
+            subCard.innerHTML = 
+              '<div class="cat-subcat-card-thumb"><img src="' + sub.icon + '" alt="' + sub.name + '"></div>' +
+              '<div class="cat-subcat-card-info"><div class="cat-subcat-card-name">' + sub.name + '</div><div class="cat-subcat-card-count">' + sub.count + ' ads</div></div>' +
+              '<svg class="cat-subcat-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+            subcatsGrid.appendChild(subCard);
+          });
+        }
       }
 
       // Populate Sidebar Categories List
@@ -1086,7 +1120,7 @@
           var item = tax[key];
           var li = document.createElement('li');
           var a = document.createElement('a');
-          a.href = 'category.html?cat=' + encodeURIComponent(key);
+          a.href = 'category.html?cat=' + encodeURIComponent(key) + (searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '');
           a.className = 'filter-category-link' + (key === currentCatKey ? ' active' : '');
           a.textContent = item.name;
           li.appendChild(a);
@@ -1094,97 +1128,123 @@
         });
       }
 
-      // Render Sample Products for this Category / Subcategory
-      var prodGrid = document.getElementById('categoryProductsGrid');
-      var listingHeading = document.getElementById('listingHeading');
-      var listingCount = document.getElementById('listingCountText');
-
-      if (listingHeading) {
-        listingHeading.textContent = currentSubKey ? (catData.subcategories.find(function(s) { return s.id === currentSubKey; }) || {}).name || catData.name : catData.name;
+      // Search and retrieve accurate products
+      var sampleProducts = [];
+      if (typeof window.NKEMMART_SEARCH === 'function') {
+        sampleProducts = window.NKEMMART_SEARCH(searchQuery, currentCatKey, currentSubKey);
+      } else {
+        sampleProducts = generateCategoryProducts(currentCatKey || 'vehicles', currentSubKey, catData || tax.vehicles);
       }
 
-      // Generate realistic products for the chosen category
-      var sampleProducts = generateCategoryProducts(currentCatKey, currentSubKey, catData);
-      
-      // Handle Global Search Parameter (?q=...)
-      var searchQuery = (urlParams.get('q') || '').trim();
+      // If category view with no query returned empty, fallback to generated
+      if ((!sampleProducts || sampleProducts.length === 0) && !searchQuery) {
+        sampleProducts = generateCategoryProducts(currentCatKey || 'vehicles', currentSubKey, catData || tax.vehicles);
+      }
+
+      // Set search bar input value if query exists
       if (searchQuery) {
         var searchInput = document.querySelector('.search-input');
         if (searchInput) searchInput.value = searchQuery;
-        var qLower = searchQuery.toLowerCase();
-        
-        if (!urlParams.get('cat')) {
-          var allList = [];
-          Object.keys(tax).forEach(function(k) {
-            allList = allList.concat(generateCategoryProducts(k, '', tax[k]));
-          });
-          var matched = allList.filter(function(p) {
-            return p.title.toLowerCase().indexOf(qLower) !== -1;
-          });
-          if (matched.length > 0) {
-            sampleProducts = matched;
-          } else {
-            sampleProducts = sampleProducts.filter(function(p) {
-              return p.title.toLowerCase().indexOf(qLower) !== -1;
-            });
-          }
-        } else {
-          sampleProducts = sampleProducts.filter(function(p) {
-            return p.title.toLowerCase().indexOf(qLower) !== -1;
-          });
-        }
-        
-        if (listingHeading) listingHeading.textContent = 'Search results for "' + searchQuery + '"';
-        if (catHeading) catHeading.textContent = 'Search: ' + searchQuery;
-        if (catDesc) catDesc.textContent = 'Showing ' + sampleProducts.length + ' matching verified items across NKEMMART';
       }
 
-      if (listingCount) listingCount.textContent = '(' + sampleProducts.length + ' products found)';
+      // Update Listing Heading & Count
+      var listingHeading = document.getElementById('listingHeading');
+      var listingCount = document.getElementById('listingCountText');
+      if (listingHeading) {
+        if (searchQuery) {
+          listingHeading.textContent = 'Search results for "' + searchQuery + '"' + (catData ? ' in ' + catData.name : '');
+        } else {
+          listingHeading.textContent = currentSubKey ? (catData.subcategories.find(function(s) { return s.id === currentSubKey; }) || {}).name || catData.name : catData.name;
+        }
+      }
+      if (listingCount) {
+        listingCount.textContent = '(' + sampleProducts.length + ' products found)';
+      }
 
+      // Render Products Grid
+      var prodGrid = document.getElementById('categoryProductsGrid');
       if (prodGrid) {
         prodGrid.innerHTML = '';
         if (sampleProducts.length === 0) {
-          prodGrid.innerHTML = '<div style="grid-column: 1 / -1; padding: 48px 16px; text-align: center; color: #64748b;"><div style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 8px;">No products found matching "' + (searchQuery || 'criteria') + '"</div><div style="font-size: 14px; margin-bottom: 16px;">Try checking your spelling, using more general keywords, or browsing our categories.</div><a href="category.html" class="action-btn" style="display: inline-block; padding: 10px 22px; background: #008751; color: #fff; border-radius: 6px; text-decoration: none; font-weight: 600;">View All Products</a></div>';
-        } else {
-          sampleProducts.forEach(function(prod) {
-          var art = document.createElement('article');
-          art.className = 'product-card';
-          art.setAttribute('data-id', prod.id);
-          art.setAttribute('data-title', prod.title);
-          art.setAttribute('data-price', prod.price);
-          art.setAttribute('data-original', prod.originalPrice);
-          art.setAttribute('data-image', prod.image);
-          art.setAttribute('data-brand', prod.brand || 'Verified');
-
-          art.innerHTML = 
-            '<div class="card-media">' +
-              '<img src="' + prod.image + '" alt="' + prod.title + '" class="card-img" loading="lazy">' +
-              '<button class="wishlist-btn" aria-label="Add to wishlist" type="button">' +
-                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
-              '</button>' +
-            '</div>' +
-            '<div class="card-body">' +
-              '<a href="product.html?id=' + encodeURIComponent(prod.id) + '" class="product-title">' + prod.title + '</a>' +
-              '<div class="price-row">' +
-                '<span class="current-price">₦ ' + prod.price.toLocaleString() + '</span>' +
-                '<span class="original-price">₦ ' + prod.originalPrice.toLocaleString() + '</span>' +
-                '<span class="discount-text">' + prod.discount + '</span>' +
+          var safeQ = (searchQuery || 'your search').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+          prodGrid.innerHTML = 
+            '<div class="search-empty-state-card">' +
+              '<div class="search-empty-icon-wrap">' +
+                '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+                  '<circle cx="11" cy="11" r="8"></circle>' +
+                  '<line x1="21" y1="21" x2="16.65" y2="16.65"></line>' +
+                  '<line x1="8" y1="11" x2="14" y2="11"></line>' +
+                '</svg>' +
               '</div>' +
-              '<div class="rating-row">' +
-                '<div class="stars-row">' +
-                  '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
-                  '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
-                  '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
-                  '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
-                  '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
+              '<h2 class="search-empty-title">No verified products found for &ldquo;' + safeQ + '&rdquo;</h2>' +
+              '<p class="search-empty-desc">' +
+                'We could not find any products matching your search term. At NKEMMART, we never guess, hallucinate, or show unrelated items. Only genuine, verified products are listed.' +
+              '</p>' +
+              '<div class="search-empty-tips">' +
+                '<div class="search-empty-tips-title">Helpful search suggestions:</div>' +
+                '<ul>' +
+                  '<li>Check your spelling for any typos or missing letters.</li>' +
+                  '<li>Use simpler or broader words (e.g. <strong>phone</strong>, <strong>fan</strong>, <strong>generator</strong>, <strong>blender</strong>, <strong>shoes</strong>).</li>' +
+                  '<li>Try searching by brand name (e.g. <strong>Hansen</strong>, <strong>Silver Crest</strong>, <strong>Syinix</strong>, <strong>Samsung</strong>, <strong>Apple</strong>).</li>' +
+                '</ul>' +
+              '</div>' +
+              '<div class="search-empty-departments">' +
+                '<div class="search-empty-departments-title">Browse popular verified departments:</div>' +
+                '<div class="search-empty-chips-wrap">' +
+                  '<a href="category.html?cat=phones" class="search-category-chip">Phones &amp; Tablets</a>' +
+                  '<a href="category.html?cat=appliances" class="search-category-chip">Appliances</a>' +
+                  '<a href="category.html?cat=electronics" class="search-category-chip">Electronics</a>' +
+                  '<a href="category.html?cat=vehicles" class="search-category-chip">Vehicles</a>' +
+                  '<a href="category.html?cat=fashion" class="search-category-chip">Fashion</a>' +
+                  '<a href="category.html?cat=supermarket" class="search-category-chip">Supermarket</a>' +
+                  '<a href="category.html?cat=computing" class="search-category-chip">Computing</a>' +
+                  '<a href="category.html?cat=health-beauty" class="search-category-chip">Health &amp; Beauty</a>' +
                 '</div>' +
-                '<span class="rating-count">(' + prod.reviews + ')</span>' +
               '</div>' +
-              '<div class="card-action-wrap">' +
-                '<button class="card-action-btn" type="button">Add to cart</button>' +
+              '<div style="display: flex; gap: 12px; justify-content: center; align-items: center;">' +
+                '<a href="category.html" class="search-empty-btn">Browse All Products</a>' +
               '</div>' +
             '</div>';
-          prodGrid.appendChild(art);
+        } else {
+          sampleProducts.forEach(function(prod) {
+            var art = document.createElement('article');
+            art.className = 'product-card';
+            art.setAttribute('data-id', prod.id);
+            art.setAttribute('data-title', prod.title);
+            art.setAttribute('data-price', prod.price);
+            art.setAttribute('data-original', prod.originalPrice);
+            art.setAttribute('data-image', prod.image);
+            art.setAttribute('data-brand', prod.brand || 'Verified');
+
+            art.innerHTML = 
+              '<div class="card-media">' +
+                '<img src="' + prod.image + '" alt="' + prod.title + '" class="card-img" loading="lazy">' +
+                '<button class="wishlist-btn" aria-label="Add to wishlist" type="button">' +
+                  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
+                '</button>' +
+              '</div>' +
+              '<div class="card-body">' +
+                '<a href="product.html?id=' + encodeURIComponent(prod.id) + '" class="product-title">' + prod.title + '</a>' +
+                '<div class="price-row">' +
+                  '<span class="current-price">₦ ' + prod.price.toLocaleString() + '</span>' +
+                  '<span class="original-price">₦ ' + prod.originalPrice.toLocaleString() + '</span>' +
+                  '<span class="discount-text">' + prod.discount + '</span>' +
+                '</div>' +
+                '<div class="rating-row">' +
+                  '<div class="stars-row">' +
+                    '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
+                    '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
+                    '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
+                    '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
+                    '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
+                  '</div>' +
+                  '<span class="rating-count">(' + (prod.reviews || 100).toLocaleString() + ')</span>' +
+                '</div>' +
+                '<div class="card-action-wrap">' +
+                  '<button class="card-action-btn" type="button">Add to cart</button>' +
+                '</div>' +
+              '</div>';
+            prodGrid.appendChild(art);
           });
         }
         if (typeof syncProductCardsUI === 'function') {

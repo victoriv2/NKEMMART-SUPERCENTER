@@ -8331,3 +8331,129 @@ html, body {
     box-sizing: border-box !important;
   }
 }
+
+/* ========================================================
+   SEARCH EMPTY STATE (REASONABLE & VERIFIED, NO GUESSING)
+   ======================================================== */
+.search-empty-state-card {
+  grid-column: 1 / -1;
+  background-color: var(--white);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 44px 24px;
+  text-align: center;
+  max-width: 720px;
+  margin: 16px auto 36px auto;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.search-empty-icon-wrap {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px auto;
+  border-radius: 50%;
+  background-color: #f0fdf4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #008751;
+}
+
+.search-empty-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.search-empty-desc {
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.6;
+  max-width: 540px;
+  margin: 0 auto 24px auto;
+}
+
+.search-empty-tips {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 18px 20px;
+  text-align: left;
+  max-width: 520px;
+  margin: 0 auto 26px auto;
+}
+
+.search-empty-tips-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.search-empty-tips ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.search-empty-departments-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.search-empty-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto 26px auto;
+}
+
+.search-category-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.search-category-chip:hover {
+  background-color: #f0fdf4;
+  border-color: #008751;
+  color: #008751;
+  transform: translateY(-1px);
+}
+
+.search-empty-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  background-color: #008751;
+  color: #ffffff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.search-empty-btn:hover {
+  background-color: #007043;
+  transform: translateY(-1px);
+}
