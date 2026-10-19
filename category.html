@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Category Catalog - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=9.4">
+  <link rel="stylesheet" href="styles.css?v=9.5">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -2131,6 +2131,7 @@
       var backToTopBtn = document.querySelector('.back-to-top-btn');
 
       window.addEventListener('scroll', function() {
+        if (document.body.classList.contains('modal-open') || document.body.classList.contains('drawer-open')) return;
         syncMobileFloatingBar();
         if (isProgrammaticScroll) return;
         var currentScrollY = window.pageYOffset || document.documentElement.scrollTop;

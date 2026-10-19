@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Product Details - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=9.4">
+  <link rel="stylesheet" href="styles.css?v=9.5">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body class="pdp-page">
@@ -244,15 +244,7 @@
         <div class="pdp-main-image-wrap" id="pdpMainImageWrap" title="Click to view full-size image">
           <span class="pdp-discount-badge" id="pdpDiscountBadge">-20%</span>
 
-          <button type="button" class="pdp-gallery-arrow prev" id="pdpGalleryPrevBtn" aria-label="Previous product image">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          </button>
-
           <img src="images/product_kettle.webp" alt="Product Image" class="pdp-main-image" id="pdpMainImg">
-
-          <button type="button" class="pdp-gallery-arrow next" id="pdpGalleryNextBtn" aria-label="Next product image">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
 
           <span class="pdp-verified-badge">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -920,36 +912,31 @@
         <p class="pdp-loc-modal-intro">Select your delivery state and region to calculate real-time dispatch shipping rates and delivery schedules.</p>
 
         <div class="pdp-loc-form-group">
-          <label for="pdpModalStateSelect" class="pdp-loc-label">State</label>
-          <div class="pdp-loc-select-wrap">
-            <select id="pdpModalStateSelect" class="pdp-loc-select" aria-label="Delivery State">
-              <option value="lagos" selected>Lagos</option>
-              <option value="abuja">Abuja (FCT)</option>
-              <option value="rivers">Rivers</option>
-              <option value="oyo">Oyo</option>
-              <option value="kano">Kano</option>
-              <option value="enugu">Enugu</option>
-              <option value="anambra">Anambra</option>
-              <option value="delta">Delta</option>
-              <option value="ogun">Ogun</option>
-              <option value="edo">Edo</option>
-              <option value="kaduna">Kaduna</option>
-              <option value="other">Other States Nationwide</option>
-            </select>
-          </div>
+          <label class="pdp-loc-label" id="pdpStateFieldLabel">State</label>
+          <button type="button" class="pdp-loc-custom-trigger" id="pdpModalStateTrigger" aria-haspopup="dialog" aria-expanded="false" aria-labelledby="pdpStateFieldLabel pdpModalStateDisplay">
+            <div class="pdp-loc-trigger-content">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span class="pdp-loc-trigger-text" id="pdpModalStateDisplay">Lagos</span>
+            </div>
+            <span class="pdp-loc-trigger-action">
+              <span>Change</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </button>
         </div>
 
         <div class="pdp-loc-form-group">
-          <label for="pdpModalCitySelect" class="pdp-loc-label">Local Government Area (LGA) / Area</label>
-          <div class="pdp-loc-select-wrap">
-            <select id="pdpModalCitySelect" class="pdp-loc-select" aria-label="Delivery City / Area">
-              <option value="Ikeja / Mainland" selected>Ikeja / Mainland</option>
-              <option value="Lekki / Victoria Island">Lekki / Victoria Island</option>
-              <option value="Surulere / Yaba">Surulere / Yaba</option>
-              <option value="Ikorodu / Epe">Ikorodu / Epe</option>
-              <option value="Badagry / Ojo">Badagry / Ojo</option>
-            </select>
-          </div>
+          <label class="pdp-loc-label" id="pdpLgaFieldLabel">Local Government Area (LGA) / Area</label>
+          <button type="button" class="pdp-loc-custom-trigger" id="pdpModalCityTrigger" aria-haspopup="dialog" aria-expanded="false" aria-labelledby="pdpLgaFieldLabel pdpModalCityDisplay">
+            <div class="pdp-loc-trigger-content">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+              <span class="pdp-loc-trigger-text" id="pdpModalCityDisplay">Ikeja / Mainland</span>
+            </div>
+            <span class="pdp-loc-trigger-action">
+              <span>Select</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </button>
         </div>
 
         <div class="pdp-loc-summary-card">
@@ -967,6 +954,78 @@
       <div class="pdp-loc-modal-footer">
         <button type="button" class="pdp-loc-cancel-btn" id="pdpCancelLocModalBtn">Cancel</button>
         <button type="button" class="pdp-loc-apply-btn" id="pdpApplyLocBtn">Save Location</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dedicated State Selector Modal -->
+  <div class="pdp-picker-modal-overlay" id="pdpStatePickerModal" aria-hidden="true" role="dialog" aria-label="Select Delivery State">
+    <div class="pdp-picker-modal-dialog">
+      <div class="pdp-picker-modal-header">
+        <div class="pdp-picker-header-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-green)" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          <div>
+            <h4>Select State in Nigeria</h4>
+            <span class="pdp-picker-header-sub">Doorstep delivery available across all 36 states and FCT</span>
+          </div>
+        </div>
+        <button type="button" class="pdp-picker-close-btn" id="pdpCloseStatePickerBtn" aria-label="Close state picker">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="pdp-picker-search-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="pdpStateSearchInput" class="pdp-picker-search-input" placeholder="Search from 36 states and FCT..." autocomplete="off">
+        <button type="button" class="pdp-picker-search-clear" id="pdpClearStateSearchBtn" aria-label="Clear search" style="display: none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <!-- Quick chips for top commercial hubs -->
+      <div class="pdp-picker-quick-chips" id="pdpStateQuickChips">
+        <span class="pdp-picker-chips-label">Popular:</span>
+        <button type="button" class="pdp-quick-chip" data-state="lagos">Lagos</button>
+        <button type="button" class="pdp-quick-chip" data-state="abuja">Abuja</button>
+        <button type="button" class="pdp-quick-chip" data-state="rivers">Rivers</button>
+        <button type="button" class="pdp-quick-chip" data-state="oyo">Oyo</button>
+        <button type="button" class="pdp-quick-chip" data-state="kano">Kano</button>
+        <button type="button" class="pdp-quick-chip" data-state="anambra">Anambra</button>
+        <button type="button" class="pdp-quick-chip" data-state="enugu">Enugu</button>
+      </div>
+
+      <div class="pdp-picker-list" id="pdpStateList" role="listbox" aria-label="Nigerian States">
+        <!-- Dynamically rendered state options with rates -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Dedicated LGA Selector Modal -->
+  <div class="pdp-picker-modal-overlay" id="pdpLgaPickerModal" aria-hidden="true" role="dialog" aria-label="Select Local Government Area">
+    <div class="pdp-picker-modal-dialog">
+      <div class="pdp-picker-modal-header">
+        <div class="pdp-picker-header-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-green)" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          <div>
+            <h4>Select LGA / Area</h4>
+            <span class="pdp-picker-header-sub" id="pdpLgaModalSubtitle">Areas in Lagos</span>
+          </div>
+        </div>
+        <button type="button" class="pdp-picker-close-btn" id="pdpCloseLgaPickerBtn" aria-label="Close LGA picker">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="pdp-picker-search-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="pdpLgaSearchInput" class="pdp-picker-search-input" placeholder="Search LGA or district name..." autocomplete="off">
+        <button type="button" class="pdp-picker-search-clear" id="pdpClearLgaSearchBtn" aria-label="Clear search" style="display: none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="pdp-picker-list" id="pdpLgaList" role="listbox" aria-label="Local Government Areas">
+        <!-- Dynamically rendered LGA options -->
       </div>
     </div>
   </div>
@@ -1019,6 +1078,7 @@
       var scrollTolerance = 5;
 
       window.addEventListener('scroll', function() {
+        if (document.body.classList.contains('modal-open')) return;
         var currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
         if (currentScrollY < 0) currentScrollY = 0;
 
@@ -1637,8 +1697,6 @@
       var currentImageIndex = 0;
       var mainImg = document.getElementById('pdpMainImg');
       var mainImgWrap = document.getElementById('pdpMainImageWrap');
-      var galleryPrevBtn = document.getElementById('pdpGalleryPrevBtn');
-      var galleryNextBtn = document.getElementById('pdpGalleryNextBtn');
       var galleryDots = document.getElementById('pdpGalleryDots');
       var thumbStrip = document.getElementById('pdpThumbnails');
       var imageCounter = document.getElementById('pdpImageCounter');
@@ -1798,24 +1856,6 @@
           galleryDots.appendChild(dot);
         });
       }
-
-      if (galleryPrevBtn) {
-        galleryPrevBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          switchGalleryImage(currentImageIndex - 1, 'prev');
-        });
-      }
-
-      if (galleryNextBtn) {
-        galleryNextBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          switchGalleryImage(currentImageIndex + 1, 'next');
-        });
-      }
-
-
 
       function attachImageSwipe(element, onSwipeLeft, onSwipeRight, isMainImg) {
         if (!element) return;
@@ -2432,80 +2472,332 @@
       var closeLocModalBtn = document.getElementById('pdpCloseLocModalBtn');
       var cancelLocModalBtn = document.getElementById('pdpCancelLocModalBtn');
       var applyLocBtn = document.getElementById('pdpApplyLocBtn');
-      var modalStateSelect = document.getElementById('pdpModalStateSelect');
-      var modalCitySelect = document.getElementById('pdpModalCitySelect');
+
+      var modalStateTrigger = document.getElementById('pdpModalStateTrigger');
+      var modalCityTrigger = document.getElementById('pdpModalCityTrigger');
+      var modalStateDisplay = document.getElementById('pdpModalStateDisplay');
+      var modalCityDisplay = document.getElementById('pdpModalCityDisplay');
       var modalRateCost = document.getElementById('pdpModalRateCost');
       var modalRateTime = document.getElementById('pdpModalRateTime');
 
-      function initModalStateOptions(selectedKey) {
-        if (!modalStateSelect) return;
-        modalStateSelect.innerHTML = '';
+      // State Picker Elements
+      var statePickerModal = document.getElementById('pdpStatePickerModal');
+      var closeStatePickerBtn = document.getElementById('pdpCloseStatePickerBtn');
+      var stateSearchInput = document.getElementById('pdpStateSearchInput');
+      var clearStateSearchBtn = document.getElementById('pdpClearStateSearchBtn');
+      var stateListContainer = document.getElementById('pdpStateList');
+      var stateQuickChips = document.getElementById('pdpStateQuickChips');
 
-        var topGroup = document.createElement('optgroup');
-        topGroup.label = 'Top Destinations';
-        var topKeys = ['lagos', 'abuja', 'rivers', 'oyo', 'ogun', 'kano', 'enugu', 'anambra', 'delta', 'edo'];
-        topKeys.forEach(function(k) {
-          if (NIGERIA_LOCATIONS[k]) {
-            var opt = document.createElement('option');
-            opt.value = k;
-            opt.textContent = NIGERIA_LOCATIONS[k].name;
-            if (k === selectedKey) opt.selected = true;
-            topGroup.appendChild(opt);
-          }
-        });
-        modalStateSelect.appendChild(topGroup);
+      // LGA Picker Elements
+      var lgaPickerModal = document.getElementById('pdpLgaPickerModal');
+      var closeLgaPickerBtn = document.getElementById('pdpCloseLgaPickerBtn');
+      var lgaSearchInput = document.getElementById('pdpLgaSearchInput');
+      var clearLgaSearchBtn = document.getElementById('pdpClearLgaSearchBtn');
+      var lgaListContainer = document.getElementById('pdpLgaList');
+      var lgaModalSubtitle = document.getElementById('pdpLgaModalSubtitle');
 
-        var allGroup = document.createElement('optgroup');
-        allGroup.label = 'All 36 States & FCT (A - Z)';
-        var allKeys = Object.keys(NIGERIA_LOCATIONS).sort(function(a, b) {
-          return NIGERIA_LOCATIONS[a].name.localeCompare(NIGERIA_LOCATIONS[b].name);
-        });
-        allKeys.forEach(function(k) {
-          var opt = document.createElement('option');
-          opt.value = k;
-          opt.textContent = NIGERIA_LOCATIONS[k].name;
-          if (k === selectedKey && !modalStateSelect.value) opt.selected = true;
-          allGroup.appendChild(opt);
-        });
-        modalStateSelect.appendChild(allGroup);
-      }
+      var tempSelectedStateKey = userLocation.stateKey || 'lagos';
+      var tempSelectedLga = userLocation.city || 'Ikeja / Mainland';
 
-      function populateModalCities(stateKey, selectedCity) {
-        if (!modalCitySelect) return;
-        modalCitySelect.innerHTML = '';
-        var stateData = NIGERIA_LOCATIONS[stateKey] || NIGERIA_LOCATIONS.lagos;
-        var lgas = stateData.lgas || [];
-        lgas.forEach(function(lgaName) {
-          var opt = document.createElement('option');
-          opt.value = lgaName;
-          opt.textContent = lgaName;
-          if (selectedCity && lgaName === selectedCity) {
-            opt.selected = true;
-          }
-          modalCitySelect.appendChild(opt);
-        });
-      }
-
-      function updateModalRatePreview(stateKey) {
-        var stateData = NIGERIA_LOCATIONS[stateKey] || NIGERIA_LOCATIONS.lagos;
+      function syncModalDisplay() {
+        var stateData = NIGERIA_LOCATIONS[tempSelectedStateKey] || NIGERIA_LOCATIONS.lagos;
+        if (modalStateDisplay) modalStateDisplay.textContent = stateData.name;
+        if (modalCityDisplay) modalCityDisplay.textContent = tempSelectedLga;
         if (modalRateCost) modalRateCost.textContent = stateData.cost;
         if (modalRateTime) modalRateTime.textContent = stateData.time;
       }
 
+      function renderStateList(query) {
+        if (!stateListContainer) return;
+        stateListContainer.innerHTML = '';
+        var q = (query || '').trim().toLowerCase();
+
+        var stateKeys = Object.keys(NIGERIA_LOCATIONS).sort(function(a, b) {
+          return NIGERIA_LOCATIONS[a].name.localeCompare(NIGERIA_LOCATIONS[b].name);
+        });
+
+        var matches = stateKeys.filter(function(key) {
+          if (!q) return true;
+          var sName = NIGERIA_LOCATIONS[key].name.toLowerCase();
+          return sName.indexOf(q) !== -1;
+        });
+
+        if (matches.length === 0) {
+          var emptyEl = document.createElement('div');
+          emptyEl.className = 'pdp-picker-empty';
+          emptyEl.textContent = 'No matching state found for "' + query + '"';
+          stateListContainer.appendChild(emptyEl);
+          return;
+        }
+
+        matches.forEach(function(key) {
+          var s = NIGERIA_LOCATIONS[key];
+          var isSelected = key === tempSelectedStateKey;
+
+          var item = document.createElement('button');
+          item.type = 'button';
+          item.className = 'pdp-picker-item' + (isSelected ? ' selected' : '');
+          item.setAttribute('role', 'option');
+          item.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+
+          var leftInfo = document.createElement('div');
+          leftInfo.className = 'pdp-picker-item-info';
+
+          var nameSpan = document.createElement('span');
+          nameSpan.className = 'pdp-picker-item-name';
+          nameSpan.textContent = s.name;
+          leftInfo.appendChild(nameSpan);
+
+          var subSpan = document.createElement('span');
+          subSpan.className = 'pdp-picker-item-sub';
+          subSpan.textContent = s.time;
+          leftInfo.appendChild(subSpan);
+
+          var rightMeta = document.createElement('div');
+          rightMeta.className = 'pdp-picker-item-meta';
+
+          var ratePill = document.createElement('span');
+          ratePill.className = 'pdp-picker-rate-pill';
+          ratePill.textContent = s.cost;
+          rightMeta.appendChild(ratePill);
+
+          if (isSelected) {
+            var checkBadge = document.createElement('span');
+            checkBadge.className = 'pdp-picker-check';
+            checkBadge.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            rightMeta.appendChild(checkBadge);
+          }
+
+          item.appendChild(leftInfo);
+          item.appendChild(rightMeta);
+
+          item.addEventListener('click', function() {
+            tempSelectedStateKey = key;
+            var defaultLga = s.lgas && s.lgas.length > 0 ? s.lgas[0] : 'Urban Area';
+            tempSelectedLga = defaultLga;
+            syncModalDisplay();
+            closeStatePicker();
+          });
+
+          stateListContainer.appendChild(item);
+        });
+      }
+
+      function openStatePicker() {
+        if (!statePickerModal) return;
+        if (stateSearchInput) {
+          stateSearchInput.value = '';
+          if (clearStateSearchBtn) clearStateSearchBtn.style.display = 'none';
+        }
+        renderStateList('');
+        if (stateQuickChips) {
+          var chips = stateQuickChips.querySelectorAll('.pdp-quick-chip');
+          chips.forEach(function(chip) {
+            var sKey = chip.getAttribute('data-state');
+            if (sKey === tempSelectedStateKey) {
+              chip.classList.add('active');
+            } else {
+              chip.classList.remove('active');
+            }
+          });
+        }
+        statePickerModal.classList.add('open');
+        statePickerModal.setAttribute('aria-hidden', 'false');
+        if (stateSearchInput) setTimeout(function() { stateSearchInput.focus(); }, 120);
+      }
+
+      function closeStatePicker() {
+        if (!statePickerModal) return;
+        statePickerModal.classList.remove('open');
+        statePickerModal.setAttribute('aria-hidden', 'true');
+      }
+
+      function renderLgaList(query) {
+        if (!lgaListContainer) return;
+        lgaListContainer.innerHTML = '';
+        var q = (query || '').trim().toLowerCase();
+
+        var stateData = NIGERIA_LOCATIONS[tempSelectedStateKey] || NIGERIA_LOCATIONS.lagos;
+        var lgas = stateData.lgas || [];
+
+        var matches = lgas.filter(function(lga) {
+          if (!q) return true;
+          return lga.toLowerCase().indexOf(q) !== -1;
+        });
+
+        if (matches.length === 0) {
+          var emptyEl = document.createElement('div');
+          emptyEl.className = 'pdp-picker-empty';
+          emptyEl.textContent = 'No matching LGA found for "' + query + '"';
+          lgaListContainer.appendChild(emptyEl);
+          return;
+        }
+
+        matches.forEach(function(lgaName) {
+          var isSelected = lgaName === tempSelectedLga;
+
+          var item = document.createElement('button');
+          item.type = 'button';
+          item.className = 'pdp-picker-item' + (isSelected ? ' selected' : '');
+          item.setAttribute('role', 'option');
+          item.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+
+          var leftInfo = document.createElement('div');
+          leftInfo.className = 'pdp-picker-item-info';
+
+          var nameSpan = document.createElement('span');
+          nameSpan.className = 'pdp-picker-item-name';
+          nameSpan.textContent = lgaName;
+          leftInfo.appendChild(nameSpan);
+
+          var rightMeta = document.createElement('div');
+          rightMeta.className = 'pdp-picker-item-meta';
+
+          if (isSelected) {
+            var checkBadge = document.createElement('span');
+            checkBadge.className = 'pdp-picker-check';
+            checkBadge.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            rightMeta.appendChild(checkBadge);
+          }
+
+          item.appendChild(leftInfo);
+          item.appendChild(rightMeta);
+
+          item.addEventListener('click', function() {
+            tempSelectedLga = lgaName;
+            syncModalDisplay();
+            closeLgaPicker();
+          });
+
+          lgaListContainer.appendChild(item);
+        });
+      }
+
+      function openLgaPicker() {
+        if (!lgaPickerModal) return;
+        var stateData = NIGERIA_LOCATIONS[tempSelectedStateKey] || NIGERIA_LOCATIONS.lagos;
+        if (lgaModalSubtitle) {
+          lgaModalSubtitle.textContent = 'Available LGAs & districts in ' + stateData.name;
+        }
+        if (lgaSearchInput) {
+          lgaSearchInput.value = '';
+          lgaSearchInput.placeholder = 'Search LGA in ' + stateData.name + '...';
+          if (clearLgaSearchBtn) clearLgaSearchBtn.style.display = 'none';
+        }
+        renderLgaList('');
+        lgaPickerModal.classList.add('open');
+        lgaPickerModal.setAttribute('aria-hidden', 'false');
+        if (lgaSearchInput) setTimeout(function() { lgaSearchInput.focus(); }, 120);
+      }
+
+      function closeLgaPicker() {
+        if (!lgaPickerModal) return;
+        lgaPickerModal.classList.remove('open');
+        lgaPickerModal.setAttribute('aria-hidden', 'true');
+      }
+
+      // Event Listeners for Custom Triggers
+      if (modalStateTrigger) {
+        modalStateTrigger.addEventListener('click', openStatePicker);
+      }
+      if (modalCityTrigger) {
+        modalCityTrigger.addEventListener('click', openLgaPicker);
+      }
+
+      // Sub-Modal Close Buttons
+      if (closeStatePickerBtn) {
+        closeStatePickerBtn.addEventListener('click', closeStatePicker);
+      }
+      if (closeLgaPickerBtn) {
+        closeLgaPickerBtn.addEventListener('click', closeLgaPicker);
+      }
+
+      // Backdrop Clicks for Sub-Modals
+      if (statePickerModal) {
+        statePickerModal.addEventListener('click', function(e) {
+          if (e.target === statePickerModal) closeStatePicker();
+        });
+      }
+      if (lgaPickerModal) {
+        lgaPickerModal.addEventListener('click', function(e) {
+          if (e.target === lgaPickerModal) closeLgaPicker();
+        });
+      }
+
+      // State Search Filtering
+      if (stateSearchInput) {
+        stateSearchInput.addEventListener('input', function() {
+          var val = stateSearchInput.value;
+          if (clearStateSearchBtn) {
+            clearStateSearchBtn.style.display = val ? 'flex' : 'none';
+          }
+          renderStateList(val);
+        });
+      }
+      if (clearStateSearchBtn) {
+        clearStateSearchBtn.addEventListener('click', function() {
+          if (stateSearchInput) {
+            stateSearchInput.value = '';
+            stateSearchInput.focus();
+          }
+          clearStateSearchBtn.style.display = 'none';
+          renderStateList('');
+        });
+      }
+
+      // LGA Search Filtering
+      if (lgaSearchInput) {
+        lgaSearchInput.addEventListener('input', function() {
+          var val = lgaSearchInput.value;
+          if (clearLgaSearchBtn) {
+            clearLgaSearchBtn.style.display = val ? 'flex' : 'none';
+          }
+          renderLgaList(val);
+        });
+      }
+      if (clearLgaSearchBtn) {
+        clearLgaSearchBtn.addEventListener('click', function() {
+          if (lgaSearchInput) {
+            lgaSearchInput.value = '';
+            lgaSearchInput.focus();
+          }
+          clearLgaSearchBtn.style.display = 'none';
+          renderLgaList('');
+        });
+      }
+
+      // Quick Chips for State Modal
+      if (stateQuickChips) {
+        stateQuickChips.addEventListener('click', function(e) {
+          var chip = e.target.closest('.pdp-quick-chip');
+          if (!chip) return;
+          var sKey = chip.getAttribute('data-state');
+          if (sKey && NIGERIA_LOCATIONS[sKey]) {
+            tempSelectedStateKey = sKey;
+            var sData = NIGERIA_LOCATIONS[sKey];
+            tempSelectedLga = sData.lgas && sData.lgas.length > 0 ? sData.lgas[0] : 'Urban Area';
+            syncModalDisplay();
+            closeStatePicker();
+          }
+        });
+      }
+
       function openLocationModal() {
         if (!locModal) return;
-        var currentKey = userLocation.stateKey || 'lagos';
-        initModalStateOptions(currentKey);
-        if (modalStateSelect) modalStateSelect.value = currentKey;
-        populateModalCities(currentKey, userLocation.city);
-        updateModalRatePreview(currentKey);
+        tempSelectedStateKey = userLocation.stateKey || 'lagos';
+        tempSelectedLga = userLocation.city || 'Ikeja / Mainland';
+        syncModalDisplay();
         locModal.classList.add('open');
+        locModal.setAttribute('aria-hidden', 'false');
         lockBodyScroll();
       }
 
       function closeLocationModal() {
         if (!locModal) return;
         locModal.classList.remove('open');
+        locModal.setAttribute('aria-hidden', 'true');
+        closeStatePicker();
+        closeLgaPicker();
         unlockBodyScroll();
       }
 
@@ -2519,19 +2811,11 @@
         });
       }
 
-      if (modalStateSelect) {
-        modalStateSelect.addEventListener('change', function() {
-          var stateKey = modalStateSelect.value;
-          populateModalCities(stateKey);
-          updateModalRatePreview(stateKey);
-        });
-      }
-
       if (applyLocBtn) {
         applyLocBtn.addEventListener('click', function() {
-          var stateKey = modalStateSelect ? modalStateSelect.value : 'lagos';
+          var stateKey = tempSelectedStateKey || 'lagos';
           var stateData = NIGERIA_LOCATIONS[stateKey] || NIGERIA_LOCATIONS.lagos;
-          var lgaName = modalCitySelect ? modalCitySelect.value : (stateData.lgas[0] || 'Urban Area');
+          var lgaName = tempSelectedLga || (stateData.lgas[0] || 'Urban Area');
 
           userLocation = {
             stateKey: stateKey,
