@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Secure Checkout - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=13.0">
+  <link rel="stylesheet" href="styles.css?v=14.0">
   <!-- Supabase JS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
@@ -414,6 +414,71 @@
   <header class="main-header" role="banner">
     <div class="header-container">
       
+      <!-- Hamburger Menu & Desktop Categories Dropdown -->
+      <div class="header-menu-wrapper">
+        <button class="menu-btn" id="mobileMenuBtn" aria-label="Open categories menu" title="All Categories" type="button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <!-- Desktop Categories Dropdown -->
+        <div class="desktop-category-dropdown" id="desktopCategoryDropdown">
+          <div class="category-dropdown-list">
+            <a href="category.html?cat=vehicles" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L18 11l-2.7-3.6a1 1 0 0 0-.8-.4H9.5a1 1 0 0 0-.8.4L6 11l-3.16.86a1 1 0 0 0-.84.99V16h3"></path><circle cx="6.5" cy="16.5" r="2.5"></circle><circle cx="16.5" cy="16.5" r="2.5"></circle></svg>
+              <span>Vehicles</span>
+            </a>
+            <a href="category.html?cat=appliances" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="10" x2="20" y2="10"></line></svg>
+              <span>Appliances</span>
+            </a>
+            <a href="category.html?cat=phones" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+              <span>Phones & Tablets</span>
+            </a>
+            <a href="category.html?cat=health-beauty" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path><path d="M19 3v4M21 5h-4"></path></svg>
+              <span>Health & Beauty</span>
+            </a>
+            <a href="category.html?cat=home-office" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              <span>Home & Office</span>
+            </a>
+            <a href="category.html?cat=electronics" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+              <span>Electronics</span>
+            </a>
+            <a href="category.html?cat=fashion" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.5a2 2 0 0 0 1.25 1.57L7 12v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-9l2.89-1.24a2 2 0 0 0 1.25-1.57l.58-3.5a2 2 0 0 0-1.34-2.23z"></path></svg>
+              <span>Fashion</span>
+            </a>
+            <a href="category.html?cat=supermarket" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 5-5 13-5 13S7 12 7 7a5 5 0 0 1 5-5z"></path></svg>
+              <span>Supermarket</span>
+            </a>
+            <a href="category.html?cat=computing" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              <span>Computing</span>
+            </a>
+            <a href="category.html?cat=baby" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+              <span>Baby Products</span>
+            </a>
+            <a href="category.html?cat=gaming" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="6"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="11" r="1"></circle><circle cx="18" cy="13" r="1"></circle></svg>
+              <span>Gaming</span>
+            </a>
+            <a href="category.html?cat=other" class="category-dropdown-item">
+              <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+              <span>Other categories</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
       <!-- Brand Logo -->
       <a href="index.html" class="brand-link" title="NKEMMART SUPERCENTER - Home">
         <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="brand-logo" />
@@ -708,8 +773,138 @@
         </div>
       </aside>
 
-    </form>
-  </main>
+  <!-- Mobile Navigation Drawer & Backdrop -->
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+  <aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Navigation">
+    <div class="mobile-nav-header">
+      <button class="mobile-nav-close" id="mobileNavCloseBtn" aria-label="Close menu" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="mobile-nav-logo">
+    </div>
+
+    <!-- Need Help Section -->
+    <div class="mobile-nav-section">
+      <a href="help.html" class="mobile-nav-link-row">
+        <span>NEED HELP?</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </a>
+    </div>
+
+    <!-- My Account Section -->
+    <div class="mobile-nav-section">
+      <div class="mobile-section-header">
+        <span class="mobile-section-title">MY ACCOUNT</span>
+      </div>
+      <div class="mobile-sub-nav-list">
+        <a href="orders.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>Orders</span>
+        </a>
+        <a href="saved-items.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span>Saved Items</span>
+        </a>
+        <a href="cart.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>Shopping Cart</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Our Categories Section -->
+    <div class="mobile-nav-section">
+      <div class="mobile-section-header">
+        <span class="mobile-section-title">OUR CATEGORIES</span>
+      </div>
+      <div class="mobile-categories-list">
+        <a href="category.html?cat=vehicles" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L18 11l-2.7-3.6a1 1 0 0 0-.8-.4H9.5a1 1 0 0 0-.8.4L6 11l-3.16.86a1 1 0 0 0-.84.99V16h3"></path><circle cx="6.5" cy="16.5" r="2.5"></circle><circle cx="16.5" cy="16.5" r="2.5"></circle></svg>
+          <span>Vehicles</span>
+        </a>
+        <a href="category.html?cat=appliances" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="10" x2="20" y2="10"></line></svg>
+          <span>Appliances</span>
+        </a>
+        <a href="category.html?cat=phones" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+          <span>Phones & Tablets</span>
+        </a>
+        <a href="category.html?cat=health-beauty" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path><path d="M19 3v4M21 5h-4"></path></svg>
+          <span>Health & Beauty</span>
+        </a>
+        <a href="category.html?cat=home-office" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          <span>Home & Office</span>
+        </a>
+        <a href="category.html?cat=electronics" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+          <span>Electronics</span>
+        </a>
+        <a href="category.html?cat=fashion" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.5a2 2 0 0 0 1.25 1.57L7 12v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-9l2.89-1.24a2 2 0 0 0 1.25-1.57l.58-3.5a2 2 0 0 0-1.34-2.23z"></path></svg>
+          <span>Fashion</span>
+        </a>
+        <a href="category.html?cat=supermarket" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 5-5 13-5 13S7 12 7 7a5 5 0 0 1 5-5z"></path></svg>
+          <span>Supermarket</span>
+        </a>
+        <a href="category.html?cat=computing" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>Computing</span>
+        </a>
+        <a href="category.html?cat=baby" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+          <span>Baby Products</span>
+        </a>
+        <a href="category.html?cat=gaming" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="6"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="11" r="1"></circle><circle cx="18" cy="13" r="1"></circle></svg>
+          <span>Gaming</span>
+        </a>
+        <a href="category.html?cat=other" class="mobile-category-item">
+          <svg class="mobile-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+          <span>Other categories</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Our Services Section -->
+    <div class="mobile-nav-section">
+      <div class="mobile-section-header">
+        <span class="mobile-section-title">OUR SERVICES</span>
+      </div>
+      <div class="mobile-services-list">
+        <a href="help.html#service-center" class="mobile-service-item">
+          <svg class="mobile-service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+          <span>Service Center</span>
+        </a>
+        <a href="tel:08155608447" class="mobile-service-item">
+          <svg class="mobile-service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+          <span>Call: 08155608447</span>
+        </a>
+        <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="mobile-service-item">
+          <svg class="mobile-service-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          <span>WhatsApp: 07042087633</span>
+        </a>
+        <a href="help.html#contact" class="mobile-service-item">
+          <svg class="mobile-service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <span>Contact Support</span>
+        </a>
+      </div>
+    </div>
+  </aside>
 
   <!-- Site Footer -->
   <footer class="site-footer">
@@ -945,6 +1140,52 @@
       if (!str) return '';
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
+
+    // Mobile Drawer and Dropdown interaction
+    (function() {
+      var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      var mobileNavDrawer = document.getElementById('mobileNavDrawer');
+      var mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+      var mobileNavCloseBtn = document.getElementById('mobileNavCloseBtn');
+      var desktopCategoryDropdown = document.getElementById('desktopCategoryDropdown');
+
+      function openMobileDrawer() {
+        if (window.innerWidth <= 860) {
+          if (mobileNavDrawer && mobileNavBackdrop) {
+            mobileNavDrawer.classList.add('open');
+            mobileNavBackdrop.classList.add('open');
+            document.body.style.overflow = 'hidden';
+          }
+        } else {
+          if (desktopCategoryDropdown) {
+            desktopCategoryDropdown.classList.toggle('open');
+          }
+        }
+      }
+
+      function closeMobileDrawer() {
+        if (mobileNavDrawer && mobileNavBackdrop) {
+          mobileNavDrawer.classList.remove('open');
+          mobileNavBackdrop.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      }
+
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openMobileDrawer();
+        });
+      }
+      if (mobileNavCloseBtn) mobileNavCloseBtn.addEventListener('click', closeMobileDrawer);
+      if (mobileNavBackdrop) mobileNavBackdrop.addEventListener('click', closeMobileDrawer);
+
+      document.addEventListener('click', function(e) {
+        if (desktopCategoryDropdown && !desktopCategoryDropdown.contains(e.target) && mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
+          desktopCategoryDropdown.classList.remove('open');
+        }
+      });
+    })();
   </script>
 
 </body>
