@@ -6510,7 +6510,7 @@ body.drawer-open {
 }
 
 @media (max-width: 768px) {
-  /* Page container fits screen completely without awkward margin gaps */
+  /* Page container with clean side margins */
   .pdp-page {
     background-color: #f1f2f4;
   }
@@ -6518,16 +6518,16 @@ body.drawer-open {
   .pdp-container {
     width: 100% !important;
     max-width: 100% !important;
-    margin: 0 0 16px 0 !important;
-    padding: 0 !important;
+    margin: 8px auto 20px auto !important;
+    padding: 0 12px !important;
     box-sizing: border-box !important;
   }
 
   .pdp-breadcrumbs {
-    padding: 10px 14px;
-    margin-bottom: 0;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
+    padding: 6px 4px 8px 4px;
+    margin-bottom: 8px;
+    background-color: transparent;
+    border-bottom: none;
     font-size: 12px;
     width: 100%;
     box-sizing: border-box;
@@ -6536,24 +6536,22 @@ body.drawer-open {
   .pdp-main-grid {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: 12px;
+    margin-bottom: 12px;
     width: 100%;
   }
 
-  /* Gallery Card edge-to-edge on mobile */
+  /* Gallery Card with side margins and rounded corners */
   .pdp-gallery-card {
     width: 100%;
     margin: 0;
-    padding: 12px 14px 16px 14px;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    border-bottom: 1px solid #e2e8f0;
-    box-shadow: none;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     box-sizing: border-box;
     gap: 12px;
+    background-color: #ffffff;
   }
 
   .pdp-main-image-wrap {
@@ -6579,19 +6577,17 @@ body.drawer-open {
     height: 56px;
   }
 
-  /* Purchase Card edge-to-edge on mobile */
+  /* Purchase Card with side margins and rounded corners */
   .pdp-purchase-card {
     width: 100%;
     margin: 0;
     padding: 16px 14px;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-top: 1px solid #e2e8f0;
-    border-bottom: 1px solid #e2e8f0;
-    box-shadow: none;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     box-sizing: border-box;
     gap: 14px;
+    background-color: #ffffff;
   }
 
   .pdp-product-title {
@@ -6604,6 +6600,7 @@ body.drawer-open {
     margin: 0;
     width: 100%;
     box-sizing: border-box;
+    border-radius: 8px;
   }
 
   .pdp-current-price {
@@ -6640,20 +6637,18 @@ body.drawer-open {
     padding: 0;
   }
 
-  /* Perks & Delivery Card edge-to-edge on mobile */
+  /* Perks & Delivery Card with side margins and rounded corners */
   .pdp-perks-card {
     grid-column: span 1;
     width: 100%;
     margin: 0;
     padding: 16px 14px;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-top: 1px solid #e2e8f0;
-    border-bottom: 1px solid #e2e8f0;
-    box-shadow: none;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     box-sizing: border-box;
     gap: 14px;
+    background-color: #ffffff;
   }
 
   .pdp-delivery-box,
@@ -6669,18 +6664,16 @@ body.drawer-open {
     padding: 10px 0;
   }
 
-  /* Tabs container edge-to-edge on mobile */
+  /* Tabs container with side margins and rounded corners */
   .pdp-tabs-container {
     width: 100%;
-    margin: 0 0 8px 0;
+    margin: 0 0 12px 0;
     padding: 16px 14px;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-top: 1px solid #e2e8f0;
-    border-bottom: 1px solid #e2e8f0;
-    box-shadow: none;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     box-sizing: border-box;
+    background-color: #ffffff;
   }
 
   .pdp-tabs-header {
@@ -6696,7 +6689,7 @@ body.drawer-open {
     flex-shrink: 0;
   }
 
-  /* Reviews container edge-to-edge on mobile */
+  /* Reviews container with side margins and rounded corners */
   .pdp-reviews-layout {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -6704,29 +6697,25 @@ body.drawer-open {
 
   .pdp-reviews-container {
     width: 100%;
-    margin: 0 0 8px 0;
+    margin: 0 0 12px 0;
     padding: 16px 14px;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-top: 1px solid #e2e8f0;
-    border-bottom: 1px solid #e2e8f0;
-    box-shadow: none;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     box-sizing: border-box;
+    background-color: #ffffff;
   }
 
-  /* Recommendations shelf edge-to-edge on mobile */
+  /* Recommendations shelf with side margins and rounded corners */
   .recommendations-container {
     width: 100%;
-    margin: 0 0 16px 0;
+    margin: 0 0 20px 0;
     padding: 14px 10px;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-top: 1px solid #e2e8f0;
-    border-bottom: 1px solid #e2e8f0;
-    box-shadow: none;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     box-sizing: border-box;
+    background-color: #ffffff;
   }
 }
 
