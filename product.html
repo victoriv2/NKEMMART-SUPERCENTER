@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Product Details - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=9.3">
+  <link rel="stylesheet" href="styles.css?v=9.4">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body class="pdp-page">
@@ -882,23 +882,24 @@
 
   <!-- Image Enlarge / Lightbox Modal -->
   <div class="pdp-lightbox-modal" id="pdpLightboxModal" aria-hidden="true" role="dialog" aria-label="Enlarged Product Image">
-    <div class="pdp-lightbox-content">
-      <button type="button" class="pdp-lightbox-close" id="pdpLightboxCloseBtn" aria-label="Close enlarged preview">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    <div class="pdp-lightbox-dialog">
+      <div class="pdp-lightbox-content">
+        <button type="button" class="pdp-lightbox-close desktop-close" id="pdpLightboxCloseBtn" aria-label="Close enlarged preview">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+
+        <div class="pdp-lightbox-img-wrap">
+          <img src="" alt="Enlarged Product View" class="pdp-lightbox-img" id="pdpLightboxImg">
+        </div>
+
+        <div class="pdp-lightbox-counter" id="pdpLightboxCounter">1 / 4</div>
+        <div class="pdp-lightbox-thumbnails" id="pdpLightboxThumbnails" aria-label="Sub images gallery"></div>
+      </div>
+
+      <!-- Mobile Close Button: Underneath the modal in the center -->
+      <button type="button" class="pdp-lightbox-mobile-close" id="pdpLightboxMobileCloseBtn" aria-label="Close enlarged preview">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
-
-      <button type="button" class="pdp-gallery-arrow prev" id="pdpLightboxPrevBtn" aria-label="Previous image">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
-      </button>
-
-      <img src="" alt="Enlarged Product View" class="pdp-lightbox-img" id="pdpLightboxImg">
-
-      <button type="button" class="pdp-gallery-arrow next" id="pdpLightboxNextBtn" aria-label="Next image">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-      </button>
-
-      <div class="pdp-lightbox-counter" id="pdpLightboxCounter">1 / 4</div>
-      <div class="pdp-lightbox-thumbnails" id="pdpLightboxThumbnails" aria-label="Sub images gallery"></div>
     </div>
   </div>
 
@@ -1646,8 +1647,7 @@
       var lightboxContent = document.querySelector('.pdp-lightbox-content');
       var lightboxImg = document.getElementById('pdpLightboxImg');
       var lightboxClose = document.getElementById('pdpLightboxCloseBtn');
-      var lightboxPrevBtn = document.getElementById('pdpLightboxPrevBtn');
-      var lightboxNextBtn = document.getElementById('pdpLightboxNextBtn');
+      var lightboxMobileClose = document.getElementById('pdpLightboxMobileCloseBtn');
       var lightboxCounter = document.getElementById('pdpLightboxCounter');
       var lightboxThumbStrip = document.getElementById('pdpLightboxThumbnails');
 
@@ -1815,21 +1815,7 @@
         });
       }
 
-      if (lightboxPrevBtn) {
-        lightboxPrevBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          switchGalleryImage(currentImageIndex - 1, 'prev');
-        });
-      }
 
-      if (lightboxNextBtn) {
-        lightboxNextBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          switchGalleryImage(currentImageIndex + 1, 'next');
-        });
-      }
 
       function attachImageSwipe(element, onSwipeLeft, onSwipeRight, isMainImg) {
         if (!element) return;
@@ -1915,6 +1901,7 @@
       }
 
       if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+      if (lightboxMobileClose) lightboxMobileClose.addEventListener('click', closeLightbox);
       if (lightboxModal) {
         lightboxModal.addEventListener('click', function(e) {
           if (e.target === lightboxModal) closeLightbox();
