@@ -2129,6 +2129,17 @@ body {
     padding: 8px 16px;
   }
 
+  .header-container:not(:has(.header-menu-wrapper)) {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "logo actions"
+      "search search";
+  }
+
+  .header-container:not(:has(.header-menu-wrapper)) .brand-link {
+    margin-left: 0;
+  }
+
   .desktop-category-dropdown,
   .header-menu-wrapper:hover .desktop-category-dropdown {
     display: none !important;
