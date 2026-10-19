@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Product Details - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=8.9">
+  <link rel="stylesheet" href="styles.css?v=9.0">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body class="pdp-page">
@@ -1261,57 +1261,208 @@
         }
       }
 
+      function attachSwipeToDismiss(toast, dismissTimer) {
+        var startX = 0;
+        var startY = 0;
+        var currentX = 0;
+        var isSwiping = false;
+        var isHorizontal = null;
+
+        function dismissWithAnimation(direction) {
+          if (dismissTimer) clearTimeout(dismissTimer);
+          if (toast._dismissTimer) clearTimeout(toast._dismissTimer);
+          toast.style.transition = 'transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.22s ease-out';
+          toast.style.transform = 'translateX(' + (direction * 125) + '%)';
+          toast.style.opacity = '0';
+          setTimeout(function() {
+            if (toast.parentNode) {
+              toast.parentNode.removeChild(toast);
+            }
+          }, 240);
+        }
+
+        // Pointer Events (touch + mouse on modern browsers)
+        toast.addEventListener('pointerdown', function(e) {
+          if (e.target.closest('.toast-btn') || e.target.closest('.toast-close-btn')) return;
+          isSwiping = true;
+          startX = e.clientX;
+          startY = e.clientY;
+          currentX = e.clientX;
+          isHorizontal = null;
+          toast.style.transition = 'none';
+        });
+
+        window.addEventListener('pointermove', function(e) {
+          if (!isSwiping) return;
+          var deltaX = e.clientX - startX;
+          var deltaY = e.clientY - startY;
+
+          if (isHorizontal === null) {
+            if (Math.abs(deltaX) > 6 || Math.abs(deltaY) > 6) {
+              isHorizontal = Math.abs(deltaX) >= Math.abs(deltaY);
+            }
+          }
+
+          if (isHorizontal) {
+            currentX = e.clientX;
+            var width = toast.offsetWidth || 300;
+            var dismissProgress = Math.min(1, Math.abs(deltaX) / (width * 0.75));
+            toast.style.transform = 'translateX(' + deltaX + 'px)';
+            toast.style.opacity = Math.max(0.1, 1 - dismissProgress * 0.85);
+          }
+        });
+
+        function handlePointerEnd() {
+          if (!isSwiping) return;
+          isSwiping = false;
+          var deltaX = currentX - startX;
+
+          if (isHorizontal && Math.abs(deltaX) > 45) {
+            var direction = deltaX > 0 ? 1 : -1;
+            dismissWithAnimation(direction);
+          } else {
+            toast.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+            toast.style.transform = 'translateX(0)';
+            toast.style.opacity = '1';
+          }
+          isHorizontal = null;
+        }
+
+        window.addEventListener('pointerup', handlePointerEnd);
+        window.addEventListener('pointercancel', handlePointerEnd);
+
+        // Explicit Touch events for mobile WebKit & Android
+        toast.addEventListener('touchstart', function(e) {
+          if (e.target.closest('.toast-btn') || e.target.closest('.toast-close-btn')) return;
+          if (e.touches && e.touches.length > 0) {
+            isSwiping = true;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            currentX = startX;
+            isHorizontal = null;
+            toast.style.transition = 'none';
+          }
+        }, { passive: true });
+
+        toast.addEventListener('touchmove', function(e) {
+          if (!isSwiping || !e.touches || e.touches.length === 0) return;
+          var deltaX = e.touches[0].clientX - startX;
+          var deltaY = e.touches[0].clientY - startY;
+
+          if (isHorizontal === null) {
+            if (Math.abs(deltaX) > 6 || Math.abs(deltaY) > 6) {
+              isHorizontal = Math.abs(deltaX) >= Math.abs(deltaY);
+            }
+          }
+
+          if (isHorizontal) {
+            currentX = e.touches[0].clientX;
+            var width = toast.offsetWidth || 300;
+            var dismissProgress = Math.min(1, Math.abs(deltaX) / (width * 0.75));
+            toast.style.transform = 'translateX(' + deltaX + 'px)';
+            toast.style.opacity = Math.max(0.1, 1 - dismissProgress * 0.85);
+          }
+        }, { passive: true });
+
+        toast.addEventListener('touchend', handlePointerEnd, { passive: true });
+        toast.addEventListener('touchcancel', handlePointerEnd, { passive: true });
+
+        // Close button click listener
+        var closeBtn = toast.querySelector('.toast-close-btn');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dismissWithAnimation(1);
+          });
+        }
+      }
+
       function showToast(msg, btnText, btnUrl) {
         var container = document.getElementById('toastContainer');
         if (!container) return;
-        var toast = document.createElement('div');
-        toast.className = 'toast-item';
-        
-        var content = document.createElement('div');
-        content.className = 'toast-content';
-        content.style.display = 'flex';
-        content.style.alignItems = 'center';
-        content.style.gap = '10px';
-        content.style.flex = '1';
 
-        var iconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        iconSvg.setAttribute('class', 'toast-icon');
-        iconSvg.setAttribute('width', '18');
-        iconSvg.setAttribute('height', '18');
-        iconSvg.setAttribute('viewBox', '0 0 24 24');
-        iconSvg.setAttribute('fill', 'none');
-        iconSvg.setAttribute('stroke', '#22c55e');
-        iconSvg.setAttribute('stroke-width', '2.5');
-        var poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-        poly.setAttribute('points', '20 6 9 17 4 12');
-        iconSvg.appendChild(poly);
-        content.appendChild(iconSvg);
+        // Prevent stacking: if a toast is already on screen, update it in-place!
+        var existing = container.querySelector('.toast-item');
+        if (existing) {
+          var txtEl = existing.querySelector('.toast-text');
+          if (txtEl) {
+            txtEl.textContent = msg;
+          }
+          var actionsEl = existing.querySelector('.toast-actions');
+          var existingBtn = existing.querySelector('.toast-btn');
+          if (btnText && btnUrl) {
+            if (existingBtn) {
+              existingBtn.textContent = btnText;
+              existingBtn.href = btnUrl;
+            } else if (actionsEl) {
+              var newLink = document.createElement('a');
+              newLink.className = 'toast-btn';
+              newLink.href = btnUrl;
+              newLink.textContent = btnText;
+              actionsEl.insertBefore(newLink, actionsEl.firstChild);
+            }
+          } else if (existingBtn) {
+            existingBtn.parentNode.removeChild(existingBtn);
+          }
 
-        var txt = document.createElement('span');
-        txt.className = 'toast-text';
-        txt.textContent = msg;
-        content.appendChild(txt);
-        toast.appendChild(content);
+          var progressEl = existing.querySelector('.toast-swipe-cue-progress');
+          if (progressEl) {
+            progressEl.style.animation = 'none';
+            void progressEl.offsetWidth;
+            progressEl.style.animation = 'toast-timer-bar 3.2s linear forwards';
+          }
 
-        if (btnText && btnUrl) {
-          var link = document.createElement('a');
-          link.className = 'toast-btn';
-          link.href = btnUrl;
-          link.textContent = btnText;
-          toast.appendChild(link);
+          existing.classList.remove('pulse');
+          void existing.offsetWidth;
+          existing.classList.add('pulse');
+
+          if (existing._dismissTimer) clearTimeout(existing._dismissTimer);
+          existing._dismissTimer = setTimeout(function() {
+            existing.classList.remove('show');
+            setTimeout(function() {
+              if (existing.parentNode) existing.parentNode.removeChild(existing);
+            }, 250);
+          }, 3200);
+
+          return;
         }
 
+        // Clean any leftover elements to ensure NEVER stacking
+        while (container.firstChild) {
+          container.removeChild(container.firstChild);
+        }
+
+        var toast = document.createElement('div');
+        toast.className = 'toast-item';
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'polite');
+
+        toast.innerHTML = 
+          '<div class="toast-content">' +
+            '<svg class="toast-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>' +
+            '<span class="toast-text">' + msg + '</span>' +
+          '</div>' +
+          '<div class="toast-actions">' +
+            (btnText && btnUrl ? '<a href="' + btnUrl + '" class="toast-btn">' + btnText + '</a>' : '') +
+            '<button type="button" class="toast-close-btn" aria-label="Dismiss">&times;</button>' +
+          '</div>' +
+          '<div class="toast-swipe-cue"><div class="toast-swipe-cue-progress"></div></div>';
+
         container.appendChild(toast);
+
         requestAnimationFrame(function() {
           toast.classList.add('show');
         });
 
-        setTimeout(function() {
+        var dismissTimer = setTimeout(function() {
           toast.classList.remove('show');
           setTimeout(function() {
             if (toast.parentNode) toast.parentNode.removeChild(toast);
-          }, 300);
+          }, 250);
         }, 3200);
+
+        toast._dismissTimer = dismissTimer;
+        attachSwipeToDismiss(toast, dismissTimer);
       }
 
       // 1. Identify Product from URL
