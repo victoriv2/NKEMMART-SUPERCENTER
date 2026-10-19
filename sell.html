@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell on Nkemmart - Vendor Hub & Merchant Center</title>
+  <link rel="stylesheet" href="styles.css?v=9.9">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <style>
+    .sell-page-wrap {
+      max-width: 1200px;
+      margin: 24px auto 60px;
+      padding: 0 16px;
+    }
+
+    .sell-hero {
+      background: linear-gradient(135deg, #0b2219 0%, #008043 100%);
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 48px 24px;
+      text-align: center;
+      margin-bottom: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sell-hero-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .sell-hero h1 {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .sell-hero p {
+      font-size: 16px;
+      opacity: 0.9;
+      max-width: 680px;
+      margin: 0 auto 28px;
+      line-height: 1.5;
+    }
+
+    .sell-hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      color: #008043;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 15px;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    }
+
+    .sell-hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .sell-stats-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .sell-stat-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .sell-stat-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: #008043;
+      margin-bottom: 4px;
+    }
+
+    .sell-stat-label {
+      font-size: 13px;
+      color: #6b7280;
+      font-weight: 600;
+    }
+
+    .sell-steps-section {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 32px 24px;
+      margin-bottom: 40px;
+    }
+
+    .sell-section-heading {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .sell-section-sub {
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 32px;
+    }
+
+    .sell-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    .sell-step-item {
+      position: relative;
+      padding: 20px 16px;
+      background: #f9fafb;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      text-align: center;
+    }
+
+    .sell-step-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #008043;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+
+    .sell-step-item h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 6px;
+    }
+
+    .sell-step-item p {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .sell-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 850px) {
+      .sell-grid-2col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .merchant-form-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    .merchant-form-card h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 6px;
+    }
+
+    .merchant-form-card p {
+      font-size: 13.5px;
+      color: #6b7280;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: #008043;
+    }
+
+    .form-submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: #008043;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s ease;
+    }
+
+    .form-submit-btn:hover {
+      background: #006636;
+    }
+
+    .perks-list-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .perks-list-card h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 16px;
+    }
+
+    .perk-row {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .perk-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: #e6f6ee;
+      color: #008043;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .perk-row h4 {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 3px;
+    }
+
+    .perk-row p {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.45;
+    }
+
+    .bulk-corporate-strip {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 32px 24px;
+      margin-bottom: 40px;
+    }
+
+    .bulk-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .bulk-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .bulk-inner h3 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .bulk-inner p {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .bulk-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #111827;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background 0.15s ease;
+    }
+
+    .bulk-cta-btn:hover {
+      background: #374151;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement Ribbon -->
+  <aside class="top-bar" aria-label="Announcement Bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-left">
+        <span class="doorstep-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          Doorstep Delivery
+        </span>
+        <span>We deliver all across Nigeria!</span>
+        <span class="top-bar-slogan">"Everything Dey™"</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="sell.html" class="top-bar-link" style="color: #ffffff; font-weight: 700;">Sell on Nkemmart</a>
+        <span class="top-bar-divider">|</span>
+        <a href="tel:08155608447" class="top-bar-link">Call: 08155608447</a>
+        <span class="top-bar-divider">|</span>
+        <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="top-bar-link">WhatsApp: 07042087633</a>
+        <span class="top-bar-divider">|</span>
+        <span class="top-bar-link" style="color: #fff; font-weight: 600;">₦ NGN</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sticky Header -->
+  <header class="main-header" role="banner">
+    <div class="header-container">
+      
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-link" title="NKEMMART SUPERCENTER - Home">
+        <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="brand-logo" />
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-container">
+        <form class="search-form" action="index.html" method="GET" role="search">
+          <span class="search-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input type="search" class="search-input" name="q" placeholder="Search products, brands and categories..." autocomplete="off" />
+          <button type="submit" class="search-btn">SEARCH</button>
+        </form>
+      </div>
+
+      <!-- Action Navigation Buttons -->
+      <nav class="header-actions" aria-label="User Actions">
+        
+        <!-- Account Dropdown Menu -->
+        <div class="header-action-wrapper" id="accountMenuWrapper">
+          <button class="action-btn" id="accountBtn" aria-expanded="false" aria-haspopup="true" aria-label="My Account" type="button">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span class="action-text">Account</span>
+            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+
+          <div class="action-dropdown" id="accountDropdown">
+            <div class="dropdown-auth-btn-wrap">
+              <a href="auth.html" class="dropdown-signin-btn" id="menuSignInBtn">SIGN IN</a>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-menu-list">
+              <a href="auth.html" class="dropdown-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>My Account</span>
+              </a>
+              <a href="orders.html" class="dropdown-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-2z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <span>Orders</span>
+              </a>
+              <a href="saved-items.html" class="dropdown-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <span>Saved Items</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Help Dropdown Menu -->
+        <div class="header-action-wrapper" id="helpMenuWrapper">
+          <button class="action-btn" id="helpBtn" aria-expanded="false" aria-haspopup="true" aria-label="Help and Support" type="button">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span class="action-text">Help</span>
+            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+
+          <div class="action-dropdown" id="helpDropdown">
+            <div class="dropdown-menu-list">
+              <a href="help.html#faqs" class="dropdown-item">Help Center & FAQs</a>
+              <a href="orders.html" class="dropdown-item">Place & Track Order</a>
+              <a href="help.html#cancellations" class="dropdown-item">Order Cancellation</a>
+              <a href="help.html#returns" class="dropdown-item">Returns & Refunds</a>
+              <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="dropdown-item" style="color: var(--primary-green); font-weight: 600;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <span>Live Chat Support</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cart Action Button -->
+        <a href="cart.html" class="action-btn cart-btn" aria-label="Cart">
+          <div class="cart-icon-wrap">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-badge" id="cartBadgeCount">0</span>
+          </div>
+          <span class="action-text">Cart</span>
+        </a>
+
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="sell-page-wrap">
+    
+    <!-- Hero Banner -->
+    <div class="sell-hero">
+      <span class="sell-hero-badge">NKEMMART VENDOR HUB</span>
+      <h1>Grow Your Business with NKEMMART</h1>
+      <p>Connect with millions of active, verified buyers looking for everyday essentials, electronics, vehicles, fashion, appliances, and lifestyle goods across all 36 states in Nigeria.</p>
+      <a href="#register" class="sell-hero-cta">
+        <span>Apply as a Vendor</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </a>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="sell-stats-strip">
+      <div class="sell-stat-card">
+        <div class="sell-stat-num">36 States</div>
+        <div class="sell-stat-label">Nationwide Delivery Reach</div>
+      </div>
+      <div class="sell-stat-card">
+        <div class="sell-stat-num">0% Setup Fee</div>
+        <div class="sell-stat-label">Free Store Registration</div>
+      </div>
+      <div class="sell-stat-card">
+        <div class="sell-stat-num">Weekly Payouts</div>
+        <div class="sell-stat-label">Direct to Your Nigerian Bank</div>
+      </div>
+      <div class="sell-stat-card">
+        <div class="sell-stat-num">24/7 Support</div>
+        <div class="sell-stat-label">Dedicated Merchant Desk</div>
+      </div>
+    </div>
+
+    <!-- 4 Step Onboarding -->
+    <section class="sell-steps-section">
+      <h2 class="sell-section-heading">How Selling on Nkemmart Works</h2>
+      <p class="sell-section-sub">Start getting orders and growing your sales in four simple steps</p>
+
+      <div class="sell-steps-grid">
+        <div class="sell-step-item">
+          <div class="sell-step-badge">1</div>
+          <h3>Register Your Store</h3>
+          <p>Fill out the merchant form below or reach our team via WhatsApp with your business details.</p>
+        </div>
+
+        <div class="sell-step-item">
+          <div class="sell-step-badge">2</div>
+          <h3>List Your Inventory</h3>
+          <p>Upload your genuine products, prices, specifications, and images into the NKEMMART catalog.</p>
+        </div>
+
+        <div class="sell-step-item">
+          <div class="sell-step-badge">3</div>
+          <h3>Fulfill Orders</h3>
+          <p>Receive order alerts instantly. Package the items, and our verified logistics dispatch team handles the rest.</p>
+        </div>
+
+        <div class="sell-step-item">
+          <div class="sell-step-badge">4</div>
+          <h3>Receive Payouts</h3>
+          <p>Get funds credited directly into your commercial bank account with transparent accounting.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 Column: Registration Form + Merchant Perks -->
+    <div class="sell-grid-2col" id="register">
+      
+      <!-- Vendor Registration Form -->
+      <div class="merchant-form-card">
+        <h2>Merchant Registration Application</h2>
+        <p>Complete this form to submit your store application. Our vendor onboarding team will review and approve your merchant portal within 24 hours.</p>
+
+        <form id="vendorForm" onsubmit="handleVendorSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="vStoreName">Business / Store Name *</label>
+            <input type="text" id="vStoreName" class="form-input" placeholder="e.g. Chukwuemeka Electronics Hub" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="vFullName">Contact Person Full Name *</label>
+            <input type="text" id="vFullName" class="form-input" placeholder="e.g. Emeka Okafor" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="vPhone">WhatsApp / Phone Number *</label>
+            <input type="tel" id="vPhone" class="form-input" placeholder="e.g. 08012345678" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="vEmail">Email Address *</label>
+            <input type="email" id="vEmail" class="form-input" placeholder="e.g. merchant@gmail.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="vCategory">Primary Product Category *</label>
+            <select id="vCategory" class="form-select" required>
+              <option value="">Select Category</option>
+              <option value="Appliances">Appliances & Kitchenware</option>
+              <option value="Electronics">Electronics & Audio</option>
+              <option value="Phones">Phones, Tablets & Accessories</option>
+              <option value="Vehicles">Vehicles, Parts & Accessories</option>
+              <option value="Fashion">Fashion, Clothing & Shoes</option>
+              <option value="Health & Beauty">Health & Beauty, Fragrances</option>
+              <option value="Supermarket">Supermarket & Groceries</option>
+              <option value="Home & Office">Home Furniture & Decor</option>
+              <option value="Computing">Computing & Laptops</option>
+              <option value="Other">Other Goods & Services</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="vLocation">City and State *</label>
+            <input type="text" id="vLocation" class="form-input" placeholder="e.g. Ikeja, Lagos State" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="vDetails">Brief Description of Your Products</label>
+            <textarea id="vDetails" class="form-textarea" rows="3" placeholder="Tell us about the products you intend to sell, inventory volumes, and brands..."></textarea>
+          </div>
+
+          <button type="submit" class="form-submit-btn">
+            <span>SUBMIT APPLICATION</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- Merchant Perks -->
+      <div class="perks-list-card">
+        <div>
+          <h2>Why Partner with NKEMMART?</h2>
+
+          <div class="perk-row">
+            <div class="perk-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div>
+              <h4>Ultra-Low Commission Rates</h4>
+              <p>Keep more of what you earn with transparent, competitive commission fees only when products sell.</p>
+            </div>
+          </div>
+
+          <div class="perk-row">
+            <div class="perk-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+            </div>
+            <div>
+              <h4>Integrated Nationwide Logistics</h4>
+              <p>No need to worry about dispatch riders or inter-state haulage. Our delivery network handles door-to-door delivery across Nigeria.</p>
+            </div>
+          </div>
+
+          <div class="perk-row">
+            <div class="perk-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <div>
+              <h4>Escrow & Buyer Protection</h4>
+              <p>Guaranteed secure transactions protect you from counterfeit claims, non-payment, and delivery fraud.</p>
+            </div>
+          </div>
+
+          <div class="perk-row">
+            <div class="perk-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div>
+              <h4>Fast Weekly Bank Settlement</h4>
+              <p>Reliable scheduled payouts credited straight to your registered corporate or personal bank account.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #f9fafb; padding: 16px; border-radius: 8px; border: 1px solid #e5e7eb; margin-top: 16px;">
+          <strong style="color: #111827; font-size: 13.5px; display: block; margin-bottom: 4px;">Prefer Instant WhatsApp Onboarding?</strong>
+          <p style="font-size: 13px; color: #6b7280; margin-bottom: 12px;">Chat directly with our Vendor Account Director to set up your store in minutes.</p>
+          <a href="https://wa.me/2347042087633?text=Hello%20NKEMMART%2C%20I%20want%20to%20register%20as%20a%20vendor%20on%20the%20platform" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; background: #25D366; color: #fff; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 700; text-decoration: none;">
+            <span>Chat with Merchant Desk</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Corporate & Bulk Purchasing Section -->
+    <section class="bulk-corporate-strip" id="bulk">
+      <div class="bulk-inner">
+        <div>
+          <h3>Corporate & Bulk Purchasing Program</h3>
+          <p>Are you a business, hotel, construction firm, hospital, educational institution, or government agency looking to purchase electronics, furniture, building materials, appliances, or supplies in bulk? Get specialized wholesale pricing, tax invoicing, and priority freight delivery.</p>
+        </div>
+        <div style="text-align: right;">
+          <a href="https://wa.me/2347042087633?text=Hello%20NKEMMART%20Corporate%2C%20we%20would%20like%20to%20request%20a%20quotation%20for%20bulk%20purchases" target="_blank" rel="noopener noreferrer" class="bulk-cta-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Request Bulk Quote
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-main">
+      <div class="footer-col">
+        <div class="footer-brand-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00a859" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>NKEMMART SUPERCENTER</span>
+        </div>
+        <p class="footer-brand-desc">
+          Life is easier when everything you need is within reach! Welcome to NKEMMART SUPERCENTER, your trusted destination for everyday essentials, lifestyle products, electronics, fashion, building materials, properties, repair services, cleaning services, and so much more. At NKEMMART, EVERYTHING DEY!
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Customer Care</h4>
+        <ul class="footer-links-list">
+          <li><a href="help.html#faqs" class="footer-link">Help Center & FAQs</a></li>
+          <li><a href="orders.html" class="footer-link">Track Your Order</a></li>
+          <li><a href="cart.html" class="footer-link">Shopping Cart</a></li>
+          <li><a href="saved-items.html" class="footer-link">Saved Items</a></li>
+          <li><a href="help.html#returns" class="footer-link">Returns & Refunds</a></li>
+          <li><a href="help.html#cancellations" class="footer-link">Order Cancellation</a></li>
+          <li><a href="help.html#contact" class="footer-link">Contact Support</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">About Nkemmart</h4>
+        <ul class="footer-links-list">
+          <li><a href="index.html" class="footer-link">About Us</a></li>
+          <li><a href="category.html?cat=appliances" class="footer-link">Appliances & Electronics</a></li>
+          <li><a href="category.html?cat=supermarket" class="footer-link">Supermarket & Groceries</a></li>
+          <li><a href="category.html?cat=phones" class="footer-link">Phones & Tablets</a></li>
+          <li><a href="terms.html" class="footer-link">Terms and Conditions</a></li>
+          <li><a href="terms.html#privacy" class="footer-link">Privacy Notice</a></li>
+          <li><a href="help.html#careers" class="footer-link">Careers at Nkemmart</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Sell & Partner</h4>
+        <ul class="footer-links-list">
+          <li><a href="sell.html" class="footer-link">Sell on Nkemmart</a></li>
+          <li><a href="sell.html" class="footer-link">Vendor Hub & Merchant Center</a></li>
+          <li><a href="help.html#careers" class="footer-link">Logistics Partner Program</a></li>
+          <li><a href="sell.html#bulk" class="footer-link">Corporate & Bulk Purchasing</a></li>
+          <li><a href="help.html#service-center" class="footer-link">Service Center Network</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <p class="copyright-text">
+          &copy; 2026 NKEMMART SUPERCENTER. All Rights Reserved. Everything Dey!
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function handleVendorSubmit(e) {
+      e.preventDefault();
+      var store = document.getElementById('vStoreName').value;
+      var name = document.getElementById('vFullName').value;
+      var phone = document.getElementById('vPhone').value;
+      var email = document.getElementById('vEmail').value;
+      var cat = document.getElementById('vCategory').value;
+      var loc = document.getElementById('vLocation').value;
+      var details = document.getElementById('vDetails').value;
+
+      var msg = 'VENDOR APPLICATION RECEIVED\n\n' +
+        'Store: ' + store + '\n' +
+        'Contact: ' + name + ' (' + phone + ')\n' +
+        'Category: ' + cat + '\n' +
+        'Location: ' + loc + '\n\n' +
+        'Our Vendor Onboarding team will contact you within 24 hours to verify documentation and set up your seller catalog.';
+      
+      alert(msg);
+
+      // Open WhatsApp prefilled message to expedite onboarding
+      var waMsg = encodeURIComponent(
+        'Hello NKEMMART Vendor Desk,\n\n' +
+        'I just submitted a vendor application:\n' +
+        'Store: ' + store + '\n' +
+        'Contact: ' + name + '\n' +
+        'Phone: ' + phone + '\n' +
+        'Category: ' + cat + '\n' +
+        'Location: ' + loc + '\n' +
+        'Details: ' + details
+      );
+      window.open('https://wa.me/2347042087633?text=' + waMsg, '_blank');
+
+      e.target.reset();
+    }
+
+    // Cart badge counter update
+    try {
+      var cartData = JSON.parse(localStorage.getItem('nkemmart_cart') || '[]');
+      var totalQty = cartData.reduce(function(acc, item) { return acc + (item.qty || 1); }, 0);
+      var badge = document.getElementById('cartBadgeCount');
+      if (badge) badge.textContent = totalQty;
+    } catch(e) {}
+  </script>
+</body>
+</html>

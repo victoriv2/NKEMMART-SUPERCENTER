@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help Center & Customer Care - NKEMMART SUPERCENTER</title>
+  <link rel="stylesheet" href="styles.css?v=9.9">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <style>
+    .help-page-wrap {
+      max-width: 1200px;
+      margin: 24px auto 60px;
+      padding: 0 16px;
+    }
+
+    .help-hero {
+      background: linear-gradient(135deg, #008043 0%, #00a859 100%);
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 40px 24px;
+      text-align: center;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 16px rgba(0, 128, 67, 0.15);
+    }
+
+    .help-hero h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .help-hero p {
+      font-size: 15px;
+      opacity: 0.95;
+      max-width: 600px;
+      margin: 0 auto 20px;
+    }
+
+    .help-search-box {
+      max-width: 540px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .help-search-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 48px 0 18px;
+      border-radius: 24px;
+      border: none;
+      font-size: 15px;
+      outline: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      box-sizing: border-box;
+    }
+
+    .help-search-icon {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #008043;
+      pointer-events: none;
+    }
+
+    .help-quick-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .help-quick-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      color: #1f2937;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .help-quick-card:hover {
+      border-color: #008043;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .help-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #e6f6ee;
+      color: #008043;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .help-quick-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #111827;
+    }
+
+    .help-quick-card p {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+
+    .help-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .help-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .help-sidebar {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 16px;
+      position: sticky;
+      top: 80px;
+      height: fit-content;
+    }
+
+    .help-nav-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #9ca3af;
+      margin-bottom: 12px;
+      padding-left: 8px;
+    }
+
+    .help-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #4b5563;
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease;
+      margin-bottom: 4px;
+    }
+
+    .help-nav-item:hover, .help-nav-item.active {
+      background: #e6f6ee;
+      color: #008043;
+    }
+
+    .help-nav-item svg {
+      flex-shrink: 0;
+    }
+
+    .help-section {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .help-section-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f3f4f6;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .help-section-title svg {
+      color: #008043;
+    }
+
+    .faq-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 14px 18px;
+      background: #f9fafb;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 14px;
+      color: #1f2937;
+      user-select: none;
+    }
+
+    .faq-question:hover {
+      background: #f3f4f6;
+    }
+
+    .faq-answer {
+      padding: 16px 18px;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.6;
+      border-top: 1px solid #e5e7eb;
+      background: #ffffff;
+      display: none;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    .faq-item.open .faq-chevron {
+      transform: rotate(180deg);
+    }
+
+    .faq-chevron {
+      transition: transform 0.2s ease;
+      color: #6b7280;
+    }
+
+    .contact-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .contact-method-card {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .contact-method-card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #111827;
+    }
+
+    .contact-method-card p {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    .contact-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.15s ease;
+    }
+
+    .contact-action-btn.phone {
+      background: #008043;
+      color: #ffffff;
+    }
+
+    .contact-action-btn.whatsapp {
+      background: #25D366;
+      color: #ffffff;
+    }
+
+    .contact-action-btn.email {
+      background: #111827;
+      color: #ffffff;
+    }
+
+    .contact-action-btn:hover {
+      opacity: 0.9;
+    }
+
+    .service-centers-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+
+    .service-centers-table th {
+      background: #f9fafb;
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 700;
+      color: #374151;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .service-centers-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e5e7eb;
+      color: #4b5563;
+    }
+
+    .service-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #e6f6ee;
+      color: #008043;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement Ribbon -->
+  <aside class="top-bar" aria-label="Announcement Bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-left">
+        <span class="doorstep-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          Doorstep Delivery
+        </span>
+        <span>We deliver all across Nigeria!</span>
+        <span class="top-bar-slogan">"Everything Dey™"</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="sell.html" class="top-bar-link">Sell on Nkemmart</a>
+        <span class="top-bar-divider">|</span>
+        <a href="tel:08155608447" class="top-bar-link">Call: 08155608447</a>
+        <span class="top-bar-divider">|</span>
+        <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="top-bar-link">WhatsApp: 07042087633</a>
+        <span class="top-bar-divider">|</span>
+        <span class="top-bar-link" style="color: #fff; font-weight: 600;">₦ NGN</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sticky Header -->
+  <header class="main-header" role="banner">
+    <div class="header-container">
+      
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-link" title="NKEMMART SUPERCENTER - Home">
+        <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="brand-logo" />
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-container">
+        <form class="search-form" action="index.html" method="GET" role="search">
+          <span class="search-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input type="search" class="search-input" name="q" placeholder="Search products, brands and categories..." autocomplete="off" />
+          <button type="submit" class="search-btn">SEARCH</button>
+        </form>
+      </div>
+
+      <!-- Action Navigation Buttons -->
+      <nav class="header-actions" aria-label="User Actions">
+        
+        <!-- Account Dropdown Menu -->
+        <div class="header-action-wrapper" id="accountMenuWrapper">
+          <button class="action-btn" id="accountBtn" aria-expanded="false" aria-haspopup="true" aria-label="My Account" type="button">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span class="action-text">Account</span>
+            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+
+          <div class="action-dropdown" id="accountDropdown">
+            <div class="dropdown-auth-btn-wrap">
+              <a href="auth.html" class="dropdown-signin-btn" id="menuSignInBtn">SIGN IN</a>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-menu-list">
+              <a href="auth.html" class="dropdown-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>My Account</span>
+              </a>
+              <a href="orders.html" class="dropdown-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-2z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <span>Orders</span>
+              </a>
+              <a href="saved-items.html" class="dropdown-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <span>Saved Items</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Help Dropdown Menu -->
+        <div class="header-action-wrapper" id="helpMenuWrapper">
+          <button class="action-btn" id="helpBtn" aria-expanded="false" aria-haspopup="true" aria-label="Help and Support" type="button">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span class="action-text">Help</span>
+            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+
+          <div class="action-dropdown" id="helpDropdown">
+            <div class="dropdown-menu-list">
+              <a href="help.html#faqs" class="dropdown-item">Help Center & FAQs</a>
+              <a href="orders.html" class="dropdown-item">Place & Track Order</a>
+              <a href="help.html#cancellations" class="dropdown-item">Order Cancellation</a>
+              <a href="help.html#returns" class="dropdown-item">Returns & Refunds</a>
+              <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="dropdown-item" style="color: var(--primary-green); font-weight: 600;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <span>Live Chat Support</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cart Action Button -->
+        <a href="cart.html" class="action-btn cart-btn" aria-label="Cart">
+          <div class="cart-icon-wrap">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-badge" id="cartBadgeCount">0</span>
+          </div>
+          <span class="action-text">Cart</span>
+        </a>
+
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="help-page-wrap">
+    
+    <!-- Hero Banner -->
+    <div class="help-hero">
+      <h1>How Can We Help You Today?</h1>
+      <p>Find answers to common questions about ordering, delivery, refunds, warranty, and customer support.</p>
+      <div class="help-search-box">
+        <input type="text" id="faqSearchInput" class="help-search-input" placeholder="Type a keyword (e.g., returns, delivery, tracking, payment)..." />
+        <svg class="help-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </div>
+    </div>
+
+    <!-- Quick Navigation Cards -->
+    <div class="help-quick-cards">
+      <a href="orders.html" class="help-quick-card">
+        <div class="help-card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+        </div>
+        <h3>Track Order</h3>
+        <p>Check the live delivery status of your package across Nigeria.</p>
+      </a>
+
+      <a href="#returns" class="help-quick-card">
+        <div class="help-card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+        </div>
+        <h3>Returns & Refunds</h3>
+        <p>7-day hassle-free return policy with quick money-back guarantee.</p>
+      </a>
+
+      <a href="#cancellations" class="help-quick-card">
+        <div class="help-card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+        </div>
+        <h3>Cancellation</h3>
+        <p>Learn how to cancel an order before dispatch or shipment.</p>
+      </a>
+
+      <a href="#contact" class="help-quick-card">
+        <div class="help-card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        </div>
+        <h3>Contact Support</h3>
+        <p>Call, WhatsApp, or email our support agents in real-time.</p>
+      </a>
+    </div>
+
+    <!-- Layout: Sidebar + Sections -->
+    <div class="help-layout">
+      
+      <!-- Sidebar -->
+      <aside class="help-sidebar">
+        <div class="help-nav-title">Help Categories</div>
+        <a href="#faqs" class="help-nav-item active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Frequently Asked Questions
+        </a>
+        <a href="#returns" class="help-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          Returns & Refunds Policy
+        </a>
+        <a href="#cancellations" class="help-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+          Order Cancellation
+        </a>
+        <a href="#service-center" class="help-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+          Service Center Network
+        </a>
+        <a href="#careers" class="help-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          Careers & Partnerships
+        </a>
+        <a href="#contact" class="help-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          Direct Support Contacts
+        </a>
+      </aside>
+
+      <!-- Main Content Area -->
+      <div class="help-content-area">
+        
+        <!-- FAQs Section -->
+        <section id="faqs" class="help-section">
+          <h2 class="help-section-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            Frequently Asked Questions
+          </h2>
+
+          <div class="faq-list">
+            <div class="faq-item open">
+              <div class="faq-question">
+                <span>How do I place an order on NKEMMART SUPERCENTER?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+              <div class="faq-answer">
+                Ordering is straightforward: Browse through our categories or search for your product. Click "ADD TO CART" or "BUY NOW". Proceed to your Cart and click "CHECKOUT". Fill in your delivery details (State, LGA, Address) and choose your preferred payment method (Pay on Delivery, Bank Transfer, or Debit Card).
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How long does delivery take nationwide?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+              <div class="faq-answer">
+                Orders within Lagos and Abuja typically arrive within 24 to 48 business hours. Deliveries to other Nigerian states (South-East, South-South, North-Central, North-East, and North-West) take between 2 to 5 business days via our verified logistics network.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>What payment methods are supported?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+              <div class="faq-answer">
+                We support Pay on Delivery (cash/POS upon doorstep inspection in eligible locations), direct Instant Bank Transfer, and secure Debit Card payments (Mastercard, Visa, and Verve).
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How do I track my order once placed?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+              <div class="faq-answer">
+                You can track your order anytime on our <a href="orders.html" style="color: #008043; font-weight: 700;">Orders & Tracking Page</a>. Simply enter your Order ID (e.g., NKM-782914) to view live progress through Order Placed, Confirmed, Shipped, Out for Delivery, and Delivered.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Are all products original and brand new?</span>
+                <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+              <div class="faq-answer">
+                Yes, 100%! All brand new products come directly from authorized brand distributors with genuine manufacturer warranties. For pre-owned electronics or verified vehicles, each item undergoes rigorous physical and diagnostic inspection by our quality control engineers before listing.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Returns & Refunds Section -->
+        <section id="returns" class="help-section">
+          <h2 class="help-section-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            Returns & Refunds Policy
+          </h2>
+          <p style="font-size: 14px; color: #4b5563; line-height: 1.6; margin-bottom: 16px;">
+            At NKEMMART SUPERCENTER, customer confidence is our top priority. We provide a <strong>7-Day Hassle-Free Return Guarantee</strong> on all eligible items.
+          </p>
+
+          <div style="background: #f9fafb; border-left: 4px solid #008043; padding: 14px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 13.5px; color: #374151;">
+            <strong>Eligible Reasons for Returns:</strong>
+            <ul style="margin: 8px 0 0 18px; line-height: 1.5;">
+              <li>Product is damaged, defective, or malfunctioning upon unboxing.</li>
+              <li>Product received does not match the specifications, brand, or color ordered.</li>
+              <li>Missing components, accessories, or parts.</li>
+            </ul>
+          </div>
+
+          <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">
+            <strong>How to Initiate a Return:</strong><br>
+            1. Reach out to our customer care team via WhatsApp at <strong>07042087633</strong> or call <strong>08155608447</strong> within 7 days of package delivery.<br>
+            2. Provide your Order ID and clear photos or a short video of the issue.<br>
+            3. Our dispatch courier will pick up the item at no cost to you, or you can drop it off at the nearest NKEMMART Service Center.<br>
+            4. Once inspected and verified, your replacement will be dispatched or your full refund credited to your bank account within 24 to 48 hours.
+          </p>
+        </section>
+
+        <!-- Cancellations Section -->
+        <section id="cancellations" class="help-section">
+          <h2 class="help-section-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+            Order Cancellation Policy
+          </h2>
+          <p style="font-size: 14px; color: #4b5563; line-height: 1.6; margin-bottom: 12px;">
+            You can cancel your order free of charge at any time before it has been marked as <strong>"Dispatched / Out for Delivery"</strong>.
+          </p>
+          <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">
+            To request immediate cancellation, contact our customer support team with your Order ID via telephone or WhatsApp. If you already made a prepayment via Bank Transfer or Card, a 100% refund will be initiated to your bank account immediately upon cancellation.
+          </p>
+        </section>
+
+        <!-- Service Centers Section -->
+        <section id="service-center" class="help-section">
+          <h2 class="help-section-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+            Service Center Network
+          </h2>
+          <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">
+            Need technical inspection, warranty servicing, appliance installation, or returns drop-off? Visit any of our certified service center hubs:
+          </p>
+
+          <table class="service-centers-table">
+            <thead>
+              <tr>
+                <th>Location / City</th>
+                <th>Hub Address</th>
+                <th>Operating Hours</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Lagos Hub</strong></td>
+                <td>Commercial Avenue, Ikeja, Lagos State</td>
+                <td>Mon - Sat: 8:00am - 6:00pm</td>
+                <td><span class="service-badge">Active Walk-in</span></td>
+              </tr>
+              <tr>
+                <td><strong>Abuja Hub</strong></td>
+                <td>Central Business District, Garki, Abuja FCT</td>
+                <td>Mon - Sat: 8:30am - 5:30pm</td>
+                <td><span class="service-badge">Active Walk-in</span></td>
+              </tr>
+              <tr>
+                <td><strong>Port Harcourt Hub</strong></td>
+                <td>Aba Road, Port Harcourt, Rivers State</td>
+                <td>Mon - Sat: 9:00am - 5:00pm</td>
+                <td><span class="service-badge">Active Walk-in</span></td>
+              </tr>
+              <tr>
+                <td><strong>Enugu / Onitsha Hub</strong></td>
+                <td>Main Commercial Boulevard, Onitsha / Enugu</td>
+                <td>Mon - Sat: 8:00am - 6:00pm</td>
+                <td><span class="service-badge">Active Walk-in</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Careers & Logistics Section -->
+        <section id="careers" class="help-section">
+          <h2 class="help-section-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            Careers & Logistics Partner Program
+          </h2>
+          <p style="font-size: 14px; color: #4b5563; line-height: 1.6; margin-bottom: 14px;">
+            Join one of Nigeria's fastest growing commerce ecosystems! We are always looking for passionate customer support specialists, warehouse supervisors, and logistics riders.
+          </p>
+          <div style="background: #f9fafb; padding: 16px; border-radius: 8px; border: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; flex-wrap: gap; gap: 12px;">
+            <div>
+              <strong style="color: #111827; font-size: 14px;">Logistics Fleet Owners & Dispatch Riders</strong>
+              <p style="font-size: 13px; color: #6b7280; margin: 4px 0 0;">Partner with NKEMMART Logistics to fulfill last-mile deliveries across Nigerian states.</p>
+            </div>
+            <a href="https://wa.me/2347042087633?text=Hello%20NKEMMART%2C%20I%20am%20interested%20in%20the%20Logistics%20Partner%20Program" target="_blank" rel="noopener noreferrer" class="contact-action-btn phone">Apply as Partner</a>
+          </div>
+        </section>
+
+        <!-- Direct Support Section -->
+        <section id="contact" class="help-section">
+          <h2 class="help-section-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            Direct Support Contacts
+          </h2>
+          <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">
+            Our support representatives are standing by to assist you with inquiries, bulk requests, order tracking, and complaints.
+          </p>
+
+          <div class="contact-card-grid">
+            <div class="contact-method-card">
+              <h4>Direct Telephone Line</h4>
+              <p>Mon - Sat: 8:00 AM - 8:00 PM</p>
+              <a href="tel:08155608447" class="contact-action-btn phone">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                08155608447
+              </a>
+            </div>
+
+            <div class="contact-method-card">
+              <h4>WhatsApp Instant Chat</h4>
+              <p>Average response: 5 mins</p>
+              <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="contact-action-btn whatsapp">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                07042087633
+              </a>
+            </div>
+
+            <div class="contact-method-card">
+              <h4>Email Support</h4>
+              <p>Official correspondence</p>
+              <a href="mailto:support@nkemmart.com" class="contact-action-btn email">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                support@nkemmart.com
+              </a>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-main">
+      <div class="footer-col">
+        <div class="footer-brand-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00a859" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>NKEMMART SUPERCENTER</span>
+        </div>
+        <p class="footer-brand-desc">
+          Life is easier when everything you need is within reach! Welcome to NKEMMART SUPERCENTER, your trusted destination for everyday essentials, lifestyle products, electronics, fashion, building materials, properties, repair services, cleaning services, and so much more. At NKEMMART, EVERYTHING DEY!
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Customer Care</h4>
+        <ul class="footer-links-list">
+          <li><a href="help.html#faqs" class="footer-link">Help Center & FAQs</a></li>
+          <li><a href="orders.html" class="footer-link">Track Your Order</a></li>
+          <li><a href="cart.html" class="footer-link">Shopping Cart</a></li>
+          <li><a href="saved-items.html" class="footer-link">Saved Items</a></li>
+          <li><a href="help.html#returns" class="footer-link">Returns & Refunds</a></li>
+          <li><a href="help.html#cancellations" class="footer-link">Order Cancellation</a></li>
+          <li><a href="help.html#contact" class="footer-link">Contact Support</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">About Nkemmart</h4>
+        <ul class="footer-links-list">
+          <li><a href="index.html" class="footer-link">About Us</a></li>
+          <li><a href="category.html?cat=appliances" class="footer-link">Appliances & Electronics</a></li>
+          <li><a href="category.html?cat=supermarket" class="footer-link">Supermarket & Groceries</a></li>
+          <li><a href="category.html?cat=phones" class="footer-link">Phones & Tablets</a></li>
+          <li><a href="terms.html" class="footer-link">Terms and Conditions</a></li>
+          <li><a href="terms.html#privacy" class="footer-link">Privacy Notice</a></li>
+          <li><a href="help.html#careers" class="footer-link">Careers at Nkemmart</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Sell & Partner</h4>
+        <ul class="footer-links-list">
+          <li><a href="sell.html" class="footer-link">Sell on Nkemmart</a></li>
+          <li><a href="sell.html" class="footer-link">Vendor Hub & Merchant Center</a></li>
+          <li><a href="help.html#careers" class="footer-link">Logistics Partner Program</a></li>
+          <li><a href="sell.html#bulk" class="footer-link">Corporate & Bulk Purchasing</a></li>
+          <li><a href="help.html#service-center" class="footer-link">Service Center Network</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <p class="copyright-text">
+          &copy; 2026 NKEMMART SUPERCENTER. All Rights Reserved. Everything Dey!
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ Accordion interaction
+    document.querySelectorAll('.faq-question').forEach(function(q) {
+      q.addEventListener('click', function() {
+        var item = this.parentElement;
+        item.classList.toggle('open');
+      });
+    });
+
+    // FAQ Search filter
+    var searchInput = document.getElementById('faqSearchInput');
+    if (searchInput) {
+      searchInput.addEventListener('input', function() {
+        var val = this.value.toLowerCase().trim();
+        document.querySelectorAll('.faq-item').forEach(function(item) {
+          var text = item.textContent.toLowerCase();
+          if (!val || text.indexOf(val) !== -1) {
+            item.style.display = '';
+            if (val) item.classList.add('open');
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    }
+
+    // Sidebar active state on scroll / click
+    document.querySelectorAll('.help-nav-item').forEach(function(link) {
+      link.addEventListener('click', function() {
+        document.querySelectorAll('.help-nav-item').forEach(function(l) { l.classList.remove('active'); });
+        this.classList.add('active');
+      });
+    });
+
+    // Cart badge counter update
+    try {
+      var cartData = JSON.parse(localStorage.getItem('nkemmart_cart') || '[]');
+      var totalQty = cartData.reduce(function(acc, item) { return acc + (item.qty || 1); }, 0);
+      var badge = document.getElementById('cartBadgeCount');
+      if (badge) badge.textContent = totalQty;
+    } catch(e) {}
+  </script>
+</body>
+</html>

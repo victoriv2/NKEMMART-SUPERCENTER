@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service & Privacy Notice - NKEMMART SUPERCENTER</title>
+  <link rel="stylesheet" href="styles.css?v=9.9">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <style>
+    .legal-page-wrap {
+      max-width: 1100px;
+      margin: 24px auto 60px;
+      padding: 0 16px;
+    }
+
+    .legal-header {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 32px 24px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .legal-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .legal-header p {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .legal-tabs {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .legal-tab-btn {
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      font-size: 14px;
+      font-weight: 700;
+      color: #4b5563;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .legal-tab-btn:hover, .legal-tab-btn.active {
+      background: #008043;
+      color: #ffffff;
+      border-color: #008043;
+    }
+
+    .legal-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 28px;
+      line-height: 1.7;
+      color: #374151;
+      font-size: 14.5px;
+    }
+
+    .legal-card h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #111827;
+      margin: 24px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid #f3f4f6;
+    }
+
+    .legal-card h2:first-of-type {
+      margin-top: 0;
+    }
+
+    .legal-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 18px 0 8px;
+    }
+
+    .legal-card p {
+      margin-bottom: 14px;
+    }
+
+    .legal-card ul {
+      margin: 8px 0 16px 20px;
+    }
+
+    .legal-card li {
+      margin-bottom: 6px;
+    }
+
+    .highlight-box {
+      background: #f0fdf4;
+      border-left: 4px solid #008043;
+      padding: 14px 18px;
+      border-radius: 4px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: #166534;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement Ribbon -->
+  <aside class="top-bar" aria-label="Announcement Bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-left">
+        <span class="doorstep-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          Doorstep Delivery
+        </span>
+        <span>We deliver all across Nigeria!</span>
+        <span class="top-bar-slogan">"Everything Dey™"</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="sell.html" class="top-bar-link">Sell on Nkemmart</a>
+        <span class="top-bar-divider">|</span>
+        <a href="tel:08155608447" class="top-bar-link">Call: 08155608447</a>
+        <span class="top-bar-divider">|</span>
+        <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="top-bar-link">WhatsApp: 07042087633</a>
+        <span class="top-bar-divider">|</span>
+        <span class="top-bar-link" style="color: #fff; font-weight: 600;">₦ NGN</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sticky Header -->
+  <header class="main-header" role="banner">
+    <div class="header-container">
+      
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-link" title="NKEMMART SUPERCENTER - Home">
+        <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER" class="brand-logo" />
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-container">
+        <form class="search-form" action="index.html" method="GET" role="search">
+          <span class="search-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input type="search" class="search-input" name="q" placeholder="Search products, brands and categories..." autocomplete="off" />
+          <button type="submit" class="search-btn">SEARCH</button>
+        </form>
+      </div>
+
+      <!-- Action Navigation Buttons -->
+      <nav class="header-actions" aria-label="User Actions">
+        
+        <!-- Account Dropdown Menu -->
+        <div class="header-action-wrapper" id="accountMenuWrapper">
+          <button class="action-btn" id="accountBtn" aria-expanded="false" aria-haspopup="true" aria-label="My Account" type="button">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span class="action-text">Account</span>
+            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+
+          <div class="action-dropdown" id="accountDropdown">
+            <div class="dropdown-auth-btn-wrap">
+              <a href="auth.html" class="dropdown-signin-btn" id="menuSignInBtn">SIGN IN</a>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-menu-list">
+              <a href="auth.html" class="dropdown-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>My Account</span>
+              </a>
+              <a href="orders.html" class="dropdown-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-2z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <span>Orders</span>
+              </a>
+              <a href="saved-items.html" class="dropdown-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <span>Saved Items</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Help Dropdown Menu -->
+        <div class="header-action-wrapper" id="helpMenuWrapper">
+          <button class="action-btn" id="helpBtn" aria-expanded="false" aria-haspopup="true" aria-label="Help and Support" type="button">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span class="action-text">Help</span>
+            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+
+          <div class="action-dropdown" id="helpDropdown">
+            <div class="dropdown-menu-list">
+              <a href="help.html#faqs" class="dropdown-item">Help Center & FAQs</a>
+              <a href="orders.html" class="dropdown-item">Place & Track Order</a>
+              <a href="help.html#cancellations" class="dropdown-item">Order Cancellation</a>
+              <a href="help.html#returns" class="dropdown-item">Returns & Refunds</a>
+              <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="dropdown-item" style="color: var(--primary-green); font-weight: 600;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <span>Live Chat Support</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cart Action Button -->
+        <a href="cart.html" class="action-btn cart-btn" aria-label="Cart">
+          <div class="cart-icon-wrap">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-badge" id="cartBadgeCount">0</span>
+          </div>
+          <span class="action-text">Cart</span>
+        </a>
+
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="legal-page-wrap">
+    
+    <div class="legal-header">
+      <h1>Terms & Legal Policies</h1>
+      <p>Last updated: October 2026. Official operating standards for NKEMMART SUPERCENTER Nigeria.</p>
+      
+      <div class="legal-tabs">
+        <a href="#terms" class="legal-tab-btn active">Terms of Service</a>
+        <a href="#privacy" class="legal-tab-btn">Privacy Notice</a>
+        <a href="#cookies" class="legal-tab-btn">Cookie Policy</a>
+        <a href="#buyer-protection" class="legal-tab-btn">Buyer Protection</a>
+      </div>
+    </div>
+
+    <!-- Terms of Service -->
+    <section class="legal-card" id="terms">
+      <h2>1. General Terms & Conditions</h2>
+      <p>Welcome to NKEMMART SUPERCENTER. By accessing or using our website, ordering products, or registering an account, you agree to comply with and be bound by the following terms and conditions.</p>
+
+      <h3>1.1 User Eligibility & Account Registration</h3>
+      <p>You must be at least 18 years of age or accessing under the supervision of a parent or legal guardian. When creating an account, you agree to provide truthful, accurate, and current information. You are solely responsible for maintaining the confidentiality of your account credentials and password.</p>
+
+      <h3>1.2 Pricing & Product Listings</h3>
+      <p>All prices listed on NKEMMART are in Nigerian Naira (NGN). We strive for absolute accuracy in pricing and product specifications. In the unlikely event of an obvious typographic or system error where an item is listed at an incorrect price, NKEMMART reserves the right to notify the customer and cancel the affected order prior to dispatch.</p>
+
+      <h3>1.3 Orders, Dispatch & Delivery</h3>
+      <p>An order is confirmed once payment has been verified or confirmed for Pay on Delivery. Delivery times provided are reasonable estimates based on logistics conditions across Nigeria. We deliver nationwide to residential and commercial addresses.</p>
+
+      <div class="highlight-box">
+        <strong>Everything Dey Guarantee:</strong> NKEMMART guarantees authentic products sourced directly from licensed brand distributors and verified merchants.
+      </div>
+    </section>
+
+    <!-- Privacy Notice -->
+    <section class="legal-card" id="privacy">
+      <h2>2. Privacy Notice & Data Protection</h2>
+      <p>NKEMMART SUPERCENTER is committed to protecting your privacy in full compliance with the Nigeria Data Protection Act (NDPA) and NDPR standards.</p>
+
+      <h3>2.1 Information We Collect</h3>
+      <p>We collect essential information required to process and fulfill your shopping orders, including:</p>
+      <ul>
+        <li>Contact information: Name, phone number, email address.</li>
+        <li>Delivery address: Street address, landmark, LGA, and State.</li>
+        <li>Transaction history and saved preferences.</li>
+      </ul>
+
+      <h3>2.2 How We Use Your Data</h3>
+      <p>Your personal data is used strictly for:</p>
+      <ul>
+        <li>Processing orders, delivering parcels, and handling customer service inquiries.</li>
+        <li>Sending transaction confirmations, tracking updates, and delivery alerts.</li>
+        <li>Preventing fraudulent orders and maintaining platform security.</li>
+      </ul>
+
+      <p>We do not sell, rent, or trade your personal data to any unauthorized third party.</p>
+    </section>
+
+    <!-- Cookie Policy -->
+    <section class="legal-card" id="cookies">
+      <h2>3. Cookie & Local Storage Policy</h2>
+      <p>We use cookies and browser local storage to improve your browsing and shopping experience on NKEMMART SUPERCENTER.</p>
+
+      <h3>3.1 Essential Functionality</h3>
+      <p>Cookies and local storage enable essential e-commerce functions such as remembering items in your Shopping Cart, keeping your account logged in across pages, and maintaining your Saved Items wish list.</p>
+
+      <h3>3.2 Analytics & Performance</h3>
+      <p>We utilize aggregated, non-identifying telemetry to understand popular product searches and improve website speed and accessibility across mobile and desktop devices.</p>
+    </section>
+
+    <!-- Buyer Protection -->
+    <section class="legal-card" id="buyer-protection">
+      <h2>4. Buyer Protection & Escrow Guarantee</h2>
+      <p>Every purchase made through NKEMMART is backed by our comprehensive Buyer Protection framework:</p>
+
+      <ul>
+        <li><strong>Genuine Goods:</strong> 100% authentic products with manufacturer backing.</li>
+        <li><strong>7-Day Returns:</strong> Hassle-free return window for damaged, defective, or misdescribed items.</li>
+        <li><strong>Safe Payment:</strong> Your card and bank transfer details are encrypted via bank-grade tokenization.</li>
+        <li><strong>Dedicated Dispute Resolution:</strong> Immediate customer care intervention via phone, WhatsApp, and email.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-main">
+      <div class="footer-col">
+        <div class="footer-brand-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00a859" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>NKEMMART SUPERCENTER</span>
+        </div>
+        <p class="footer-brand-desc">
+          Life is easier when everything you need is within reach! Welcome to NKEMMART SUPERCENTER, your trusted destination for everyday essentials, lifestyle products, electronics, fashion, building materials, properties, repair services, cleaning services, and so much more. At NKEMMART, EVERYTHING DEY!
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Customer Care</h4>
+        <ul class="footer-links-list">
+          <li><a href="help.html#faqs" class="footer-link">Help Center & FAQs</a></li>
+          <li><a href="orders.html" class="footer-link">Track Your Order</a></li>
+          <li><a href="cart.html" class="footer-link">Shopping Cart</a></li>
+          <li><a href="saved-items.html" class="footer-link">Saved Items</a></li>
+          <li><a href="help.html#returns" class="footer-link">Returns & Refunds</a></li>
+          <li><a href="help.html#cancellations" class="footer-link">Order Cancellation</a></li>
+          <li><a href="help.html#contact" class="footer-link">Contact Support</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">About Nkemmart</h4>
+        <ul class="footer-links-list">
+          <li><a href="index.html" class="footer-link">About Us</a></li>
+          <li><a href="category.html?cat=appliances" class="footer-link">Appliances & Electronics</a></li>
+          <li><a href="category.html?cat=supermarket" class="footer-link">Supermarket & Groceries</a></li>
+          <li><a href="category.html?cat=phones" class="footer-link">Phones & Tablets</a></li>
+          <li><a href="terms.html" class="footer-link">Terms and Conditions</a></li>
+          <li><a href="terms.html#privacy" class="footer-link">Privacy Notice</a></li>
+          <li><a href="help.html#careers" class="footer-link">Careers at Nkemmart</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Sell & Partner</h4>
+        <ul class="footer-links-list">
+          <li><a href="sell.html" class="footer-link">Sell on Nkemmart</a></li>
+          <li><a href="sell.html" class="footer-link">Vendor Hub & Merchant Center</a></li>
+          <li><a href="help.html#careers" class="footer-link">Logistics Partner Program</a></li>
+          <li><a href="sell.html#bulk" class="footer-link">Corporate & Bulk Purchasing</a></li>
+          <li><a href="help.html#service-center" class="footer-link">Service Center Network</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <p class="copyright-text">
+          &copy; 2026 NKEMMART SUPERCENTER. All Rights Reserved. Everything Dey!
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Tab highlighting
+    document.querySelectorAll('.legal-tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.legal-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+      });
+    });
+
+    // Cart badge counter update
+    try {
+      var cartData = JSON.parse(localStorage.getItem('nkemmart_cart') || '[]');
+      var totalQty = cartData.reduce(function(acc, item) { return acc + (item.qty || 1); }, 0);
+      var badge = document.getElementById('cartBadgeCount');
+      if (badge) badge.textContent = totalQty;
+    } catch(e) {}
+  </script>
+</body>
+</html>

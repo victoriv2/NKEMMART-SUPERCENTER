@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <title>Orders & Delivery Tracking - NKEMMART SUPERCENTER</title>
+  <link rel="stylesheet" href="styles.css?v=9.9">
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <style>
+    body {
+      background-color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .orders-header {
+      background: #091e3a;
+      padding: 16px 20px;
+      border-bottom: 2px solid #00a859;
+    }
+
+    .orders-header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .orders-logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .orders-logo-wrap img {
+      height: 38px;
+      width: auto;
+    }
+
+    .orders-container {
+      max-width: 1000px;
+      margin: 32px auto;
+      padding: 0 16px;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+    }
+
+    .order-success-banner {
+      background: linear-gradient(135deg, #091e3a 0%, #008744 100%);
+      color: #ffffff;
+      border-radius: 14px;
+      padding: 28px 24px;
+      text-align: center;
+      margin-bottom: 28px;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0, 168, 89, 0.15);
+    }
+
+    .order-success-badge {
+      display: inline-block;
+      background: #22c55e;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .order-success-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin: 0 0 8px 0;
+    }
+
+    .order-success-sub {
+      font-size: 14px;
+      color: #e2e8f0;
+      margin: 0 0 16px 0;
+      line-height: 1.5;
+    }
+
+    /* Track Order Input Card */
+    .track-search-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .track-search-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #091e3a;
+      margin: 0 0 6px 0;
+    }
+
+    .track-search-desc {
+      font-size: 13px;
+      color: #64748b;
+      margin: 0 0 16px 0;
+    }
+
+    .track-input-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .track-input {
+      flex: 1;
+      min-width: 240px;
+      padding: 12px 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .track-input:focus {
+      border-color: #00a859;
+    }
+
+    .track-btn {
+      padding: 12px 24px;
+      background: #00a859;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Order Details Card */
+    .order-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .order-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .order-id-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #091e3a;
+      margin: 0 0 4px 0;
+    }
+
+    .order-date-text {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .order-status-pill {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .status-confirmed { background: #dcfce7; color: #15803d; }
+    .status-shipped { background: #e0f2fe; color: #0369a1; }
+    .status-delivered { background: #f0fdf4; color: #16a34a; }
+    .status-pending { background: #fef3c7; color: #b45309; }
+
+    /* Stepper */
+    .order-stepper {
+      display: flex;
+      justify-content: space-between;
+      margin: 28px 0;
+      position: relative;
+    }
+
+    .order-stepper::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 20px;
+      right: 20px;
+      height: 3px;
+      background: #e2e8f0;
+      z-index: 1;
+    }
+
+    .step-node {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #64748b;
+      text-align: center;
+      max-width: 90px;
+    }
+
+    .step-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .step-node.completed .step-circle {
+      background: #00a859;
+      border-color: #00a859;
+      color: #ffffff;
+    }
+
+    .step-node.completed {
+      color: #008744;
+    }
+
+    .step-node.active .step-circle {
+      border-color: #00a859;
+      color: #00a859;
+    }
+
+    /* Order Items */
+    .order-items-grid {
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .order-item-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .order-item-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+
+    .order-item-info {
+      flex: 1;
+    }
+
+    .order-item-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #091e3a;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .order-item-meta {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .order-item-price {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #091e3a;
+      white-space: nowrap;
+    }
+
+    /* Order Details Grid */
+    .order-info-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 13px;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    .order-contact-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .order-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .btn-wa {
+      background: #25d366;
+      color: #ffffff;
+    }
+
+    .btn-call {
+      background: #f1f5f9;
+      color: #091e3a;
+      border: 1px solid #cbd5e1;
+    }
+
+    @media (max-width: 600px) {
+      .order-info-columns {
+        grid-template-columns: 1fr;
+      }
+      .order-stepper {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Minimal Header -->
+  <header class="orders-header">
+    <div class="orders-header-inner">
+      <a href="index.html" class="orders-logo-wrap">
+        <img src="logo/LOGO.png" alt="NKEMMART Logo">
+        <span>NKEMMART SUPERCENTER</span>
+      </a>
+      <a href="index.html" style="color: #cbd5e1; text-decoration: none; font-size: 13px; font-weight: 600;">Back to Store</a>
+    </div>
+  </header>
+
+  <main class="orders-container">
+
+    <!-- Order Success Banner (shown when arriving after checkout) -->
+    <div class="order-success-banner" id="orderSuccessBanner">
+      <span class="order-success-badge">Order Confirmed</span>
+      <h1 class="order-success-title">Thank You For Your Order!</h1>
+      <p class="order-success-sub">
+        Your order has been recorded in the NKEMMART Supercenter dispatch log. Our delivery team will contact you shortly to coordinate dispatch.
+      </p>
+      <div style="font-size: 14px; font-weight: 700;">
+        Order Tracking Reference: <span id="bannerOrderId" style="color: #4ade80;">#NKM-000000</span>
+      </div>
+    </div>
+
+    <!-- Search / Track Form -->
+    <section class="track-search-card">
+      <h2 class="track-search-title">Track an Existing Order</h2>
+      <p class="track-search-desc">Enter your NKEMMART Order ID or your customer phone number to look up real-time delivery status.</p>
+      <form id="trackOrderForm" class="track-input-group">
+        <input type="text" id="trackInput" class="track-input" placeholder="e.g. NKM-829145 or 08155608447" required>
+        <button type="submit" class="track-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span>Track Order</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- Orders Feed Container -->
+    <div id="ordersFeedContainer">
+      <!-- Dynamic populated -->
+    </div>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-main">
+      <div class="footer-col">
+        <div class="footer-brand-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00a859" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>NKEMMART SUPERCENTER</span>
+        </div>
+        <p class="footer-brand-desc">
+          Life is easier when everything you need is within reach! Welcome to NKEMMART SUPERCENTER, your trusted destination for everyday essentials, lifestyle products, electronics, fashion, building materials, properties, repair services, cleaning services, and so much more. At NKEMMART, EVERYTHING DEY!
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Customer Care</h4>
+        <ul class="footer-links-list">
+          <li><a href="help.html#faqs" class="footer-link">Help Center & FAQs</a></li>
+          <li><a href="orders.html" class="footer-link">Track Your Order</a></li>
+          <li><a href="cart.html" class="footer-link">Shopping Cart</a></li>
+          <li><a href="saved-items.html" class="footer-link">Saved Items</a></li>
+          <li><a href="help.html#returns" class="footer-link">Returns & Refunds</a></li>
+          <li><a href="help.html#cancellations" class="footer-link">Order Cancellation</a></li>
+          <li><a href="help.html#contact" class="footer-link">Contact Support</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">About Nkemmart</h4>
+        <ul class="footer-links-list">
+          <li><a href="index.html" class="footer-link">About Us</a></li>
+          <li><a href="category.html?cat=appliances" class="footer-link">Appliances & Electronics</a></li>
+          <li><a href="category.html?cat=supermarket" class="footer-link">Supermarket & Groceries</a></li>
+          <li><a href="category.html?cat=phones" class="footer-link">Phones & Tablets</a></li>
+          <li><a href="terms.html" class="footer-link">Terms and Conditions</a></li>
+          <li><a href="terms.html#privacy" class="footer-link">Privacy Notice</a></li>
+          <li><a href="help.html#careers" class="footer-link">Careers at Nkemmart</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Sell & Partner</h4>
+        <ul class="footer-links-list">
+          <li><a href="sell.html" class="footer-link">Sell on Nkemmart</a></li>
+          <li><a href="sell.html" class="footer-link">Vendor Hub & Merchant Center</a></li>
+          <li><a href="help.html#careers" class="footer-link">Logistics Partner Program</a></li>
+          <li><a href="sell.html#bulk" class="footer-link">Corporate & Bulk Purchasing</a></li>
+          <li><a href="help.html#service-center" class="footer-link">Service Center Network</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <p class="copyright-text">
+          &copy; 2026 NKEMMART SUPERCENTER. All Rights Reserved. Everything Dey!
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetOrderId = urlParams.get('orderId');
+      const isJustPlaced = urlParams.get('placed') === 'true';
+
+      const banner = document.getElementById('orderSuccessBanner');
+      const bannerIdSpan = document.getElementById('bannerOrderId');
+      const feedContainer = document.getElementById('ordersFeedContainer');
+      const trackForm = document.getElementById('trackOrderForm');
+      const trackInput = document.getElementById('trackInput');
+
+      if (isJustPlaced && targetOrderId) {
+        banner.style.display = 'block';
+        bannerIdSpan.textContent = '#' + targetOrderId;
+      }
+
+      // Load orders from LocalStorage + Supabase
+      let allOrders = [];
+      try {
+        allOrders = JSON.parse(localStorage.getItem('nkemmart_user_orders') || '[]');
+      } catch (e) {
+        allOrders = [];
+      }
+
+      // Also fetch from Supabase if user logged in
+      const client = getSupabase();
+      if (client) {
+        try {
+          const user = await getCurrentUser();
+          if (user) {
+            const { data: cloudOrders } = await client
+              .from('orders')
+              .select('*')
+              .eq('user_id', user.id)
+              .order('created_at', { ascending: false });
+            
+            if (cloudOrders && cloudOrders.length > 0) {
+              // Merge avoiding duplicates
+              cloudOrders.forEach(co => {
+                if (!allOrders.find(o => o.id === co.id)) {
+                  allOrders.push(co);
+                }
+              });
+            }
+          }
+        } catch (e) {
+          console.warn('Supabase orders fetch note:', e);
+        }
+      }
+
+      function renderOrders(ordersToDisplay) {
+        if (!ordersToDisplay || ordersToDisplay.length === 0) {
+          feedContainer.innerHTML = `
+            <div class="order-card" style="text-align: center; padding: 48px 20px;">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" style="margin-bottom: 12px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <h3 style="font-size: 17px; color: #091e3a; margin-bottom: 6px;">No orders found</h3>
+              <p style="font-size: 13px; color: #64748b; margin-bottom: 18px;">You haven't placed any orders yet, or no orders matched your search.</p>
+              <a href="index.html" style="display: inline-block; padding: 10px 20px; background: #00a859; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 13.5px;">Start Shopping</a>
+            </div>
+          `;
+          return;
+        }
+
+        feedContainer.innerHTML = ordersToDisplay.map(ord => {
+          const dateStr = ord.created_at ? new Date(ord.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recent';
+          const items = Array.isArray(ord.items) ? ord.items : [];
+          const status = ord.order_status || 'confirmed';
+
+          let statusClass = 'status-confirmed';
+          let statusText = 'Confirmed';
+          if (status === 'shipped') { statusClass = 'status-shipped'; statusText = 'Out for Delivery'; }
+          else if (status === 'delivered') { statusClass = 'status-delivered'; statusText = 'Delivered'; }
+          else if (status === 'pending') { statusClass = 'status-pending'; statusText = 'Pending'; }
+
+          // Stepper calculations
+          const isPlaced = true;
+          const isConfirmed = status === 'confirmed' || status === 'processing' || status === 'shipped' || status === 'delivered';
+          const isProcessing = status === 'processing' || status === 'shipped' || status === 'delivered';
+          const isShipped = status === 'shipped' || status === 'delivered';
+          const isDelivered = status === 'delivered';
+
+          const waMsg = encodeURIComponent(`Hello NKEMMART Support, I am tracking my order ${ord.id}. Name: ${ord.customer_name}.`);
+
+          return `
+            <div class="order-card" id="order-${ord.id}">
+              <div class="order-card-header">
+                <div>
+                  <h3 class="order-id-title">Order #${ord.id}</h3>
+                  <span class="order-date-text">Placed on ${dateStr}</span>
+                </div>
+                <span class="order-status-pill ${statusClass}">${statusText}</span>
+              </div>
+
+              <!-- Stepper -->
+              <div class="order-stepper">
+                <div class="step-node ${isPlaced ? 'completed' : ''}">
+                  <div class="step-circle">&#10003;</div>
+                  <span>Placed</span>
+                </div>
+                <div class="step-node ${isConfirmed ? 'completed' : ''}">
+                  <div class="step-circle">${isConfirmed ? '&#10003;' : '2'}</div>
+                  <span>Confirmed</span>
+                </div>
+                <div class="step-node ${isProcessing ? 'completed' : (isConfirmed ? 'active' : '')}">
+                  <div class="step-circle">${isProcessing ? '&#10003;' : '3'}</div>
+                  <span>Processing</span>
+                </div>
+                <div class="step-node ${isShipped ? 'completed' : ''}">
+                  <div class="step-circle">${isShipped ? '&#10003;' : '4'}</div>
+                  <span>Shipped</span>
+                </div>
+                <div class="step-node ${isDelivered ? 'completed' : ''}">
+                  <div class="step-circle">${isDelivered ? '&#10003;' : '5'}</div>
+                  <span>Delivered</span>
+                </div>
+              </div>
+
+              <!-- Items List -->
+              <div class="order-items-grid">
+                ${items.map(it => `
+                  <div class="order-item-row">
+                    <img src="${escapeHtml(it.image || 'images/subcategories/sub_smartphones.jpg')}" alt="${escapeHtml(it.title)}" class="order-item-img" onerror="this.src='images/subcategories/sub_smartphones.jpg'">
+                    <div class="order-item-info">
+                      <span class="order-item-name">${escapeHtml(it.title)}</span>
+                      <span class="order-item-meta">Qty: ${it.qty || 1} &bull; ₦${Number(it.price || 0).toLocaleString()} each</span>
+                    </div>
+                    <span class="order-item-price">₦${(Number(it.price || 0) * (it.qty || 1)).toLocaleString()}</span>
+                  </div>
+                `).join('')}
+              </div>
+
+              <!-- Info Columns -->
+              <div class="order-info-columns">
+                <div>
+                  <strong>Delivery Address:</strong><br>
+                  ${escapeHtml(ord.delivery_address || '')}<br>
+                  ${escapeHtml(ord.city || '')}${ord.state ? ', ' + escapeHtml(ord.state) : ''}<br>
+                  Recipient: <strong>${escapeHtml(ord.customer_name || '')}</strong> (${escapeHtml(ord.customer_phone || '')})
+                </div>
+                <div>
+                  <strong>Payment Information:</strong><br>
+                  Method: <span style="text-transform: capitalize;">${(ord.payment_method || 'Pay on Delivery').replace(/_/g, ' ')}</span><br>
+                  Delivery Fee: ₦${Number(ord.delivery_fee || 0).toLocaleString()}<br>
+                  Grand Total: <strong style="color: #008744; font-size: 15px;">₦${Number(ord.total_amount || 0).toLocaleString()}</strong>
+                </div>
+              </div>
+
+              <!-- Contact & Support for this order -->
+              <div class="order-contact-actions">
+                <a href="https://wa.me/2347042087633?text=${waMsg}" target="_blank" rel="noopener noreferrer" class="order-action-btn btn-wa">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  <span>WhatsApp Inquiry for this Order</span>
+                </a>
+                <a href="tel:08155608447" class="order-action-btn btn-call">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                  <span>Call 08155608447</span>
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Initial render: if specific order ID requested, show it or show all
+      if (targetOrderId) {
+        trackInput.value = targetOrderId;
+        const matched = allOrders.filter(o => String(o.id).toLowerCase() === targetOrderId.toLowerCase());
+        if (matched.length > 0) {
+          renderOrders(matched);
+        } else {
+          renderOrders(allOrders);
+        }
+      } else {
+        renderOrders(allOrders);
+      }
+
+      // Track Form Filter
+      trackForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const q = trackInput.value.trim().toLowerCase();
+        if (!q) {
+          renderOrders(allOrders);
+          return;
+        }
+
+        const filtered = allOrders.filter(o => {
+          const matchId = String(o.id || '').toLowerCase().includes(q);
+          const matchPhone = String(o.customer_phone || '').includes(q);
+          const matchEmail = String(o.customer_email || '').toLowerCase().includes(q);
+          return matchId || matchPhone || matchEmail;
+        });
+
+        renderOrders(filtered);
+      });
+    });
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+  </script>
+
+</body>
+</html>
