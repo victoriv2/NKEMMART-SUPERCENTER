@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=7.7">
+  <link rel="stylesheet" href="styles.css?v=8.0">
 </head>
 <body>
 
@@ -421,6 +421,126 @@
     </div>
   </aside>
 
+  <!-- SITE FOOTER -->
+  <footer class="site-footer">
+    <!-- Newsletter Strip -->
+    <div class="footer-newsletter-wrap">
+      <div class="footer-newsletter-inner">
+        <div class="footer-newsletter-text">
+          <span class="footer-newsletter-badge">Stay Updated</span>
+          <h3>BE THE FIRST TO KNOW</h3>
+          <p>Subscribe to our newsletter to receive daily flash sale discounts, price cuts, and exclusive coupon codes.</p>
+        </div>
+        <form class="footer-newsletter-form" onsubmit="event.preventDefault(); var inp = this.querySelector('input'); if (inp && inp.value) { alert('Thank you for subscribing to NKEMMART updates with: ' + inp.value); inp.value = ''; }">
+          <input type="email" class="footer-newsletter-input" placeholder="Enter your email address" required aria-label="Enter your email address">
+          <button type="submit" class="footer-newsletter-btn">
+            <span>Subscribe</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Footer Columns -->
+    <div class="footer-main">
+      <div class="footer-col">
+        <div class="footer-brand-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00a859" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>NKEMMART SUPERCENTER</span>
+        </div>
+        <p class="footer-brand-desc">
+          Nigeria's foremost online retail supercenter. Quality consumer electronics, household appliances, everyday groceries, fashion, and baby essentials delivered straight to your doorstep.
+        </p>
+        <div class="footer-contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <span>Hotline: 0800-NKEMMART (Mon-Sat: 8am-8pm)</span>
+        </div>
+        <div class="footer-contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <span>Email: support@nkemmart.com</span>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Customer Care</h4>
+        <ul class="footer-links-list">
+          <li><a href="index.html#help-center" class="footer-link">Help Center & FAQs</a></li>
+          <li><a href="index.html#track-order" class="footer-link">Track Your Order</a></li>
+          <li><a href="cart.html" class="footer-link">Shopping Cart</a></li>
+          <li><a href="saved-items.html" class="footer-link">Saved Items</a></li>
+          <li><a href="index.html#returns" class="footer-link">Returns & Refunds</a></li>
+          <li><a href="index.html#cancellations" class="footer-link">Order Cancellation</a></li>
+          <li><a href="index.html#contact-us" class="footer-link">Contact Support</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">About Nkemmart</h4>
+        <ul class="footer-links-list">
+          <li><a href="index.html" class="footer-link">About Us</a></li>
+          <li><a href="category.html?cat=appliances" class="footer-link">Appliances & Electronics</a></li>
+          <li><a href="category.html?cat=supermarket" class="footer-link">Supermarket & Groceries</a></li>
+          <li><a href="category.html?cat=phones" class="footer-link">Phones & Tablets</a></li>
+          <li><a href="index.html#terms" class="footer-link">Terms and Conditions</a></li>
+          <li><a href="index.html#privacy" class="footer-link">Privacy Notice</a></li>
+          <li><a href="index.html#careers" class="footer-link">Careers at Nkemmart</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Sell & Partner</h4>
+        <ul class="footer-links-list">
+          <li><a href="index.html#sell" class="footer-link">Sell on Nkemmart</a></li>
+          <li><a href="index.html#sell" class="footer-link">Vendor Hub & Merchant Center</a></li>
+          <li><a href="index.html#logistics" class="footer-link">Logistics Partner Program</a></li>
+          <li><a href="index.html#bulk" class="footer-link">Corporate & Bulk Purchasing</a></li>
+          <li><a href="index.html#service-center" class="footer-link">Service Center Network</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Trust & Payment Guarantee Strip -->
+    <div class="footer-trust-strip">
+      <div class="footer-trust-inner">
+        <div class="footer-trust-perks">
+          <div class="footer-trust-perk">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>100% Genuine Products</span>
+          </div>
+          <div class="footer-trust-perk">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>Fast Nationwide Delivery</span>
+          </div>
+          <div class="footer-trust-perk">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span>Secure Bank-Grade Payment</span>
+          </div>
+        </div>
+
+        <div class="footer-payment-group">
+          <span class="footer-payment-label">Accepted Payments:</span>
+          <span class="footer-payment-pill">VERVE</span>
+          <span class="footer-payment-pill">MASTERCARD</span>
+          <span class="footer-payment-pill">VISA</span>
+          <span class="footer-payment-pill">BANK TRANSFER</span>
+          <span class="footer-payment-pill">PAY ON DELIVERY</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Legal Copyright Bar -->
+    <div class="footer-bottom-bar">
+      <div class="footer-bottom-inner">
+        <span>Copyright &copy; 2026 NKEMMART SUPERCENTER. All Rights Reserved.</span>
+        <div class="footer-legal-links">
+          <a href="index.html#terms">Terms of Service</a>
+          <a href="index.html#privacy">Privacy Policy</a>
+          <a href="index.html#cookies">Cookie Notice</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
   <!-- Toast Notification Container -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
@@ -677,11 +797,11 @@
               var itemTotal = (item.price || 0) * (item.qty || 1);
 
               row.innerHTML = 
-                '<div class="cart-item-img-wrapper">' +
+                '<a href="product.html?id=' + encodeURIComponent(item.id) + '" class="cart-item-img-wrapper">' +
                   '<img src="' + item.image + '" alt="' + item.title + '" class="cart-item-img">' +
-                '</div>' +
+                '</a>' +
                 '<div class="cart-item-details">' +
-                  '<a href="index.html#product" class="cart-item-title">' + item.title + '</a>' +
+                  '<a href="product.html?id=' + encodeURIComponent(item.id) + '" class="cart-item-title">' + item.title + '</a>' +
                   '<div class="cart-item-status">' +
                     '<span class="cart-item-status-dot"></span>' +
                     '<span>In Stock | Eligible for Doorstep Delivery</span>' +
@@ -774,13 +894,15 @@
 
           card.innerHTML = 
             '<div class="rec-card-media">' +
-              '<img src="' + p.image + '" alt="' + p.title + '" class="rec-card-img">' +
+              '<a href="product.html?id=' + encodeURIComponent(p.id) + '">' +
+                '<img src="' + p.image + '" alt="' + p.title + '" class="rec-card-img">' +
+              '</a>' +
               '<button type="button" class="wishlist-btn ' + (isSaved ? 'active' : '') + '" data-rec-wish="' + p.id + '" aria-label="Toggle wishlist" style="position: absolute; bottom: 8px; right: 8px;">' +
                 '<svg width="15" height="15" viewBox="0 0 24 24" fill="' + (isSaved ? '#ef4444' : 'none') + '" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
               '</button>' +
             '</div>' +
             '<div class="rec-card-body">' +
-              '<a href="index.html#product" class="rec-card-title">' + p.title + '</a>' +
+              '<a href="product.html?id=' + encodeURIComponent(p.id) + '" class="rec-card-title">' + p.title + '</a>' +
               '<div class="rec-card-price-row">' +
                 '<span class="rec-card-price">' + formatNaira(p.price) + '</span>' +
                 '<span class="rec-card-discount">-' + discountPercent + '%</span>' +

@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <title>Product Details - NKEMMART SUPERCENTER</title>
+  <link rel="stylesheet" href="styles.css?v=8.0">
+  <script src="taxonomy.js?v=3.1"></script>
+</head>
+<body class="pdp-page">
+
+  <!-- TOP BAR / ANNOUNCEMENT -->
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-left">
+        <span class="delivery-badge">Doorstep Delivery Nationwide</span>
+        <span class="top-sep">|</span>
+        <a href="tel:0800NKEMMART" class="top-tel-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <span>Call to Order: 0800-NKEMMART</span>
+        </a>
+      </div>
+      <div class="top-bar-right">
+        <a href="index.html#sell" class="top-link">Sell on Nkemmart</a>
+        <span class="top-sep">|</span>
+        <a href="index.html#help-center" class="top-link">Help Center</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN HEADER -->
+  <header class="main-header" id="mainHeader">
+    <div class="main-header-inner">
+      
+      <!-- Mobile Drawer Hamburger -->
+      <button class="mobile-drawer-btn" id="mobileDrawerOpenBtn" aria-label="Open navigation menu" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Brand Logo -->
+      <a href="index.html" class="header-logo" aria-label="NKEMMART SUPERCENTER Homepage">
+        <img src="logo/LOGO.png" alt="NKEMMART SUPERCENTER Logo" class="logo-img">
+      </a>
+
+      <!-- Search Bar -->
+      <form class="header-search-form" action="category.html" method="GET" role="search" id="headerSearchForm">
+        <div class="search-input-wrap">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="search" name="q" class="search-input" id="headerSearchInput" placeholder="Search products, brands and categories..." autocomplete="off">
+        </div>
+        <button type="submit" class="search-btn">Search</button>
+      </form>
+
+      <!-- Header Actions: Account, Help, Saved Items, Cart -->
+      <div class="header-actions">
+        <!-- Account Dropdown -->
+        <div class="header-dropdown" id="accountDropdown">
+          <button class="header-action-btn" type="button" aria-expanded="false" id="accountMenuBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span class="action-btn-text">Account</span>
+            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="dropdown-menu" id="accountMenu">
+            <div class="dropdown-header">
+              <a href="index.html#signin" class="dropdown-signin-btn">SIGN IN</a>
+            </div>
+            <ul class="dropdown-list">
+              <li><a href="index.html#account" class="dropdown-item">My Nkemmart Account</a></li>
+              <li><a href="index.html#orders" class="dropdown-item">Orders</a></li>
+              <li><a href="saved-items.html" class="dropdown-item">Saved Items</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Help Dropdown -->
+        <div class="header-dropdown" id="helpDropdown">
+          <button class="header-action-btn" type="button" aria-expanded="false" id="helpMenuBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <span class="action-btn-text">Help</span>
+            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="dropdown-menu" id="helpMenu">
+            <ul class="dropdown-list">
+              <li><a href="index.html#help-center" class="dropdown-item">Help Center</a></li>
+              <li><a href="index.html#track-order" class="dropdown-item">Track Your Order</a></li>
+              <li><a href="index.html#returns" class="dropdown-item">Returns & Refunds</a></li>
+              <li><a href="index.html#contact-us" class="dropdown-item">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Saved Items Button -->
+        <a href="saved-items.html" class="header-action-btn" id="savedItemsHeaderLink" aria-label="Saved Items">
+          <div class="header-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <span class="header-badge" id="headerSavedBadge" style="display: none;">0</span>
+          </div>
+          <span class="action-btn-text">Saved</span>
+        </a>
+
+        <!-- Cart Button -->
+        <a href="cart.html" class="header-action-btn cart-btn-active" id="cartHeaderLink" aria-label="Shopping Cart">
+          <div class="header-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span class="header-badge" id="headerCartBadge" style="display: none;">0</span>
+          </div>
+          <span class="action-btn-text">Cart</span>
+        </a>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN PRODUCT DETAILS CONTENT -->
+  <main class="pdp-container">
+    
+    <!-- Breadcrumb Row -->
+    <nav class="pdp-breadcrumbs" aria-label="Breadcrumbs">
+      <a href="index.html">Home</a>
+      <span class="pdp-breadcrumb-sep">/</span>
+      <a href="category.html?cat=appliances" id="pdpBreadcrumbCat">Appliances</a>
+      <span class="pdp-breadcrumb-sep">/</span>
+      <span class="pdp-breadcrumb-current" id="pdpBreadcrumbCurrent">Product Title</span>
+    </nav>
+
+    <!-- 3-Column Core Product Block -->
+    <section class="pdp-main-grid" aria-label="Product Presentation">
+      
+      <!-- 1. Left Gallery Card -->
+      <div class="pdp-gallery-card">
+        <div class="pdp-main-image-wrap" id="pdpMainImageWrap">
+          <span class="pdp-discount-badge" id="pdpDiscountBadge">-20%</span>
+          <img src="images/product_kettle.webp" alt="Product Image" class="pdp-main-image" id="pdpMainImg">
+          <span class="pdp-verified-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Verified Authentic</span>
+          </span>
+        </div>
+
+        <!-- Image Thumbnails -->
+        <div class="pdp-thumbnail-strip" id="pdpThumbnails">
+          <!-- Dynamically populated or switchable -->
+        </div>
+      </div>
+
+      <!-- 2. Center Purchase Panel -->
+      <div class="pdp-purchase-card">
+        <div class="pdp-brand-tag-row">
+          <a href="category.html" class="pdp-brand-link" id="pdpBrandLink">Brand: Verified Manufacturer</a>
+          <span class="pdp-sku-text" id="pdpSkuText">SKU: NKEM-82914</span>
+        </div>
+
+        <h1 class="pdp-product-title" id="pdpProductTitle">Loading Product Details...</h1>
+
+        <div class="pdp-rating-strip">
+          <div class="pdp-stars-box" id="pdpRatingStars">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <span class="pdp-rating-num" id="pdpRatingScore">4.8</span>
+          <span class="pdp-sep">|</span>
+          <a href="#reviewsTab" class="pdp-rating-count-link" id="pdpRatingCountLink">1,240 verified ratings</a>
+        </div>
+
+        <!-- Price and Stock Block -->
+        <div class="pdp-pricing-box">
+          <div class="pdp-price-row">
+            <span class="pdp-current-price" id="pdpCurrentPrice">₦ 0</span>
+            <span class="pdp-original-price" id="pdpOriginalPrice">₦ 0</span>
+            <span class="pdp-save-percent" id="pdpSavePercent">-0%</span>
+          </div>
+          <div class="pdp-stock-status-row">
+            <span class="pdp-stock-dot"></span>
+            <span>In Stock (Doorstep delivery available)</span>
+          </div>
+        </div>
+
+        <!-- Quantity Stepper & Buttons -->
+        <div class="pdp-purchase-actions-box">
+          <div class="pdp-qty-label-row">
+            <span class="pdp-qty-title">Quantity:</span>
+            <div class="pdp-stepper-wrap">
+              <button type="button" class="pdp-stepper-btn" id="pdpQtyDecBtn" aria-label="Decrease quantity">-</button>
+              <input type="number" class="pdp-stepper-input" id="pdpQtyInput" value="1" min="1" max="10" readonly aria-label="Selected quantity">
+              <button type="button" class="pdp-stepper-btn" id="pdpQtyIncBtn" aria-label="Increase quantity">+</button>
+            </div>
+          </div>
+
+          <div class="pdp-buttons-row">
+            <button type="button" class="pdp-add-to-cart-btn" id="pdpAddToCartBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <span>ADD TO CART</span>
+            </button>
+
+            <button type="button" class="pdp-buy-now-btn" id="pdpBuyNowBtn">
+              <span>BUY NOW</span>
+            </button>
+
+            <button type="button" class="pdp-wishlist-toggle-btn" id="pdpWishlistBtn" aria-label="Save to wishlist">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3. Right Perks & Delivery Card -->
+      <aside class="pdp-perks-card">
+        <h3 class="pdp-perks-title">Delivery & Returns</h3>
+        
+        <div class="pdp-perk-row">
+          <div class="pdp-perk-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+          </div>
+          <div class="pdp-perk-text">
+            <strong>Doorstep Delivery</strong>
+            <span>Delivery within 24 to 72 hours across Lagos, Abuja, Port Harcourt and nationwide.</span>
+          </div>
+        </div>
+
+        <div class="pdp-perk-row">
+          <div class="pdp-perk-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          </div>
+          <div class="pdp-perk-text">
+            <strong>7 Days Return Policy</strong>
+            <span>Hassle-free return and full refund if item is damaged, defective or incorrect.</span>
+          </div>
+        </div>
+
+        <div class="pdp-perk-row">
+          <div class="pdp-perk-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <div class="pdp-perk-text">
+            <strong>Manufacturer Warranty</strong>
+            <span>12 Months Official Manufacturer Warranty included on verified electronic items.</span>
+          </div>
+        </div>
+
+        <div class="pdp-perk-row">
+          <div class="pdp-perk-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </div>
+          <div class="pdp-perk-text">
+            <strong>Secure Payment Guaranteed</strong>
+            <span>Multiple safe payment gateways: Card, Transfer, USSD, or Pay on Delivery.</span>
+          </div>
+        </div>
+      </aside>
+
+    </section>
+
+    <!-- Details, Specifications & Reviews Tabs -->
+    <section class="pdp-tabs-container">
+      <div class="pdp-tabs-header">
+        <button type="button" class="pdp-tab-trigger active" data-tab="overviewTab">Product Overview</button>
+        <button type="button" class="pdp-tab-trigger" data-tab="specsTab">Technical Specifications</button>
+        <button type="button" class="pdp-tab-trigger" data-tab="reviewsTab">Verified Customer Reviews</button>
+      </div>
+
+      <!-- Tab 1: Product Overview -->
+      <div class="pdp-tab-content-panel active" id="overviewTab">
+        <div class="pdp-description-body" id="pdpOverviewContent">
+          <h4>Key Features and Highlights</h4>
+          <ul id="pdpKeyFeaturesList">
+            <li>Built with premium industrial grade materials for long lasting durability.</li>
+            <li>Energy efficient performance designed specifically for Nigerian households and power conditions.</li>
+            <li>Ergonomic, modern exterior that fits seamlessly into your kitchen, living space or office.</li>
+            <li>Tested and certified for safety and high performance under strict quality controls.</li>
+          </ul>
+
+          <h4>Product Description</h4>
+          <p id="pdpLongDesc">
+            Enjoy premium quality, unparalleled reliability, and outstanding performance with this certified product from NKEMMART SUPERCENTER. Backed by full warranty coverage and rapid doorstep delivery across all states in Nigeria.
+          </p>
+
+          <h4>What is in the Box</h4>
+          <ul id="pdpInTheBoxList">
+            <li>1 x Main Unit</li>
+            <li>1 x User Manual and Installation Guide</li>
+            <li>1 x Official Warranty Certificate</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tab 2: Specifications Table -->
+      <div class="pdp-tab-content-panel" id="specsTab">
+        <table class="pdp-spec-table">
+          <tbody id="pdpSpecsTableBody">
+            <tr>
+              <td class="pdp-spec-label">Brand</td>
+              <td class="pdp-spec-value" id="specBrand">Nkemmart Verified</td>
+            </tr>
+            <tr>
+              <td class="pdp-spec-label">Model Code</td>
+              <td class="pdp-spec-value" id="specModel">NK-2026-X</td>
+            </tr>
+            <tr>
+              <td class="pdp-spec-label">Condition</td>
+              <td class="pdp-spec-value">Brand New in Factory Sealed Box</td>
+            </tr>
+            <tr>
+              <td class="pdp-spec-label">Power Supply / Rating</td>
+              <td class="pdp-spec-value">220V - 240V / 50Hz Standard Nigerian Voltage</td>
+            </tr>
+            <tr>
+              <td class="pdp-spec-label">Warranty Coverage</td>
+              <td class="pdp-spec-value">12 Months Manufacturer Warranty</td>
+            </tr>
+            <tr>
+              <td class="pdp-spec-label">Color</td>
+              <td class="pdp-spec-value">Standard Factory Finish</td>
+            </tr>
+            <tr>
+              <td class="pdp-spec-label">Return Period</td>
+              <td class="pdp-spec-value">7 Days Return Window</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tab 3: Customer Reviews -->
+      <div class="pdp-tab-content-panel" id="reviewsTab">
+        <div class="pdp-reviews-layout">
+          
+          <div class="pdp-rating-overview-card">
+            <div class="pdp-rating-big-score" id="pdpBigScore">4.8</div>
+            <div class="pdp-rating-big-stars">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <div class="pdp-rating-total-reviews">Based on 1,240 verified customer purchases</div>
+
+            <div class="pdp-breakdown-row">
+              <span>5 star</span>
+              <div class="pdp-breakdown-bar-bg"><div class="pdp-breakdown-bar-fill" style="width: 82%;"></div></div>
+              <span>82%</span>
+            </div>
+            <div class="pdp-breakdown-row">
+              <span>4 star</span>
+              <div class="pdp-breakdown-bar-bg"><div class="pdp-breakdown-bar-fill" style="width: 12%;"></div></div>
+              <span>12%</span>
+            </div>
+            <div class="pdp-breakdown-row">
+              <span>3 star</span>
+              <div class="pdp-breakdown-bar-bg"><div class="pdp-breakdown-bar-fill" style="width: 4%;"></div></div>
+              <span>4%</span>
+            </div>
+            <div class="pdp-breakdown-row">
+              <span>2 star</span>
+              <div class="pdp-breakdown-bar-bg"><div class="pdp-breakdown-bar-fill" style="width: 1%;"></div></div>
+              <span>1%</span>
+            </div>
+            <div class="pdp-breakdown-row">
+              <span>1 star</span>
+              <div class="pdp-breakdown-bar-bg"><div class="pdp-breakdown-bar-fill" style="width: 1%;"></div></div>
+              <span>1%</span>
+            </div>
+          </div>
+
+          <div class="pdp-reviews-list">
+            <div class="pdp-review-card-item">
+              <div class="pdp-review-header">
+                <span class="pdp-reviewer-name">Chinedu O. (Verified Purchase)</span>
+                <span class="pdp-review-date">2 days ago</span>
+              </div>
+              <div class="pdp-stars-box" style="color: #f59e0b; margin-bottom: 4px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <p class="pdp-review-comment">Super fast delivery to Ikeja, Lagos! The build quality is genuine and works perfectly straight out of the box. Highly recommended supercenter.</p>
+            </div>
+
+            <div class="pdp-review-card-item">
+              <div class="pdp-review-header">
+                <span class="pdp-reviewer-name">Fatima A. (Verified Purchase)</span>
+                <span class="pdp-review-date">1 week ago</span>
+              </div>
+              <div class="pdp-stars-box" style="color: #f59e0b; margin-bottom: 4px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <p class="pdp-review-comment">Original product exactly as advertised. The package was sealed properly and the courier was polite. Will definitely buy again from Nkemmart.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cross-Sell Recommendation Shelf -->
+    <section class="recommendations-container" aria-label="Customers Also Viewed">
+      <div class="recommendations-header">
+        <div>
+          <h2 class="recommendations-title">Customers Who Viewed This Also Bought</h2>
+          <span class="recommendations-subtitle">Top recommendations based on customer preferences</span>
+        </div>
+        <a href="category.html?cat=appliances" class="recommendations-view-all">View All</a>
+      </div>
+      <div class="recommendations-grid" id="pdpRecommendationsGrid">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SITE FOOTER -->
+  <footer class="site-footer">
+    <!-- Newsletter Strip -->
+    <div class="footer-newsletter-wrap">
+      <div class="footer-newsletter-inner">
+        <div class="footer-newsletter-text">
+          <span class="footer-newsletter-badge">Stay Updated</span>
+          <h3>BE THE FIRST TO KNOW</h3>
+          <p>Subscribe to our newsletter to receive daily flash sale discounts, price cuts, and exclusive coupon codes.</p>
+        </div>
+        <form class="footer-newsletter-form" onsubmit="event.preventDefault(); var inp = this.querySelector('input'); if (inp && inp.value) { alert('Thank you for subscribing to NKEMMART updates with: ' + inp.value); inp.value = ''; }">
+          <input type="email" class="footer-newsletter-input" placeholder="Enter your email address" required aria-label="Enter your email address">
+          <button type="submit" class="footer-newsletter-btn">
+            <span>Subscribe</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Footer Columns -->
+    <div class="footer-main">
+      <div class="footer-col">
+        <div class="footer-brand-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00a859" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>NKEMMART SUPERCENTER</span>
+        </div>
+        <p class="footer-brand-desc">
+          Nigeria's foremost online retail supercenter. Quality consumer electronics, household appliances, everyday groceries, fashion, and baby essentials delivered straight to your doorstep.
+        </p>
+        <div class="footer-contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <span>Hotline: 0800-NKEMMART (Mon-Sat: 8am-8pm)</span>
+        </div>
+        <div class="footer-contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <span>Email: support@nkemmart.com</span>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Customer Care</h4>
+        <ul class="footer-links-list">
+          <li><a href="index.html#help-center" class="footer-link">Help Center & FAQs</a></li>
+          <li><a href="index.html#track-order" class="footer-link">Track Your Order</a></li>
+          <li><a href="cart.html" class="footer-link">Shopping Cart</a></li>
+          <li><a href="saved-items.html" class="footer-link">Saved Items</a></li>
+          <li><a href="index.html#returns" class="footer-link">Returns & Refunds</a></li>
+          <li><a href="index.html#cancellations" class="footer-link">Order Cancellation</a></li>
+          <li><a href="index.html#contact-us" class="footer-link">Contact Support</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">About Nkemmart</h4>
+        <ul class="footer-links-list">
+          <li><a href="index.html" class="footer-link">About Us</a></li>
+          <li><a href="category.html?cat=appliances" class="footer-link">Appliances & Electronics</a></li>
+          <li><a href="category.html?cat=supermarket" class="footer-link">Supermarket & Groceries</a></li>
+          <li><a href="category.html?cat=phones" class="footer-link">Phones & Tablets</a></li>
+          <li><a href="index.html#terms" class="footer-link">Terms and Conditions</a></li>
+          <li><a href="index.html#privacy" class="footer-link">Privacy Notice</a></li>
+          <li><a href="index.html#careers" class="footer-link">Careers at Nkemmart</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Sell & Partner</h4>
+        <ul class="footer-links-list">
+          <li><a href="index.html#sell" class="footer-link">Sell on Nkemmart</a></li>
+          <li><a href="index.html#sell" class="footer-link">Vendor Hub & Merchant Center</a></li>
+          <li><a href="index.html#logistics" class="footer-link">Logistics Partner Program</a></li>
+          <li><a href="index.html#bulk" class="footer-link">Corporate & Bulk Purchasing</a></li>
+          <li><a href="index.html#service-center" class="footer-link">Service Center Network</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Trust & Payment Guarantee Strip -->
+    <div class="footer-trust-strip">
+      <div class="footer-trust-inner">
+        <div class="footer-trust-perks">
+          <div class="footer-trust-perk">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>100% Genuine Products</span>
+          </div>
+          <div class="footer-trust-perk">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>Fast Nationwide Delivery</span>
+          </div>
+          <div class="footer-trust-perk">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span>Secure Bank-Grade Payment</span>
+          </div>
+        </div>
+
+        <div class="footer-payment-group">
+          <span class="footer-payment-label">Accepted Payments:</span>
+          <span class="footer-payment-pill">VERVE</span>
+          <span class="footer-payment-pill">MASTERCARD</span>
+          <span class="footer-payment-pill">VISA</span>
+          <span class="footer-payment-pill">BANK TRANSFER</span>
+          <span class="footer-payment-pill">PAY ON DELIVERY</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Legal Copyright Bar -->
+    <div class="footer-bottom-bar">
+      <div class="footer-bottom-inner">
+        <span>Copyright &copy; 2026 NKEMMART SUPERCENTER. All Rights Reserved.</span>
+        <div class="footer-legal-links">
+          <a href="index.html#terms">Terms of Service</a>
+          <a href="index.html#privacy">Privacy Policy</a>
+          <a href="index.html#cookies">Cookie Notice</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MOBILE FLOATING STICKY NAVIGATION BAR -->
+  <nav class="mobile-floating-bar" aria-label="Mobile Navigation">
+    <a href="index.html" class="mobile-nav-item">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span class="mobile-nav-label">Home</span>
+    </a>
+    <a href="category.html?cat=appliances" class="mobile-nav-item">
+      <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <span class="mobile-nav-label">Categories</span>
+    </a>
+    <a href="saved-items.html" class="mobile-nav-item">
+      <div class="mobile-nav-icon-wrap">
+        <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        <span class="mobile-badge" id="mobileSavedBadge" style="display: none;">0</span>
+      </div>
+      <span class="mobile-nav-label">Saved</span>
+    </a>
+    <a href="cart.html" class="mobile-nav-item">
+      <div class="mobile-nav-icon-wrap">
+        <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <span class="mobile-badge" id="mobileCartBadge" style="display: none;">0</span>
+      </div>
+      <span class="mobile-nav-label">Cart</span>
+    </a>
+  </nav>
+
+  <!-- Mobile Menu Drawer Backdrop & Aside -->
+  <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop"></div>
+  <aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Menu">
+    <div class="mobile-drawer-header">
+      <span class="mobile-drawer-title">Menu</span>
+      <button class="mobile-drawer-close" id="mobileDrawerCloseBtn" aria-label="Close menu" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="mobile-drawer-body">
+      <div class="mobile-sub-nav-list">
+        <a href="index.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          <span>Home</span>
+        </a>
+        <a href="category.html?cat=appliances" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="10" x2="20" y2="10"></line></svg>
+          <span>Appliances</span>
+        </a>
+        <a href="category.html?cat=phones" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+          <span>Phones & Tablets</span>
+        </a>
+        <a href="saved-items.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span>Saved Items</span>
+        </a>
+        <a href="cart.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>Shopping Cart</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- PDP Application Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var CART_KEY = 'nkemmart_cart';
+      var SAVED_KEY = 'nkemmart_saved_items';
+
+      var CATALOG_PRODUCTS = [
+        {
+          id: 'prod-1',
+          title: 'Ace Elec 20000 mAh Ultra Slim Portable Power Bank - Type C Dual Input',
+          price: 7650,
+          originalPrice: 12000,
+          discount: '-36%',
+          image: 'images/product_powerbank.jpg',
+          brand: 'Ace Elec',
+          categoryKey: 'phones',
+          categoryName: 'Phones & Tablets',
+          rating: 4.8,
+          reviews: 1420,
+          sku: 'NKEM-ACE-20K',
+          features: [
+            '20,000 mAh high capacity lithium polymer battery with smart power management.',
+            'Dual USB output + Type-C and Micro USB input for maximum compatibility.',
+            'Ultra-slim aerodynamic pocket profile with anti-scratch matte grip finish.',
+            'Intelligent circuit protection against overcharging, overheating and short circuits.'
+          ],
+          description: 'Never run out of power on the go. The Ace Elec 20000 mAh Ultra Slim Power Bank is engineered with cutting-edge high-density battery cells to provide multiple full charges for your smartphones, tablets, earphones and USB accessories. Sleek, dependable, and fully compliant with international aviation travel safety standards.',
+          specs: [
+            ['Brand', 'Ace Elec'],
+            ['Capacity', '20,000 mAh (74Wh)'],
+            ['Input Ports', 'Micro-USB (5V/2A) & Type-C (5V/2.1A)'],
+            ['Output Ports', '2x USB-A (5V/2.1A Fast Charge)'],
+            ['Battery Type', 'Lithium Polymer Grade A+'],
+            ['Dimensions', '140 x 68 x 16 mm'],
+            ['Weight', '220g'],
+            ['Warranty', '12 Months Official Manufacturer Warranty']
+          ]
+        },
+        {
+          id: 'prod-2',
+          title: 'SILVER CREST 2L Industrial 8500W Food Crusher Blender With 2 Jar',
+          price: 20954,
+          originalPrice: 26386,
+          discount: '-21%',
+          image: 'images/product_blender.webp',
+          brand: 'Silver Crest',
+          categoryKey: 'appliances',
+          categoryName: 'Appliances',
+          rating: 4.9,
+          reviews: 8420,
+          sku: 'NKEM-SC-8500W',
+          features: [
+            'Massive 8500W copper wound high torque motor capable of crushing beans, tiger nuts, ice, and spices.',
+            'Unbreakable 2-Litre BPA-free polycarbonate jug plus supplementary dry grinding jar.',
+            '6-leaf laser hardened stainless steel serrated blades.',
+            'Variable 15-speed stepless dial and high-intensity pulse switch.'
+          ],
+          description: 'The Silver Crest 8500W Industrial Blender is Nigeria\'s favorite kitchen workhorse. Whether you are smoothly blending soaked beans for Akara and Moi-Moi, dry grinding egusi, ogbono, crayfish, or crushing hard ice blocks, this blender handles it effortlessly in seconds without overheating.',
+          specs: [
+            ['Brand', 'Silver Crest'],
+            ['Motor Power', '8500W Pure Copper Core Motor'],
+            ['Capacity', '2.0 Litres Main Jar + 0.8L Grinder Jar'],
+            ['Blade System', '6 Stainless Steel 304 Sawtooth Blades'],
+            ['Speed Levels', '15 Variable Speeds + Pulse Mode'],
+            ['Safety Mechanism', 'Auto Overheat & Overload Circuit Breaker'],
+            ['Voltage', '220V - 240V / 50-60Hz'],
+            ['Warranty', '12 Months Manufacturer Warranty']
+          ]
+        },
+        {
+          id: 'prod-3',
+          title: 'HANSEN Electric Iron Pressing Clothes 1000W',
+          price: 5959,
+          originalPrice: 7117,
+          discount: '-16%',
+          image: 'images/product_iron.jpg',
+          brand: 'Hansen',
+          categoryKey: 'appliances',
+          categoryName: 'Appliances',
+          rating: 4.7,
+          reviews: 3110,
+          sku: 'NKEM-HAN-1000W',
+          features: [
+            'Polished non-stick ceramic soleplate glides effortlessly over all fabric types.',
+            'Precise thermostatic temperature dial for cotton, linen, silk, wool and synthetic materials.',
+            'Comfort-grip ergonomic handle with 360-degree swivel cord to prevent tangling.',
+            'Energy efficient 1000W quick heating element designed for generator compatibility.'
+          ],
+          description: 'Look crisp and professional every day with the Hansen 1000W Heavy Duty Dry Pressing Iron. Engineered with uniform heat distribution and a non-stick soleplate that protects your expensive native attires, shirts, and delicate fabrics.',
+          specs: [
+            ['Brand', 'Hansen'],
+            ['Power Rating', '1000 Watts'],
+            ['Soleplate Type', 'Non-Stick Ceramic Coated Golden Base'],
+            ['Cord Length', '1.8 Metres with 360-degree swivel'],
+            ['Safety Feature', 'Thermal Overheat Fuse Protection'],
+            ['Warranty', '12 Months Warranty']
+          ]
+        },
+        {
+          id: 'prod-4',
+          title: 'HANSEN 18 inches industrial level standing fan',
+          price: 16998,
+          originalPrice: 20060,
+          discount: '-15%',
+          image: 'images/product_fan.webp',
+          brand: 'Hansen',
+          categoryKey: 'appliances',
+          categoryName: 'Appliances',
+          rating: 4.6,
+          reviews: 5890,
+          sku: 'NKEM-FAN-18IN',
+          features: [
+            'Aerodynamically balanced 5-blade aluminum alloy system delivering high-velocity air circulation.',
+            'Heavy-duty copper wound motor with self-lubricating bearings for whisper-quiet performance.',
+            'Heavy weighted round base for vibration-free anti-topple stability.',
+            'Adjustable telescopic height (up to 1.4m) with 90-degree wide oscillation.'
+          ],
+          description: 'Beat the tropical heat with the Hansen 18-Inch Industrial Standing Fan. Built for sustained heavy-duty operation in Nigerian homes, shops, offices, and religious centers.',
+          specs: [
+            ['Brand', 'Hansen'],
+            ['Fan Size', '18 Inches (45cm)'],
+            ['Blade Material', 'Reinforced Aluminum 5-Blade Design'],
+            ['Speed Settings', '3 Speed Rotary Push Buttons'],
+            ['Oscillation', '90-degree horizontal with tilt adjustment'],
+            ['Warranty', '12 Months Warranty']
+          ]
+        },
+        {
+          id: 'prod-5',
+          title: 'Syinix 2.2L Electric Kettle - Food Grade Stainless Steel SKE22U1',
+          price: 6399,
+          originalPrice: 7229,
+          discount: '-12%',
+          image: 'images/product_kettle.webp',
+          brand: 'Syinix',
+          categoryKey: 'appliances',
+          categoryName: 'Appliances',
+          rating: 4.8,
+          reviews: 15262,
+          sku: 'NKEM-SYI-KETTLE',
+          features: [
+            'Food-grade 304 stainless steel interior with zero chemical plastic odor.',
+            'Rapid boiling technology heats 2.2 litres in under 4 minutes.',
+            'Double-wall cool-touch exterior prevents accidental burns.',
+            'Automatic shut-off and boil-dry safety protection.'
+          ],
+          description: 'Start your mornings right with the Syinix 2.2L Stainless Steel Electric Kettle. Boils water in record time for your tea, coffee, baby cereal, and cooking with complete safety and energy efficiency.',
+          specs: [
+            ['Brand', 'Syinix'],
+            ['Capacity', '2.2 Litres'],
+            ['Material', '304 Food-Grade Stainless Steel & Cool-Touch Polypropylene'],
+            ['Power', '1800W Rapid Heating'],
+            ['Base', '360-Degree Cordless Swivel Base'],
+            ['Warranty', '12 Months Official Manufacturer Warranty']
+          ]
+        },
+        {
+          id: 'prod-6',
+          title: 'SILVER CREST 8L Extra Large Digital Air Fryer 2400W',
+          price: 30999,
+          originalPrice: 44000,
+          discount: '-30%',
+          image: 'images/product_airfryer.jpg',
+          brand: 'Silver Crest',
+          categoryKey: 'appliances',
+          categoryName: 'Appliances',
+          rating: 4.9,
+          reviews: 7523,
+          sku: 'NKEM-SC-AF8L',
+          features: [
+            'Extra-large 8-Litre capacity fits whole chicken, large cuts of beef, plantain, and pastries.',
+            '360-degree rapid hot air circulation cooks with up to 85% less oil for healthy living.',
+            'Intuitive smart digital LED touch screen with 8 pre-programmed culinary presets.',
+            'Non-stick dishwasher-safe basket with cool-touch handle.'
+          ],
+          description: 'Cook delicious, crispy, and guilt-free meals for the whole family with the Silver Crest 8L Digital Air Fryer. Fry chicken, bake cakes, roast fish, grill steak, and crisp dodo without bathing your food in cholesterol-heavy cooking oil.',
+          specs: [
+            ['Brand', 'Silver Crest'],
+            ['Capacity', '8.0 Litres (Family Size)'],
+            ['Power', '2400W High Efficiency Thermal Element'],
+            ['Display', 'Digital One-Touch LED Interface'],
+            ['Temperature Range', '80°C - 200°C Adjustable'],
+            ['Timer', '0 - 60 Minutes Auto Shutoff'],
+            ['Warranty', '12 Months Warranty']
+          ]
+        },
+        {
+          id: 'prod-7',
+          title: 'Maxi 20 Litres Manual Microwave Oven (MAXIMWO2021W) - 12 Months Warranty',
+          price: 55999,
+          originalPrice: 71550,
+          discount: '-22%',
+          image: 'images/product_microwave.jpg',
+          brand: 'Maxi',
+          categoryKey: 'appliances',
+          categoryName: 'Appliances',
+          rating: 4.8,
+          reviews: 1496,
+          sku: 'NKEM-MAX-20L',
+          features: [
+            'Spacious 20-Litre cavity with durable rotating glass turntable plate.',
+            'Dual ergonomic mechanical rotary dials for hassle-free timer and power selection.',
+            'Defrost by weight or time feature for frozen meats, poultry, and fish.',
+            'Easy-to-clean enamel cavity resistant to oil splatters and stains.'
+          ],
+          description: 'Warm up meals, defrost frozen proteins, and prepare quick snacks with the Maxi 20L Manual Microwave Oven. Designed for maximum reliability and ease of use in Nigerian kitchens.',
+          specs: [
+            ['Brand', 'Maxi'],
+            ['Capacity', '20 Litres'],
+            ['Power Levels', '5 Power Settings (700W Microwave Output)'],
+            ['Turntable', '255mm Removable Glass Turntable'],
+            ['Control Type', 'Dual Mechanical Knobs'],
+            ['Dimensions', '440 x 330 x 258 mm'],
+            ['Warranty', '12 Months Official Manufacturer Warranty']
+          ]
+        },
+        {
+          id: 'prod-8',
+          title: 'Hikers 32 Smart HD Frameless Panel Digital LED TV with Android',
+          price: 102246,
+          originalPrice: 171000,
+          discount: '-40%',
+          image: 'images/product_tv.jpg',
+          brand: 'Hikers',
+          categoryKey: 'electronics',
+          categoryName: 'Electronics',
+          rating: 4.7,
+          reviews: 4210,
+          sku: 'NKEM-HIK-32TV',
+          features: [
+            'Stunning 32-Inch High Definition frameless edge-to-edge cinematic display.',
+            'Built-in Android OS with YouTube, Netflix, Prime Video, and Google Play Store.',
+            'Dual integrated surround sound stereo box speakers with rich bass.',
+            'Full connectivity: 2x HDMI, 2x USB, Wi-Fi, AV, and Optical Audio Out.'
+          ],
+          description: 'Elevate your home entertainment with the Hikers 32 Smart Frameless Android TV. Enjoy crystal clear visuals, ultra-slim bezels, and seamless wireless streaming of your favorite movies, football matches, and TV shows.',
+          specs: [
+            ['Brand', 'Hikers'],
+            ['Screen Size', '32 Inches (81 cm)'],
+            ['Resolution', '1366 x 768 HD with HDR Enhancement'],
+            ['Operating System', 'Android Smart TV Platform'],
+            ['Connectivity', 'Wi-Fi, 2x HDMI, 2x USB, AV In, Earphone Out'],
+            ['Speakers', '2x 8W Stereo Box Speakers'],
+            ['Warranty', '12 Months Official Warranty']
+          ]
+        }
+      ];
+
+      function formatNaira(num) {
+        return '₦ ' + Number(num).toLocaleString('en-NG');
+      }
+
+      function getCart() {
+        try {
+          var d = localStorage.getItem(CART_KEY);
+          return d ? JSON.parse(d) : [];
+        } catch (e) { return []; }
+      }
+
+      function saveCart(cart) {
+        try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {}
+      }
+
+      function getSaved() {
+        try {
+          var d = localStorage.getItem(SAVED_KEY);
+          return d ? JSON.parse(d) : [];
+        } catch (e) { return []; }
+      }
+
+      function saveSaved(list) {
+        try { localStorage.setItem(SAVED_KEY, JSON.stringify(list)); } catch (e) {}
+      }
+
+      function updateBadges() {
+        var cart = getCart();
+        var totalQty = cart.reduce(function(sum, it) { return sum + (it.qty || 1); }, 0);
+        var cartBadge = document.getElementById('headerCartBadge');
+        var mobileCartBadge = document.getElementById('mobileCartBadge');
+        if (cartBadge) {
+          cartBadge.style.display = totalQty > 0 ? 'flex' : 'none';
+          cartBadge.textContent = totalQty;
+        }
+        if (mobileCartBadge) {
+          mobileCartBadge.style.display = totalQty > 0 ? 'flex' : 'none';
+          mobileCartBadge.textContent = totalQty;
+        }
+
+        var saved = getSaved();
+        var savedCount = saved.length;
+        var savedBadge = document.getElementById('headerSavedBadge');
+        var mobileSavedBadge = document.getElementById('mobileSavedBadge');
+        if (savedBadge) {
+          savedBadge.style.display = savedCount > 0 ? 'flex' : 'none';
+          savedBadge.textContent = savedCount;
+        }
+        if (mobileSavedBadge) {
+          mobileSavedBadge.style.display = savedCount > 0 ? 'flex' : 'none';
+          mobileSavedBadge.textContent = savedCount;
+        }
+      }
+
+      function showToast(msg, btnText, btnUrl) {
+        var container = document.getElementById('toastContainer');
+        if (!container) return;
+        var toast = document.createElement('div');
+        toast.className = 'toast-bubble';
+        
+        var txt = document.createElement('span');
+        txt.className = 'toast-text';
+        txt.textContent = msg;
+        toast.appendChild(txt);
+
+        if (btnText && btnUrl) {
+          var link = document.createElement('a');
+          link.className = 'toast-btn';
+          link.href = btnUrl;
+          link.textContent = btnText;
+          toast.appendChild(link);
+        }
+
+        container.appendChild(toast);
+        setTimeout(function() {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(function() {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+          }, 300);
+        }, 3200);
+      }
+
+      // 1. Identify Product from URL
+      var params = new URLSearchParams(window.location.search);
+      var currentId = params.get('id') || 'prod-5';
+      var activeProduct = CATALOG_PRODUCTS.find(function(p) { return p.id === currentId; });
+
+      // Fallback if id was not found
+      if (!activeProduct) {
+        activeProduct = CATALOG_PRODUCTS[0];
+      }
+
+      // Update page title
+      document.title = activeProduct.title + ' - NKEMMART SUPERCENTER';
+
+      // Update breadcrumbs
+      var bcCat = document.getElementById('pdpBreadcrumbCat');
+      if (bcCat) {
+        bcCat.textContent = activeProduct.categoryName || 'Appliances';
+        bcCat.href = 'category.html?cat=' + (activeProduct.categoryKey || 'appliances');
+      }
+      var bcCurrent = document.getElementById('pdpBreadcrumbCurrent');
+      if (bcCurrent) bcCurrent.textContent = activeProduct.title;
+
+      // Update Media Gallery
+      var mainImg = document.getElementById('pdpMainImg');
+      if (mainImg) {
+        mainImg.src = activeProduct.image;
+        mainImg.alt = activeProduct.title;
+      }
+      var discBadge = document.getElementById('pdpDiscountBadge');
+      if (discBadge) discBadge.textContent = activeProduct.discount || '-20%';
+
+      // Thumbnails setup
+      var thumbStrip = document.getElementById('pdpThumbnails');
+      if (thumbStrip) {
+        thumbStrip.innerHTML = '';
+        var thumbImages = [activeProduct.image, activeProduct.image, activeProduct.image, activeProduct.image];
+        thumbImages.forEach(function(src, idx) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'pdp-thumb-item' + (idx === 0 ? ' active' : '');
+          btn.innerHTML = '<img src="' + src + '" alt="Angle ' + (idx + 1) + '">';
+          btn.addEventListener('click', function() {
+            document.querySelectorAll('.pdp-thumb-item').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            if (mainImg) mainImg.src = src;
+          });
+          thumbStrip.appendChild(btn);
+        });
+      }
+
+      // Update Product Info
+      var titleEl = document.getElementById('pdpProductTitle');
+      if (titleEl) titleEl.textContent = activeProduct.title;
+
+      var brandLink = document.getElementById('pdpBrandLink');
+      if (brandLink) {
+        brandLink.textContent = 'Brand: ' + (activeProduct.brand || 'Verified');
+        brandLink.href = 'category.html?q=' + encodeURIComponent(activeProduct.brand || '');
+      }
+
+      var skuEl = document.getElementById('pdpSkuText');
+      if (skuEl) skuEl.textContent = 'SKU: ' + (activeProduct.sku || 'NKEM-' + activeProduct.id.toUpperCase());
+
+      var curPriceEl = document.getElementById('pdpCurrentPrice');
+      if (curPriceEl) curPriceEl.textContent = formatNaira(activeProduct.price);
+
+      var origPriceEl = document.getElementById('pdpOriginalPrice');
+      if (origPriceEl) origPriceEl.textContent = formatNaira(activeProduct.originalPrice);
+
+      var savePctEl = document.getElementById('pdpSavePercent');
+      if (savePctEl) savePctEl.textContent = activeProduct.discount || '-20%';
+
+      var scoreEl = document.getElementById('pdpRatingScore');
+      if (scoreEl) scoreEl.textContent = activeProduct.rating || '4.8';
+
+      var revCountEl = document.getElementById('pdpRatingCountLink');
+      if (revCountEl) revCountEl.textContent = (activeProduct.reviews ? activeProduct.reviews.toLocaleString() : '1,240') + ' verified ratings';
+
+      var bigScoreEl = document.getElementById('pdpBigScore');
+      if (bigScoreEl) bigScoreEl.textContent = activeProduct.rating || '4.8';
+
+      // Specifications table
+      var specBrand = document.getElementById('specBrand');
+      if (specBrand) specBrand.textContent = activeProduct.brand || 'Verified';
+      var specModel = document.getElementById('specModel');
+      if (specModel) specModel.textContent = activeProduct.sku || activeProduct.id;
+
+      if (activeProduct.specs && activeProduct.specs.length) {
+        var specTbody = document.getElementById('pdpSpecsTableBody');
+        if (specTbody) {
+          specTbody.innerHTML = '';
+          activeProduct.specs.forEach(function(pair) {
+            var tr = document.createElement('tr');
+            tr.innerHTML = '<td class="pdp-spec-label">' + pair[0] + '</td><td class="pdp-spec-value">' + pair[1] + '</td>';
+            specTbody.appendChild(tr);
+          });
+        }
+      }
+
+      // Feature highlights
+      if (activeProduct.features && activeProduct.features.length) {
+        var featList = document.getElementById('pdpKeyFeaturesList');
+        if (featList) {
+          featList.innerHTML = '';
+          activeProduct.features.forEach(function(feat) {
+            var li = document.createElement('li');
+            li.textContent = feat;
+            featList.appendChild(li);
+          });
+        }
+      }
+
+      // Long description
+      var longDesc = document.getElementById('pdpLongDesc');
+      if (longDesc && activeProduct.description) {
+        longDesc.textContent = activeProduct.description;
+      }
+
+      // Quantity Stepper Logic
+      var qtyInput = document.getElementById('pdpQtyInput');
+      var qtyInc = document.getElementById('pdpQtyIncBtn');
+      var qtyDec = document.getElementById('pdpQtyDecBtn');
+
+      if (qtyInc && qtyInput) {
+        qtyInc.addEventListener('click', function() {
+          var val = parseInt(qtyInput.value, 10) || 1;
+          if (val < 10) qtyInput.value = val + 1;
+        });
+      }
+      if (qtyDec && qtyInput) {
+        qtyDec.addEventListener('click', function() {
+          var val = parseInt(qtyInput.value, 10) || 1;
+          if (val > 1) qtyInput.value = val - 1;
+        });
+      }
+
+      // Add to Cart
+      var addCartBtn = document.getElementById('pdpAddToCartBtn');
+      if (addCartBtn) {
+        addCartBtn.addEventListener('click', function() {
+          var qty = parseInt(qtyInput ? qtyInput.value : 1, 10) || 1;
+          var cart = getCart();
+          var existing = cart.find(function(it) { return it.id === activeProduct.id; });
+          if (existing) {
+            existing.qty = (existing.qty || 1) + qty;
+          } else {
+            cart.push({
+              id: activeProduct.id,
+              title: activeProduct.title,
+              price: activeProduct.price,
+              originalPrice: activeProduct.originalPrice,
+              image: activeProduct.image,
+              brand: activeProduct.brand,
+              qty: qty
+            });
+          }
+          saveCart(cart);
+          updateBadges();
+          showToast(activeProduct.title.substring(0, 22) + '... added to cart (' + qty + ')', 'VIEW CART', 'cart.html');
+        });
+      }
+
+      // Buy Now
+      var buyNowBtn = document.getElementById('pdpBuyNowBtn');
+      if (buyNowBtn) {
+        buyNowBtn.addEventListener('click', function() {
+          var qty = parseInt(qtyInput ? qtyInput.value : 1, 10) || 1;
+          var cart = getCart();
+          var existing = cart.find(function(it) { return it.id === activeProduct.id; });
+          if (existing) {
+            existing.qty = (existing.qty || 1) + qty;
+          } else {
+            cart.push({
+              id: activeProduct.id,
+              title: activeProduct.title,
+              price: activeProduct.price,
+              originalPrice: activeProduct.originalPrice,
+              image: activeProduct.image,
+              brand: activeProduct.brand,
+              qty: qty
+            });
+          }
+          saveCart(cart);
+          window.location.href = 'cart.html';
+        });
+      }
+
+      // Wishlist Toggle
+      var wishBtn = document.getElementById('pdpWishlistBtn');
+      function syncWishlistBtn() {
+        if (!wishBtn) return;
+        var saved = getSaved();
+        var exists = saved.some(function(it) { return it.id === activeProduct.id; });
+        if (exists) {
+          wishBtn.classList.add('active');
+        } else {
+          wishBtn.classList.remove('active');
+        }
+      }
+      syncWishlistBtn();
+
+      if (wishBtn) {
+        wishBtn.addEventListener('click', function() {
+          var saved = getSaved();
+          var idx = saved.findIndex(function(it) { return it.id === activeProduct.id; });
+          if (idx > -1) {
+            saved.splice(idx, 1);
+            saveSaved(saved);
+            wishBtn.classList.remove('active');
+            showToast('Removed from saved items', null, null);
+          } else {
+            saved.unshift({
+              id: activeProduct.id,
+              title: activeProduct.title,
+              price: activeProduct.price,
+              originalPrice: activeProduct.originalPrice,
+              image: activeProduct.image,
+              brand: activeProduct.brand
+            });
+            saveSaved(saved);
+            wishBtn.classList.add('active');
+            showToast('Added to saved items', 'VIEW SAVED', 'saved-items.html');
+          }
+          updateBadges();
+        });
+      }
+
+      // Tabs Logic
+      var tabTriggers = document.querySelectorAll('.pdp-tab-trigger');
+      tabTriggers.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          tabTriggers.forEach(function(t) { t.classList.remove('active'); });
+          document.querySelectorAll('.pdp-tab-content-panel').forEach(function(p) { p.classList.remove('active'); });
+          
+          tab.classList.add('active');
+          var targetId = tab.getAttribute('data-tab');
+          var targetPanel = document.getElementById(targetId);
+          if (targetPanel) targetPanel.classList.add('active');
+        });
+      });
+
+      // Render Recommendations Grid
+      var recGrid = document.getElementById('pdpRecommendationsGrid');
+      if (recGrid) {
+        recGrid.innerHTML = '';
+        var related = CATALOG_PRODUCTS.filter(function(p) { return p.id !== activeProduct.id; }).slice(0, 4);
+        related.forEach(function(prod) {
+          var card = document.createElement('article');
+          card.className = 'rec-card';
+          card.setAttribute('data-id', prod.id);
+          card.innerHTML = 
+            '<div class="rec-card-media">' +
+              '<a href="product.html?id=' + encodeURIComponent(prod.id) + '">' +
+                '<img src="' + prod.image + '" alt="' + prod.title + '" class="rec-card-img">' +
+              '</a>' +
+              '<span class="rec-discount-badge">' + (prod.discount || '-20%') + '</span>' +
+              '<button type="button" class="rec-wishlist-btn" data-wish-id="' + prod.id + '" aria-label="Save item">' +
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
+              '</button>' +
+            '</div>' +
+            '<div class="rec-card-body">' +
+              '<a href="product.html?id=' + encodeURIComponent(prod.id) + '" class="rec-card-title">' + prod.title + '</a>' +
+              '<div class="rec-card-price-row">' +
+                '<span class="rec-card-price">' + formatNaira(prod.price) + '</span>' +
+                '<span class="rec-card-orig-price">' + formatNaira(prod.originalPrice) + '</span>' +
+              '</div>' +
+              '<button type="button" class="rec-card-btn" data-rec-id="' + prod.id + '">Add to cart</button>' +
+            '</div>';
+          recGrid.appendChild(card);
+        });
+
+        // Recommendations click delegation
+        recGrid.addEventListener('click', function(e) {
+          var addBtn = e.target.closest('.rec-card-btn');
+          if (addBtn) {
+            var pid = addBtn.getAttribute('data-rec-id');
+            var target = CATALOG_PRODUCTS.find(function(p) { return p.id === pid; });
+            if (!target) return;
+            var cart = getCart();
+            var ex = cart.find(function(it) { return it.id === target.id; });
+            if (ex) { ex.qty = (ex.qty || 1) + 1; }
+            else {
+              cart.push({
+                id: target.id,
+                title: target.title,
+                price: target.price,
+                originalPrice: target.originalPrice,
+                image: target.image,
+                brand: target.brand,
+                qty: 1
+              });
+            }
+            saveCart(cart);
+            updateBadges();
+            showToast(target.title.substring(0, 22) + '... added to cart', 'VIEW CART', 'cart.html');
+            return;
+          }
+
+          var recWish = e.target.closest('.rec-wishlist-btn');
+          if (recWish) {
+            var pid = recWish.getAttribute('data-wish-id');
+            var target = CATALOG_PRODUCTS.find(function(p) { return p.id === pid; });
+            if (!target) return;
+            var saved = getSaved();
+            var sIdx = saved.findIndex(function(it) { return it.id === target.id; });
+            if (sIdx > -1) {
+              saved.splice(sIdx, 1);
+              saveSaved(saved);
+              recWish.classList.remove('active');
+              showToast('Removed from saved items', null, null);
+            } else {
+              saved.unshift({
+                id: target.id,
+                title: target.title,
+                price: target.price,
+                originalPrice: target.originalPrice,
+                image: target.image,
+                brand: target.brand
+              });
+              saveSaved(saved);
+              recWish.classList.add('active');
+              showToast('Added to saved items', 'VIEW SAVED', 'saved-items.html');
+            }
+            updateBadges();
+          }
+        });
+      }
+
+      // Mobile Drawer open/close
+      var drawerOpenBtn = document.getElementById('mobileDrawerOpenBtn');
+      var drawerCloseBtn = document.getElementById('mobileDrawerCloseBtn');
+      var drawerBackdrop = document.getElementById('mobileDrawerBackdrop');
+      var drawer = document.getElementById('mobileNavDrawer');
+
+      if (drawerOpenBtn && drawer && drawerBackdrop) {
+        drawerOpenBtn.addEventListener('click', function() {
+          drawer.classList.add('open');
+          drawerBackdrop.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        });
+      }
+      function closeDrawer() {
+        if (drawer) drawer.classList.remove('open');
+        if (drawerBackdrop) drawerBackdrop.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+      if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
+
+      // Account & Help dropdown toggles
+      function setupDropdown(btnId, menuId) {
+        var btn = document.getElementById(btnId);
+        var menu = document.getElementById(menuId);
+        if (!btn || !menu) return;
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var isOpen = menu.classList.contains('show');
+          document.querySelectorAll('.dropdown-menu').forEach(function(m) { m.classList.remove('show'); });
+          if (!isOpen) menu.classList.add('show');
+        });
+      }
+      setupDropdown('accountMenuBtn', 'accountMenu');
+      setupDropdown('helpMenuBtn', 'helpMenu');
+
+      document.addEventListener('click', function() {
+        document.querySelectorAll('.dropdown-menu').forEach(function(m) { m.classList.remove('show'); });
+      });
+
+      // Initial badges update
+      updateBadges();
+    });
+  </script>
+</body>
+</html>
