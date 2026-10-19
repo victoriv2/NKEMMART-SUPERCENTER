@@ -223,9 +223,61 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-// Auto update menu on DOM load if Supabase is active
+// Universal Header & Mobile Drawer Badge Synchronizer
+function syncAllBadges() {
+  try {
+    var cartData = JSON.parse(localStorage.getItem('nkemmart_cart') || '[]');
+    var cartQty = cartData.reduce(function(sum, it) { return sum + (it.qty || 1); }, 0);
+    
+    var headerCart = document.getElementById('headerCartBadge');
+    if (headerCart) {
+      headerCart.textContent = cartQty;
+      headerCart.style.display = cartQty > 0 ? 'flex' : 'none';
+    }
+    var mobileCart = document.getElementById('mobileCartBadge');
+    if (mobileCart) {
+      mobileCart.textContent = cartQty;
+      mobileCart.style.display = cartQty > 0 ? 'flex' : 'none';
+    }
+    var dropdownCart = document.getElementById('dropdownCartBadge');
+    if (dropdownCart) {
+      dropdownCart.textContent = cartQty;
+      dropdownCart.style.display = cartQty > 0 ? 'flex' : 'none';
+    }
+
+    var savedData = JSON.parse(localStorage.getItem('nkemmart_saved_items') || '[]');
+    var savedCount = Array.isArray(savedData) ? savedData.length : 0;
+
+    var headerSaved = document.getElementById('headerSavedBadge');
+    if (headerSaved) {
+      headerSaved.textContent = savedCount;
+      headerSaved.style.display = savedCount > 0 ? 'flex' : 'none';
+    }
+    var mobileSaved = document.getElementById('mobileSavedBadge');
+    if (mobileSaved) {
+      mobileSaved.textContent = savedCount;
+      mobileSaved.style.display = savedCount > 0 ? 'flex' : 'none';
+    }
+    var dropdownSaved = document.getElementById('dropdownSavedBadge');
+    if (dropdownSaved) {
+      dropdownSaved.textContent = savedCount;
+      dropdownSaved.style.display = savedCount > 0 ? 'flex' : 'none';
+    }
+  } catch (e) {
+    console.warn('Badge sync note:', e);
+  }
+}
+
+// Auto update menu and badges on DOM load
 if (typeof document !== 'undefined') {
-  document.addEventListener('DOMContentLoaded', () => {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      syncAllBadges();
+      setTimeout(updateSiteAccountMenu, 300);
+    });
+  } else {
+    syncAllBadges();
     setTimeout(updateSiteAccountMenu, 300);
-  });
+  }
+  window.addEventListener('storage', syncAllBadges);
 }
