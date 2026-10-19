@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Product Details - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=8.6">
+  <link rel="stylesheet" href="styles.css?v=8.7">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body class="pdp-page">
@@ -324,28 +324,46 @@
       <aside class="pdp-perks-card">
         <h3 class="pdp-perks-title">Delivery & Returns</h3>
 
-        <!-- Interactive Delivery Location Estimator -->
-        <div class="pdp-delivery-estimator">
-          <label class="pdp-estimator-label" for="pdpLocationSelect">Delivery Destination & Fees</label>
-          <select id="pdpLocationSelect" class="pdp-location-select" aria-label="Select Delivery State">
-            <option value="lagos" selected>Lagos (Ikeja, Island, Mainland)</option>
-            <option value="abuja">Abuja (FCT, Garki, Wuse, Maitama)</option>
-            <option value="rivers">Rivers (Port Harcourt, Obio-Akpor)</option>
-            <option value="oyo">Oyo (Ibadan, Ogbomoso)</option>
-            <option value="kano">Kano (Kano Municipal)</option>
-            <option value="enugu">Enugu (Enugu Urban, Nsukka)</option>
-            <option value="anambra">Anambra (Onitsha, Awka, Nnewi)</option>
-            <option value="delta">Delta (Warri, Asaba)</option>
-            <option value="other">Other States Nationwide</option>
-          </select>
-          <div class="pdp-delivery-estimate-result" id="pdpDeliveryEstimateResult">
-            <div class="pdp-estimate-line">
-              <span>Doorstep Delivery:</span>
-              <strong class="pdp-estimate-badge" id="pdpEstimateCost">₦ 1,500</strong>
+        <!-- Interactive Delivery Destination Card -->
+        <div class="pdp-delivery-box">
+          <div class="pdp-delivery-header">
+            <div class="pdp-delivery-title-wrap">
+              <svg class="pdp-delivery-pin-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <div>
+                <span class="pdp-delivery-label">Delivery Destination</span>
+                <div class="pdp-current-location" id="pdpCurrentLocationText">Lagos (Ikeja / Mainland)</div>
+              </div>
             </div>
-            <div class="pdp-estimate-line">
-              <span>Estimated Delivery:</span>
-              <span id="pdpEstimateTime">Within 24 - 48 Hours</span>
+            <button type="button" class="pdp-change-loc-btn" id="pdpOpenLocationModalBtn" aria-label="Change delivery location">Change</button>
+          </div>
+
+          <div class="pdp-delivery-options">
+            <!-- Doorstep Option -->
+            <div class="pdp-delivery-option-item">
+              <div class="pdp-option-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              </div>
+              <div class="pdp-option-details">
+                <div class="pdp-option-row">
+                  <span class="pdp-option-name">Doorstep Delivery</span>
+                  <span class="pdp-option-fee" id="pdpDoorstepFee">₦ 1,500</span>
+                </div>
+                <span class="pdp-option-sub" id="pdpDoorstepTime">Delivery within 24 - 48 Hours</span>
+              </div>
+            </div>
+
+            <!-- Pickup Option -->
+            <div class="pdp-delivery-option-item">
+              <div class="pdp-option-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              </div>
+              <div class="pdp-option-details">
+                <div class="pdp-option-row">
+                  <span class="pdp-option-name">Pickup Station</span>
+                  <span class="pdp-option-fee pdp-fee-free">FREE</span>
+                </div>
+                <span class="pdp-option-sub">Ready for pickup tomorrow at nearest center</span>
+              </div>
             </div>
           </div>
         </div>
@@ -868,6 +886,74 @@
     </div>
   </div>
 
+  <!-- Delivery Location Selection Modal -->
+  <div class="pdp-location-modal-overlay" id="pdpLocationModal" aria-hidden="true" role="dialog" aria-label="Select Delivery Location">
+    <div class="pdp-location-modal-dialog">
+      <div class="pdp-loc-modal-header">
+        <div class="pdp-loc-modal-title-row">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-green)" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          <h3 class="pdp-loc-modal-title">Choose Delivery Destination</h3>
+        </div>
+        <button type="button" class="pdp-loc-modal-close" id="pdpCloseLocModalBtn" aria-label="Close dialog">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="pdp-loc-modal-body">
+        <p class="pdp-loc-modal-intro">Select your delivery state and region to calculate real-time dispatch shipping rates and delivery schedules.</p>
+
+        <div class="pdp-loc-form-group">
+          <label for="pdpModalStateSelect" class="pdp-loc-label">State</label>
+          <div class="pdp-loc-select-wrap">
+            <select id="pdpModalStateSelect" class="pdp-loc-select" aria-label="Delivery State">
+              <option value="lagos" selected>Lagos</option>
+              <option value="abuja">Abuja (FCT)</option>
+              <option value="rivers">Rivers</option>
+              <option value="oyo">Oyo</option>
+              <option value="kano">Kano</option>
+              <option value="enugu">Enugu</option>
+              <option value="anambra">Anambra</option>
+              <option value="delta">Delta</option>
+              <option value="ogun">Ogun</option>
+              <option value="edo">Edo</option>
+              <option value="kaduna">Kaduna</option>
+              <option value="other">Other States Nationwide</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pdp-loc-form-group">
+          <label for="pdpModalCitySelect" class="pdp-loc-label">City / Region</label>
+          <div class="pdp-loc-select-wrap">
+            <select id="pdpModalCitySelect" class="pdp-loc-select" aria-label="Delivery City / Area">
+              <option value="Ikeja / Mainland" selected>Ikeja / Mainland</option>
+              <option value="Lekki / Victoria Island">Lekki / Victoria Island</option>
+              <option value="Surulere / Yaba">Surulere / Yaba</option>
+              <option value="Ikorodu / Epe">Ikorodu / Epe</option>
+              <option value="Badagry / Ojo">Badagry / Ojo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pdp-loc-summary-card">
+          <div class="pdp-loc-rate-row">
+            <span class="pdp-loc-rate-label">Doorstep Delivery:</span>
+            <strong class="pdp-loc-rate-val" id="pdpModalRateCost">₦ 1,500</strong>
+          </div>
+          <div class="pdp-loc-rate-row">
+            <span class="pdp-loc-rate-label">Estimated Transit Time:</span>
+            <span class="pdp-loc-rate-val" id="pdpModalRateTime">Within 24 - 48 Hours</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pdp-loc-modal-footer">
+        <button type="button" class="pdp-loc-cancel-btn" id="pdpCancelLocModalBtn">Cancel</button>
+        <button type="button" class="pdp-loc-apply-btn" id="pdpApplyLocBtn">Save Location</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Mobile Sticky Bottom Action Bar -->
   <aside class="pdp-mobile-sticky-bar" id="pdpMobileStickyBar" aria-label="Quick Actions">
     <button type="button" class="pdp-sticky-wish-btn" id="pdpStickyWishBtn" aria-label="Save to wishlist">
@@ -1191,12 +1277,33 @@
         var container = document.getElementById('toastContainer');
         if (!container) return;
         var toast = document.createElement('div');
-        toast.className = 'toast-bubble';
+        toast.className = 'toast-item';
         
+        var content = document.createElement('div');
+        content.className = 'toast-content';
+        content.style.display = 'flex';
+        content.style.alignItems = 'center';
+        content.style.gap = '10px';
+        content.style.flex = '1';
+
+        var iconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        iconSvg.setAttribute('class', 'toast-icon');
+        iconSvg.setAttribute('width', '18');
+        iconSvg.setAttribute('height', '18');
+        iconSvg.setAttribute('viewBox', '0 0 24 24');
+        iconSvg.setAttribute('fill', 'none');
+        iconSvg.setAttribute('stroke', '#22c55e');
+        iconSvg.setAttribute('stroke-width', '2.5');
+        var poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+        poly.setAttribute('points', '20 6 9 17 4 12');
+        iconSvg.appendChild(poly);
+        content.appendChild(iconSvg);
+
         var txt = document.createElement('span');
         txt.className = 'toast-text';
         txt.textContent = msg;
-        toast.appendChild(txt);
+        content.appendChild(txt);
+        toast.appendChild(content);
 
         if (btnText && btnUrl) {
           var link = document.createElement('a');
@@ -1207,9 +1314,12 @@
         }
 
         container.appendChild(toast);
+        requestAnimationFrame(function() {
+          toast.classList.add('show');
+        });
+
         setTimeout(function() {
-          toast.style.opacity = '0';
-          toast.style.transform = 'translateY(10px)';
+          toast.classList.remove('show');
           setTimeout(function() {
             if (toast.parentNode) toast.parentNode.removeChild(toast);
           }, 300);
@@ -1373,7 +1483,7 @@
       }
 
       // Add to Cart
-      function handleAddToCart() {
+      function handleAddToCart(e) {
         var qty = parseInt(qtyInput ? qtyInput.value : 1, 10) || 1;
         var cart = getCart();
         var existing = cart.find(function(it) { return it.id === activeProduct.id; });
@@ -1392,7 +1502,23 @@
         }
         saveCart(cart);
         updateBadges();
-        showToast(activeProduct.title.substring(0, 22) + '... added to cart (' + qty + ')', 'VIEW CART', 'cart.html');
+
+        if (typeof renderRecommendations === 'function') {
+          renderRecommendations();
+        }
+
+        var triggerBtn = (e && e.currentTarget) ? e.currentTarget : addCartBtn;
+        if (triggerBtn) {
+          var originalHtml = triggerBtn.innerHTML;
+          triggerBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Added to Cart';
+          triggerBtn.style.pointerEvents = 'none';
+          setTimeout(function() {
+            triggerBtn.innerHTML = originalHtml;
+            triggerBtn.style.pointerEvents = '';
+          }, 1400);
+        }
+
+        showToast(activeProduct.title.substring(0, 24) + '... added to cart (' + qty + ')', 'VIEW CART', 'cart.html');
       }
 
       var addCartBtn = document.getElementById('pdpAddToCartBtn');
@@ -1504,29 +1630,195 @@
         });
       }
 
-      // Delivery Estimator Selection
-      var locationSelect = document.getElementById('pdpLocationSelect');
-      var estimateCost = document.getElementById('pdpEstimateCost');
-      var estimateTime = document.getElementById('pdpEstimateTime');
-
-      var RATES = {
-        lagos: { cost: '₦ 1,500', time: 'Within 24 - 48 Hours' },
-        abuja: { cost: '₦ 2,200', time: 'Within 48 - 72 Hours' },
-        rivers: { cost: '₦ 2,500', time: 'Within 48 - 72 Hours' },
-        oyo: { cost: '₦ 1,800', time: 'Within 48 - 72 Hours' },
-        kano: { cost: '₦ 2,800', time: '3 - 4 Days Delivery' },
-        enugu: { cost: '₦ 2,500', time: 'Within 48 - 72 Hours' },
-        anambra: { cost: '₦ 2,200', time: 'Within 48 - 72 Hours' },
-        delta: { cost: '₦ 2,500', time: 'Within 48 - 72 Hours' },
-        other: { cost: '₦ 3,000', time: '3 - 5 Days Nationwide' }
+      // Delivery Location Modal & Region Rates
+      var STATE_REGIONS = {
+        lagos: {
+          name: 'Lagos',
+          cost: '₦ 1,500',
+          time: 'Within 24 - 48 Hours',
+          cities: ['Ikeja / Mainland', 'Lekki / Victoria Island', 'Surulere / Yaba', 'Ikorodu / Epe', 'Badagry / Ojo']
+        },
+        abuja: {
+          name: 'Abuja (FCT)',
+          cost: '₦ 2,200',
+          time: 'Within 48 - 72 Hours',
+          cities: ['Central Area / Garki', 'Wuse / Maitama', 'Gwarinpa / Kubwa', 'Lugbe / Airport Road', 'Asokoro / Guzape']
+        },
+        rivers: {
+          name: 'Rivers',
+          cost: '₦ 2,500',
+          time: 'Within 48 - 72 Hours',
+          cities: ['Port Harcourt GRA / Old GRA', 'Obio-Akpor / Rumuokoro', 'Trans-Amadi / D-Line', 'Eleme / Oyigbo']
+        },
+        oyo: {
+          name: 'Oyo',
+          cost: '₦ 1,800',
+          time: 'Within 48 - 72 Hours',
+          cities: ['Ibadan North / Bodija', 'Ibadan South / Ring Road', 'Oluyole / Challenge', 'Ogbomoso / Oyo Town']
+        },
+        kano: {
+          name: 'Kano',
+          cost: '₦ 2,800',
+          time: '3 - 4 Days Delivery',
+          cities: ['Kano Municipal', 'Nassarawa / Bompai', 'Fagge / Sabon Gari', 'Tarauni / Hotoro']
+        },
+        enugu: {
+          name: 'Enugu',
+          cost: '₦ 2,500',
+          time: 'Within 48 - 72 Hours',
+          cities: ['Enugu Urban / Independence Layout', 'New Haven / Ogui', 'Trans-Ekulu / Abakpa', 'Nsukka']
+        },
+        anambra: {
+          name: 'Anambra',
+          cost: '₦ 2,200',
+          time: 'Within 48 - 72 Hours',
+          cities: ['Awka Urban / GRA', 'Onitsha Main / Fegge', 'Nnewi / Otolo']
+        },
+        delta: {
+          name: 'Delta',
+          cost: '₦ 2,500',
+          time: 'Within 48 - 72 Hours',
+          cities: ['Warri / Effurun', 'Asaba / GRA', 'Sapele / Ughelli']
+        },
+        ogun: {
+          name: 'Ogun',
+          cost: '₦ 1,800',
+          time: 'Within 24 - 48 Hours',
+          cities: ['Abeokuta / Ibara', 'Mowe / Ibafo', 'Sagamu / Ijebu-Ode', 'Ota / Sango']
+        },
+        edo: {
+          name: 'Edo',
+          cost: '₦ 2,400',
+          time: 'Within 48 - 72 Hours',
+          cities: ['Benin City / GRA', 'Ugbowo / Ikpoba Hill', 'Auchi / Ekpoma']
+        },
+        kaduna: {
+          name: 'Kaduna',
+          cost: '₦ 2,800',
+          time: '3 - 4 Days Delivery',
+          cities: ['Kaduna North / Barnawa', 'Kaduna South / Sabon Tasha', 'Zaria']
+        },
+        other: {
+          name: 'Other States',
+          cost: '₦ 3,000',
+          time: '3 - 5 Days Nationwide',
+          cities: ['State Capital Urban Area', 'Major Town / Regional Center']
+        }
       };
 
-      if (locationSelect && estimateCost && estimateTime) {
-        locationSelect.addEventListener('change', function() {
-          var sel = locationSelect.value;
-          var rate = RATES[sel] || RATES.other;
-          estimateCost.textContent = rate.cost;
-          estimateTime.textContent = rate.time;
+      var userLocation = null;
+      try {
+        userLocation = JSON.parse(localStorage.getItem('nkemmart_user_location'));
+      } catch (e) {
+        userLocation = null;
+      }
+      if (!userLocation || !userLocation.stateKey) {
+        userLocation = {
+          stateKey: 'lagos',
+          stateName: 'Lagos',
+          city: 'Ikeja / Mainland',
+          cost: '₦ 1,500',
+          time: 'Within 24 - 48 Hours'
+        };
+      }
+
+      function updateLocationBox(loc) {
+        var locText = document.getElementById('pdpCurrentLocationText');
+        var feeText = document.getElementById('pdpDoorstepFee');
+        var timeText = document.getElementById('pdpDoorstepTime');
+        if (locText) locText.textContent = loc.stateName + ' (' + loc.city + ')';
+        if (feeText) feeText.textContent = loc.cost;
+        if (timeText) timeText.textContent = 'Delivery ' + loc.time.toLowerCase();
+      }
+      updateLocationBox(userLocation);
+
+      var locModal = document.getElementById('pdpLocationModal');
+      var openLocModalBtn = document.getElementById('pdpOpenLocationModalBtn');
+      var closeLocModalBtn = document.getElementById('pdpCloseLocModalBtn');
+      var cancelLocModalBtn = document.getElementById('pdpCancelLocModalBtn');
+      var applyLocBtn = document.getElementById('pdpApplyLocBtn');
+      var modalStateSelect = document.getElementById('pdpModalStateSelect');
+      var modalCitySelect = document.getElementById('pdpModalCitySelect');
+      var modalRateCost = document.getElementById('pdpModalRateCost');
+      var modalRateTime = document.getElementById('pdpModalRateTime');
+
+      function populateModalCities(stateKey, selectedCity) {
+        if (!modalCitySelect) return;
+        modalCitySelect.innerHTML = '';
+        var stateData = STATE_REGIONS[stateKey] || STATE_REGIONS.other;
+        stateData.cities.forEach(function(cityName) {
+          var opt = document.createElement('option');
+          opt.value = cityName;
+          opt.textContent = cityName;
+          if (selectedCity && cityName === selectedCity) {
+            opt.selected = true;
+          }
+          modalCitySelect.appendChild(opt);
+        });
+      }
+
+      function updateModalRatePreview(stateKey) {
+        var stateData = STATE_REGIONS[stateKey] || STATE_REGIONS.other;
+        if (modalRateCost) modalRateCost.textContent = stateData.cost;
+        if (modalRateTime) modalRateTime.textContent = stateData.time;
+      }
+
+      function openLocationModal() {
+        if (!locModal) return;
+        if (modalStateSelect) {
+          modalStateSelect.value = userLocation.stateKey || 'lagos';
+          populateModalCities(modalStateSelect.value, userLocation.city);
+          updateModalRatePreview(modalStateSelect.value);
+        }
+        locModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLocationModal() {
+        if (!locModal) return;
+        locModal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      if (openLocModalBtn) openLocModalBtn.addEventListener('click', openLocationModal);
+      if (closeLocModalBtn) closeLocModalBtn.addEventListener('click', closeLocationModal);
+      if (cancelLocModalBtn) cancelLocModalBtn.addEventListener('click', closeLocationModal);
+
+      if (locModal) {
+        locModal.addEventListener('click', function(e) {
+          if (e.target === locModal) closeLocationModal();
+        });
+      }
+
+      if (modalStateSelect) {
+        modalStateSelect.addEventListener('change', function() {
+          var stateKey = modalStateSelect.value;
+          populateModalCities(stateKey);
+          updateModalRatePreview(stateKey);
+        });
+      }
+
+      if (applyLocBtn) {
+        applyLocBtn.addEventListener('click', function() {
+          var stateKey = modalStateSelect ? modalStateSelect.value : 'lagos';
+          var stateData = STATE_REGIONS[stateKey] || STATE_REGIONS.other;
+          var cityName = modalCitySelect ? modalCitySelect.value : (stateData.cities[0] || 'Urban Area');
+
+          userLocation = {
+            stateKey: stateKey,
+            stateName: stateData.name,
+            city: cityName,
+            cost: stateData.cost,
+            time: stateData.time
+          };
+
+          try {
+            localStorage.setItem('nkemmart_user_location', JSON.stringify(userLocation));
+          } catch (e) {}
+
+          updateLocationBox(userLocation);
+          closeLocationModal();
+          showToast('Delivery location updated to ' + userLocation.stateName + ' (' + userLocation.city + ')', null, null);
         });
       }
 
@@ -1642,18 +1934,42 @@
         });
       });
 
-      // Render Recommendations Grid
+      // Render Recommendations Grid with Interactive Stepper
       var recGrid = document.getElementById('pdpRecommendationsGrid');
-      if (recGrid) {
-        recGrid.innerHTML = '';
+
+      function renderRecommendations() {
+        if (!recGrid) return;
+        var cart = getCart();
         var saved = getSaved();
         var savedIds = saved.map(function(s) { return s.id; });
         var related = CATALOG_PRODUCTS.filter(function(p) { return p.id !== activeProduct.id; }).slice(0, 4);
+
+        recGrid.innerHTML = '';
         related.forEach(function(prod) {
           var isSaved = savedIds.indexOf(prod.id) > -1;
+          var inCartItem = cart.find(function(it) { return it.id === prod.id; });
+          var inCartQty = inCartItem ? (inCartItem.qty || 1) : 0;
+
           var card = document.createElement('article');
           card.className = 'rec-card';
           card.setAttribute('data-id', prod.id);
+
+          var actionHtml = '';
+          if (inCartQty > 0) {
+            actionHtml = 
+              '<div class="card-qty-stepper" data-rec-id="' + prod.id + '">' +
+                '<button type="button" class="card-qty-btn rec-qty-dec" data-rec-id="' + prod.id + '" aria-label="Decrease quantity">' +
+                  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+                '</button>' +
+                '<span class="card-qty-val">' + inCartQty + '</span>' +
+                '<button type="button" class="card-qty-btn rec-qty-inc" data-rec-id="' + prod.id + '" aria-label="Increase quantity">' +
+                  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+                '</button>' +
+              '</div>';
+          } else {
+            actionHtml = '<button type="button" class="rec-card-btn" data-rec-id="' + prod.id + '">Add to cart</button>';
+          }
+
           card.innerHTML = 
             '<div class="rec-card-media">' +
               '<a href="product.html?id=' + encodeURIComponent(prod.id) + '">' +
@@ -1669,15 +1985,19 @@
               '<div class="rec-card-price-row">' +
                 '<span class="rec-card-price">' + formatNaira(prod.price) + '</span>' +
                 '<span class="rec-card-orig-price">' + formatNaira(prod.originalPrice) + '</span>' +
-                '<span class="rec-card-discount">' + (prod.discount || '-20%') + '</span>' +
               '</div>' +
-              '<button type="button" class="rec-card-btn" data-rec-id="' + prod.id + '">Add to cart</button>' +
+              actionHtml +
             '</div>';
+
           recGrid.appendChild(card);
         });
+      }
 
-        // Recommendations click delegation
+      if (recGrid) {
+        renderRecommendations();
+
         recGrid.addEventListener('click', function(e) {
+          // 1. Initial Add to cart click
           var addBtn = e.target.closest('.rec-card-btn');
           if (addBtn) {
             var pid = addBtn.getAttribute('data-rec-id');
@@ -1685,8 +2005,9 @@
             if (!target) return;
             var cart = getCart();
             var ex = cart.find(function(it) { return it.id === target.id; });
-            if (ex) { ex.qty = (ex.qty || 1) + 1; }
-            else {
+            if (ex) {
+              ex.qty = (ex.qty || 1) + 1;
+            } else {
               cart.push({
                 id: target.id,
                 title: target.title,
@@ -1699,10 +2020,68 @@
             }
             saveCart(cart);
             updateBadges();
+            renderRecommendations();
             showToast(target.title.substring(0, 22) + '... added to cart', 'VIEW CART', 'cart.html');
             return;
           }
 
+          // 2. Increment Quantity button
+          var incBtn = e.target.closest('.rec-qty-inc');
+          if (incBtn) {
+            var pid = incBtn.getAttribute('data-rec-id');
+            var target = CATALOG_PRODUCTS.find(function(p) { return p.id === pid; });
+            if (!target) return;
+            var cart = getCart();
+            var ex = cart.find(function(it) { return it.id === target.id; });
+            if (ex) {
+              ex.qty = (ex.qty || 1) + 1;
+            } else {
+              cart.push({
+                id: target.id,
+                title: target.title,
+                price: target.price,
+                originalPrice: target.originalPrice,
+                image: target.image,
+                brand: target.brand,
+                qty: 1
+              });
+            }
+            saveCart(cart);
+            updateBadges();
+            renderRecommendations();
+            var curQty = ex ? ex.qty : 1;
+            showToast(target.title.substring(0, 20) + '... quantity: ' + curQty, 'VIEW CART', 'cart.html');
+            return;
+          }
+
+          // 3. Decrement Quantity button
+          var decBtn = e.target.closest('.rec-qty-dec');
+          if (decBtn) {
+            var pid = decBtn.getAttribute('data-rec-id');
+            var target = CATALOG_PRODUCTS.find(function(p) { return p.id === pid; });
+            if (!target) return;
+            var cart = getCart();
+            var exIdx = cart.findIndex(function(it) { return it.id === target.id; });
+            if (exIdx > -1) {
+              if (cart[exIdx].qty > 1) {
+                cart[exIdx].qty -= 1;
+                var newQty = cart[exIdx].qty;
+                saveCart(cart);
+                updateBadges();
+                renderRecommendations();
+                showToast(target.title.substring(0, 20) + '... quantity: ' + newQty, 'VIEW CART', 'cart.html');
+              } else {
+                cart.splice(exIdx, 1);
+                saveCart(cart);
+                updateBadges();
+                renderRecommendations();
+                showToast(target.title.substring(0, 22) + '... removed from cart', null, null);
+              }
+            }
+            return;
+          }
+
+          // 4. Wishlist save toggle
           var recWish = e.target.closest('.rec-wishlist-btn');
           if (recWish) {
             var pid = recWish.getAttribute('data-wish-id');
