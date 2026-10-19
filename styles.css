@@ -48,7 +48,7 @@ body {
    TOP UTILITY BAR / ANNOUNCEMENT
 ----------------------------------------- */
 .top-bar {
-  background: linear-gradient(90deg, #072a6b 0%, #0b4dbb 60%, #00a859 100%);
+  background: #008043;
   color: var(--white);
   font-size: 12px;
   padding: 6px 16px;
@@ -3964,7 +3964,7 @@ body {
    JIJI STYLE HERO BANNER & SEARCH
 ========================================= */
 .jiji-hero-banner {
-  background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 55%, #00a859 100%);
+  background: #008043;
   border-radius: 16px;
   padding: 24px 20px;
   margin-bottom: 20px;
@@ -4942,7 +4942,7 @@ body.modal-open {
 
 /* Drawer Header - Single unified container with zero seams or lines */
 .jiji-drawer-header {
-  background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 100%);
+  background: #008043;
   padding: 8px 12px 12px 14px;
   display: flex;
   flex-direction: column;
@@ -5155,7 +5155,7 @@ body.modal-open {
 
 /* Dedicated Category Page Styles - Clean Branded Presentation */
 .cat-page-banner {
-  background: linear-gradient(135deg, #072a6b 0%, #0b4dbb 55%, #00a859 100%);
+  background: #008043;
   color: #ffffff;
   padding: 22px 28px 24px 28px;
   border-radius: 16px;
@@ -5467,7 +5467,7 @@ body.modal-open {
 
 /* Newsletter Strip */
 .footer-newsletter-wrap {
-  background: linear-gradient(180deg, #070707 0%, #0f0f0f 100%);
+  background: #0b0b0b;
   padding: 36px 20px;
   border-bottom: 1px solid #1f1f1f;
 }
@@ -8094,7 +8094,7 @@ body.modal-open {
 }
 
 .brand-story-inner {
-  background: linear-gradient(135deg, #091e3a 0%, #0d2b52 55%, #008744 100%);
+  background: #008043;
   border-radius: 14px;
   padding: 40px 32px;
   color: #ffffff;
