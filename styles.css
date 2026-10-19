@@ -5568,6 +5568,17 @@ body.modal-open {
   flex-shrink: 0;
 }
 
+.footer-contact-link {
+  color: #d4d4d8;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.footer-contact-link:hover {
+  color: var(--primary-green);
+  text-decoration: underline;
+}
+
 .footer-col-heading {
   color: #fafafa;
   font-size: 14px;
@@ -8019,6 +8030,153 @@ body.modal-open {
 .live-chat-btn:hover {
   background-color: #f0fdf4;
 }
+
+/* -----------------------------------------
+   BRAND STORY & WELCOME MISSION SECTION
+----------------------------------------- */
+.brand-story-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 36px auto 24px auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.brand-story-inner {
+  background: linear-gradient(135deg, #091e3a 0%, #0d2b52 55%, #008744 100%);
+  border-radius: 14px;
+  padding: 40px 32px;
+  color: #ffffff;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(9, 30, 58, 0.12);
+  box-sizing: border-box;
+}
+
+.brand-story-badge {
+  display: inline-block;
+  background-color: #00a859;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.brand-story-heading {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 14px 0;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+}
+
+.brand-story-lead {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #e2e8f0;
+  max-width: 860px;
+  margin: 0 auto 12px auto;
+}
+
+.brand-story-body {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #cbd5e1;
+  max-width: 820px;
+  margin: 0 auto 18px auto;
+}
+
+.brand-story-quote {
+  background: rgba(255, 255, 255, 0.08);
+  border-left: 3.5px solid #00a859;
+  border-radius: 8px;
+  padding: 12px 18px;
+  max-width: 760px;
+  margin: 0 auto 20px auto;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.brand-story-slogan {
+  display: block;
+  color: #4ade80;
+  font-size: 15.5px;
+  font-weight: 800;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
+.brand-story-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.brand-story-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.brand-story-btn:hover {
+  opacity: 0.92;
+}
+
+.brand-story-btn.call-btn {
+  background-color: #ffffff;
+  color: #091e3a;
+}
+
+.brand-story-btn.wa-btn {
+  background-color: #25d366;
+  color: #ffffff;
+}
+
+.brand-story-cta {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 768px) {
+  .brand-story-inner {
+    padding: 26px 18px;
+    border-radius: 10px;
+  }
+  .brand-story-heading {
+    font-size: 18px;
+  }
+  .brand-story-lead {
+    font-size: 13.5px;
+  }
+  .brand-story-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .brand-story-btn {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+}
+
 
 
 
