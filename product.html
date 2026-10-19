@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Product Details - NKEMMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=8.7">
+  <link rel="stylesheet" href="styles.css?v=8.8">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body class="pdp-page">
@@ -923,7 +923,7 @@
         </div>
 
         <div class="pdp-loc-form-group">
-          <label for="pdpModalCitySelect" class="pdp-loc-label">City / Region</label>
+          <label for="pdpModalCitySelect" class="pdp-loc-label">Local Government Area (LGA) / Area</label>
           <div class="pdp-loc-select-wrap">
             <select id="pdpModalCitySelect" class="pdp-loc-select" aria-label="Delivery City / Area">
               <option value="Ikeja / Mainland" selected>Ikeja / Mainland</option>
@@ -1449,6 +1449,18 @@
       var qtyInc = document.getElementById('pdpQtyIncBtn');
       var qtyDec = document.getElementById('pdpQtyDecBtn');
 
+      function syncMainQtyWithCart() {
+        if (!qtyInput) return;
+        var cart = getCart();
+        var existing = cart.find(function(it) { return it.id === activeProduct.id; });
+        if (existing && existing.qty) {
+          qtyInput.value = existing.qty;
+        } else {
+          qtyInput.value = 1;
+        }
+        updateStepperButtons();
+      }
+
       function updateStepperButtons() {
         if (!qtyInput) return;
         var val = parseInt(qtyInput.value, 10) || 1;
@@ -1457,39 +1469,67 @@
           qtyDec.style.opacity = (val <= 1) ? '0.5' : '1';
         }
         if (qtyInc) {
-          qtyInc.disabled = (val >= 10);
-          qtyInc.style.opacity = (val >= 10) ? '0.5' : '1';
+          qtyInc.disabled = (val >= 20);
+          qtyInc.style.opacity = (val >= 20) ? '0.5' : '1';
         }
       }
-      updateStepperButtons();
+      syncMainQtyWithCart();
 
       if (qtyInc && qtyInput) {
         qtyInc.addEventListener('click', function() {
           var val = parseInt(qtyInput.value, 10) || 1;
-          if (val < 10) {
-            qtyInput.value = val + 1;
+          if (val < 20) {
+            var newQty = val + 1;
+            qtyInput.value = newQty;
             updateStepperButtons();
+
+            var cart = getCart();
+            var ex = cart.find(function(it) { return it.id === activeProduct.id; });
+            if (ex) {
+              ex.qty = newQty;
+              saveCart(cart);
+              updateBadges();
+              if (typeof renderRecommendations === 'function') renderRecommendations();
+              showToast(activeProduct.title.substring(0, 22) + '... (' + newQty + ' in cart)', 'VIEW CART', 'cart.html');
+            }
           }
         });
       }
+
       if (qtyDec && qtyInput) {
         qtyDec.addEventListener('click', function() {
           var val = parseInt(qtyInput.value, 10) || 1;
           if (val > 1) {
-            qtyInput.value = val - 1;
+            var newQty = val - 1;
+            qtyInput.value = newQty;
             updateStepperButtons();
+
+            var cart = getCart();
+            var ex = cart.find(function(it) { return it.id === activeProduct.id; });
+            if (ex) {
+              ex.qty = newQty;
+              saveCart(cart);
+              updateBadges();
+              if (typeof renderRecommendations === 'function') renderRecommendations();
+              showToast(activeProduct.title.substring(0, 22) + '... (' + newQty + ' in cart)', 'VIEW CART', 'cart.html');
+            }
           }
         });
       }
 
       // Add to Cart
       function handleAddToCart(e) {
-        var qty = parseInt(qtyInput ? qtyInput.value : 1, 10) || 1;
         var cart = getCart();
         var existing = cart.find(function(it) { return it.id === activeProduct.id; });
+        var targetQty = 1;
+
         if (existing) {
-          existing.qty = (existing.qty || 1) + qty;
+          // Increment existing cart quantity by 1 on each click
+          existing.qty = (existing.qty || 1) + 1;
+          targetQty = existing.qty;
         } else {
+          var currentVal = parseInt(qtyInput ? qtyInput.value : 1, 10) || 1;
+          targetQty = currentVal;
           cart.push({
             id: activeProduct.id,
             title: activeProduct.title,
@@ -1497,10 +1537,17 @@
             originalPrice: activeProduct.originalPrice,
             image: activeProduct.image,
             brand: activeProduct.brand,
-            qty: qty
+            qty: targetQty
           });
         }
         saveCart(cart);
+
+        // Update stepper number immediately on screen so user sees the number increasing!
+        if (qtyInput) {
+          qtyInput.value = targetQty;
+          updateStepperButtons();
+        }
+
         updateBadges();
 
         if (typeof renderRecommendations === 'function') {
@@ -1509,16 +1556,19 @@
 
         var triggerBtn = (e && e.currentTarget) ? e.currentTarget : addCartBtn;
         if (triggerBtn) {
-          var originalHtml = triggerBtn.innerHTML;
-          triggerBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Added to Cart';
-          triggerBtn.style.pointerEvents = 'none';
-          setTimeout(function() {
+          var originalHtml = triggerBtn.getAttribute('data-orig-html');
+          if (!originalHtml) {
+            originalHtml = triggerBtn.innerHTML;
+            triggerBtn.setAttribute('data-orig-html', originalHtml);
+          }
+          triggerBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Added (' + targetQty + ')';
+          clearTimeout(triggerBtn._timer);
+          triggerBtn._timer = setTimeout(function() {
             triggerBtn.innerHTML = originalHtml;
-            triggerBtn.style.pointerEvents = '';
-          }, 1400);
+          }, 1200);
         }
 
-        showToast(activeProduct.title.substring(0, 24) + '... added to cart (' + qty + ')', 'VIEW CART', 'cart.html');
+        showToast(activeProduct.title.substring(0, 24) + '... (' + targetQty + ' in cart)', 'VIEW CART', 'cart.html');
       }
 
       var addCartBtn = document.getElementById('pdpAddToCartBtn');
@@ -1630,79 +1680,229 @@
         });
       }
 
-      // Delivery Location Modal & Region Rates
-      var STATE_REGIONS = {
-        lagos: {
-          name: 'Lagos',
-          cost: '₦ 1,500',
-          time: 'Within 24 - 48 Hours',
-          cities: ['Ikeja / Mainland', 'Lekki / Victoria Island', 'Surulere / Yaba', 'Ikorodu / Epe', 'Badagry / Ojo']
+      // Delivery Location Modal & All 36 States + FCT Local Government Areas
+      var NIGERIA_LOCATIONS = {
+        "lagos": {
+          name: "Lagos",
+          cost: "₦ 1,500",
+          time: "Within 24 - 48 Hours",
+          lgas: ["Agege", "Ajeromi-Ifelodun", "Alimosho", "Amuwo-Odofin", "Apapa", "Badagry", "Epe", "Eti-Osa (Ikoyi / Lekki / VI)", "Ifako-Ijaiye", "Ikeja (Alausa / GRA / Airport)", "Ikorodu", "Kosofe", "Lagos Island", "Lagos Mainland (Yaba / Ebute Metta)", "Mushin", "Ojo", "Oshodi-Isolo", "Shomolu", "Surulere"]
         },
-        abuja: {
-          name: 'Abuja (FCT)',
-          cost: '₦ 2,200',
-          time: 'Within 48 - 72 Hours',
-          cities: ['Central Area / Garki', 'Wuse / Maitama', 'Gwarinpa / Kubwa', 'Lugbe / Airport Road', 'Asokoro / Guzape']
+        "abuja": {
+          name: "Abuja (FCT)",
+          cost: "₦ 2,200",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Abaji", "Bwari", "Gwagwalada", "Kuje", "Kwali", "Municipal Area Council (AMAC)"]
         },
-        rivers: {
-          name: 'Rivers',
-          cost: '₦ 2,500',
-          time: 'Within 48 - 72 Hours',
-          cities: ['Port Harcourt GRA / Old GRA', 'Obio-Akpor / Rumuokoro', 'Trans-Amadi / D-Line', 'Eleme / Oyigbo']
+        "abia": {
+          name: "Abia",
+          cost: "₦ 2,500",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Aba North", "Aba South", "Arochukwu", "Bende", "Ikwuano", "Isiala Ngwa North", "Isiala Ngwa South", "Isuikwuato", "Obi Ngwa", "Ohafia", "Osisioma", "Ugwunagbo", "Ukwa East", "Ukwa West", "Umuahia North", "Umuahia South", "Umu Nneochi"]
         },
-        oyo: {
-          name: 'Oyo',
-          cost: '₦ 1,800',
-          time: 'Within 48 - 72 Hours',
-          cities: ['Ibadan North / Bodija', 'Ibadan South / Ring Road', 'Oluyole / Challenge', 'Ogbomoso / Oyo Town']
+        "adamawa": {
+          name: "Adamawa",
+          cost: "₦ 3,200",
+          time: "3 - 5 Days Delivery",
+          lgas: ["Demsa", "Fufore", "Ganye", "Girei", "Gombi", "Guyuk", "Hong", "Jada", "Lamurde", "Madagali", "Maiha", "Mayo Belwa", "Michika", "Mubi North", "Mubi South", "Numan", "Shelleng", "Song", "Toungo", "Yola North", "Yola South"]
         },
-        kano: {
-          name: 'Kano',
-          cost: '₦ 2,800',
-          time: '3 - 4 Days Delivery',
-          cities: ['Kano Municipal', 'Nassarawa / Bompai', 'Fagge / Sabon Gari', 'Tarauni / Hotoro']
+        "akwa-ibom": {
+          name: "Akwa Ibom",
+          cost: "₦ 2,500",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Abak", "Eastern Obolo", "Eket", "Esit Eket", "Essien Udim", "Etim Ekpo", "Etinan", "Ibeno", "Ibesikpo Asutan", "Ibiono Ibom", "Ika", "Ikono", "Ikot Abasi", "Ikot Ekpene", "Ini", "Itu", "Mbo", "Mkpat Enin", "Nsit Atai", "Nsit Ibom", "Nsit Ubium", "Obot Akara", "Okobo", "Onna", "Oron", "Oruk Anam", "Udung Uko", "Ukanafun", "Uruan", "Urue-Offong/Oruko", "Uyo"]
         },
-        enugu: {
-          name: 'Enugu',
-          cost: '₦ 2,500',
-          time: 'Within 48 - 72 Hours',
-          cities: ['Enugu Urban / Independence Layout', 'New Haven / Ogui', 'Trans-Ekulu / Abakpa', 'Nsukka']
+        "anambra": {
+          name: "Anambra",
+          cost: "₦ 2,200",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Aguata", "Anambra East", "Anambra West", "Anaocha", "Awka North", "Awka South", "Ayamelum", "Dunukofia", "Ekwusigo", "Idemili North", "Idemili South", "Ihiala", "Njikoka", "Nnewi North", "Nnewi South", "Ogbaru", "Onitsha North", "Onitsha South", "Orumba North", "Orumba South", "Oyi"]
         },
-        anambra: {
-          name: 'Anambra',
-          cost: '₦ 2,200',
-          time: 'Within 48 - 72 Hours',
-          cities: ['Awka Urban / GRA', 'Onitsha Main / Fegge', 'Nnewi / Otolo']
+        "bauchi": {
+          name: "Bauchi",
+          cost: "₦ 3,000",
+          time: "3 - 5 Days Delivery",
+          lgas: ["Alkaleri", "Bauchi", "Bogoro", "Damban", "Darazo", "Dass", "Gamawa", "Ganjuwa", "Giade", "Itas/Gadau", "Jama'are", "Katagum", "Kirfi", "Misau", "Ningi", "Shira", "Tafawa Balewa", "Toro", "Warji", "Zaki"]
         },
-        delta: {
-          name: 'Delta',
-          cost: '₦ 2,500',
-          time: 'Within 48 - 72 Hours',
-          cities: ['Warri / Effurun', 'Asaba / GRA', 'Sapele / Ughelli']
+        "bayelsa": {
+          name: "Bayelsa",
+          cost: "₦ 2,600",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Brass", "Ekeremor", "Kolokuma/Opokuma", "Nembe", "Ogbia", "Sagbama", "Southern Ijaw", "Yenagoa"]
         },
-        ogun: {
-          name: 'Ogun',
-          cost: '₦ 1,800',
-          time: 'Within 24 - 48 Hours',
-          cities: ['Abeokuta / Ibara', 'Mowe / Ibafo', 'Sagamu / Ijebu-Ode', 'Ota / Sango']
+        "benue": {
+          name: "Benue",
+          cost: "₦ 2,800",
+          time: "3 - 4 Days Delivery",
+          lgas: ["Ado", "Agatu", "Apa", "Buruku", "Gboko", "Guma", "Gwer East", "Gwer West", "Katsina-Ala", "Konshisha", "Kwande", "Logo", "Makurdi", "Obi", "Ogbadibo", "Ohimini", "Oju", "Okpokwu", "Otukpo", "Tarka", "Ukum", "Ushongo", "Vandeikya"]
         },
-        edo: {
-          name: 'Edo',
-          cost: '₦ 2,400',
-          time: 'Within 48 - 72 Hours',
-          cities: ['Benin City / GRA', 'Ugbowo / Ikpoba Hill', 'Auchi / Ekpoma']
+        "borno": {
+          name: "Borno",
+          cost: "₦ 3,500",
+          time: "3 - 5 Days Delivery",
+          lgas: ["Abadam", "Askira/Uba", "Bama", "Bayo", "Biu", "Chibok", "Damboa", "Dikwa", "Gubio", "Guzamala", "Gwoza", "Hawul", "Jere", "Kaga", "Kala/Balge", "Konduga", "Kukawa", "Kwaya Kusar", "Mafa", "Magumeri", "Maiduguri", "Marte", "Mobbar", "Monguno", "Ngala", "Nganzai", "Shani"]
         },
-        kaduna: {
-          name: 'Kaduna',
-          cost: '₦ 2,800',
-          time: '3 - 4 Days Delivery',
-          cities: ['Kaduna North / Barnawa', 'Kaduna South / Sabon Tasha', 'Zaria']
+        "cross-river": {
+          name: "Cross River",
+          cost: "₦ 2,500",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Abi", "Akamkpa", "Akpabuyo", "Bakassi", "Bekwarra", "Biase", "Boki", "Calabar Municipal", "Calabar South", "Etung", "Ikom", "Obanliku", "Obubra", "Obudu", "Odukpani", "Ogoja", "Yakuur", "Yala"]
         },
-        other: {
-          name: 'Other States',
-          cost: '₦ 3,000',
-          time: '3 - 5 Days Nationwide',
-          cities: ['State Capital Urban Area', 'Major Town / Regional Center']
+        "delta": {
+          name: "Delta",
+          cost: "₦ 2,500",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Aniocha North", "Aniocha South", "Bomadi", "Burutu", "Ethiope East", "Ethiope West", "Ika North East", "Ika South", "Isoko North", "Isoko South", "Ndokwa East", "Ndokwa West", "Okpe", "Oshimili North", "Oshimili South", "Patani", "Sapele", "Udu", "Ughelli North", "Ughelli South", "Ukwuani", "Uvwie", "Warri North", "Warri South", "Warri South West"]
+        },
+        "ebonyi": {
+          name: "Ebonyi",
+          cost: "₦ 2,500",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Abakaliki", "Afikpo North", "Afikpo South", "Ebonyi", "Ezza North", "Ezza South", "Ikwo", "Ishielu", "Ivo", "Izzi", "Ohaozara", "Ohaukwu", "Onicha"]
+        },
+        "edo": {
+          name: "Edo",
+          cost: "₦ 2,400",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Akoko-Edo", "Egor", "Esan Central", "Esan North-East", "Esan South-East", "Esan West", "Etsako Central", "Etsako East", "Etsako West", "Igueben", "Ikpoba Okha", "Oredo", "Orhionmwon", "Ovia North-East", "Ovia South-West", "Owan East", "Owan West", "Uhunmwonde"]
+        },
+        "ekiti": {
+          name: "Ekiti",
+          cost: "₦ 2,000",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Ado Ekiti", "Efon", "Ekiti East", "Ekiti South-West", "Ekiti West", "Emure", "Gbonyin", "Ido Osi", "Ijero", "Ikole", "Ilejemeje", "Irepodun/Ifelodun", "Ise/Orun", "Moba", "Oye"]
+        },
+        "enugu": {
+          name: "Enugu",
+          cost: "₦ 2,500",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Aninri", "Awgu", "Enugu East", "Enugu North", "Enugu South", "Ezeagu", "Igbo Etiti", "Igbo Eze North", "Igbo Eze South", "Isi Uzo", "Nkanu East", "Nkanu West", "Nsukka", "Oji River", "Udenu", "Udi", "Uzo Uwani"]
+        },
+        "gombe": {
+          name: "Gombe",
+          cost: "₦ 3,000",
+          time: "3 - 5 Days Delivery",
+          lgas: ["Akko", "Balanga", "Billiri", "Dukku", "Funakaye", "Gombe", "Kaltungo", "Kwami", "Nafada", "Shongom", "Yamaltu/Deba"]
+        },
+        "imo": {
+          name: "Imo",
+          cost: "₦ 2,400",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Aboh Mbaise", "Ahiazu Mbaise", "Ehime Mbano", "Ezinihitte", "Ideato North", "Ideato South", "Ihitte/Uboma", "Ikeduru", "Isiala Mbano", "Isu", "Mbaitoli", "Ngor Okpala", "Njaba", "Nkwerre", "Nwangele", "Obowo", "Oguta", "Ohaji/Egbema", "Okigwe", "Onuimo", "Orlu", "Orsu", "Oru East", "Oru West", "Owerri Municipal", "Owerri North", "Owerri West"]
+        },
+        "jigawa": {
+          name: "Jigawa",
+          cost: "₦ 3,200",
+          time: "3 - 5 Days Delivery",
+          lgas: ["Auyo", "Babura", "Biriniwa", "Birnin Kudu", "Buji", "Dutse", "Gagarawa", "Garki", "Gumel", "Guri", "Gwaram", "Gwiwa", "Hadejia", "Jahun", "Kafin Hausa", "Kaugama", "Kazaure", "Kiri Kasama", "Kiyawa", "Maigatari", "Malam Madori", "Miga", "Ringim", "Roni", "Sule Tankarkar", "Taura", "Yankwashi"]
+        },
+        "kaduna": {
+          name: "Kaduna",
+          cost: "₦ 2,800",
+          time: "3 - 4 Days Delivery",
+          lgas: ["Birnin Gwari", "Chikun", "Giwa", "Igabi", "Ikara", "Jaba", "Jema'a", "Kachia", "Kaduna North", "Kaduna South", "Kagarko", "Kajuru", "Kaura", "Kauru", "Kubau", "Kudan", "Lere", "Makarfi", "Sabon Gari", "Sanga", "Soba", "Zangon Kataf", "Zaria"]
+        },
+        "kano": {
+          name: "Kano",
+          cost: "₦ 2,800",
+          time: "3 - 4 Days Delivery",
+          lgas: ["Ajingi", "Albasu", "Bagwai", "Bebeji", "Bichi", "Bunkure", "Dala", "Dambatta", "Dawakin Kudu", "Dawakin Tofa", "Doguwa", "Fagge", "Gabasawa", "Garko", "Garun Mallam", "Gaya", "Gezawa", "Gwale", "Gwarzo", "Kabo", "Kano Municipal", "Karaye", "Kibiya", "Kiru", "Kumbotso", "Kunchi", "Kura", "Madobi", "Makoda", "Minjibir", "Nasarawa", "Rano", "Rimin Gado", "Rogo", "Shanono", "Sumaila", "Takai", "Tarauni", "Tofa", "Tsanyawa", "Tudun Wada", "Ungogo", "Warawa", "Wudil"]
+        },
+        "katsina": {
+          name: "Katsina",
+          cost: "₦ 3,000",
+          time: "3 - 5 Days Delivery",
+          lgas: ["Bakori", "Batagarawa", "Batsari", "Baure", "Bindawa", "Charanchi", "Dandume", "Danja", "Dan Musa", "Daura", "Dutsin Ma", "Faskari", "Funtua", "Ingawa", "Jibia", "Kafur", "Kaita", "Kankara", "Kankia", "Katsina", "Kurfi", "Kusada", "Mai'Adua", "Malumfashi", "Mani", "Mashi", "Matazu", "Musawa", "Rimi", "Sabuwa", "Safana", "Sandamu", "Zango"]
+        },
+        "kebbi": {
+          name: "Kebbi",
+          cost: "₦ 3,200",
+          time: "3 - 5 Days Delivery",
+          lgas: ["Aleiro", "Arewa Dandi", "Argungu", "Augie", "Bagudo", "Birnin Kebbi", "Bunza", "Dandi", "Fakai", "Gwandu", "Jega", "Kalgo", "Koko/Besse", "Maiyama", "Ngaski", "Sakaba", "Shanga", "Suru", "Danko/Wasagu", "Yauri", "Zuru"]
+        },
+        "kogi": {
+          name: "Kogi",
+          cost: "₦ 2,600",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Adavi", "Ajaokuta", "Ankpa", "Bassa", "Dekina", "Ibaji", "Idah", "Igalamela Odolu", "Ijumu", "Kabba/Bunu", "Kogi", "Lokoja", "Mopa Muro", "Ofu", "Ogori/Magongo", "Okehi", "Okene", "Olamaboro", "Omala", "Yagba East", "Yagba West"]
+        },
+        "kwara": {
+          name: "Kwara",
+          cost: "₦ 2,400",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Asa", "Baruten", "Edu", "Ekiti", "Ifelodun", "Ilorin East", "Ilorin South", "Ilorin West", "Irepodun", "Isin", "Kaiama", "Moro", "Offa", "Oke Ero", "Oyun", "Pategi"]
+        },
+        "nasarawa": {
+          name: "Nasarawa",
+          cost: "₦ 2,600",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Akwanga", "Awe", "Doma", "Karu", "Keana", "Keffi", "Kokona", "Lafia", "Nasarawa", "Nasarawa Egon", "Obi", "Toto", "Wamba"]
+        },
+        "niger": {
+          name: "Niger",
+          cost: "₦ 2,800",
+          time: "3 - 4 Days Delivery",
+          lgas: ["Agaie", "Agwara", "Bida", "Borgu", "Bosso", "Chanchaga", "Edati", "Gbako", "Gurara", "Katcha", "Kontagora", "Lapai", "Lavun", "Magama", "Mariga", "Mashegu", "Mokwa", "Moya", "Paikoro", "Rafi", "Rijau", "Shiroro", "Suleja", "Tafa", "Wushishi"]
+        },
+        "ogun": {
+          name: "Ogun",
+          cost: "₦ 1,800",
+          time: "Within 24 - 48 Hours",
+          lgas: ["Abeokuta North", "Abeokuta South", "Ado-Odo/Ota", "Ewekoro", "Ifo", "Ijebu East", "Ijebu North", "Ijebu North East", "Ijebu Ode", "Ikenne", "Imeko Afon", "Ipokia", "Obafemi Owode", "Odeda", "Odogbolu", "Ogun Waterside", "Remo North", "Shagamu", "Yewa North", "Yewa South"]
+        },
+        "ondo": {
+          name: "Ondo",
+          cost: "₦ 2,000",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Akoko North-East", "Akoko North-West", "Akoko South-West", "Akoko South-East", "Akure North", "Akure South", "Ese Odo", "Idanre", "Ifedore", "Ilaje", "Ile Oluji/Okeigbo", "Irele", "Odigbo", "Okitipupa", "Ondo East", "Ondo West", "Ose", "Owo"]
+        },
+        "osun": {
+          name: "Osun",
+          cost: "₦ 2,000",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Atakunmosa East", "Atakunmosa West", "Aiyedaade", "Aiyedire", "Boluwaduro", "Boripe", "Ede North", "Ede South", "Ife Central", "Ife East", "Ife North", "Ife South", "Egbedore", "Ejigbo", "Ifelodun", "Ila", "Ilesa East", "Ilesa West", "Irepodun", "Irewole", "Isokan", "Iwo", "Obokun", "Odo Otin", "Ola Oluwa", "Olorunda", "Oriade", "Orolu", "Osogbo"]
+        },
+        "oyo": {
+          name: "Oyo",
+          cost: "₦ 1,800",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Afijio", "Akinyele", "Atiba", "Atisbo", "Egbeda", "Ibadan North", "Ibadan North-East", "Ibadan North-West", "Ibadan South-East", "Ibadan South-West", "Ibarapa Central", "Ibarapa East", "Ibarapa North", "Ido", "Irepo", "Iseyin", "Itesiwaju", "Iwajowa", "Kajola", "Lagelu", "Ogbomosho North", "Ogbomosho South", "Ogo Oluwa", "Olorunsogo", "Oluyole", "Ona Ara", "Orelope", "Ori Ire", "Oyo East", "Oyo West", "Saki East", "Saki West", "Surulere"]
+        },
+        "plateau": {
+          name: "Plateau",
+          cost: "₦ 2,800",
+          time: "3 - 4 Days Delivery",
+          lgas: ["Barkin Ladi", "Bassa", "Bokkos", "Jos East", "Jos North", "Jos South", "Kanam", "Kanke", "Langtang North", "Langtang South", "Mangu", "Mikang", "Pankshin", "Qua'an Pan", "Riyom", "Shendam", "Wase"]
+        },
+        "rivers": {
+          name: "Rivers",
+          cost: "₦ 2,500",
+          time: "Within 48 - 72 Hours",
+          lgas: ["Abua/Odual", "Ahoada East", "Ahoada West", "Akuku-Toru", "Andoni", "Asari-Toru", "Bonny", "Degema", "Eleme", "Emohua", "Etche", "Gokana", "Ikwerre", "Khana", "Obio/Akpor", "Ogba/Egbema/Ndoni", "Ogu/Bolo", "Okrika", "Omuma", "Opobo/Nkoro", "Oyigbo", "Port Harcourt", "Tai"]
+        },
+        "sokoto": {
+          name: "Sokoto",
+          cost: "₦ 3,200",
+          time: "3 - 5 Days Delivery",
+          lgas: ["Binji", "Bodinga", "Dange Shuni", "Gada", "Goronyo", "Gudu", "Gawabawa", "Illela", "Isa", "Kebbe", "Kware", "Rabah", "Sabon Birni", "Shagari", "Silame", "Sokoto North", "Sokoto South", "Tambuwal", "Tangaza", "Tureta", "Wamako", "Wurno", "Yabo"]
+        },
+        "taraba": {
+          name: "Taraba",
+          cost: "₦ 3,200",
+          time: "3 - 5 Days Delivery",
+          lgas: ["Ardo Kola", "Bali", "Donga", "Gashaka", "Gassol", "Ibi", "Jalingo", "Karim Lamido", "Kumi", "Lau", "Sardauna", "Takum", "Ussa", "Wukari", "Yorro", "Zing"]
+        },
+        "yobe": {
+          name: "Yobe",
+          cost: "₦ 3,200",
+          time: "3 - 5 Days Delivery",
+          lgas: ["Bade", "Bursari", "Damaturu", "Fika", "Fune", "Geidam", "Gujba", "Gulani", "Jakusko", "Karasuwa", "Machina", "Nangere", "Nguru", "Potiskum", "Tarmuwa", "Yunusari", "Yusufari"]
+        },
+        "zamfara": {
+          name: "Zamfara",
+          cost: "₦ 3,200",
+          time: "3 - 5 Days Delivery",
+          lgas: ["Anka", "Bakura", "Birnin Magaji/Kiyaw", "Bukkuyum", "Bungudu", "Gummi", "Gusau", "Kaura Namoda", "Maradun", "Maru", "Shinkafi", "Talata Mafara", "Tsafe", "Zurmi"]
         }
       };
 
@@ -1712,11 +1912,11 @@
       } catch (e) {
         userLocation = null;
       }
-      if (!userLocation || !userLocation.stateKey) {
+      if (!userLocation || !userLocation.stateKey || !NIGERIA_LOCATIONS[userLocation.stateKey]) {
         userLocation = {
           stateKey: 'lagos',
           stateName: 'Lagos',
-          city: 'Ikeja / Mainland',
+          city: 'Ikeja (Alausa / GRA / Airport)',
           cost: '₦ 1,500',
           time: 'Within 24 - 48 Hours'
         };
@@ -1742,15 +1942,49 @@
       var modalRateCost = document.getElementById('pdpModalRateCost');
       var modalRateTime = document.getElementById('pdpModalRateTime');
 
+      function initModalStateOptions(selectedKey) {
+        if (!modalStateSelect) return;
+        modalStateSelect.innerHTML = '';
+
+        var topGroup = document.createElement('optgroup');
+        topGroup.label = 'Top Destinations';
+        var topKeys = ['lagos', 'abuja', 'rivers', 'oyo', 'ogun', 'kano', 'enugu', 'anambra', 'delta', 'edo'];
+        topKeys.forEach(function(k) {
+          if (NIGERIA_LOCATIONS[k]) {
+            var opt = document.createElement('option');
+            opt.value = k;
+            opt.textContent = NIGERIA_LOCATIONS[k].name;
+            if (k === selectedKey) opt.selected = true;
+            topGroup.appendChild(opt);
+          }
+        });
+        modalStateSelect.appendChild(topGroup);
+
+        var allGroup = document.createElement('optgroup');
+        allGroup.label = 'All 36 States & FCT (A - Z)';
+        var allKeys = Object.keys(NIGERIA_LOCATIONS).sort(function(a, b) {
+          return NIGERIA_LOCATIONS[a].name.localeCompare(NIGERIA_LOCATIONS[b].name);
+        });
+        allKeys.forEach(function(k) {
+          var opt = document.createElement('option');
+          opt.value = k;
+          opt.textContent = NIGERIA_LOCATIONS[k].name;
+          if (k === selectedKey && !modalStateSelect.value) opt.selected = true;
+          allGroup.appendChild(opt);
+        });
+        modalStateSelect.appendChild(allGroup);
+      }
+
       function populateModalCities(stateKey, selectedCity) {
         if (!modalCitySelect) return;
         modalCitySelect.innerHTML = '';
-        var stateData = STATE_REGIONS[stateKey] || STATE_REGIONS.other;
-        stateData.cities.forEach(function(cityName) {
+        var stateData = NIGERIA_LOCATIONS[stateKey] || NIGERIA_LOCATIONS.lagos;
+        var lgas = stateData.lgas || [];
+        lgas.forEach(function(lgaName) {
           var opt = document.createElement('option');
-          opt.value = cityName;
-          opt.textContent = cityName;
-          if (selectedCity && cityName === selectedCity) {
+          opt.value = lgaName;
+          opt.textContent = lgaName;
+          if (selectedCity && lgaName === selectedCity) {
             opt.selected = true;
           }
           modalCitySelect.appendChild(opt);
@@ -1758,18 +1992,18 @@
       }
 
       function updateModalRatePreview(stateKey) {
-        var stateData = STATE_REGIONS[stateKey] || STATE_REGIONS.other;
+        var stateData = NIGERIA_LOCATIONS[stateKey] || NIGERIA_LOCATIONS.lagos;
         if (modalRateCost) modalRateCost.textContent = stateData.cost;
         if (modalRateTime) modalRateTime.textContent = stateData.time;
       }
 
       function openLocationModal() {
         if (!locModal) return;
-        if (modalStateSelect) {
-          modalStateSelect.value = userLocation.stateKey || 'lagos';
-          populateModalCities(modalStateSelect.value, userLocation.city);
-          updateModalRatePreview(modalStateSelect.value);
-        }
+        var currentKey = userLocation.stateKey || 'lagos';
+        initModalStateOptions(currentKey);
+        if (modalStateSelect) modalStateSelect.value = currentKey;
+        populateModalCities(currentKey, userLocation.city);
+        updateModalRatePreview(currentKey);
         locModal.classList.add('open');
         document.body.style.overflow = 'hidden';
       }
@@ -1801,13 +2035,13 @@
       if (applyLocBtn) {
         applyLocBtn.addEventListener('click', function() {
           var stateKey = modalStateSelect ? modalStateSelect.value : 'lagos';
-          var stateData = STATE_REGIONS[stateKey] || STATE_REGIONS.other;
-          var cityName = modalCitySelect ? modalCitySelect.value : (stateData.cities[0] || 'Urban Area');
+          var stateData = NIGERIA_LOCATIONS[stateKey] || NIGERIA_LOCATIONS.lagos;
+          var lgaName = modalCitySelect ? modalCitySelect.value : (stateData.lgas[0] || 'Urban Area');
 
           userLocation = {
             stateKey: stateKey,
             stateName: stateData.name,
-            city: cityName,
+            city: lgaName,
             cost: stateData.cost,
             time: stateData.time
           };
