@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>NKEMMART SUPERCENTER - Online Shopping | Supermarket</title>
-  <link rel="stylesheet" href="styles.css?v=8.0">
+  <link rel="stylesheet" href="styles.css?v=8.1">
   <script src="taxonomy.js?v=3.1"></script>
 </head>
 <body>
@@ -1564,6 +1564,7 @@
             chipBtn.childNodes[0].nodeValue = 'Price (₦' + minPrice.toLocaleString() + ' - ₦' + maxPrice.toLocaleString() + ') ';
           }
         }
+        syncMobileFloatingBar();
       }
 
       // Dual-Point Price Range Slider Setup
@@ -1896,6 +1897,57 @@
       }
 
       // ==========================================
+      // MOBILE FLOATING ACTION BAR VISIBILITY CONTROLLER
+      // ==========================================
+      function syncMobileFloatingBar() {
+        var floatBar = document.querySelector('.mobile-floating-bar');
+        if (!floatBar) return;
+
+        if (window.innerWidth > 768) {
+          floatBar.classList.remove('hidden');
+          return;
+        }
+
+        var grid = document.querySelector('.products-grid');
+        var cards = grid ? Array.from(grid.querySelectorAll('.product-card')) : [];
+        var visibleCards = cards.filter(function(card) {
+          return card.style.display !== 'none';
+        });
+
+        // Hide when no products exist or all products are filtered out
+        if (visibleCards.length === 0) {
+          floatBar.classList.add('hidden');
+          return;
+        }
+
+        var footer = document.querySelector('.site-footer') || document.querySelector('footer');
+        var isAtFooter = false;
+        if (footer) {
+          var footerRect = footer.getBoundingClientRect();
+          if (footerRect.top <= window.innerHeight - 30) {
+            isAtFooter = true;
+          }
+        }
+
+        var isPastGrid = false;
+        if (grid) {
+          var gridRect = grid.getBoundingClientRect();
+          if (gridRect.bottom < 80) {
+            isPastGrid = true;
+          }
+        }
+
+        if (isAtFooter || isPastGrid) {
+          floatBar.classList.add('hidden');
+        } else {
+          floatBar.classList.remove('hidden');
+        }
+      }
+
+      window.addEventListener('resize', syncMobileFloatingBar);
+      syncMobileFloatingBar();
+
+      // ==========================================
       // SMART STICKY HEADER (HIDE ON SCROLL DOWN, SHOW ON SCROLL UP)
       // ==========================================
       var mainHeader = document.querySelector('.main-header');
@@ -1905,6 +1957,7 @@
       var backToTopBtn = document.querySelector('.back-to-top-btn');
 
       window.addEventListener('scroll', function() {
+        syncMobileFloatingBar();
         if (isProgrammaticScroll) return;
         var currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
         if (currentScrollY < 0) currentScrollY = 0;
