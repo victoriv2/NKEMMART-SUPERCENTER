@@ -29,7 +29,7 @@ if (!Array.prototype.map) {
   };
 }
 
-window.NKEMMART_TAXONOMY = {
+window.RALPHMART_TAXONOMY = window.NKEMMART_TAXONOMY = {
   vehicles: {
     id: "vehicles",
     name: "Vehicles",
@@ -177,10 +177,10 @@ window.NKEMMART_TAXONOMY = {
 };
 
 // ========================================================
-// NKEMMART VERIFIED MASTER CATALOG
+// RALPHMART VERIFIED MASTER CATALOG
 // Accurate products with authentic prices, brands, keywords
 // ========================================================
-window.NKEMMART_CATALOG = [
+window.RALPHMART_CATALOG = window.NKEMMART_CATALOG = [
   // --- FLAGSHIP HOMEPAGE PRODUCTS ---
   {
     id: "prod-1",
@@ -1318,8 +1318,8 @@ window.NKEMMART_CATALOG = [
 // SMART ACCURATE SEARCH & RELEVANCE ENGINE
 // Multi-term token matching, brand scoring, zero hallucination
 // ========================================================
-window.NKEMMART_SEARCH = function(rawQuery, catFilter, subFilter) {
-  var catalog = window.NKEMMART_CATALOG || [];
+window.NKEMMART_SEARCH = window.RALPHMART_SEARCH = function(rawQuery, catFilter, subFilter) {
+  var catalog = window.RALPHMART_CATALOG || [];
   var q = (rawQuery || '').trim().toLowerCase();
 
   // If filtered by category / subcategory

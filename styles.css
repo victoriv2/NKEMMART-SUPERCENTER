@@ -1,15 +1,15 @@
 :root {
-  --primary-blue: #008043;
-  --primary-blue-hover: #006b38;
-  --primary-green: #008043;
-  --primary-green-hover: #006b38;
-  --accent-gold: #ffb800;
-  --accent-gold-hover: #e5a500;
+  --primary-blue: #b8860b;
+  --primary-blue-hover: #996f00;
+  --primary-green: #b8860b;
+  --primary-green-hover: #996f00;
+  --accent-gold: #d4af37;
+  --accent-gold-hover: #c59b27;
   --badge-red: #e53e3e;
-  --dark-navy: #0d1b2a;
+  --dark-navy: #111827;
   --text-dark: #282828;
   --text-muted: #75757a;
-  --bg-light: #f1f2f4;
+  --bg-light: #f8fafc;
   --white: #ffffff;
   --border-color: #d1d5db;
   --border-light: #e5e7eb;
@@ -52,8 +52,9 @@ body {
    TOP UTILITY BAR / ANNOUNCEMENT
 ----------------------------------------- */
 .top-bar {
-  background: #008751;
+  background: #111827;
   color: var(--white);
+  border-bottom: 2px solid #b8860b;
   font-size: 12px;
   padding: 6px 16px;
   white-space: nowrap;
@@ -110,7 +111,7 @@ body {
 }
 
 .top-bar-slogan {
-  color: #d1fae5;
+  color: #f3c642;
   font-style: italic;
   font-weight: 600;
   white-space: nowrap;
@@ -3726,7 +3727,7 @@ body {
 .shipping-progress-track {
   width: 100%;
   height: 6px;
-  background-color: #dcfce7;
+  background-color: #fef9eb;
   border-radius: 3px;
   overflow: hidden;
 }
@@ -4000,12 +4001,13 @@ body {
    JIJI STYLE HERO BANNER & SEARCH
 ========================================= */
 .jiji-hero-banner {
-  background: #008043;
+  background: linear-gradient(135deg, #111827 0%, #1f2937 60%, #111827 100%);
+  border: 1.5px solid #d4af37;
   border-radius: 16px;
   padding: 24px 20px;
   margin-bottom: 20px;
   color: #ffffff;
-  box-shadow: 0 4px 20px rgba(11, 77, 187, 0.18);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
   position: relative;
   overflow: visible;
 }
@@ -4978,7 +4980,7 @@ body.modal-open {
 
 /* Drawer Header - Single unified container with zero seams or lines */
 .jiji-drawer-header {
-  background: #008043;
+  background: #b8860b;
   padding: 8px 12px 12px 14px;
   display: flex;
   flex-direction: column;
@@ -5191,7 +5193,11 @@ body.modal-open {
 
 /* Dedicated Category Page Styles - Clean Branded Presentation */
 .cat-page-banner {
-  background: #008043;
+  background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+  border-left: 5px solid #d4af37;
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  border-right: 1px solid rgba(212, 175, 55, 0.2);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
   color: #ffffff;
   padding: 22px 28px 24px 28px;
   border-radius: 16px;
@@ -5199,7 +5205,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  box-shadow: 0 4px 18px rgba(11, 77, 187, 0.12);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -5992,7 +5998,7 @@ body.modal-open {
   bottom: 12px;
   left: 12px;
   background-color: rgba(0, 168, 89, 0.12);
-  color: #008f4c;
+  color: #b8860b;
   font-size: 11px;
   font-weight: 700;
   padding: 4px 8px;
@@ -6075,12 +6081,12 @@ body.modal-open {
 }
 
 .pdp-thumb-item.active {
-  border-color: #00a859;
+  border-color: #b8860b;
   background-color: #ffffff;
 }
 
 .pdp-thumb-item:hover {
-  border-color: #00a859;
+  border-color: #b8860b;
 }
 
 .pdp-thumb-item img {
@@ -6294,7 +6300,7 @@ body.modal-open {
 
 .pdp-add-to-cart-btn {
   width: 100%;
-  background-color: #00a859;
+  background-color: #b8860b;
   color: #ffffff;
   border: none;
   padding: 14px 20px;
@@ -6311,7 +6317,7 @@ body.modal-open {
 }
 
 .pdp-add-to-cart-btn:hover {
-  background-color: #008f4c;
+  background-color: #b8860b;
 }
 
 .pdp-add-to-cart-btn:active {
@@ -6484,8 +6490,8 @@ body.modal-open {
 }
 
 .pdp-tab-trigger.active {
-  color: #00a859;
-  border-bottom-color: #00a859;
+  color: #b8860b;
+  border-bottom-color: #b8860b;
   background-color: #ffffff;
 }
 
@@ -6996,12 +7002,12 @@ body.modal-open {
 .pdp-option-fee {
   font-size: 12.5px;
   font-weight: 800;
-  color: #008f4c;
+  color: #b8860b;
 }
 
 .pdp-fee-free {
-  color: #008f4c;
-  background-color: #dcfce7;
+  color: #b8860b;
+  background-color: #fef9eb;
   padding: 1px 6px;
   border-radius: 4px;
   font-size: 11px;
@@ -7177,7 +7183,7 @@ body.modal-open {
 }
 
 #pdpModalRateCost {
-  color: #008f4c;
+  color: #b8860b;
   font-weight: 800;
 }
 
@@ -7278,7 +7284,7 @@ body.modal-open {
   font-size: 12px;
   font-weight: 700;
   color: var(--primary-green);
-  background-color: #e8f7ee;
+  background-color: #fef9eb;
   padding: 4px 10px;
   border-radius: 6px;
   flex-shrink: 0;
@@ -7465,9 +7471,9 @@ body.modal-open {
 }
 
 .pdp-quick-chip.active {
-  background: #e8f7ee;
+  background: #fef9eb;
   border-color: #86efac;
-  color: #008744;
+  color: #b8860b;
 }
 
 .pdp-picker-list {
@@ -7520,7 +7526,7 @@ body.modal-open {
 }
 
 .pdp-picker-item.selected .pdp-picker-item-name {
-  color: #008744;
+  color: #b8860b;
 }
 
 .pdp-picker-item-sub {
@@ -7538,8 +7544,8 @@ body.modal-open {
 .pdp-picker-rate-pill {
   font-size: 11.5px;
   font-weight: 700;
-  color: #008744;
-  background: #e8f7ee;
+  color: #b8860b;
+  background: #fef9eb;
   padding: 3px 8px;
   border-radius: 5px;
 }
@@ -7894,7 +7900,7 @@ body.modal-open {
 .pdp-form-input:focus,
 .pdp-form-textarea:focus,
 .pdp-form-select:focus {
-  border-color: #00a859;
+  border-color: #b8860b;
 }
 
 .pdp-form-submit-row {
@@ -7905,7 +7911,7 @@ body.modal-open {
 }
 
 .pdp-form-submit-btn {
-  background-color: #00a859;
+  background-color: #b8860b;
   color: #ffffff;
   border: none;
   padding: 9px 20px;
@@ -7985,7 +7991,7 @@ body.modal-open {
 .pdp-sticky-cart-btn {
   width: 100%;
   height: 44px;
-  background-color: #00a859;
+  background-color: #b8860b;
   color: #ffffff;
   border: none;
   border-radius: 6px;
@@ -8137,19 +8143,20 @@ body.modal-open {
 }
 
 .brand-story-inner {
-  background: #008043;
+  background: linear-gradient(135deg, #111827 0%, #18181b 100%);
+  border: 1.5px solid #d4af37;
   border-radius: 14px;
   padding: 40px 32px;
   color: #ffffff;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(9, 30, 58, 0.12);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
 }
 
 .brand-story-badge {
   display: inline-block;
-  background-color: #00a859;
-  color: #ffffff;
+  background-color: #d4af37;
+  color: #111827;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1px;
@@ -8186,7 +8193,7 @@ body.modal-open {
 
 .brand-story-quote {
   background: rgba(255, 255, 255, 0.08);
-  border-left: 3.5px solid #00a859;
+  border-left: 3.5px solid #b8860b;
   border-radius: 8px;
   padding: 12px 18px;
   max-width: 760px;
@@ -8363,7 +8370,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #008751;
+  color: #b8860b;
 }
 
 .search-empty-title {
@@ -8443,15 +8450,15 @@ html, body {
 
 .search-category-chip:hover {
   background-color: #f0fdf4;
-  border-color: #008751;
-  color: #008751;
+  border-color: #b8860b;
+  color: #b8860b;
   transform: translateY(-1px);
 }
 
 .search-empty-btn {
   display: inline-block;
   padding: 12px 28px;
-  background-color: #008751;
+  background-color: #b8860b;
   color: #ffffff;
   border-radius: 8px;
   font-size: 14px;
@@ -8461,6 +8468,6 @@ html, body {
 }
 
 .search-empty-btn:hover {
-  background-color: #007043;
+  background-color: #996f00;
   transform: translateY(-1px);
 }

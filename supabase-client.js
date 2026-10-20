@@ -1,5 +1,5 @@
 /**
- * NKEMMART SUPERCENTER - SUPABASE CLIENT & AUTH HELPER
+ * RALPHMART SUPERCENTER - SUPABASE CLIENT & AUTH HELPER
  * Project: nkemmart.supercenter@gmail.com's Project
  * Region: eu-west-1
  */
@@ -67,7 +67,7 @@ async function getCurrentProfile() {
     }
 
     // Default admin detection for store owner
-    const isOwner = user.email && user.email.toLowerCase() === 'nkemmart.supercenter@gmail.com';
+    const isOwner = user.email && (user.email.toLowerCase() === 'ralphmart.supercenter@gmail.com' || user.email.toLowerCase() === 'nkemmart.supercenter@gmail.com');
     const role = (profile && profile.role) || (isOwner ? 'admin' : 'customer');
 
     const stateName = (profile && profile.state) || user.user_metadata?.state || '';
@@ -114,7 +114,7 @@ async function signUpUser(email, password, { fullName, phone, state, stateKey, l
   const client = getSupabase();
   if (!client) throw new Error('Supabase client unavailable');
 
-  const isOwner = email.trim().toLowerCase() === 'nkemmart.supercenter@gmail.com';
+  const isOwner = (email.trim().toLowerCase() === 'ralphmart.supercenter@gmail.com' || email.trim().toLowerCase() === 'nkemmart.supercenter@gmail.com');
   const role = isOwner ? 'admin' : 'customer';
 
   const metadata = {
