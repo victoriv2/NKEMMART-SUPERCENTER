@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Product Details - RALPHMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=19.0">
+  <link rel="stylesheet" href="styles.css?v=20.0">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
   <script src="taxonomy.js?v=3.1"></script>
@@ -1639,6 +1639,17 @@
       function showToast(msg, btnText, btnUrl) {
         var container = document.getElementById('toastContainer');
         if (!container) return;
+
+        if (!btnText) {
+          var msgLower = (msg || '').toLowerCase();
+          if (msgLower.indexOf('cart') !== -1) {
+            btnText = 'VIEW CART';
+            btnUrl = 'cart.html';
+          } else if (msgLower.indexOf('saved') !== -1 || msgLower.indexOf('wishlist') !== -1) {
+            btnText = 'VIEW SAVED';
+            btnUrl = 'saved-items.html';
+          }
+        }
 
         // Prevent stacking: if a toast is already on screen, update it in-place!
         var existing = container.querySelector('.toast-item');

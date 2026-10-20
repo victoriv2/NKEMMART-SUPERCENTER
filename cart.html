@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart - RALPHMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=19.0">
+  <link rel="stylesheet" href="styles.css?v=20.0">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
   <script src="taxonomy.js?v=3.2"></script>
@@ -892,6 +892,17 @@
         var container = document.getElementById('toastContainer');
         if (!container) return;
 
+        if (!linkText) {
+          var msgLower = (message || '').toLowerCase();
+          if (msgLower.indexOf('cart') !== -1) {
+            linkText = 'VIEW CART';
+            linkUrl = 'cart.html';
+          } else if (msgLower.indexOf('saved') !== -1 || msgLower.indexOf('wishlist') !== -1) {
+            linkText = 'VIEW SAVED';
+            linkUrl = 'saved-items.html';
+          }
+        }
+
         while (container.firstChild) {
           container.removeChild(container.firstChild);
         }
@@ -1146,13 +1157,13 @@
             cart[itemIndex].qty = (cart[itemIndex].qty || 1) + 1;
             saveCart(cart);
             renderCart();
-            showToast('Quantity updated: ' + cart[itemIndex].qty, null, null);
+            showToast('Quantity updated: ' + cart[itemIndex].qty, 'VIEW CART', 'cart.html');
           } else if (action === 'dec') {
             if (cart[itemIndex].qty > 1) {
               cart[itemIndex].qty -= 1;
               saveCart(cart);
               renderCart();
-              showToast('Quantity updated: ' + cart[itemIndex].qty, null, null);
+              showToast('Quantity updated: ' + cart[itemIndex].qty, 'VIEW CART', 'cart.html');
             } else {
               var removedTitle = cart[itemIndex].title;
               cart.splice(itemIndex, 1);
@@ -1236,7 +1247,7 @@
 
             saveCart(cart);
             renderCart();
-            showToast(product.title.substring(0, 24) + '... added to cart (1)', null, null);
+            showToast(product.title.substring(0, 24) + '... added to cart (1)', 'VIEW CART', 'cart.html');
             return;
           }
 
@@ -1249,7 +1260,7 @@
               cart[idx].qty = (cart[idx].qty || 1) + 1;
               saveCart(cart);
               renderCart();
-              showToast('Quantity updated: ' + cart[idx].qty, null, null);
+              showToast('Quantity updated: ' + cart[idx].qty, 'VIEW CART', 'cart.html');
             }
             return;
           }
@@ -1264,7 +1275,7 @@
                 cart[idx].qty -= 1;
                 saveCart(cart);
                 renderCart();
-                showToast('Quantity updated: ' + cart[idx].qty, null, null);
+                showToast('Quantity updated: ' + cart[idx].qty, 'VIEW CART', 'cart.html');
               } else {
                 var removedTitle = cart[idx].title;
                 cart.splice(idx, 1);
