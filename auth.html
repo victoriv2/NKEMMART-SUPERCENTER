@@ -714,9 +714,29 @@
         padding: 20px 16px;
       }
       .auth-badges-row {
-        flex-direction: column;
-        gap: 8px;
-        align-items: flex-start;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
+        gap: 12px !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 11px !important;
+      }
+      .auth-badge-item {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        white-space: nowrap !important;
+      }
+      .auth-badge-item svg {
+        flex-shrink: 0 !important;
+      }
+      @media (max-width: 360px) {
+        .auth-badges-row {
+          gap: 8px !important;
+          font-size: 10px !important;
+        }
       }
       .auth-footer {
         padding: 18px 12px;
@@ -1036,14 +1056,14 @@
   </div>
 
   <!-- Dedicated State Selector Modal for Auth -->
-  <div class="pdp-picker-modal-overlay" id="authStatePickerModal" aria-hidden="true" role="dialog" aria-label="Select Delivery State">
+  <div class="pdp-picker-modal-overlay" id="authStatePickerModal" aria-hidden="true" role="dialog" aria-label="Select State">
     <div class="pdp-picker-modal-dialog">
       <div class="pdp-picker-modal-header">
         <div class="pdp-picker-header-title">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#008751" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
           <div>
-            <h4>Select Delivery State</h4>
-            <span class="pdp-picker-header-sub">We deliver to all 36 states and FCT Abuja</span>
+            <h4>Select State</h4>
+            <span class="pdp-picker-header-sub">Choose your state in Nigeria</span>
           </div>
         </div>
         <button type="button" class="pdp-picker-close-btn" id="authCloseStatePickerBtn" aria-label="Close state picker">
@@ -1059,20 +1079,8 @@
         </button>
       </div>
 
-      <!-- Quick chips for top commercial hubs -->
-      <div class="pdp-picker-quick-chips" id="authStateQuickChips">
-        <span class="pdp-picker-chips-label">Popular:</span>
-        <button type="button" class="pdp-quick-chip" data-state="lagos">Lagos</button>
-        <button type="button" class="pdp-quick-chip" data-state="abuja">Abuja</button>
-        <button type="button" class="pdp-quick-chip" data-state="rivers">Rivers</button>
-        <button type="button" class="pdp-quick-chip" data-state="oyo">Oyo</button>
-        <button type="button" class="pdp-quick-chip" data-state="kano">Kano</button>
-        <button type="button" class="pdp-quick-chip" data-state="anambra">Anambra</button>
-        <button type="button" class="pdp-quick-chip" data-state="enugu">Enugu</button>
-      </div>
-
       <div class="pdp-picker-list" id="authStatePickerList" role="listbox" aria-label="Nigerian States">
-        <!-- Dynamically rendered state options with rates -->
+        <!-- Dynamically rendered state options -->
       </div>
     </div>
   </div>
@@ -1293,7 +1301,6 @@
       const authStateSearchInput = document.getElementById('authStateSearchInput');
       const authClearStateSearchBtn = document.getElementById('authClearStateSearchBtn');
       const authStatePickerList = document.getElementById('authStatePickerList');
-      const authStateQuickChips = document.getElementById('authStateQuickChips');
 
       const authLgaPickerModal = document.getElementById('authLgaPickerModal');
       const authCloseLgaPickerBtn = document.getElementById('authCloseLgaPickerBtn');
@@ -1357,11 +1364,9 @@
           btn.innerHTML = `
             <div class="pdp-picker-item-info">
               <span class="pdp-picker-item-name">${s.name}</span>
-              <span class="pdp-picker-item-sub">${s.time || 'Fast delivery'}</span>
             </div>
             <div class="pdp-picker-item-meta">
-              <span class="pdp-picker-rate-pill">${s.cost || '₦ 2,500'}</span>
-              ${isSelected ? '<span class="pdp-picker-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></span>' : ''}
+              ${isSelected ? '<span class="pdp-picker-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></span>' : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>'}
             </div>
           `;
 
@@ -1467,10 +1472,9 @@
           btn.innerHTML = `
             <div class="pdp-picker-item-info">
               <span class="pdp-picker-item-name">${lga}</span>
-              <span class="pdp-picker-item-sub">${stateObj.name} Delivery Zone</span>
             </div>
             <div class="pdp-picker-item-meta">
-              ${isSelected ? '<span class="pdp-picker-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></span>' : ''}
+              ${isSelected ? '<span class="pdp-picker-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></span>' : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>'}
             </div>
           `;
 
@@ -1512,15 +1516,6 @@
           authClearStateSearchBtn.style.display = 'none';
           renderStateOptions('');
           authStateSearchInput.focus();
-        });
-      }
-
-      if (authStateQuickChips) {
-        authStateQuickChips.addEventListener('click', (e) => {
-          const chip = e.target.closest('.pdp-quick-chip');
-          if (chip && chip.dataset.state) {
-            selectState(chip.dataset.state);
-          }
         });
       }
 
