@@ -812,6 +812,7 @@ body {
 .filter-section {
   padding: 16px;
   border-bottom: 1px solid var(--border-light);
+  box-sizing: border-box;
 }
 
 .filter-section:last-child {
@@ -923,10 +924,12 @@ body {
 .dual-slider-container {
   position: relative;
   width: 100%;
+  max-width: 100%;
   height: 24px;
   display: flex;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
 }
 
 .dual-slider-track-bg {
@@ -1019,13 +1022,19 @@ body {
   justify-content: space-between;
   gap: 8px;
   margin-bottom: 14px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .price-box-input {
-  flex: 1;
-  padding: 7px 10px;
-  font-size: 14px;
-  font-weight: 500;
+  flex: 1 1 0;
+  min-width: 0;
+  width: 0;
+  max-width: calc(50% - 10px);
+  padding: 8px 6px;
+  font-size: 13.5px;
+  font-weight: 600;
   color: #111827;
   border: 1px solid #d1d5db;
   border-radius: 6px;
@@ -1034,6 +1043,7 @@ body {
   background-color: #ffffff;
   transition: border-color 0.2s, box-shadow 0.2s;
   -moz-appearance: textfield;
+  box-sizing: border-box;
 }
 
 .price-box-input::-webkit-inner-spin-button,
@@ -1044,13 +1054,15 @@ body {
 
 .price-box-input:focus {
   border-color: var(--primary-blue);
-  box-shadow: 0 0 0 2px rgba(11, 77, 187, 0.2);
+  box-shadow: 0 0 0 2px rgba(81, 33, 117, 0.2);
 }
 
 .price-separator {
   font-weight: 600;
   color: #6b7280;
   font-size: 15px;
+  flex-shrink: 0;
+  user-select: none;
 }
 
 /* Price Buttons: Reset & Save (Matching screenshot) */
