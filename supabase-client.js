@@ -222,7 +222,7 @@ async function updateSiteAccountMenu() {
         let adminItemHtml = '';
         if (profile.role === 'admin') {
           adminItemHtml = `
-            <a href="admin.html" class="dropdown-item" style="color: #b8860b; font-weight: 700; background: rgba(212, 175, 55, 0.1);">
+            <a href="admin.html" class="dropdown-item" style="color: #1c56a8; font-weight: 700; background: rgba(28, 86, 168, 0.1);">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
               <span>Admin Portal</span>
             </a>

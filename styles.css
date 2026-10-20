@@ -1,17 +1,23 @@
 :root {
-  --primary-blue: #b8860b;
-  --primary-blue-hover: #996f00;
-  --primary-green: #b8860b;
-  --primary-green-hover: #996f00;
-  --accent-gold: #d4af37;
-  --accent-gold-hover: #c59b27;
-  --badge-red: #e53e3e;
+  --primary-blue: #1c56a8;
+  --primary-blue-hover: #154487;
+  --primary-green: #1c56a8;
+  --primary-green-hover: #154487;
+  --brand-blue: #1c56a8;
+  --brand-blue-hover: #154487;
+  --brand-red: #d02934;
+  --brand-red-hover: #b91c1c;
+  --brand-green: #3f954f;
+  --brand-green-hover: #2e7d32;
+  --accent-gold: #d02934;
+  --accent-gold-hover: #b91c1c;
+  --badge-red: #d02934;
   --dark-navy: #111827;
   --text-dark: #282828;
   --text-muted: #75757a;
   --bg-light: #f8fafc;
   --white: #ffffff;
-  --border-color: #d1d5db;
+  --border-color: #cbd5e1;
   --border-light: #e5e7eb;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.12);
@@ -52,7 +58,7 @@ body {
 .top-bar {
   background: #111827;
   color: var(--white);
-  border-bottom: 2px solid #b8860b;
+  border-bottom: 2px solid #1c56a8;
   font-size: 12px;
   padding: 6px 16px;
   white-space: nowrap;
@@ -95,8 +101,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background-color: var(--accent-gold);
-  color: var(--dark-navy);
+  background-color: var(--brand-green);
+  color: #ffffff;
   padding: 3px 9px;
   border-radius: 12px;
   font-weight: 700;
@@ -109,7 +115,7 @@ body {
 }
 
 .top-bar-slogan {
-  color: #f3c642;
+  color: #4ade80;
   font-style: italic;
   font-weight: 600;
   white-space: nowrap;
@@ -2151,7 +2157,7 @@ body {
     display: block !important;
     background: #111827;
     color: var(--white);
-    border-bottom: 1.5px solid #b8860b;
+    border-bottom: 1.5px solid #1c56a8;
     font-size: 11px;
     padding: 5px 12px;
     white-space: nowrap;
@@ -2441,7 +2447,7 @@ body {
   touch-action: pan-y;
   user-select: none;
   cursor: grab;
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  border: 1px solid rgba(28, 86, 168, 0.35);
   position: relative;
   overflow: hidden;
 }
@@ -3784,15 +3790,15 @@ body {
 /* Free Shipping Eligibility Progress Bar */
 .shipping-progress-card {
   padding: 12px 14px;
-  background: #fef9eb;
-  border: 1px solid #fde68a;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
   border-radius: 6px;
   margin-bottom: 12px;
 }
 
 .shipping-progress-text {
   font-size: 12px;
-  color: #855b00;
+  color: #1c56a8;
   font-weight: 600;
   margin-bottom: 6px;
   display: flex;
@@ -3803,7 +3809,7 @@ body {
 .shipping-progress-track {
   width: 100%;
   height: 6px;
-  background-color: #fef9eb;
+  background-color: #dbeafe;
   border-radius: 3px;
   overflow: hidden;
 }
@@ -4078,7 +4084,7 @@ body {
 ========================================= */
 .jiji-hero-banner {
   background: linear-gradient(135deg, #111827 0%, #1f2937 60%, #111827 100%);
-  border: 1.5px solid #d4af37;
+  border: 1.5px solid #1c56a8;
   border-radius: 16px;
   padding: 24px 20px;
   margin-bottom: 20px;
@@ -5056,7 +5062,7 @@ body.modal-open {
 
 /* Drawer Header - Single unified container with zero seams or lines */
 .jiji-drawer-header {
-  background: #b8860b;
+  background: #1c56a8;
   padding: 8px 12px 12px 14px;
   display: flex;
   flex-direction: column;
@@ -5270,7 +5276,7 @@ body.modal-open {
 /* Dedicated Category Page Styles - Clean Branded Presentation */
 .cat-page-banner {
   background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  border: 1px solid rgba(28, 86, 168, 0.35);
   color: #ffffff;
   padding: 22px 28px 24px 28px;
   border-radius: 16px;
@@ -5604,8 +5610,8 @@ body.modal-open {
 
 .footer-newsletter-badge {
   display: inline-block;
-  background-color: rgba(212, 175, 55, 0.15);
-  color: #d4af37;
+  background-color: rgba(208, 41, 52, 0.15);
+  color: #d02934;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -5613,7 +5619,7 @@ body.modal-open {
   padding: 3px 8px;
   border-radius: 4px;
   margin-bottom: 8px;
-  border: 1px solid rgba(212, 175, 55, 0.4);
+  border: 1px solid rgba(208, 41, 52, 0.35);
 }
 
 .footer-newsletter-text h3 {
@@ -5654,7 +5660,7 @@ body.modal-open {
 
 .footer-newsletter-input:focus {
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
+  box-shadow: 0 0 0 3px rgba(28, 86, 168, 0.25);
 }
 
 .footer-newsletter-input::placeholder {
@@ -5680,7 +5686,7 @@ body.modal-open {
 .footer-newsletter-btn:hover {
   background-color: var(--primary-green-hover);
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.35);
+  box-shadow: 0 4px 14px rgba(28, 86, 168, 0.35);
 }
 
 /* Main 4-Column Footer */
@@ -5784,7 +5790,7 @@ body.modal-open {
 }
 
 .footer-link:hover {
-  color: #d4af37;
+  color: #60a5fa;
 }
 
 /* Trust & Payment Guarantee Strip */
@@ -5895,7 +5901,7 @@ body.modal-open {
 }
 
 .footer-legal-links a:hover {
-  color: #d4af37;
+  color: #60a5fa;
   text-decoration: underline;
 }
 
@@ -6070,13 +6076,13 @@ body.modal-open {
   position: absolute;
   bottom: 12px;
   left: 12px;
-  background-color: rgba(212, 175, 55, 0.15);
-  color: #b8860b;
+  background-color: rgba(63, 149, 79, 0.12);
+  color: #3f954f;
   font-size: 11px;
   font-weight: 700;
   padding: 4px 8px;
   border-radius: 4px;
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  border: 1px solid rgba(63, 149, 79, 0.3);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -6154,12 +6160,12 @@ body.modal-open {
 }
 
 .pdp-thumb-item.active {
-  border-color: #b8860b;
+  border-color: #1c56a8;
   background-color: #ffffff;
 }
 
 .pdp-thumb-item:hover {
-  border-color: #b8860b;
+  border-color: #1c56a8;
 }
 
 .pdp-thumb-item img {
@@ -6283,15 +6289,15 @@ body.modal-open {
   gap: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: #855b00;
+  color: #2e7d32;
 }
 
 .pdp-stock-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #b8860b;
-  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.2);
+  background-color: #3f954f;
+  box-shadow: 0 0 0 3px rgba(63, 149, 79, 0.2);
 }
 
 /* Quantity & CTA Buttons */
@@ -6373,7 +6379,7 @@ body.modal-open {
 
 .pdp-add-to-cart-btn {
   width: 100%;
-  background-color: #b8860b;
+  background-color: #1c56a8;
   color: #ffffff;
   border: none;
   padding: 14px 20px;
@@ -6385,12 +6391,12 @@ body.modal-open {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 2px 6px rgba(184, 134, 11, 0.25);
+  box-shadow: 0 2px 6px rgba(28, 86, 168, 0.25);
   transition: background-color 0.18s, transform 0.1s;
 }
 
 .pdp-add-to-cart-btn:hover {
-  background-color: #b8860b;
+  background-color: #154487;
 }
 
 .pdp-add-to-cart-btn:active {
@@ -6423,7 +6429,7 @@ body.modal-open {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(184, 134, 11, 0.25);
+  box-shadow: 0 2px 5px rgba(28, 86, 168, 0.25);
   transition: background-color 0.15s, transform 0.1s;
   flex-shrink: 0;
   margin: 0;
@@ -6563,8 +6569,8 @@ body.modal-open {
 }
 
 .pdp-tab-trigger.active {
-  color: #b8860b;
-  border-bottom-color: #b8860b;
+  color: #1c56a8;
+  border-bottom-color: #1c56a8;
   background-color: #ffffff;
 }
 
@@ -7075,12 +7081,12 @@ body.modal-open {
 .pdp-option-fee {
   font-size: 12.5px;
   font-weight: 800;
-  color: #b8860b;
+  color: #3f954f;
 }
 
 .pdp-fee-free {
-  color: #b8860b;
-  background-color: #fef9eb;
+  color: #3f954f;
+  background-color: #f0fdf4;
   padding: 1px 6px;
   border-radius: 4px;
   font-size: 11px;
@@ -7226,7 +7232,7 @@ body.modal-open {
 
 .pdp-loc-select:focus {
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.15);
+  box-shadow: 0 0 0 3px rgba(28, 86, 168, 0.15);
 }
 
 .pdp-loc-summary-card {
@@ -7256,7 +7262,7 @@ body.modal-open {
 }
 
 #pdpModalRateCost {
-  color: #b8860b;
+  color: #1c56a8;
   font-weight: 800;
 }
 
@@ -7325,7 +7331,7 @@ body.modal-open {
 .pdp-loc-custom-trigger:focus-visible {
   outline: none;
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.18);
+  box-shadow: 0 0 0 3px rgba(28, 86, 168, 0.18);
 }
 
 .pdp-loc-trigger-content {
@@ -7357,7 +7363,7 @@ body.modal-open {
   font-size: 12px;
   font-weight: 700;
   color: var(--primary-green);
-  background-color: #fef9eb;
+  background-color: #eff6ff;
   padding: 4px 10px;
   border-radius: 6px;
   flex-shrink: 0;
@@ -7478,7 +7484,7 @@ body.modal-open {
 
 .pdp-picker-search-input:focus {
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 2.5px rgba(184, 134, 11, 0.18);
+  box-shadow: 0 0 0 2.5px rgba(28, 86, 168, 0.18);
 }
 
 .pdp-picker-search-clear {
@@ -7544,9 +7550,9 @@ body.modal-open {
 }
 
 .pdp-quick-chip.active {
-  background: #fef9eb;
-  border-color: #d4af37;
-  color: #b8860b;
+  background: #eff6ff;
+  border-color: #1c56a8;
+  color: #1c56a8;
 }
 
 .pdp-picker-list {
@@ -7581,8 +7587,8 @@ body.modal-open {
 }
 
 .pdp-picker-item.selected {
-  background-color: #fef9eb;
-  border-color: #d4af37;
+  background-color: #eff6ff;
+  border-color: #1c56a8;
 }
 
 .pdp-picker-item-info {
@@ -7599,7 +7605,7 @@ body.modal-open {
 }
 
 .pdp-picker-item.selected .pdp-picker-item-name {
-  color: #b8860b;
+  color: #1c56a8;
 }
 
 .pdp-picker-item-sub {
@@ -7617,8 +7623,8 @@ body.modal-open {
 .pdp-picker-rate-pill {
   font-size: 11.5px;
   font-weight: 700;
-  color: #b8860b;
-  background: #fef9eb;
+  color: #1c56a8;
+  background: #eff6ff;
   padding: 3px 8px;
   border-radius: 5px;
 }
@@ -7848,7 +7854,7 @@ body.modal-open {
 
 .pdp-lightbox-thumb.active {
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 2px rgba(184, 134, 11, 0.3);
+  box-shadow: 0 0 0 2px rgba(28, 86, 168, 0.3);
 }
 
 .pdp-lightbox-thumb img {
@@ -7973,7 +7979,7 @@ body.modal-open {
 .pdp-form-input:focus,
 .pdp-form-textarea:focus,
 .pdp-form-select:focus {
-  border-color: #b8860b;
+  border-color: #1c56a8;
 }
 
 .pdp-form-submit-row {
@@ -7984,7 +7990,7 @@ body.modal-open {
 }
 
 .pdp-form-submit-btn {
-  background-color: #b8860b;
+  background-color: #1c56a8;
   color: #ffffff;
   border: none;
   padding: 9px 20px;
@@ -8064,7 +8070,7 @@ body.modal-open {
 .pdp-sticky-cart-btn {
   width: 100%;
   height: 44px;
-  background-color: #b8860b;
+  background-color: #1c56a8;
   color: #ffffff;
   border: none;
   border-radius: 6px;
@@ -8075,7 +8081,7 @@ body.modal-open {
   justify-content: center;
   gap: 6px;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(184, 134, 11, 0.25);
+  box-shadow: 0 2px 6px rgba(28, 86, 168, 0.25);
 }
 
 .pdp-sticky-stepper {
@@ -8201,7 +8207,7 @@ body.modal-open {
 }
 
 .live-chat-btn:hover {
-  background-color: #fef9eb;
+  background-color: #eff6ff;
 }
 
 /* -----------------------------------------
@@ -8217,7 +8223,7 @@ body.modal-open {
 
 .brand-story-inner {
   background: linear-gradient(135deg, #111827 0%, #18181b 100%);
-  border: 1.5px solid #d4af37;
+  border: 1.5px solid #1c56a8;
   border-radius: 14px;
   padding: 40px 32px;
   color: #ffffff;
@@ -8228,8 +8234,8 @@ body.modal-open {
 
 .brand-story-badge {
   display: inline-block;
-  background-color: #d4af37;
-  color: #111827;
+  background-color: #d02934;
+  color: #ffffff;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1px;
@@ -8266,7 +8272,7 @@ body.modal-open {
 
 .brand-story-quote {
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid rgba(28, 86, 168, 0.3);
   border-radius: 8px;
   padding: 12px 18px;
   max-width: 760px;
@@ -8279,7 +8285,7 @@ body.modal-open {
 
 .brand-story-slogan {
   display: block;
-  color: #d4af37;
+  color: #3f954f;
   font-size: 15.5px;
   font-weight: 800;
   margin-top: 6px;
@@ -8439,11 +8445,11 @@ html, body {
   height: 72px;
   margin: 0 auto 20px auto;
   border-radius: 50%;
-  background-color: #fef9eb;
+  background-color: #eff6ff;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #b8860b;
+  color: #1c56a8;
 }
 
 .search-empty-title {
@@ -8522,16 +8528,16 @@ html, body {
 }
 
 .search-category-chip:hover {
-  background-color: #fef9eb;
-  border-color: #b8860b;
-  color: #b8860b;
+  background-color: #eff6ff;
+  border-color: #1c56a8;
+  color: #1c56a8;
   transform: translateY(-1px);
 }
 
 .search-empty-btn {
   display: inline-block;
   padding: 12px 28px;
-  background-color: #b8860b;
+  background-color: #1c56a8;
   color: #ffffff;
   border-radius: 8px;
   font-size: 14px;
@@ -8541,6 +8547,6 @@ html, body {
 }
 
 .search-empty-btn:hover {
-  background-color: #996f00;
+  background-color: #154487;
   transform: translateY(-1px);
 }
