@@ -7298,6 +7298,8 @@ body.modal-open {
   align-items: center;
   justify-content: center;
   padding: 16px;
+  overscroll-behavior: contain !important;
+  touch-action: none;
 }
 
 .pdp-picker-modal-overlay.open {
@@ -7316,6 +7318,8 @@ body.modal-open {
   flex-direction: column;
   overflow: hidden;
   animation: modalSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  overscroll-behavior: contain !important;
+  touch-action: pan-y !important;
 }
 
 .pdp-picker-modal-header {
@@ -7473,6 +7477,9 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain !important;
+  touch-action: pan-y !important;
 }
 
 .pdp-picker-item {

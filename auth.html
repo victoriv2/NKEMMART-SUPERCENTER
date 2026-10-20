@@ -541,6 +541,8 @@
       align-items: center;
       justify-content: center;
       padding: 16px;
+      overscroll-behavior: contain !important;
+      touch-action: none;
     }
 
     .auth-modal.open {
@@ -554,6 +556,16 @@
       width: 100%;
       max-width: 420px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      overscroll-behavior: contain !important;
+      touch-action: pan-y !important;
+    }
+
+    /* Modal Background Scroll Lock */
+    html.modal-open,
+    body.modal-open {
+      overflow: hidden !important;
+      height: 100% !important;
+      overscroll-behavior: none !important;
     }
 
     /* Modular Location Trigger Buttons */
@@ -1311,8 +1323,45 @@
 
       const locationsData = window.NIGERIA_LOCATIONS || {};
 
+      // Body Scroll Lock Controller for Modals
+      var modalScrollY = 0;
+      var activeModalCount = 0;
+
+      function lockBodyScroll() {
+        if (activeModalCount === 0) {
+          modalScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+          document.body.style.position = 'fixed';
+          document.body.style.top = -modalScrollY + 'px';
+          document.body.style.left = '0';
+          document.body.style.right = '0';
+          document.body.style.width = '100%';
+          document.body.classList.add('modal-open');
+          document.documentElement.classList.add('modal-open');
+        }
+        activeModalCount++;
+      }
+
+      function unlockBodyScroll(force) {
+        if (force) {
+          activeModalCount = 0;
+        } else {
+          activeModalCount = Math.max(0, activeModalCount - 1);
+        }
+        if (activeModalCount === 0 && document.body.classList.contains('modal-open')) {
+          document.body.classList.remove('modal-open');
+          document.documentElement.classList.remove('modal-open');
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.left = '';
+          document.body.style.right = '';
+          document.body.style.width = '';
+          window.scrollTo(0, modalScrollY);
+        }
+      }
+
       function openStatePicker() {
         if (!authStatePickerModal) return;
+        lockBodyScroll();
         authStatePickerModal.classList.add('open');
         authStatePickerModal.setAttribute('aria-hidden', 'false');
         if (authStateSearchInput) {
@@ -1325,8 +1374,11 @@
 
       function closeStatePicker() {
         if (!authStatePickerModal) return;
-        authStatePickerModal.classList.remove('open');
-        authStatePickerModal.setAttribute('aria-hidden', 'true');
+        if (authStatePickerModal.classList.contains('open')) {
+          authStatePickerModal.classList.remove('open');
+          authStatePickerModal.setAttribute('aria-hidden', 'true');
+          unlockBodyScroll();
+        }
       }
 
       function renderStateOptions(query) {
@@ -1415,6 +1467,7 @@
           authLgaModalSubtitle.textContent = 'Areas in ' + stateObj.name;
         }
 
+        lockBodyScroll();
         authLgaPickerModal.classList.add('open');
         authLgaPickerModal.setAttribute('aria-hidden', 'false');
         if (authLgaSearchInput) {
@@ -1427,8 +1480,11 @@
 
       function closeLgaPicker() {
         if (!authLgaPickerModal) return;
-        authLgaPickerModal.classList.remove('open');
-        authLgaPickerModal.setAttribute('aria-hidden', 'true');
+        if (authLgaPickerModal.classList.contains('open')) {
+          authLgaPickerModal.classList.remove('open');
+          authLgaPickerModal.setAttribute('aria-hidden', 'true');
+          unlockBodyScroll();
+        }
       }
 
       function renderLgaOptions(query) {
@@ -1547,6 +1603,10 @@
         if (e.key === 'Escape') {
           closeStatePicker();
           closeLgaPicker();
+          if (forgotModal && forgotModal.classList.contains('open')) {
+            forgotModal.classList.remove('open');
+            unlockBodyScroll();
+          }
         }
       });
 
@@ -1667,11 +1727,22 @@
 
       document.getElementById('openForgotModal').addEventListener('click', (e) => {
         e.preventDefault();
+        lockBodyScroll();
         forgotModal.classList.add('open');
       });
 
       document.getElementById('closeForgotModal').addEventListener('click', () => {
-        forgotModal.classList.remove('open');
+        if (forgotModal.classList.contains('open')) {
+          forgotModal.classList.remove('open');
+          unlockBodyScroll();
+        }
+      });
+
+      forgotModal.addEventListener('click', (e) => {
+        if (e.target === forgotModal && forgotModal.classList.contains('open')) {
+          forgotModal.classList.remove('open');
+          unlockBodyScroll();
+        }
       });
 
       forgotForm.addEventListener('submit', async (e) => {
@@ -1702,6 +1773,7 @@
       var scrollTolerance = 5;
 
       window.addEventListener('scroll', function() {
+        if (document.body.classList.contains('modal-open')) return;
         var currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
         if (currentScrollY < 0) currentScrollY = 0;
 
