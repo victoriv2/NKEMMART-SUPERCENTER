@@ -7,13 +7,13 @@
   --brand-blue-hover: #3d1858;
   --brand-purple: #512175;
   --brand-purple-hover: #3d1858;
-  --brand-red: #d02934;
-  --brand-red-hover: #b91c1c;
-  --brand-green: #3f954f;
-  --brand-green-hover: #2e7d32;
+  --brand-red: #512175;
+  --brand-red-hover: #3d1858;
+  --brand-green: #512175;
+  --brand-green-hover: #3d1858;
   --accent-gold: #512175;
   --accent-gold-hover: #3d1858;
-  --badge-red: #d02934;
+  --badge-red: #ef4444;
   --dark-navy: #111827;
   --text-dark: #282828;
   --text-muted: #75757a;
@@ -103,7 +103,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background-color: var(--brand-green);
+  background-color: #512175;
   color: #ffffff;
   padding: 3px 9px;
   border-radius: 12px;
@@ -117,7 +117,7 @@ body {
 }
 
 .top-bar-slogan {
-  color: #4ade80;
+  color: #c084fc;
   font-style: italic;
   font-weight: 600;
   white-space: nowrap;
@@ -5612,8 +5612,8 @@ body.modal-open {
 
 .footer-newsletter-badge {
   display: inline-block;
-  background-color: rgba(208, 41, 52, 0.15);
-  color: #d02934;
+  background-color: rgba(81, 33, 117, 0.35);
+  color: #c084fc;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -5621,7 +5621,7 @@ body.modal-open {
   padding: 3px 8px;
   border-radius: 4px;
   margin-bottom: 8px;
-  border: 1px solid rgba(208, 41, 52, 0.35);
+  border: 1px solid rgba(192, 132, 252, 0.4);
 }
 
 .footer-newsletter-text h3 {
@@ -6078,13 +6078,13 @@ body.modal-open {
   position: absolute;
   bottom: 12px;
   left: 12px;
-  background-color: rgba(63, 149, 79, 0.12);
-  color: #3f954f;
+  background-color: rgba(81, 33, 117, 0.12);
+  color: #512175;
   font-size: 11px;
   font-weight: 700;
   padding: 4px 8px;
   border-radius: 4px;
-  border: 1px solid rgba(63, 149, 79, 0.3);
+  border: 1px solid rgba(81, 33, 117, 0.3);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -8236,7 +8236,7 @@ body.modal-open {
 
 .brand-story-badge {
   display: inline-block;
-  background-color: #d02934;
+  background-color: #512175;
   color: #ffffff;
   font-size: 11px;
   font-weight: 800;
@@ -8245,6 +8245,7 @@ body.modal-open {
   border-radius: 20px;
   text-transform: uppercase;
   margin-bottom: 16px;
+  border: 1px solid rgba(192, 132, 252, 0.4);
 }
 
 .brand-story-heading {
@@ -8287,7 +8288,7 @@ body.modal-open {
 
 .brand-story-slogan {
   display: block;
-  color: #3f954f;
+  color: #c084fc;
   font-size: 15.5px;
   font-weight: 800;
   margin-top: 6px;
