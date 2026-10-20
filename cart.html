@@ -892,8 +892,13 @@
         var container = document.getElementById('toastContainer');
         if (!container) return;
 
-        if (!linkText) {
-          var msgLower = (message || '').toLowerCase();
+        var msgLower = (message || '').toLowerCase();
+        var isRemoval = /remov|clear|delet/.test(msgLower);
+
+        if (isRemoval) {
+          linkText = null;
+          linkUrl = null;
+        } else if (!linkText) {
           if (msgLower.indexOf('cart') !== -1) {
             linkText = 'VIEW CART';
             linkUrl = 'cart.html';

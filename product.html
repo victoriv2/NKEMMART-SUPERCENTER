@@ -1640,8 +1640,13 @@
         var container = document.getElementById('toastContainer');
         if (!container) return;
 
-        if (!btnText) {
-          var msgLower = (msg || '').toLowerCase();
+        var msgLower = (msg || '').toLowerCase();
+        var isRemoval = /remov|clear|delet/.test(msgLower);
+
+        if (isRemoval) {
+          btnText = null;
+          btnUrl = null;
+        } else if (!btnText) {
           if (msgLower.indexOf('cart') !== -1) {
             btnText = 'VIEW CART';
             btnUrl = 'cart.html';
