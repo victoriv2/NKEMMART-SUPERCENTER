@@ -556,6 +556,131 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     }
 
+    /* Modular Location Trigger Buttons */
+    .auth-picker-trigger {
+      width: 100%;
+      height: 44px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 9px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      font-size: 13.5px;
+      color: #091e3a;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .auth-picker-trigger:hover:not(:disabled) {
+      border-color: #008751;
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 135, 81, 0.08);
+    }
+    .auth-picker-trigger:focus-visible {
+      outline: none;
+      border-color: #008751;
+      box-shadow: 0 0 0 3px rgba(0, 135, 81, 0.15);
+    }
+    .auth-picker-trigger.disabled,
+    .auth-picker-trigger:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background: #f1f5f9;
+      border-color: #e2e8f0;
+    }
+    .auth-picker-trigger .auth-picker-icon {
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .auth-picker-trigger .auth-picker-value {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .auth-picker-trigger .auth-picker-value.placeholder {
+      color: #94a3b8;
+      font-weight: 400;
+    }
+    .auth-picker-trigger .auth-picker-chevron {
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* Password Live Guidance Box */
+    .password-guidance-box {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+    .password-guidance-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .password-guidance-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 5px;
+    }
+    @media (min-width: 480px) {
+      .password-guidance-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 10px;
+      }
+    }
+    .password-guidance-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      color: #64748b;
+      transition: all 0.2s ease;
+    }
+    .password-guidance-item .req-icon {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .password-guidance-item .req-icon svg {
+      opacity: 0;
+      transform: scale(0.6);
+      transition: all 0.2s ease;
+    }
+    .password-guidance-item.valid {
+      color: #008751;
+      font-weight: 600;
+    }
+    .password-guidance-item.valid .req-icon {
+      background: #008751;
+    }
+    .password-guidance-item.valid .req-icon svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
     @media (max-width: 860px) {
       .top-bar {
         display: none !important;
@@ -751,23 +876,31 @@
             <!-- State and Local Government (LGA) Selection -->
             <div class="auth-form-row">
               <div class="auth-form-group">
-                <label for="regState" class="auth-label">Delivery State</label>
-                <div class="auth-input-wrapper">
-                  <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                  <select id="regState" class="auth-input auth-select" required>
-                    <option value="" disabled selected>Select State</option>
-                  </select>
-                </div>
+                <label for="authStateTrigger" class="auth-label">Delivery State</label>
+                <button type="button" class="auth-picker-trigger" id="authStateTrigger" aria-haspopup="dialog" aria-expanded="false">
+                  <span class="auth-picker-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                  </span>
+                  <span class="auth-picker-value placeholder" id="authStateTriggerText">Select State</span>
+                  <span class="auth-picker-chevron">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </span>
+                </button>
+                <input type="hidden" id="regState" name="state" required>
               </div>
 
               <div class="auth-form-group">
-                <label for="regLga" class="auth-label">Local Government (LGA)</label>
-                <div class="auth-input-wrapper">
-                  <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 12 8"></polygon></svg>
-                  <select id="regLga" class="auth-input auth-select" required disabled>
-                    <option value="" disabled selected>Select State first</option>
-                  </select>
-                </div>
+                <label for="authLgaTrigger" class="auth-label">Local Government (LGA)</label>
+                <button type="button" class="auth-picker-trigger disabled" id="authLgaTrigger" aria-haspopup="dialog" aria-expanded="false" disabled>
+                  <span class="auth-picker-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 12 8"></polygon></svg>
+                  </span>
+                  <span class="auth-picker-value placeholder" id="authLgaTriggerText">Select State first</span>
+                  <span class="auth-picker-chevron">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </span>
+                </button>
+                <input type="hidden" id="regLga" name="lga" required>
               </div>
             </div>
 
@@ -775,7 +908,7 @@
               <label for="regPassword" class="auth-label">Create Password</label>
               <div class="auth-input-wrapper">
                 <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                <input type="password" id="regPassword" class="auth-input" placeholder="At least 6 characters" required autocomplete="new-password">
+                <input type="password" id="regPassword" class="auth-input" placeholder="Create strong password" required autocomplete="new-password">
                 <button type="button" class="auth-password-toggle" id="toggleRegPassword" aria-label="Toggle password visibility">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 </button>
@@ -786,6 +919,37 @@
                 </div>
                 <div class="password-strength-text" id="passwordStrengthText">Password strength</div>
               </div>
+
+              <!-- Live Password Guidance Checklist -->
+              <div class="password-guidance-box" id="passwordGuidanceBox">
+                <div class="password-guidance-title">Password Requirements:</div>
+                <div class="password-guidance-grid">
+                  <div class="password-guidance-item" id="reqMinChar">
+                    <span class="req-icon">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    <span>At least 6 characters</span>
+                  </div>
+                  <div class="password-guidance-item" id="reqUpper">
+                    <span class="req-icon">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    <span>At least 1 uppercase</span>
+                  </div>
+                  <div class="password-guidance-item" id="reqNumber">
+                    <span class="req-icon">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    <span>At least 1 number</span>
+                  </div>
+                  <div class="password-guidance-item" id="reqSymbol">
+                    <span class="req-icon">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    <span>At least 1 symbol</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="auth-form-group">
@@ -793,6 +957,9 @@
               <div class="auth-input-wrapper">
                 <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                 <input type="password" id="regConfirmPassword" class="auth-input" placeholder="Re-enter password" required autocomplete="new-password">
+                <button type="button" class="auth-password-toggle" id="toggleRegConfirmPassword" aria-label="Toggle confirm password visibility">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
               </div>
             </div>
 
@@ -868,6 +1035,78 @@
     </div>
   </div>
 
+  <!-- Dedicated State Selector Modal for Auth -->
+  <div class="pdp-picker-modal-overlay" id="authStatePickerModal" aria-hidden="true" role="dialog" aria-label="Select Delivery State">
+    <div class="pdp-picker-modal-dialog">
+      <div class="pdp-picker-modal-header">
+        <div class="pdp-picker-header-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#008751" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          <div>
+            <h4>Select Delivery State</h4>
+            <span class="pdp-picker-header-sub">We deliver to all 36 states and FCT Abuja</span>
+          </div>
+        </div>
+        <button type="button" class="pdp-picker-close-btn" id="authCloseStatePickerBtn" aria-label="Close state picker">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="pdp-picker-search-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="authStateSearchInput" class="pdp-picker-search-input" placeholder="Search from 36 states and FCT..." autocomplete="off">
+        <button type="button" class="pdp-picker-search-clear" id="authClearStateSearchBtn" aria-label="Clear search" style="display: none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <!-- Quick chips for top commercial hubs -->
+      <div class="pdp-picker-quick-chips" id="authStateQuickChips">
+        <span class="pdp-picker-chips-label">Popular:</span>
+        <button type="button" class="pdp-quick-chip" data-state="lagos">Lagos</button>
+        <button type="button" class="pdp-quick-chip" data-state="abuja">Abuja</button>
+        <button type="button" class="pdp-quick-chip" data-state="rivers">Rivers</button>
+        <button type="button" class="pdp-quick-chip" data-state="oyo">Oyo</button>
+        <button type="button" class="pdp-quick-chip" data-state="kano">Kano</button>
+        <button type="button" class="pdp-quick-chip" data-state="anambra">Anambra</button>
+        <button type="button" class="pdp-quick-chip" data-state="enugu">Enugu</button>
+      </div>
+
+      <div class="pdp-picker-list" id="authStatePickerList" role="listbox" aria-label="Nigerian States">
+        <!-- Dynamically rendered state options with rates -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Dedicated LGA Selector Modal for Auth -->
+  <div class="pdp-picker-modal-overlay" id="authLgaPickerModal" aria-hidden="true" role="dialog" aria-label="Select Local Government Area">
+    <div class="pdp-picker-modal-dialog">
+      <div class="pdp-picker-modal-header">
+        <div class="pdp-picker-header-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#008751" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 12 8"></polygon></svg>
+          <div>
+            <h4>Select Local Government Area</h4>
+            <span class="pdp-picker-header-sub" id="authLgaModalSubtitle">Choose your LGA</span>
+          </div>
+        </div>
+        <button type="button" class="pdp-picker-close-btn" id="authCloseLgaPickerBtn" aria-label="Close LGA picker">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="pdp-picker-search-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="authLgaSearchInput" class="pdp-picker-search-input" placeholder="Search LGA or district..." autocomplete="off">
+        <button type="button" class="pdp-picker-search-clear" id="authClearLgaSearchBtn" aria-label="Clear search" style="display: none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="pdp-picker-list" id="authLgaPickerList" role="listbox" aria-label="Local Government Areas">
+        <!-- Dynamically rendered LGA options -->
+      </div>
+    </div>
+  </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       const tabSignIn = document.getElementById('tabSignIn');
@@ -932,6 +1171,28 @@
       }
       setupPasswordToggle('toggleLoginPassword', 'loginPassword');
       setupPasswordToggle('toggleRegPassword', 'regPassword');
+      setupPasswordToggle('toggleRegConfirmPassword', 'regConfirmPassword');
+
+      // Live Password Requirements Checklist
+      const reqMinChar = document.getElementById('reqMinChar');
+      const reqUpper = document.getElementById('reqUpper');
+      const reqNumber = document.getElementById('reqNumber');
+      const reqSymbol = document.getElementById('reqSymbol');
+
+      function validatePasswordRules(val) {
+        const str = val || '';
+        const hasMin = str.length >= 6;
+        const hasUp = /[A-Z]/.test(str);
+        const hasNum = /[0-9]/.test(str);
+        const hasSym = /[^A-Za-z0-9]/.test(str);
+
+        if (reqMinChar) reqMinChar.classList.toggle('valid', hasMin);
+        if (reqUpper) reqUpper.classList.toggle('valid', hasUp);
+        if (reqNumber) reqNumber.classList.toggle('valid', hasNum);
+        if (reqSymbol) reqSymbol.classList.toggle('valid', hasSym);
+
+        return { hasMin, hasUp, hasNum, hasSym, isValid: (hasMin && hasUp && hasNum && hasSym) };
+      }
 
       // Live Password Strength Indicator
       const regPasswordInput = document.getElementById('regPassword');
@@ -941,6 +1202,7 @@
 
       regPasswordInput.addEventListener('input', () => {
         const val = regPasswordInput.value;
+        validatePasswordRules(val);
         if (!val) {
           strengthWrap.style.display = 'none';
           return;
@@ -950,7 +1212,7 @@
         if (val.length >= 6) score += 1;
         if (val.length >= 10) score += 1;
         if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score += 1;
-        if (/[0-9]/.test(val) || /[^A-Za-z0-9]/.test(val)) score += 1;
+        if (/[0-9]/.test(val) && /[^A-Za-z0-9]/.test(val)) score += 1;
 
         if (score <= 1) {
           strengthFill.style.width = '25%';
@@ -1018,51 +1280,280 @@
         return;
       }
 
-      // Populate States and Local Governments (LGAs) for Registration
-      const regStateSelect = document.getElementById('regState');
-      const regLgaSelect = document.getElementById('regLga');
+      // Modular State & LGA Picker Controller
+      const authStateTrigger = document.getElementById('authStateTrigger');
+      const authStateTriggerText = document.getElementById('authStateTriggerText');
+      const authLgaTrigger = document.getElementById('authLgaTrigger');
+      const authLgaTriggerText = document.getElementById('authLgaTriggerText');
+      const regStateInput = document.getElementById('regState');
+      const regLgaInput = document.getElementById('regLga');
 
-      function initLocationDropdowns() {
-        if (!regStateSelect || !regLgaSelect) return;
-        const locations = window.NIGERIA_LOCATIONS || {};
-        
-        // Populate States in alphabetical order
-        const stateKeys = Object.keys(locations).sort((a, b) => {
-          return locations[a].name.localeCompare(locations[b].name);
+      const authStatePickerModal = document.getElementById('authStatePickerModal');
+      const authCloseStatePickerBtn = document.getElementById('authCloseStatePickerBtn');
+      const authStateSearchInput = document.getElementById('authStateSearchInput');
+      const authClearStateSearchBtn = document.getElementById('authClearStateSearchBtn');
+      const authStatePickerList = document.getElementById('authStatePickerList');
+      const authStateQuickChips = document.getElementById('authStateQuickChips');
+
+      const authLgaPickerModal = document.getElementById('authLgaPickerModal');
+      const authCloseLgaPickerBtn = document.getElementById('authCloseLgaPickerBtn');
+      const authLgaSearchInput = document.getElementById('authLgaSearchInput');
+      const authClearLgaSearchBtn = document.getElementById('authClearLgaSearchBtn');
+      const authLgaPickerList = document.getElementById('authLgaPickerList');
+      const authLgaModalSubtitle = document.getElementById('authLgaModalSubtitle');
+
+      const locationsData = window.NIGERIA_LOCATIONS || {};
+
+      function openStatePicker() {
+        if (!authStatePickerModal) return;
+        authStatePickerModal.classList.add('open');
+        authStatePickerModal.setAttribute('aria-hidden', 'false');
+        if (authStateSearchInput) {
+          authStateSearchInput.value = '';
+          if (authClearStateSearchBtn) authClearStateSearchBtn.style.display = 'none';
+        }
+        renderStateOptions('');
+        setTimeout(() => { if (authStateSearchInput) authStateSearchInput.focus(); }, 120);
+      }
+
+      function closeStatePicker() {
+        if (!authStatePickerModal) return;
+        authStatePickerModal.classList.remove('open');
+        authStatePickerModal.setAttribute('aria-hidden', 'true');
+      }
+
+      function renderStateOptions(query) {
+        if (!authStatePickerList) return;
+        authStatePickerList.innerHTML = '';
+        const q = (query || '').trim().toLowerCase();
+        const keys = Object.keys(locationsData).sort((a, b) => {
+          return locationsData[a].name.localeCompare(locationsData[b].name);
         });
 
-        regStateSelect.innerHTML = '<option value="" disabled selected>Select State</option>';
-        stateKeys.forEach(key => {
-          const opt = document.createElement('option');
-          opt.value = key;
-          opt.textContent = locations[key].name;
-          regStateSelect.appendChild(opt);
+        const filtered = keys.filter(k => {
+          if (!q) return true;
+          return locationsData[k].name.toLowerCase().includes(q);
         });
 
-        regStateSelect.addEventListener('change', () => {
-          const selectedKey = regStateSelect.value;
-          const selectedState = locations[selectedKey];
-          
-          if (!selectedState || !selectedState.lgas || selectedState.lgas.length === 0) {
-            regLgaSelect.innerHTML = '<option value="" disabled selected>No LGAs available</option>';
-            regLgaSelect.disabled = true;
-            return;
-          }
+        if (filtered.length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'pdp-picker-empty';
+          empty.textContent = 'No matching state found for "' + query + '"';
+          authStatePickerList.appendChild(empty);
+          return;
+        }
 
-          regLgaSelect.disabled = false;
-          regLgaSelect.innerHTML = '<option value="" disabled selected>Select Local Government Area</option>';
-          
-          const sortedLgas = [...selectedState.lgas].sort((a, b) => a.localeCompare(b));
-          sortedLgas.forEach(lga => {
-            const opt = document.createElement('option');
-            opt.value = lga;
-            opt.textContent = lga;
-            regLgaSelect.appendChild(opt);
+        const currentSelectedKey = regStateInput ? regStateInput.value : '';
+
+        filtered.forEach(k => {
+          const s = locationsData[k];
+          const isSelected = k === currentSelectedKey;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'pdp-picker-item' + (isSelected ? ' selected' : '');
+          btn.setAttribute('role', 'option');
+          btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+
+          btn.innerHTML = `
+            <div class="pdp-picker-item-info">
+              <span class="pdp-picker-item-name">${s.name}</span>
+              <span class="pdp-picker-item-sub">${s.time || 'Fast delivery'}</span>
+            </div>
+            <div class="pdp-picker-item-meta">
+              <span class="pdp-picker-rate-pill">${s.cost || '₦ 2,500'}</span>
+              ${isSelected ? '<span class="pdp-picker-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></span>' : ''}
+            </div>
+          `;
+
+          btn.addEventListener('click', () => {
+            selectState(k);
           });
+
+          authStatePickerList.appendChild(btn);
         });
       }
 
-      initLocationDropdowns();
+      function selectState(stateKey) {
+        const stateObj = locationsData[stateKey];
+        if (!stateObj) return;
+
+        if (regStateInput) regStateInput.value = stateKey;
+        if (authStateTriggerText) {
+          authStateTriggerText.textContent = stateObj.name;
+          authStateTriggerText.classList.remove('placeholder');
+        }
+
+        // Enable LGA trigger and reset LGA selection
+        if (authLgaTrigger) {
+          authLgaTrigger.disabled = false;
+          authLgaTrigger.classList.remove('disabled');
+        }
+        if (regLgaInput) regLgaInput.value = '';
+        if (authLgaTriggerText) {
+          authLgaTriggerText.textContent = 'Select LGA / Area';
+          authLgaTriggerText.classList.add('placeholder');
+        }
+
+        closeStatePicker();
+      }
+
+      function openLgaPicker() {
+        if (!authLgaPickerModal) return;
+        const currentKey = regStateInput ? regStateInput.value : '';
+        if (!currentKey || !locationsData[currentKey]) {
+          openStatePicker();
+          return;
+        }
+
+        const stateObj = locationsData[currentKey];
+        if (authLgaModalSubtitle) {
+          authLgaModalSubtitle.textContent = 'Areas in ' + stateObj.name;
+        }
+
+        authLgaPickerModal.classList.add('open');
+        authLgaPickerModal.setAttribute('aria-hidden', 'false');
+        if (authLgaSearchInput) {
+          authLgaSearchInput.value = '';
+          if (authClearLgaSearchBtn) authClearLgaSearchBtn.style.display = 'none';
+        }
+        renderLgaOptions('');
+        setTimeout(() => { if (authLgaSearchInput) authLgaSearchInput.focus(); }, 120);
+      }
+
+      function closeLgaPicker() {
+        if (!authLgaPickerModal) return;
+        authLgaPickerModal.classList.remove('open');
+        authLgaPickerModal.setAttribute('aria-hidden', 'true');
+      }
+
+      function renderLgaOptions(query) {
+        if (!authLgaPickerList) return;
+        authLgaPickerList.innerHTML = '';
+        const currentKey = regStateInput ? regStateInput.value : '';
+        const stateObj = locationsData[currentKey];
+        if (!stateObj || !stateObj.lgas || stateObj.lgas.length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'pdp-picker-empty';
+          empty.textContent = 'No LGAs available for this state.';
+          authLgaPickerList.appendChild(empty);
+          return;
+        }
+
+        const q = (query || '').trim().toLowerCase();
+        const sortedLgas = [...stateObj.lgas].sort((a, b) => a.localeCompare(b));
+        const filtered = sortedLgas.filter(lga => {
+          if (!q) return true;
+          return lga.toLowerCase().includes(q);
+        });
+
+        if (filtered.length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'pdp-picker-empty';
+          empty.textContent = 'No matching LGA found for "' + query + '"';
+          authLgaPickerList.appendChild(empty);
+          return;
+        }
+
+        const currentSelectedLga = regLgaInput ? regLgaInput.value : '';
+
+        filtered.forEach(lga => {
+          const isSelected = lga === currentSelectedLga;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'pdp-picker-item' + (isSelected ? ' selected' : '');
+          btn.setAttribute('role', 'option');
+          btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+
+          btn.innerHTML = `
+            <div class="pdp-picker-item-info">
+              <span class="pdp-picker-item-name">${lga}</span>
+              <span class="pdp-picker-item-sub">${stateObj.name} Delivery Zone</span>
+            </div>
+            <div class="pdp-picker-item-meta">
+              ${isSelected ? '<span class="pdp-picker-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></span>' : ''}
+            </div>
+          `;
+
+          btn.addEventListener('click', () => {
+            selectLga(lga);
+          });
+
+          authLgaPickerList.appendChild(btn);
+        });
+      }
+
+      function selectLga(lga) {
+        if (regLgaInput) regLgaInput.value = lga;
+        if (authLgaTriggerText) {
+          authLgaTriggerText.textContent = lga;
+          authLgaTriggerText.classList.remove('placeholder');
+        }
+        closeLgaPicker();
+      }
+
+      if (authStateTrigger) authStateTrigger.addEventListener('click', openStatePicker);
+      if (authCloseStatePickerBtn) authCloseStatePickerBtn.addEventListener('click', closeStatePicker);
+      if (authStatePickerModal) {
+        authStatePickerModal.addEventListener('click', (e) => {
+          if (e.target === authStatePickerModal) closeStatePicker();
+        });
+      }
+
+      if (authStateSearchInput) {
+        authStateSearchInput.addEventListener('input', () => {
+          const val = authStateSearchInput.value;
+          if (authClearStateSearchBtn) authClearStateSearchBtn.style.display = val ? 'flex' : 'none';
+          renderStateOptions(val);
+        });
+      }
+      if (authClearStateSearchBtn) {
+        authClearStateSearchBtn.addEventListener('click', () => {
+          authStateSearchInput.value = '';
+          authClearStateSearchBtn.style.display = 'none';
+          renderStateOptions('');
+          authStateSearchInput.focus();
+        });
+      }
+
+      if (authStateQuickChips) {
+        authStateQuickChips.addEventListener('click', (e) => {
+          const chip = e.target.closest('.pdp-quick-chip');
+          if (chip && chip.dataset.state) {
+            selectState(chip.dataset.state);
+          }
+        });
+      }
+
+      if (authLgaTrigger) authLgaTrigger.addEventListener('click', openLgaPicker);
+      if (authCloseLgaPickerBtn) authCloseLgaPickerBtn.addEventListener('click', closeLgaPicker);
+      if (authLgaPickerModal) {
+        authLgaPickerModal.addEventListener('click', (e) => {
+          if (e.target === authLgaPickerModal) closeLgaPicker();
+        });
+      }
+
+      if (authLgaSearchInput) {
+        authLgaSearchInput.addEventListener('input', () => {
+          const val = authLgaSearchInput.value;
+          if (authClearLgaSearchBtn) authClearLgaSearchBtn.style.display = val ? 'flex' : 'none';
+          renderLgaOptions(val);
+        });
+      }
+      if (authClearLgaSearchBtn) {
+        authClearLgaSearchBtn.addEventListener('click', () => {
+          authLgaSearchInput.value = '';
+          authClearLgaSearchBtn.style.display = 'none';
+          renderLgaOptions('');
+          authLgaSearchInput.focus();
+        });
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeStatePicker();
+          closeLgaPicker();
+        }
+      });
 
       // Handle Sign In Submit
       signInForm.addEventListener('submit', async (e) => {
@@ -1100,8 +1591,8 @@
         const pass = document.getElementById('regPassword').value;
         const confirmPass = document.getElementById('regConfirmPassword').value;
 
-        const stateKey = regStateSelect ? regStateSelect.value : '';
-        const lga = regLgaSelect ? regLgaSelect.value : '';
+        const stateKey = regStateInput ? regStateInput.value : '';
+        const lga = regLgaInput ? regLgaInput.value : '';
         const locations = window.NIGERIA_LOCATIONS || {};
         const stateObj = locations[stateKey] || null;
         const stateName = stateObj ? stateObj.name : '';
@@ -1116,8 +1607,21 @@
           return;
         }
 
-        if (pass.length < 6) {
+        const pwValidation = validatePasswordRules(pass);
+        if (!pwValidation.hasMin) {
           showAlert('Password must be at least 6 characters long.');
+          return;
+        }
+        if (!pwValidation.hasUp) {
+          showAlert('Password must contain at least 1 uppercase letter (A-Z).');
+          return;
+        }
+        if (!pwValidation.hasNum) {
+          showAlert('Password must contain at least 1 number (0-9).');
+          return;
+        }
+        if (!pwValidation.hasSym) {
+          showAlert('Password must contain at least 1 symbol or special character.');
           return;
         }
 
