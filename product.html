@@ -1466,8 +1466,15 @@
         }
       ];
 
+      function formatNumberWithCommas(num) {
+        if (num === null || num === undefined || isNaN(num)) return '0';
+        var parts = String(Math.round(Number(num))).split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return parts.join('.');
+      }
+
       function formatNaira(num) {
-        return '₦ ' + Number(num).toLocaleString('en-NG');
+        return '₦ ' + formatNumberWithCommas(num);
       }
 
       function getCart() {
@@ -2098,7 +2105,7 @@
       if (scoreEl) scoreEl.textContent = activeProduct.rating || '4.8';
 
       var revCountEl = document.getElementById('pdpRatingCountLink');
-      if (revCountEl) revCountEl.textContent = (activeProduct.reviews ? activeProduct.reviews.toLocaleString() : '1,240') + ' verified ratings';
+      if (revCountEl) revCountEl.textContent = (activeProduct.reviews ? formatNumberWithCommas(activeProduct.reviews) : '1,240') + ' verified ratings';
 
       var bigScoreEl = document.getElementById('pdpBigScore');
       if (bigScoreEl) bigScoreEl.textContent = activeProduct.rating || '4.8';
@@ -3130,7 +3137,7 @@
           // Update verified count badge
           if (activeProduct.reviews) {
             activeProduct.reviews += 1;
-            if (revCountEl) revCountEl.textContent = activeProduct.reviews.toLocaleString() + ' verified ratings';
+            if (revCountEl) revCountEl.textContent = formatNumberWithCommas(activeProduct.reviews) + ' verified ratings';
           }
 
           reviewForm.reset();

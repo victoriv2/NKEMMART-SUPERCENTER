@@ -802,8 +802,15 @@
         }
       ];
 
+      function formatNumberWithCommas(num) {
+        if (num === null || num === undefined || isNaN(num)) return '0';
+        var parts = String(Math.round(Number(num))).split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return parts.join('.');
+      }
+
       function formatNaira(amount) {
-        return '₦ ' + Number(amount).toLocaleString('en-NG');
+        return '₦ ' + formatNumberWithCommas(amount);
       }
 
       function getCart() {

@@ -1076,6 +1076,17 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      function formatNumberWithCommas(num) {
+        if (num === null || num === undefined || isNaN(num)) return '0';
+        var parts = String(Math.round(Number(num))).split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return parts.join('.');
+      }
+
+      function formatNaira(amount) {
+        return '₦ ' + formatNumberWithCommas(amount);
+      }
+
       const checkoutForm = document.getElementById('checkoutForm');
       const checkoutEmptyNotice = document.getElementById('checkoutEmptyNotice');
       const checkoutItemsList = document.getElementById('checkoutItemsList');
@@ -1143,7 +1154,7 @@
           deliveryFee = currentBaseDeliveryFee;
         }
         if (doorstepFeeBadge) {
-          doorstepFeeBadge.textContent = stateData.cost || ('₦' + currentBaseDeliveryFee.toLocaleString());
+          doorstepFeeBadge.textContent = stateData.cost || formatNaira(currentBaseDeliveryFee);
         }
         if (doorstepSubBadge && stateData.time) {
           doorstepSubBadge.textContent = 'Dispatched directly to your address (' + stateData.time + ')';
@@ -1221,19 +1232,19 @@
             <img src="${escapeHtml(item.image || 'images/subcategories/sub_smartphones.jpg')}" alt="${escapeHtml(item.title)}" class="summary-item-img" onerror="this.src='images/subcategories/sub_smartphones.jpg'">
             <div class="summary-item-title">
               <div>${escapeHtml(item.title)}</div>
-              <span class="summary-item-qty">Qty: ${qty} &times; ₦${price.toLocaleString()}</span>
+              <span class="summary-item-qty">Qty: ${qty} &times; ${formatNaira(price)}</span>
             </div>
-            <span class="summary-item-price">₦${(price * qty).toLocaleString()}</span>
+            <span class="summary-item-price">${formatNaira(price * qty)}</span>
           </div>
         `;
       }).join('');
 
       checkoutTotalCount.textContent = totalQty;
-      checkoutSubtotal.textContent = '₦' + subtotal.toLocaleString();
+      checkoutSubtotal.textContent = formatNaira(subtotal);
       
       function updateTotals() {
-        checkoutDeliveryFee.textContent = deliveryFee === 0 ? 'FREE' : '₦' + deliveryFee.toLocaleString();
-        checkoutGrandTotal.textContent = '₦' + (subtotal + deliveryFee).toLocaleString();
+        checkoutDeliveryFee.textContent = deliveryFee === 0 ? 'FREE' : formatNaira(deliveryFee);
+        checkoutGrandTotal.textContent = formatNaira(subtotal + deliveryFee);
       }
       updateTotals();
 
@@ -1299,7 +1310,7 @@
               stateKey: stateKey,
               stateName: stateName,
               city: lgaName,
-              cost: stateObj.cost || ('₦ ' + deliveryFee.toLocaleString()),
+              cost: stateObj.cost || formatNaira(deliveryFee),
               time: stateObj.time || 'Within 48 - 72 Hours'
             };
             localStorage.setItem('nkemmart_user_location', JSON.stringify(locObj));

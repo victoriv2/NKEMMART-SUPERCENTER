@@ -1012,6 +1012,17 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       var tax = window.RALPHMART_TAXONOMY || {};
+
+      function formatNumberWithCommas(num) {
+        if (num === null || num === undefined || isNaN(num)) return '0';
+        var parts = String(Math.round(Number(num))).split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return parts.join('.');
+      }
+
+      function formatNaira(amount) {
+        return '₦ ' + formatNumberWithCommas(amount);
+      }
       
       // Parse URL parameters
       var urlParams = new URLSearchParams(window.location.search);
@@ -1229,8 +1240,8 @@
               '<div class="card-body">' +
                 '<a href="product.html?id=' + encodeURIComponent(prod.id) + '" class="product-title">' + prod.title + '</a>' +
                 '<div class="price-row">' +
-                  '<span class="current-price">₦ ' + prod.price.toLocaleString() + '</span>' +
-                  '<span class="original-price">₦ ' + prod.originalPrice.toLocaleString() + '</span>' +
+                  '<span class="current-price">' + formatNaira(prod.price) + '</span>' +
+                  '<span class="original-price">' + formatNaira(prod.originalPrice) + '</span>' +
                   '<span class="discount-text">' + prod.discount + '</span>' +
                 '</div>' +
                 '<div class="rating-row">' +
@@ -1241,7 +1252,7 @@
                     '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
                     '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
                   '</div>' +
-                  '<span class="rating-count">(' + (prod.reviews || 100).toLocaleString() + ')</span>' +
+                  '<span class="rating-count">(' + formatNumberWithCommas(prod.reviews || 100) + ')</span>' +
                 '</div>' +
                 '<div class="card-action-wrap">' +
                   '<button class="card-action-btn" type="button">Add to cart</button>' +
@@ -1525,7 +1536,7 @@
           if (isReset || (minPrice === 215 && maxPrice === 6112961)) {
             chipBtn.childNodes[0].nodeValue = 'Price ';
           } else {
-            chipBtn.childNodes[0].nodeValue = 'Price (₦' + minPrice.toLocaleString() + ' - ₦' + maxPrice.toLocaleString() + ') ';
+            chipBtn.childNodes[0].nodeValue = 'Price (' + formatNaira(minPrice) + ' - ' + formatNaira(maxPrice) + ') ';
           }
         }
 

@@ -1428,6 +1428,16 @@
   <!-- Interactive JavaScript -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      function formatNumberWithCommas(num) {
+        if (num === null || num === undefined || isNaN(num)) return '0';
+        var parts = String(Math.round(Number(num))).split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return parts.join('.');
+      }
+
+      function formatNaira(amount) {
+        return '₦ ' + formatNumberWithCommas(amount);
+      }
       // Dropdown Popups for Brand, Price, Rating, and Sort
       var dropdowns = [
         { btn: document.getElementById('chipBrandBtn'), popup: document.getElementById('brandPopup') },
@@ -1658,7 +1668,7 @@
           if (isReset || (minPrice === 215 && maxPrice === 6112961)) {
             chipBtn.childNodes[0].nodeValue = 'Price ';
           } else {
-            chipBtn.childNodes[0].nodeValue = 'Price (₦' + minPrice.toLocaleString() + ' - ₦' + maxPrice.toLocaleString() + ') ';
+            chipBtn.childNodes[0].nodeValue = 'Price (' + formatNaira(minPrice) + ' - ' + formatNaira(maxPrice) + ') ';
           }
         }
         syncMobileFloatingBar();

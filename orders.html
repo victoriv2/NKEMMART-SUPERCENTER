@@ -943,6 +943,17 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      function formatNumberWithCommas(num) {
+        if (num === null || num === undefined || isNaN(num)) return '0';
+        var parts = String(Math.round(Number(num))).split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return parts.join('.');
+      }
+
+      function formatNaira(amount) {
+        return '₦ ' + formatNumberWithCommas(amount);
+      }
+
       const urlParams = new URLSearchParams(window.location.search);
       const targetOrderId = urlParams.get('orderId');
       const isJustPlaced = urlParams.get('placed') === 'true';
@@ -1066,9 +1077,9 @@
                     <img src="${escapeHtml(it.image || 'images/subcategories/sub_smartphones.jpg')}" alt="${escapeHtml(it.title)}" class="order-item-img" onerror="this.src='images/subcategories/sub_smartphones.jpg'">
                     <div class="order-item-info">
                       <span class="order-item-name">${escapeHtml(it.title)}</span>
-                      <span class="order-item-meta">Qty: ${it.qty || 1} &bull; ₦${Number(it.price || 0).toLocaleString()} each</span>
+                      <span class="order-item-meta">Qty: ${it.qty || 1} &bull; ${formatNaira(it.price || 0)} each</span>
                     </div>
-                    <span class="order-item-price">₦${(Number(it.price || 0) * (it.qty || 1)).toLocaleString()}</span>
+                    <span class="order-item-price">${formatNaira(Number(it.price || 0) * (it.qty || 1))}</span>
                   </div>
                 `).join('')}
               </div>
@@ -1084,8 +1095,8 @@
                 <div>
                   <strong>Payment Information:</strong><br>
                   Method: <span style="text-transform: capitalize;">${(ord.payment_method || 'Pay on Delivery').replace(/_/g, ' ')}</span><br>
-                  Delivery Fee: ₦${Number(ord.delivery_fee || 0).toLocaleString()}<br>
-                  Grand Total: <strong style="color: #512175; font-size: 15px;">₦${Number(ord.total_amount || 0).toLocaleString()}</strong>
+                  Delivery Fee: ${formatNaira(ord.delivery_fee || 0)}<br>
+                  Grand Total: <strong style="color: #512175; font-size: 15px;">${formatNaira(ord.total_amount || 0)}</strong>
                 </div>
               </div>
 

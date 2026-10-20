@@ -1149,13 +1149,24 @@
       renderProductsTable();
     }
 
+    function formatNumberWithCommas(num) {
+      if (num === null || num === undefined || isNaN(num)) return '0';
+      var parts = String(Math.round(Number(num))).split('.');
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return parts.join('.');
+    }
+
+    function formatNaira(amount) {
+      return '₦' + formatNumberWithCommas(amount);
+    }
+
     function saveProductsLocal() {
       localStorage.setItem('nkemmart_admin_products', JSON.stringify(adminProducts));
     }
 
     function updateStats() {
       const totalCount = adminProducts.length;
-      document.getElementById('statTotalProducts').textContent = totalCount.toLocaleString();
+      document.getElementById('statTotalProducts').textContent = formatNumberWithCommas(totalCount);
       document.getElementById('sidebarProductCount').textContent = totalCount;
 
       let totalValuation = 0;
@@ -1170,7 +1181,7 @@
         if (p.verified !== false) verifiedCount++;
       });
 
-      document.getElementById('statCatalogValue').textContent = '₦' + totalValuation.toLocaleString();
+      document.getElementById('statCatalogValue').textContent = formatNaira(totalValuation);
       document.getElementById('statLowStock').textContent = lowStockCount;
       document.getElementById('statVerifiedCount').textContent = verifiedCount;
     }
@@ -1214,8 +1225,8 @@
           stockLabel = `Low: ${stock} left`;
         }
 
-        const priceFormatted = '₦' + Number(p.price).toLocaleString();
-        const oldPriceFormatted = p.oldPrice || p.old_price ? '₦' + Number(p.oldPrice || p.old_price).toLocaleString() : '';
+        const priceFormatted = formatNaira(p.price);
+        const oldPriceFormatted = p.oldPrice || p.old_price ? formatNaira(p.oldPrice || p.old_price) : '';
         const discountBadge = p.discount ? `<span style="font-size: 10px; color: #ef4444; font-weight: 700; margin-left: 4px;">-${p.discount}%</span>` : '';
 
         return `
