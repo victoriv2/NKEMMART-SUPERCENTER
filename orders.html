@@ -19,7 +19,7 @@
     .orders-header {
       background: #091e3a;
       padding: 16px 20px;
-      border-bottom: 2px solid #1c56a8;
+      border-bottom: 2px solid #512175;
     }
 
     .orders-header-inner {
@@ -57,14 +57,14 @@
     }
 
     .order-success-banner {
-      background: linear-gradient(135deg, #1c56a8 0%, #154487 100%);
+      background: linear-gradient(135deg, #512175 0%, #3d1858 100%);
       color: #ffffff;
       border-radius: 14px;
       padding: 28px 24px;
       text-align: center;
       margin-bottom: 28px;
       display: none;
-      box-shadow: 0 8px 24px rgba(28, 86, 168, 0.15);
+      box-shadow: 0 8px 24px rgba(81, 33, 117, 0.15);
     }
 
     .order-success-badge {
@@ -133,12 +133,12 @@
     }
 
     .track-input:focus {
-      border-color: #1c56a8;
+      border-color: #512175;
     }
 
     .track-btn {
       padding: 12px 24px;
-      background: #1c56a8;
+      background: #512175;
       color: #ffffff;
       border: none;
       border-radius: 8px;
@@ -152,7 +152,7 @@
     }
 
     .track-btn:hover {
-      background: #154487;
+      background: #3d1858;
     }
 
     /* Order Details Card */
@@ -199,7 +199,7 @@
       text-transform: uppercase;
     }
 
-    .status-confirmed { background: #eff6ff; color: #1c56a8; }
+    .status-confirmed { background: #faf5ff; color: #512175; }
     .status-shipped { background: #e0f2fe; color: #0369a1; }
     .status-delivered { background: #dcfce7; color: #15803d; }
     .status-pending { background: #fef3c7; color: #b45309; }
@@ -252,18 +252,18 @@
     }
 
     .step-node.completed .step-circle {
-      background: #1c56a8;
-      border-color: #1c56a8;
+      background: #512175;
+      border-color: #512175;
       color: #ffffff;
     }
 
     .step-node.completed {
-      color: #1c56a8;
+      color: #512175;
     }
 
     .step-node.active .step-circle {
-      border-color: #1c56a8;
-      color: #1c56a8;
+      border-color: #512175;
+      color: #512175;
     }
 
     /* Order Items */
@@ -802,7 +802,7 @@
     <div class="footer-main">
       <div class="footer-col">
         <div class="footer-brand-title">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1c56a8" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           <span>RALPHMART SUPERCENTER</span>
         </div>
         <p class="footer-brand-desc">
@@ -999,7 +999,7 @@
               <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" style="margin-bottom: 12px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
               <h3 style="font-size: 17px; color: #091e3a; margin-bottom: 6px;">No orders found</h3>
               <p style="font-size: 13px; color: #64748b; margin-bottom: 18px;">You haven't placed any orders yet, or no orders matched your search.</p>
-              <a href="index.html" style="display: inline-block; padding: 10px 20px; background: #1c56a8; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 13.5px;">Start Shopping</a>
+              <a href="index.html" style="display: inline-block; padding: 10px 20px; background: #512175; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 13.5px;">Start Shopping</a>
             </div>
           `;
           return;
@@ -1085,7 +1085,7 @@
                   <strong>Payment Information:</strong><br>
                   Method: <span style="text-transform: capitalize;">${(ord.payment_method || 'Pay on Delivery').replace(/_/g, ' ')}</span><br>
                   Delivery Fee: ₦${Number(ord.delivery_fee || 0).toLocaleString()}<br>
-                  Grand Total: <strong style="color: #1c56a8; font-size: 15px;">₦${Number(ord.total_amount || 0).toLocaleString()}</strong>
+                  Grand Total: <strong style="color: #512175; font-size: 15px;">₦${Number(ord.total_amount || 0).toLocaleString()}</strong>
                 </div>
               </div>
 
