@@ -317,6 +317,92 @@ function syncAllBadges() {
   }
 }
 
+// Universal Smart Sticky Header Controller
+function initSmartHeader() {
+  var topBar = document.querySelector('.top-bar');
+  var mainHeader = document.querySelector('.main-header') || document.querySelector('.auth-header');
+  if (!mainHeader && !topBar) return;
+
+  var wrapper = document.querySelector('.site-header-wrapper');
+  if (!wrapper && topBar && mainHeader && topBar.nextElementSibling === mainHeader) {
+    wrapper = document.createElement('div');
+    wrapper.className = 'site-header-wrapper';
+    topBar.parentNode.insertBefore(wrapper, topBar);
+    wrapper.appendChild(topBar);
+    wrapper.appendChild(mainHeader);
+  } else if (!wrapper) {
+    wrapper = mainHeader || topBar;
+  }
+
+  if (wrapper.dataset.smartHeaderInitialized) return;
+  wrapper.dataset.smartHeaderInitialized = 'true';
+
+  var lastScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+  var isTicking = false;
+
+  window.addEventListener('scroll', function() {
+    if (document.body.classList.contains('modal-open') || document.body.classList.contains('drawer-open')) return;
+
+    if (!isTicking) {
+      window.requestAnimationFrame(function() {
+        var currentScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        if (currentScrollY < 0) currentScrollY = 0;
+
+        // If near the top, reset and show normal resting header
+        if (currentScrollY <= 25) {
+          wrapper.classList.remove('header-hidden');
+          wrapper.classList.remove('header-scrolled-up');
+          if (mainHeader && mainHeader !== wrapper) {
+            mainHeader.classList.remove('header-hidden');
+            mainHeader.classList.remove('header-scrolled-up');
+          }
+          if (topBar && topBar !== wrapper) {
+            topBar.classList.remove('header-hidden');
+            topBar.classList.remove('header-scrolled-up');
+          }
+          lastScrollY = currentScrollY;
+          isTicking = false;
+          return;
+        }
+
+        var scrollDelta = currentScrollY - lastScrollY;
+
+        // Scrolling DOWN -> Hide header to maximize screen space
+        if (scrollDelta > 4 && currentScrollY > 70) {
+          if (typeof closeAllPopups === 'function') closeAllPopups();
+          wrapper.classList.add('header-hidden');
+          wrapper.classList.remove('header-scrolled-up');
+          if (mainHeader && mainHeader !== wrapper) {
+            mainHeader.classList.add('header-hidden');
+            mainHeader.classList.remove('header-scrolled-up');
+          }
+          if (topBar && topBar !== wrapper) {
+            topBar.classList.add('header-hidden');
+            topBar.classList.remove('header-scrolled-up');
+          }
+        } 
+        // Scrolling UP even a little bit (2px threshold) -> Reveal header immediately
+        else if (scrollDelta < -2) {
+          wrapper.classList.remove('header-hidden');
+          wrapper.classList.add('header-scrolled-up');
+          if (mainHeader && mainHeader !== wrapper) {
+            mainHeader.classList.remove('header-hidden');
+            mainHeader.classList.add('header-scrolled-up');
+          }
+          if (topBar && topBar !== wrapper) {
+            topBar.classList.remove('header-hidden');
+            topBar.classList.add('header-scrolled-up');
+          }
+        }
+
+        lastScrollY = currentScrollY;
+        isTicking = false;
+      });
+      isTicking = true;
+    }
+  }, { passive: true });
+}
+
 // Universal Back-to-Top Button Handler
 function initBackToTop() {
   var btn = document.querySelector('.back-to-top-btn');
@@ -335,16 +421,18 @@ function initBackToTop() {
   });
 }
 
-// Auto update menu, badges, and back-to-top on DOM load
+// Auto update menu, badges, smart header, and back-to-top on DOM load
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       syncAllBadges();
+      initSmartHeader();
       initBackToTop();
       setTimeout(updateSiteAccountMenu, 300);
     });
   } else {
     syncAllBadges();
+    initSmartHeader();
     initBackToTop();
     setTimeout(updateSiteAccountMenu, 300);
   }

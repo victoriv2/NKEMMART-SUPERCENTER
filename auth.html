@@ -26,6 +26,31 @@
       padding-bottom: 0 !important;
     }
 
+    .site-header-wrapper {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
+      will-change: transform;
+    }
+
+    .site-header-wrapper.header-hidden {
+      transform: translateY(-100%);
+      box-shadow: none;
+    }
+
+    .site-header-wrapper.header-scrolled-up {
+      transform: translateY(0);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .site-header-wrapper .auth-header {
+      position: relative !important;
+      top: auto !important;
+    }
+
     .auth-header {
       background-color: #ffffff;
       padding: 14px 20px;
@@ -695,7 +720,48 @@
 
     @media (max-width: 860px) {
       .top-bar {
+        display: block !important;
+        background: #111827;
+        color: #ffffff;
+        border-bottom: 1.5px solid #b8860b;
+        font-size: 11px;
+        padding: 5px 12px;
+        white-space: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .top-bar::-webkit-scrollbar {
+        display: none;
+      }
+      .top-bar-inner {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+        width: max-content;
+      }
+      .top-bar-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .top-bar-left .doorstep-badge {
         display: none !important;
+      }
+      .top-bar-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .top-bar-link {
+        font-size: 11px;
       }
     }
 
@@ -759,8 +825,10 @@
 </head>
 <body>
 
-  <!-- Top Announcement / Utility Ribbon -->
-  <aside class="top-bar" aria-label="Announcement Bar">
+  <!-- Unified Smart Sticky Header (Top Bar + Auth Navigation) -->
+  <div class="site-header-wrapper">
+    <!-- Top Announcement / Utility Ribbon -->
+    <aside class="top-bar" aria-label="Announcement Bar">
     <div class="top-bar-inner">
       <div class="top-bar-left">
         <span class="doorstep-badge">
@@ -802,6 +870,7 @@
       </a>
     </div>
   </header>
+  </div>
 
 
   <!-- Auth Content Container -->
@@ -1768,9 +1837,10 @@
       });
 
       // Smart Sticky Header for Auth Page (Hide on scroll down, show on scroll up)
-      var authHeader = document.querySelector('.auth-header');
+      var authHeader = document.querySelector('.site-header-wrapper') || document.querySelector('.auth-header');
+      var topBar = document.querySelector('.top-bar');
       var lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
-      var scrollTolerance = 5;
+      var scrollTolerance = 2;
 
       window.addEventListener('scroll', function() {
         if (document.body.classList.contains('modal-open')) return;
@@ -1781,6 +1851,10 @@
           if (authHeader) {
             authHeader.classList.remove('header-hidden');
             authHeader.classList.remove('header-scrolled-up');
+          }
+          if (topBar) {
+            topBar.classList.remove('header-hidden');
+            topBar.classList.remove('header-scrolled-up');
           }
           lastScrollY = currentScrollY;
           return;
@@ -1795,12 +1869,20 @@
             authHeader.classList.add('header-hidden');
             authHeader.classList.remove('header-scrolled-up');
           }
+          if (topBar) {
+            topBar.classList.add('header-hidden');
+            topBar.classList.remove('header-scrolled-up');
+          }
         } 
-        // Scrolling UP -> Reveal header immediately
+        // Scrolling UP even a little bit -> Reveal header immediately
         else if (scrollDelta < 0) {
           if (authHeader && !authHeader.classList.contains('header-scrolled-up')) {
             authHeader.classList.remove('header-hidden');
             authHeader.classList.add('header-scrolled-up');
+          }
+          if (topBar) {
+            topBar.classList.remove('header-hidden');
+            topBar.classList.add('header-scrolled-up');
           }
         }
 

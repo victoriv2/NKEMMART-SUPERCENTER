@@ -11,8 +11,10 @@
 </head>
 <body class="pdp-page">
 
-  <!-- Top Announcement / Utility Ribbon (Desktop) -->
-  <aside class="top-bar" aria-label="Announcement Bar">
+  <!-- Unified Smart Sticky Header (Top Bar + Main Navigation) -->
+  <div class="site-header-wrapper">
+    <!-- Top Announcement / Utility Ribbon -->
+    <aside class="top-bar" aria-label="Announcement Bar">
     <div class="top-bar-inner">
       <div class="top-bar-left">
         <span class="doorstep-badge">
@@ -220,6 +222,7 @@
       </nav>
     </div>
   </header>
+  </div>
 
   <!-- MAIN PRODUCT DETAILS CONTENT -->
   <main class="pdp-container">
@@ -1125,9 +1128,10 @@
       }
 
       // Smart Sticky Header (Hide on Scroll Down, Show on Scroll Up)
-      var mainHeader = document.querySelector('.main-header');
+      var mainHeader = document.querySelector('.site-header-wrapper') || document.querySelector('.main-header');
+      var topBar = document.querySelector('.top-bar');
       var lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
-      var scrollTolerance = 5;
+      var scrollTolerance = 2;
 
       window.addEventListener('scroll', function() {
         if (document.body.classList.contains('modal-open')) return;
@@ -1138,6 +1142,10 @@
           if (mainHeader) {
             mainHeader.classList.remove('header-hidden');
             mainHeader.classList.remove('header-scrolled-up');
+          }
+          if (topBar) {
+            topBar.classList.remove('header-hidden');
+            topBar.classList.remove('header-scrolled-up');
           }
           lastScrollY = currentScrollY;
           return;
@@ -1153,10 +1161,18 @@
             mainHeader.classList.add('header-hidden');
             mainHeader.classList.remove('header-scrolled-up');
           }
+          if (topBar) {
+            topBar.classList.add('header-hidden');
+            topBar.classList.remove('header-scrolled-up');
+          }
         } else if (scrollDelta < 0) {
           if (mainHeader && !mainHeader.classList.contains('header-scrolled-up')) {
             mainHeader.classList.remove('header-hidden');
             mainHeader.classList.add('header-scrolled-up');
+          }
+          if (topBar) {
+            topBar.classList.remove('header-hidden');
+            topBar.classList.add('header-scrolled-up');
           }
         }
 
