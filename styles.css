@@ -2365,7 +2365,7 @@ body {
   touch-action: pan-y;
   user-select: none;
   cursor: grab;
-  border-left: 4px solid var(--primary-green);
+  border: 1px solid rgba(212, 175, 55, 0.35);
   position: relative;
   overflow: hidden;
 }
@@ -3708,15 +3708,15 @@ body {
 /* Free Shipping Eligibility Progress Bar */
 .shipping-progress-card {
   padding: 12px 14px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
+  background: #fef9eb;
+  border: 1px solid #fde68a;
   border-radius: 6px;
   margin-bottom: 12px;
 }
 
 .shipping-progress-text {
   font-size: 12px;
-  color: #166534;
+  color: #855b00;
   font-weight: 600;
   margin-bottom: 6px;
   display: flex;
@@ -5194,10 +5194,7 @@ body.modal-open {
 /* Dedicated Category Page Styles - Clean Branded Presentation */
 .cat-page-banner {
   background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-  border-left: 5px solid #d4af37;
-  border-top: 1px solid rgba(212, 175, 55, 0.3);
-  border-right: 1px solid rgba(212, 175, 55, 0.2);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.35);
   color: #ffffff;
   padding: 22px 28px 24px 28px;
   border-radius: 16px;
@@ -5531,8 +5528,8 @@ body.modal-open {
 
 .footer-newsletter-badge {
   display: inline-block;
-  background-color: rgba(0, 168, 89, 0.14);
-  color: #34d399;
+  background-color: rgba(212, 175, 55, 0.15);
+  color: #d4af37;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -5540,7 +5537,7 @@ body.modal-open {
   padding: 3px 8px;
   border-radius: 4px;
   margin-bottom: 8px;
-  border: 1px solid rgba(0, 168, 89, 0.32);
+  border: 1px solid rgba(212, 175, 55, 0.4);
 }
 
 .footer-newsletter-text h3 {
@@ -5581,7 +5578,7 @@ body.modal-open {
 
 .footer-newsletter-input:focus {
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 3px rgba(0, 168, 89, 0.22);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
 }
 
 .footer-newsletter-input::placeholder {
@@ -5607,7 +5604,7 @@ body.modal-open {
 .footer-newsletter-btn:hover {
   background-color: var(--primary-green-hover);
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(0, 168, 89, 0.35);
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.35);
 }
 
 /* Main 4-Column Footer */
@@ -5711,7 +5708,7 @@ body.modal-open {
 }
 
 .footer-link:hover {
-  color: #34d399;
+  color: #d4af37;
 }
 
 /* Trust & Payment Guarantee Strip */
@@ -5822,7 +5819,7 @@ body.modal-open {
 }
 
 .footer-legal-links a:hover {
-  color: #34d399;
+  color: #d4af37;
   text-decoration: underline;
 }
 
@@ -5997,13 +5994,13 @@ body.modal-open {
   position: absolute;
   bottom: 12px;
   left: 12px;
-  background-color: rgba(0, 168, 89, 0.12);
+  background-color: rgba(212, 175, 55, 0.15);
   color: #b8860b;
   font-size: 11px;
   font-weight: 700;
   padding: 4px 8px;
   border-radius: 4px;
-  border: 1px solid rgba(0, 168, 89, 0.25);
+  border: 1px solid rgba(212, 175, 55, 0.35);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -6210,15 +6207,15 @@ body.modal-open {
   gap: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: #15803d;
+  color: #855b00;
 }
 
 .pdp-stock-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #16a34a;
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+  background-color: #b8860b;
+  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.2);
 }
 
 /* Quantity & CTA Buttons */
@@ -6312,7 +6309,7 @@ body.modal-open {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 2px 6px rgba(0, 168, 89, 0.25);
+  box-shadow: 0 2px 6px rgba(184, 134, 11, 0.25);
   transition: background-color 0.18s, transform 0.1s;
 }
 
@@ -6350,7 +6347,7 @@ body.modal-open {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 168, 89, 0.25);
+  box-shadow: 0 2px 5px rgba(184, 134, 11, 0.25);
   transition: background-color 0.15s, transform 0.1s;
   flex-shrink: 0;
   margin: 0;
@@ -7153,7 +7150,7 @@ body.modal-open {
 
 .pdp-loc-select:focus {
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 3px rgba(0, 168, 89, 0.15);
+  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.15);
 }
 
 .pdp-loc-summary-card {
@@ -7252,7 +7249,7 @@ body.modal-open {
 .pdp-loc-custom-trigger:focus-visible {
   outline: none;
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 3px rgba(0, 168, 89, 0.18);
+  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.18);
 }
 
 .pdp-loc-trigger-content {
@@ -7405,7 +7402,7 @@ body.modal-open {
 
 .pdp-picker-search-input:focus {
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 2.5px rgba(0, 168, 89, 0.18);
+  box-shadow: 0 0 0 2.5px rgba(184, 134, 11, 0.18);
 }
 
 .pdp-picker-search-clear {
@@ -7472,7 +7469,7 @@ body.modal-open {
 
 .pdp-quick-chip.active {
   background: #fef9eb;
-  border-color: #86efac;
+  border-color: #d4af37;
   color: #b8860b;
 }
 
@@ -7508,8 +7505,8 @@ body.modal-open {
 }
 
 .pdp-picker-item.selected {
-  background-color: #f0fdf4;
-  border-color: #86efac;
+  background-color: #fef9eb;
+  border-color: #d4af37;
 }
 
 .pdp-picker-item-info {
@@ -7775,7 +7772,7 @@ body.modal-open {
 
 .pdp-lightbox-thumb.active {
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 2px rgba(0, 168, 89, 0.3);
+  box-shadow: 0 0 0 2px rgba(184, 134, 11, 0.3);
 }
 
 .pdp-lightbox-thumb img {
@@ -8002,7 +7999,7 @@ body.modal-open {
   justify-content: center;
   gap: 6px;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 168, 89, 0.25);
+  box-shadow: 0 2px 6px rgba(184, 134, 11, 0.25);
 }
 
 .pdp-sticky-stepper {
@@ -8128,7 +8125,7 @@ body.modal-open {
 }
 
 .live-chat-btn:hover {
-  background-color: #f0fdf4;
+  background-color: #fef9eb;
 }
 
 /* -----------------------------------------
@@ -8193,7 +8190,7 @@ body.modal-open {
 
 .brand-story-quote {
   background: rgba(255, 255, 255, 0.08);
-  border-left: 3.5px solid #b8860b;
+  border: 1px solid rgba(212, 175, 55, 0.3);
   border-radius: 8px;
   padding: 12px 18px;
   max-width: 760px;
@@ -8206,7 +8203,7 @@ body.modal-open {
 
 .brand-story-slogan {
   display: block;
-  color: #4ade80;
+  color: #d4af37;
   font-size: 15.5px;
   font-weight: 800;
   margin-top: 6px;
@@ -8366,7 +8363,7 @@ html, body {
   height: 72px;
   margin: 0 auto 20px auto;
   border-radius: 50%;
-  background-color: #f0fdf4;
+  background-color: #fef9eb;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8449,7 +8446,7 @@ html, body {
 }
 
 .search-category-chip:hover {
-  background-color: #f0fdf4;
+  background-color: #fef9eb;
   border-color: #b8860b;
   color: #b8860b;
   transform: translateY(-1px);
