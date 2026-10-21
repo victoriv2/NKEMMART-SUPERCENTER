@@ -2950,6 +2950,15 @@
       updateCartBadges();
       syncProductCardsUI();
       syncWishlistButtons();
+
+      // Listen for cross-device cloud sync events
+      window.addEventListener('nkemmart_cart_synced', function() {
+        syncProductCardsUI();
+        updateCartBadges();
+      });
+      window.addEventListener('nkemmart_saved_synced', function() {
+        syncWishlistButtons();
+      });
     });
   </script>
 

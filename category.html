@@ -2553,6 +2553,15 @@
       syncProductCardsUI();
       syncWishlistButtons();
 
+      // Listen for cross-device cloud sync events
+      window.addEventListener('nkemmart_cart_synced', function() {
+        syncProductCardsUI();
+        updateCartBadges();
+      });
+      window.addEventListener('nkemmart_saved_synced', function() {
+        syncWishlistButtons();
+      });
+
       // Delegated click handler for Add to Cart, Stepper (+ / -), and Wishlist Heart
       document.addEventListener('click', function(e) {
         // 0. Click Product Card Media (Image) -> Open product details

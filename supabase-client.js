@@ -166,6 +166,16 @@ async function signUpUser(email, password, { firstName, lastName, fullName, phon
     }
   }
 
+  if (data && data.user && data.session) {
+    try {
+      if (typeof logUserActivity === 'function') {
+        logUserActivity('signup', 'Created new RALPHMART account', { email: email.trim(), name: computedFullName });
+      }
+      if (typeof mergeGuestCartOnLogin === 'function') await mergeGuestCartOnLogin();
+      if (typeof setupRealtimeSync === 'function') await setupRealtimeSync();
+    } catch (e) {}
+  }
+
   return data;
 }
 
@@ -802,9 +812,19 @@ async function setupRealtimeSync() {
 
 async function signOutUser() {
   const client = getSupabase();
+  if (realtimeChannel && client) {
+    try { client.removeChannel(realtimeChannel); } catch (e) {}
+    realtimeChannel = null;
+  }
+  try {
+    if (typeof logUserActivity === 'function') {
+      await logUserActivity('logout', 'Signed out of account');
+    }
+  } catch (e) {}
   if (!client) return;
   const { error } = await client.auth.signOut();
   if (error) console.error('Sign out error:', error);
+  localStorage.removeItem('nkemmart_last_authed_user');
 }
 
 async function resetPasswordForEmail(email) {

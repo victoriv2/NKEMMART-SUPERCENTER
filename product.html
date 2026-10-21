@@ -2307,6 +2307,15 @@
       }
       syncWishlistBtn();
 
+      // Listen for cross-device cloud sync events
+      window.addEventListener('nkemmart_saved_synced', function() {
+        syncWishlistBtn();
+        updateBadges();
+      });
+      window.addEventListener('nkemmart_cart_synced', function() {
+        updateBadges();
+      });
+
       function handleWishlistToggle() {
         var saved = getSaved();
         var idx = saved.findIndex(function(it) { return it.id === activeProduct.id; });
