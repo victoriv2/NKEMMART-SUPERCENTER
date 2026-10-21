@@ -182,6 +182,73 @@ async function signInUser(email, password) {
   return data;
 }
 
+async function updateUserProfile({ firstName, lastName, phone, state, stateKey, lga }) {
+  const client = getSupabase();
+  if (!client) throw new Error('Supabase client unavailable');
+
+  const { data: { user }, error: userError } = await client.auth.getUser();
+  if (userError || !user) throw new Error('You must be signed in to update your profile.');
+
+  const fName = (firstName || '').trim();
+  const lName = (lastName || '').trim();
+  const fullName = (fName && lName ? `${fName} ${lName}` : (fName || lName)).trim();
+
+  // 1. Update public.profiles table in Supabase
+  const { data: updatedProfile, error: profileError } = await client
+    .from('profiles')
+    .update({
+      first_name: fName,
+      last_name: lName,
+      full_name: fullName,
+      phone: (phone || '').trim(),
+      state: (state || '').trim(),
+      state_key: (stateKey || '').trim(),
+      lga: (lga || '').trim(),
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', user.id);
+
+  if (profileError) {
+    console.warn('Profile table update error:', profileError);
+    throw profileError;
+  }
+
+  // 2. Update auth user metadata
+  try {
+    await client.auth.updateUser({
+      data: {
+        first_name: fName,
+        last_name: lName,
+        full_name: fullName,
+        phone: (phone || '').trim(),
+        state: (state || '').trim(),
+        state_key: (stateKey || '').trim(),
+        lga: (lga || '').trim()
+      }
+    });
+  } catch (authErr) {
+    console.warn('Auth metadata update notice:', authErr);
+  }
+
+  // 3. Update localStorage location immediately so fees and shipping update across store
+  if (stateKey && typeof window !== 'undefined') {
+    try {
+      const locations = window.NIGERIA_LOCATIONS || null;
+      const stateData = locations ? locations[stateKey] : null;
+      const locObj = {
+        stateKey: stateKey,
+        stateName: (stateData && stateData.name) || state || stateKey,
+        city: lga || '',
+        cost: (stateData && stateData.cost) || '₦ 2,500',
+        time: (stateData && stateData.time) || 'Within 48 - 72 Hours'
+      };
+      localStorage.setItem('nkemmart_user_location', JSON.stringify(locObj));
+    } catch (e) {}
+  }
+
+  return await getCurrentProfile();
+}
+
 async function signOutUser() {
   const client = getSupabase();
   if (!client) return;
@@ -243,11 +310,21 @@ async function updateSiteAccountMenu() {
         }
 
         menu.innerHTML = `
-          <div style="padding: 10px 14px; border-bottom: 1px solid #f1f5f9; background: #f8fafc;">
-            <div style="font-size: 13px; font-weight: 700; color: #091e3a;">${escapeHtml(profile.full_name)}</div>
-            <div style="font-size: 11px; color: #64748b;">${escapeHtml(profile.email)}</div>
-            <span style="display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; margin-top: 4px; background: ${profile.role === 'admin' ? '#dcfce7; color: #15803d;' : '#e0f2fe; color: #0369a1;'}">${profile.role}</span>
-          </div>
+          <a href="profile.html" style="text-decoration: none; display: block; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; background: #f8fafc; transition: all 0.2s; cursor: pointer;" onmouseover="this.style.background='#f3e8ff'" onmouseout="this.style.background='#f8fafc'" title="Click to edit profile info">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div style="font-size: 13px; font-weight: 800; color: #091e3a;">${escapeHtml(profile.full_name)}</div>
+              <span style="font-size: 11px; font-weight: 700; color: #512175; text-decoration: underline;">Edit Info</span>
+            </div>
+            <div style="font-size: 11px; color: #64748b; margin-top: 3px;">${escapeHtml(profile.email)}</div>
+            <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px;">
+              <span style="display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: ${profile.role === 'admin' ? '#dcfce7; color: #15803d;' : '#e0f2fe; color: #0369a1;'}">${profile.role}</span>
+              ${profile.state ? `<span style="font-size: 11px; color: #475569; font-weight: 500;">${escapeHtml(profile.lga ? profile.lga + ', ' : '')}${escapeHtml(profile.state)}</span>` : ''}
+            </div>
+          </a>
+          <a href="profile.html" class="dropdown-item" style="color: #512175; font-weight: 700;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            <span>Edit Profile &amp; Info</span>
+          </a>
           ${adminItemHtml}
           <a href="index.html#orders" class="dropdown-item">My Orders</a>
           <a href="saved-items.html" class="dropdown-item">Saved Items</a>
@@ -266,6 +343,17 @@ async function updateSiteAccountMenu() {
             await signOutUser();
             window.location.reload();
           });
+        }
+      });
+
+      // Update mobile drawer account items if present
+      const mobileAccountItems = document.querySelectorAll('#mobileAccountSubNav a[href="auth.html"], .mobile-account-auth-link');
+      mobileAccountItems.forEach(item => {
+        item.href = 'profile.html';
+        const span = item.querySelector('span');
+        if (span) {
+          const fName = profile.first_name || (profile.full_name ? profile.full_name.split(' ')[0] : 'My Profile');
+          span.textContent = 'Edit Profile (' + fName + ')';
         }
       });
     }
