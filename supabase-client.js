@@ -576,13 +576,13 @@ async function updateSiteAccountMenu() {
         }
 
         menu.innerHTML = `
-          <a href="profile.html" style="text-decoration: none; display: block; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; background: #f8fafc; transition: all 0.2s; cursor: pointer;" onmouseover="this.style.background='#f3e8ff'" onmouseout="this.style.background='#f8fafc'" title="Click to edit profile info">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <div style="font-size: 13px; font-weight: 800; color: #091e3a;">${escapeHtml(profile.full_name)}</div>
-              <span style="font-size: 11px; font-weight: 700; color: #512175; text-decoration: underline;">Edit Info</span>
+          <a href="profile.html" style="text-decoration: none; display: block; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; background: #f8fafc; transition: all 0.2s; cursor: pointer; box-sizing: border-box;" onmouseover="this.style.background='#f3e8ff'" onmouseout="this.style.background='#f8fafc'" title="Click to edit profile info">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+              <div style="font-size: 13px; font-weight: 800; color: #091e3a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;">${escapeHtml(profile.full_name)}</div>
+              <span style="font-size: 11px; font-weight: 700; color: #512175; text-decoration: underline; flex-shrink: 0;">Edit Info</span>
             </div>
-            <div style="font-size: 11px; color: #64748b; margin-top: 3px;">${escapeHtml(profile.email)}</div>
-            <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px;">
+            <div style="font-size: 11px; color: #64748b; margin-top: 3px; word-break: break-all;">${escapeHtml(profile.email)}</div>
+            <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
               <span style="display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: ${profile.role === 'admin' ? '#dcfce7; color: #15803d;' : '#e0f2fe; color: #0369a1;'}">${profile.role}</span>
               ${profile.state ? `<span style="font-size: 11px; color: #475569; font-weight: 500;">${escapeHtml(profile.lga ? profile.lga + ', ' : '')}${escapeHtml(profile.state)}</span>` : ''}
             </div>
@@ -592,9 +592,18 @@ async function updateSiteAccountMenu() {
             <span>Edit Profile &amp; Info</span>
           </a>
           ${adminItemHtml}
-          <a href="index.html#orders" class="dropdown-item">My Orders</a>
-          <a href="saved-items.html" class="dropdown-item">Saved Items</a>
-          <a href="cart.html" class="dropdown-item">Shopping Cart</a>
+          <a href="orders.html" class="dropdown-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span>My Orders</span>
+          </a>
+          <a href="saved-items.html" class="dropdown-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <span>Saved Items</span>
+          </a>
+          <a href="cart.html" class="dropdown-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span>Shopping Cart</span>
+          </a>
           <div class="dropdown-divider"></div>
           <button type="button" class="dropdown-item" id="siteSignOutBtn" style="color: #ef4444; width: 100%; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
@@ -787,6 +796,58 @@ function initBackToTop() {
   });
 }
 
+// Universal Header Dropdown (Account & Help) touch and click toggle
+function initHeaderDropdowns() {
+  const items = document.querySelectorAll('.header-actions .action-item');
+  items.forEach(item => {
+    const btn = item.querySelector('.action-btn');
+    const menu = item.querySelector('.dropdown-menu, .action-dropdown');
+    if (!btn || !menu || btn.dataset.dropdownInit) return;
+    btn.dataset.dropdownInit = 'true';
+
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = item.classList.contains('active') || menu.classList.contains('show');
+      
+      // Close other action dropdowns first
+      items.forEach(other => {
+        if (other !== item) {
+          other.classList.remove('active');
+          const otherMenu = other.querySelector('.dropdown-menu, .action-dropdown');
+          if (otherMenu) otherMenu.classList.remove('show');
+          const otherBtn = other.querySelector('.action-btn');
+          if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      if (isOpen) {
+        item.classList.remove('active');
+        menu.classList.remove('show');
+        btn.setAttribute('aria-expanded', 'false');
+      } else {
+        item.classList.add('active');
+        menu.classList.add('show');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  if (!window._dropdownGlobalCloseInit) {
+    window._dropdownGlobalCloseInit = true;
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.header-actions .action-item')) {
+        document.querySelectorAll('.header-actions .action-item').forEach(item => {
+          item.classList.remove('active');
+          const menu = item.querySelector('.dropdown-menu, .action-dropdown');
+          if (menu) menu.classList.remove('show');
+          const btn = item.querySelector('.action-btn');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+  }
+}
+
 // Auto update menu, badges, smart header, and back-to-top on DOM load
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') {
@@ -794,12 +855,14 @@ if (typeof document !== 'undefined') {
       syncAllBadges();
       initSmartHeader();
       initBackToTop();
+      initHeaderDropdowns();
       setTimeout(updateSiteAccountMenu, 300);
     });
   } else {
     syncAllBadges();
     initSmartHeader();
     initBackToTop();
+    initHeaderDropdowns();
     setTimeout(updateSiteAccountMenu, 300);
   }
   window.addEventListener('storage', syncAllBadges);
