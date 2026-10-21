@@ -1778,10 +1778,22 @@
             localStorage.setItem('nkemmart_user_location', JSON.stringify(defaultLoc));
           }
 
-          showAlert('Account created successfully! Redirecting...', false);
-          setTimeout(() => {
-            window.location.href = redirectUrl;
-          }, 1000);
+          if (res && res.user && !res.session) {
+            showAlert('Account created! Please check your email inbox to confirm your account, then sign in.', false);
+            submitBtn.disabled = false;
+            submitBtn.querySelector('span').textContent = 'Create Free Account';
+            setTimeout(() => {
+              const loginTabBtn = document.querySelector('[data-tab="login"]');
+              if (loginTabBtn) loginTabBtn.click();
+              const loginEmailInput = document.getElementById('loginEmail');
+              if (loginEmailInput) loginEmailInput.value = email;
+            }, 2500);
+          } else {
+            showAlert('Account created successfully! Redirecting...', false);
+            setTimeout(() => {
+              window.location.href = redirectUrl;
+            }, 1000);
+          }
         } catch (err) {
           showAlert(err.message || 'Registration failed. Please try again.');
           submitBtn.disabled = false;
