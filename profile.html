@@ -167,6 +167,209 @@
       transform: translateY(-1px);
     }
 
+    /* Activity Summary Stats Grid */
+    .profile-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 640px) {
+      .profile-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+
+    .profile-stat-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      transition: all 0.2s;
+    }
+
+    .profile-stat-box:hover {
+      border-color: #512175;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(81, 33, 117, 0.08);
+    }
+
+    .profile-stat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .profile-stat-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: #091e3a;
+      line-height: 1.1;
+    }
+
+    .profile-stat-label {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    /* Activity Timeline List */
+    .profile-activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .profile-activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      border-radius: 10px;
+      transition: background 0.15s;
+    }
+
+    .profile-activity-item:hover {
+      background: #faf5ff;
+      border-color: #f3e8ff;
+    }
+
+    .profile-activity-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: #512175;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .profile-activity-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .profile-activity-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 3px 0;
+    }
+
+    .profile-activity-time {
+      font-size: 11.5px;
+      color: #64748b;
+      margin: 0;
+    }
+
+    /* Recent Orders Feed */
+    .profile-orders-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .profile-order-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      gap: 12px;
+      flex-wrap: wrap;
+      transition: all 0.15s;
+    }
+
+    .profile-order-item:hover {
+      border-color: #512175;
+      background: #faf5ff;
+    }
+
+    .profile-order-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .profile-order-id {
+      font-size: 14px;
+      font-weight: 800;
+      color: #091e3a;
+    }
+
+    .profile-order-date {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .profile-order-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .profile-order-badge.confirmed {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .profile-order-badge.pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .profile-order-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .profile-order-amount {
+      font-size: 15px;
+      font-weight: 800;
+      color: #512175;
+      text-align: right;
+    }
+
+    .profile-order-btn {
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #512175;
+      color: #ffffff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
     /* Main Grid Layout */
     .profile-layout-grid {
       display: grid;
@@ -860,6 +1063,39 @@
       </div>
     </section>
 
+    <!-- User Activity Summary Stats Grid -->
+    <div class="profile-stats-grid">
+      <a href="orders.html" class="profile-stat-box" title="View all your orders">
+        <div class="profile-stat-icon" style="background: rgba(81, 33, 117, 0.1); color: #512175;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        </div>
+        <div>
+          <div class="profile-stat-val" id="statOrdersCount">0</div>
+          <div class="profile-stat-label">Orders Placed</div>
+        </div>
+      </a>
+
+      <a href="cart.html" class="profile-stat-box" title="View items in your cart">
+        <div class="profile-stat-icon" style="background: rgba(59, 130, 246, 0.1); color: #2563eb;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        </div>
+        <div>
+          <div class="profile-stat-val" id="statCartCount">0</div>
+          <div class="profile-stat-label">Cart Items (Synced)</div>
+        </div>
+      </a>
+
+      <a href="saved-items.html" class="profile-stat-box" title="View your saved items">
+        <div class="profile-stat-icon" style="background: rgba(239, 68, 68, 0.1); color: #dc2626;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        </div>
+        <div>
+          <div class="profile-stat-val" id="statSavedCount">0</div>
+          <div class="profile-stat-label">Saved Items (Synced)</div>
+        </div>
+      </a>
+    </div>
+
     <!-- Layout Grid -->
     <div class="profile-layout-grid">
 
@@ -1006,6 +1242,41 @@
               <span>Update Password</span>
             </button>
           </form>
+        </div>
+
+        <!-- Recent Orders Card -->
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <div>
+              <h2 class="profile-card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <span>My Orders History</span>
+              </h2>
+              <p class="profile-card-subtitle">Orders placed under your account on RALPHMART.</p>
+            </div>
+            <a href="orders.html" style="font-size: 12.5px; font-weight: 700; color: #512175; text-decoration: none;">View All Orders &gt;</a>
+          </div>
+
+          <div id="profileOrdersFeed" class="profile-orders-feed">
+            <div style="text-align: center; padding: 24px; color: #64748b; font-size: 13px;">Loading orders history...</div>
+          </div>
+        </div>
+
+        <!-- Recent Account Activities Log Card -->
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <div>
+              <h2 class="profile-card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <span>Recent Account Activities</span>
+              </h2>
+              <p class="profile-card-subtitle">Saved record of your orders, shopping cart, wishlist, and profile updates.</p>
+            </div>
+          </div>
+
+          <div id="activityFeedList" class="profile-activity-list">
+            <div style="text-align: center; padding: 24px; color: #64748b; font-size: 13px;">Loading activity history...</div>
+          </div>
         </div>
 
       </div>
@@ -1496,10 +1767,12 @@
 
           showAlert('Profile and delivery details updated successfully!', false);
           
-          // Re-trigger global header update
+          // Re-trigger global header update and refresh activity list
           if (typeof updateSiteAccountMenu === 'function') {
             await updateSiteAccountMenu();
           }
+          await loadActivitiesList();
+          await loadUserStats();
         } catch (err) {
           showAlert(err.message || 'Failed to update profile. Please try again.', true);
         } finally {
@@ -1546,6 +1819,11 @@
           passwordAlert.textContent = 'Password changed successfully!';
           passwordAlert.style.display = 'block';
           changePasswordForm.reset();
+
+          if (typeof logUserActivity === 'function') {
+            await logUserActivity('password_changed', 'Changed account security password');
+            await loadActivitiesList();
+          }
         } catch (err) {
           passwordAlert.className = 'profile-alert error';
           passwordAlert.textContent = err.message || 'Error updating password.';
@@ -1556,6 +1834,134 @@
         }
       });
 
+      // Relative Time Formatter
+      function formatRelativeTime(dateString) {
+        if (!dateString) return 'Just now';
+        const d = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - d;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMins / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        if (diffMins < 2) return 'Just now';
+        if (diffMins < 60) return diffMins + ' minutes ago';
+        if (diffHours < 24) return diffHours + (diffHours === 1 ? ' hour ago' : ' hours ago');
+        if (diffDays === 1) return 'Yesterday at ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (diffDays < 7) return diffDays + ' days ago';
+        return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      }
+
+      // Load Statistics
+      async function loadUserStats() {
+        try {
+          // Orders Count
+          const orders = typeof getUserOrders === 'function' ? await getUserOrders() : [];
+          const statOrders = document.getElementById('statOrdersCount');
+          if (statOrders) statOrders.textContent = orders.length;
+
+          // Cart Count
+          const cart = JSON.parse(localStorage.getItem('nkemmart_cart') || '[]');
+          const cartTotalQty = cart.reduce((sum, it) => sum + (it.qty || 1), 0);
+          const statCart = document.getElementById('statCartCount');
+          if (statCart) statCart.textContent = cartTotalQty;
+
+          // Saved Count
+          const saved = JSON.parse(localStorage.getItem('nkemmart_saved_items') || '[]');
+          const statSaved = document.getElementById('statSavedCount');
+          if (statSaved) statSaved.textContent = saved.length;
+
+          renderOrdersList(orders);
+        } catch (e) {
+          console.warn('Error loading stats:', e);
+        }
+      }
+
+      // Render Orders List
+      function renderOrdersList(orders) {
+        const container = document.getElementById('profileOrdersFeed');
+        if (!container) return;
+        if (!orders || orders.length === 0) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 28px 16px; color: #64748b;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" style="margin-bottom: 8px;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <div style="font-weight: 700; color: #334155; margin-bottom: 4px;">No orders placed yet</div>
+              <p style="font-size: 12.5px; margin: 0 0 12px 0;">When you buy items, your orders will appear here automatically.</p>
+              <a href="index.html" style="font-size: 12.5px; font-weight: 700; color: #512175; text-decoration: underline;">Browse Store</a>
+            </div>
+          `;
+          return;
+        }
+
+        const recentOrders = orders.slice(0, 5);
+        container.innerHTML = recentOrders.map(ord => {
+          const itemCount = Array.isArray(ord.items) ? ord.items.reduce((s, it) => s + (it.qty || 1), 0) : 1;
+          const status = (ord.order_status || 'confirmed').toLowerCase();
+          const badgeClass = status === 'delivered' ? 'confirmed' : (status === 'confirmed' ? 'confirmed' : 'pending');
+          const dateFormatted = ord.created_at ? new Date(ord.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recent';
+
+          return `
+            <div class="profile-order-item">
+              <div class="profile-order-left">
+                <div>
+                  <div class="profile-order-id">#${ord.id}</div>
+                  <div class="profile-order-date">${dateFormatted} &bull; ${itemCount} ${itemCount === 1 ? 'item' : 'items'}</div>
+                </div>
+                <span class="profile-order-badge ${badgeClass}">${status}</span>
+              </div>
+              <div class="profile-order-right">
+                <div class="profile-order-amount">₦ ${Number(ord.total_amount || 0).toLocaleString()}</div>
+                <a href="orders.html?orderId=${ord.id}" class="profile-order-btn">Track Order</a>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Load Activities
+      async function loadActivitiesList() {
+        const feed = document.getElementById('activityFeedList');
+        if (!feed) return;
+        try {
+          const acts = typeof getUserActivities === 'function' ? await getUserActivities(15) : [];
+          if (!acts || acts.length === 0) {
+            feed.innerHTML = `
+              <div style="text-align: center; padding: 24px; color: #64748b; font-size: 13px;">
+                No recent activity logged yet. Your shopping actions, cart updates, and orders will show here in real time.
+              </div>
+            `;
+            return;
+          }
+
+          feed.innerHTML = acts.map(act => {
+            let iconSvg = '';
+            if (act.activity_type.includes('cart')) {
+              iconSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>';
+            } else if (act.activity_type.includes('saved')) {
+              iconSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>';
+            } else if (act.activity_type.includes('order')) {
+              iconSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>';
+            } else if (act.activity_type.includes('profile')) {
+              iconSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>';
+            } else {
+              iconSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>';
+            }
+
+            return `
+              <div class="profile-activity-item">
+                <div class="profile-activity-icon">${iconSvg}</div>
+                <div class="profile-activity-content">
+                  <div class="profile-activity-title">${escapeHtml(act.activity_title)}</div>
+                  <div class="profile-activity-time">${formatRelativeTime(act.created_at)}</div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } catch (e) {
+          console.warn('Error loading activities:', e);
+        }
+      }
+
       // Sign Out from Sidebar
       document.getElementById('sidebarSignOutBtn').addEventListener('click', async () => {
         await signOutUser();
@@ -1565,6 +1971,10 @@
       // Initial badge sync & account menu
       if (typeof syncAllBadges === 'function') syncAllBadges();
       if (typeof updateSiteAccountMenu === 'function') updateSiteAccountMenu();
+
+      // Load User Activity and Stats
+      await loadUserStats();
+      await loadActivitiesList();
     });
   </script>
 </body>

@@ -179,6 +179,16 @@ async function signInUser(email, password) {
   });
 
   if (error) throw error;
+
+  try {
+    if (typeof logUserActivity === 'function') {
+      logUserActivity('login', 'Signed into account', { email: email.trim() });
+    }
+    if (typeof syncUserDataWithSupabase === 'function') {
+      await syncUserDataWithSupabase();
+    }
+  } catch (syncErr) {}
+
   return data;
 }
 
@@ -246,8 +256,259 @@ async function updateUserProfile({ firstName, lastName, phone, state, stateKey, 
     } catch (e) {}
   }
 
+  // 4. Log profile edit activity
+  if (typeof logUserActivity === 'function') {
+    logUserActivity('profile_updated', 'Updated personal and delivery profile', {
+      name: fullName,
+      phone: phone,
+      state: state,
+      lga: lga
+    });
+  }
+
   return await getCurrentProfile();
 }
+
+// User Activity Logger
+async function logUserActivity(activityType, activityTitle, details = {}) {
+  try {
+    const client = getSupabase();
+    if (!client) return;
+    const user = await getCurrentUser();
+    if (!user) return;
+
+    await client.from('user_activities').insert([{
+      user_id: user.id,
+      user_email: user.email,
+      activity_type: activityType,
+      activity_title: activityTitle,
+      activity_details: details,
+      created_at: new Date().toISOString()
+    }]);
+  } catch (err) {
+    console.warn('Activity logging notice:', err);
+  }
+}
+
+// Fetch User Activities for Profile Timeline
+async function getUserActivities(limit = 15) {
+  try {
+    const client = getSupabase();
+    if (!client) return [];
+    const user = await getCurrentUser();
+    if (!user) return [];
+
+    const { data, error } = await client
+      .from('user_activities')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      console.warn('Notice fetching activities:', error);
+      return [];
+    }
+    return data || [];
+  } catch (err) {
+    console.warn('Error getting activities:', err);
+    return [];
+  }
+}
+
+// Fetch User Orders
+async function getUserOrders() {
+  try {
+    const client = getSupabase();
+    if (!client) return [];
+    const user = await getCurrentUser();
+    if (!user) return [];
+
+    const { data, error } = await client
+      .from('orders')
+      .select('*')
+      .or(`user_id.eq.${user.id},customer_email.eq.${user.email}`)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.warn('Notice fetching user orders:', error);
+      return [];
+    }
+    return data || [];
+  } catch (err) {
+    console.warn('Error getting orders:', err);
+    return [];
+  }
+}
+
+// Explicit Cart Sync to Supabase
+async function syncCartToCloud(cartArray) {
+  try {
+    if (!Array.isArray(cartArray)) return;
+    localStorage.setItem('nkemmart_cart', JSON.stringify(cartArray));
+    if (typeof syncAllBadges === 'function') syncAllBadges();
+
+    const client = getSupabase();
+    if (!client) return;
+    const user = await getCurrentUser();
+    if (!user) return;
+
+    await client
+      .from('profiles')
+      .update({
+        cart: cartArray,
+        last_active_at: new Date().toISOString()
+      })
+      .eq('id', user.id);
+  } catch (e) {
+    console.warn('Notice syncing cart to cloud:', e);
+  }
+}
+
+// Explicit Saved Items Sync to Supabase
+async function syncSavedToCloud(savedArray) {
+  try {
+    if (!Array.isArray(savedArray)) return;
+    localStorage.setItem('nkemmart_saved_items', JSON.stringify(savedArray));
+    if (typeof syncAllBadges === 'function') syncAllBadges();
+
+    const client = getSupabase();
+    if (!client) return;
+    const user = await getCurrentUser();
+    if (!user) return;
+
+    await client
+      .from('profiles')
+      .update({
+        saved_items: savedArray,
+        last_active_at: new Date().toISOString()
+      })
+      .eq('id', user.id);
+  } catch (e) {
+    console.warn('Notice syncing saved to cloud:', e);
+  }
+}
+
+// Bidirectional Cloud & Local Synchronizer for Logged-In Users
+async function syncUserDataWithSupabase() {
+  try {
+    const client = getSupabase();
+    if (!client) return;
+    const user = await getCurrentUser();
+    if (!user) return;
+
+    const { data: profile, error } = await client
+      .from('profiles')
+      .select('cart, saved_items, last_active_at')
+      .eq('id', user.id)
+      .single();
+
+    if (error || !profile) return;
+
+    // 1. Merge Shopping Cart
+    let localCart = [];
+    try { localCart = JSON.parse(localStorage.getItem('nkemmart_cart') || '[]'); } catch (e) {}
+    const cloudCart = Array.isArray(profile.cart) ? profile.cart : [];
+
+    const cartMap = new Map();
+    cloudCart.forEach(it => { if (it && (it.id || it.title)) cartMap.set(String(it.id || it.title), it); });
+    localCart.forEach(it => {
+      if (it && (it.id || it.title)) {
+        const key = String(it.id || it.title);
+        if (cartMap.has(key)) {
+          const existing = cartMap.get(key);
+          existing.qty = Math.max(existing.qty || 1, it.qty || 1);
+        } else {
+          cartMap.set(key, it);
+        }
+      }
+    });
+    const mergedCart = Array.from(cartMap.values());
+    localStorage.setItem('nkemmart_cart', JSON.stringify(mergedCart));
+
+    // 2. Merge Saved Items
+    let localSaved = [];
+    try { localSaved = JSON.parse(localStorage.getItem('nkemmart_saved_items') || '[]'); } catch (e) {}
+    const cloudSaved = Array.isArray(profile.saved_items) ? profile.saved_items : [];
+
+    const savedMap = new Map();
+    cloudSaved.forEach(it => { if (it && (it.id || it.title)) savedMap.set(String(it.id || it.title), it); });
+    localSaved.forEach(it => { if (it && (it.id || it.title)) savedMap.set(String(it.id || it.title), it); });
+    const mergedSaved = Array.from(savedMap.values());
+    localStorage.setItem('nkemmart_saved_items', JSON.stringify(mergedSaved));
+
+    // 3. Update Supabase if local additions existed
+    if (mergedCart.length !== cloudCart.length || mergedSaved.length !== cloudSaved.length) {
+      await client
+        .from('profiles')
+        .update({
+          cart: mergedCart,
+          saved_items: mergedSaved,
+          last_active_at: new Date().toISOString()
+        })
+        .eq('id', user.id);
+    }
+
+    if (typeof syncAllBadges === 'function') syncAllBadges();
+  } catch (err) {
+    console.warn('Error during cloud user sync:', err);
+  }
+}
+
+// Background Auto-sync Interceptor for LocalStorage
+(function setupCloudAutoSyncInterceptor() {
+  if (typeof window === 'undefined') return;
+
+  const originalSetItem = localStorage.setItem.bind(localStorage);
+  let cartSyncTimer = null;
+  let savedSyncTimer = null;
+
+  localStorage.setItem = function(key, value) {
+    originalSetItem(key, value);
+
+    if (key === 'nkemmart_cart') {
+      clearTimeout(cartSyncTimer);
+      cartSyncTimer = setTimeout(async () => {
+        try {
+          const client = getSupabase();
+          if (!client) return;
+          const user = await getCurrentUser();
+          if (!user) return;
+          const parsed = JSON.parse(value || '[]');
+          await client.from('profiles').update({
+            cart: parsed,
+            last_active_at: new Date().toISOString()
+          }).eq('id', user.id);
+
+          logUserActivity('cart_update', 'Updated shopping cart (' + parsed.length + ' items)', {
+            count: parsed.length
+          });
+        } catch (e) {}
+      }, 700);
+    }
+
+    if (key === 'nkemmart_saved_items') {
+      clearTimeout(savedSyncTimer);
+      savedSyncTimer = setTimeout(async () => {
+        try {
+          const client = getSupabase();
+          if (!client) return;
+          const user = await getCurrentUser();
+          if (!user) return;
+          const parsed = JSON.parse(value || '[]');
+          await client.from('profiles').update({
+            saved_items: parsed,
+            last_active_at: new Date().toISOString()
+          }).eq('id', user.id);
+
+          logUserActivity('saved_update', 'Updated saved items list (' + parsed.length + ' items)', {
+            count: parsed.length
+          });
+        } catch (e) {}
+      }, 700);
+    }
+  };
+})();
 
 async function signOutUser() {
   const client = getSupabase();
@@ -289,6 +550,11 @@ async function updateSiteAccountMenu() {
     const accountDropdowns = document.querySelectorAll('#accountMenu, .account-dropdown-menu');
 
     if (profile) {
+      // Sync cloud cart and saved items with local storage
+      if (typeof syncUserDataWithSupabase === 'function') {
+        syncUserDataWithSupabase();
+      }
+
       accountButtons.forEach(btn => {
         const textSpan = btn.querySelector('span:not(.chevron-icon)');
         if (textSpan) {

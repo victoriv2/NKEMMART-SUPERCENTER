@@ -1354,6 +1354,18 @@
             const user = await getCurrentUser();
             if (user) orderData.user_id = user.id;
             await client.from('orders').insert([orderData]);
+
+            // Log order placement activity in user account
+            if (typeof logUserActivity === 'function') {
+              logUserActivity('order_placed', 'Placed order #' + orderId, {
+                order_id: orderId,
+                total: grandTotal,
+                items_count: (cart || []).length,
+                payment_method: selectedPaymentMethod,
+                city: lgaName,
+                state: stateName
+              });
+            }
           } catch (err) {
             console.warn('Supabase order insert note:', err);
           }
@@ -1368,8 +1380,12 @@
           console.warn('Local storage order save error:', e);
         }
 
-        // 3. Clear cart
-        localStorage.removeItem('nkemmart_cart');
+        // 3. Clear cart both locally and in cloud
+        if (typeof syncCartToCloud === 'function') {
+          syncCartToCloud([]);
+        } else {
+          localStorage.removeItem('nkemmart_cart');
+        }
         window.dispatchEvent(new Event('cartUpdated'));
 
         // 4. Redirect to order confirmation page
