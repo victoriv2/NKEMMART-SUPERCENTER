@@ -92,10 +92,16 @@ async function getCurrentProfile() {
       }
     }
 
+    const fName = (profile && profile.first_name) || user.user_metadata?.first_name || '';
+    const lName = (profile && profile.last_name) || user.user_metadata?.last_name || '';
+    const computedFull = (profile && profile.full_name) || user.user_metadata?.full_name || (fName && lName ? `${fName} ${lName}` : (fName || lName || user.email.split('@')[0]));
+
     return {
       id: user.id,
       email: user.email,
-      full_name: (profile && profile.full_name) || user.user_metadata?.full_name || user.email.split('@')[0],
+      first_name: fName,
+      last_name: lName,
+      full_name: computedFull,
       phone: (profile && profile.phone) || user.user_metadata?.phone || '',
       state: stateName,
       state_key: stateKey,
@@ -110,15 +116,21 @@ async function getCurrentProfile() {
   }
 }
 
-async function signUpUser(email, password, { fullName, phone, state, stateKey, lga }) {
+async function signUpUser(email, password, { firstName, lastName, fullName, phone, state, stateKey, lga }) {
   const client = getSupabase();
   if (!client) throw new Error('Supabase client unavailable');
+
+  const fName = (firstName || '').trim();
+  const lName = (lastName || '').trim();
+  const computedFullName = (fullName || (fName && lName ? `${fName} ${lName}` : (fName || lName))).trim();
 
   const isOwner = (email.trim().toLowerCase() === 'ralphmart.supercenter@gmail.com' || email.trim().toLowerCase() === 'nkemmart.supercenter@gmail.com');
   const role = isOwner ? 'admin' : 'customer';
 
   const metadata = {
-    full_name: fullName.trim(),
+    first_name: fName,
+    last_name: lName,
+    full_name: computedFullName,
     phone: (phone || '').trim(),
     state: (state || '').trim(),
     state_key: (stateKey || '').trim(),

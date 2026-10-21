@@ -1298,6 +1298,15 @@
         const email = document.getElementById('checkoutEmail').value.trim();
         const street = document.getElementById('checkoutStreet').value.trim();
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email.includes('@') || !email.includes('.') || !emailRegex.test(email)) {
+          alert('Please enter a valid email address containing "@" and a domain with "." (e.g. name@example.com).');
+          document.getElementById('checkoutEmail').focus();
+          placeBtn.disabled = false;
+          placeBtn.querySelector('span').textContent = 'Confirm & Place Order';
+          return;
+        }
+
         const stateKey = stateSelect ? stateSelect.value : '';
         const stateObj = locations[stateKey] || null;
         const stateName = stateObj ? stateObj.name : stateKey;

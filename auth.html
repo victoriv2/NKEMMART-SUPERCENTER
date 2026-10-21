@@ -950,11 +950,20 @@
 
           <!-- REGISTER FORM -->
           <form id="registerForm" style="display: none;">
-            <div class="auth-form-group">
-              <label for="regFullName" class="auth-label">Full Name</label>
-              <div class="auth-input-wrapper">
-                <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                <input type="text" id="regFullName" class="auth-input" placeholder="e.g. Victor Okafor" required autocomplete="name">
+            <div class="auth-form-row">
+              <div class="auth-form-group">
+                <label for="regFirstName" class="auth-label">First Name</label>
+                <div class="auth-input-wrapper">
+                  <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  <input type="text" id="regFirstName" class="auth-input" placeholder="e.g. Victor" required autocomplete="given-name">
+                </div>
+              </div>
+              <div class="auth-form-group">
+                <label for="regLastName" class="auth-label">Last Name</label>
+                <div class="auth-input-wrapper">
+                  <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  <input type="text" id="regLastName" class="auth-input" placeholder="e.g. Okafor" required autocomplete="family-name">
+                </div>
               </div>
             </div>
 
@@ -1679,6 +1688,38 @@
         }
       });
 
+      // Email Format Validator: Requires @ and a valid domain with a dot extension (.com, .ng, etc.)
+      function validateEmailFormat(email) {
+        if (!email || !email.trim()) {
+          return { valid: false, message: 'Please enter your email address.' };
+        }
+        const clean = email.trim();
+        if (!clean.includes('@')) {
+          return { valid: false, message: 'Email address must contain an "@" symbol (e.g. name@example.com).' };
+        }
+        const parts = clean.split('@');
+        if (parts.length !== 2 || !parts[0].trim() || !parts[1].trim()) {
+          return { valid: false, message: 'Please enter a valid email address with a username and domain (e.g. name@example.com).' };
+        }
+        const domain = parts[1].trim();
+        if (!domain.includes('.')) {
+          return { valid: false, message: 'Email domain must contain a "." followed by an extension (e.g. .com, .ng, .org).' };
+        }
+        const domainParts = domain.split('.');
+        if (domainParts.some(p => !p.trim())) {
+          return { valid: false, message: 'Email address domain format is invalid.' };
+        }
+        const tld = domainParts[domainParts.length - 1].trim();
+        if (tld.length < 2) {
+          return { valid: false, message: 'Email domain extension must be at least 2 characters (e.g. .com, .ng).' };
+        }
+        const standardRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+        if (!standardRegex.test(clean)) {
+          return { valid: false, message: 'Please enter a valid email address format without invalid characters.' };
+        }
+        return { valid: true, cleanEmail: clean };
+      }
+
       // Handle Sign In Submit
       signInForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -1687,11 +1728,18 @@
         const email = document.getElementById('loginEmail').value;
         const pass = document.getElementById('loginPassword').value;
 
+        const emailCheck = validateEmailFormat(email);
+        if (!emailCheck.valid) {
+          showAlert(emailCheck.message);
+          document.getElementById('loginEmail').focus();
+          return;
+        }
+
         submitBtn.disabled = true;
         submitBtn.querySelector('span').textContent = 'Signing in...';
 
         try {
-          const res = await signInUser(email, pass);
+          const res = await signInUser(emailCheck.cleanEmail, pass);
           await getCurrentProfile();
           showAlert('Signed in successfully! Redirecting...', false);
           setTimeout(() => {
@@ -1709,11 +1757,41 @@
         e.preventDefault();
         clearAlert();
         const submitBtn = document.getElementById('regSubmitBtn');
-        const fullName = document.getElementById('regFullName').value;
-        const email = document.getElementById('regEmail').value;
-        const phone = document.getElementById('regPhone').value;
+        const firstName = (document.getElementById('regFirstName')?.value || '').trim();
+        const lastName = (document.getElementById('regLastName')?.value || '').trim();
+        const email = (document.getElementById('regEmail')?.value || '').trim();
+        const phone = (document.getElementById('regPhone')?.value || '').trim();
         const pass = document.getElementById('regPassword').value;
         const confirmPass = document.getElementById('regConfirmPassword').value;
+
+        if (!firstName) {
+          showAlert('Please enter your first name.');
+          document.getElementById('regFirstName')?.focus();
+          return;
+        }
+        if (firstName.length < 2) {
+          showAlert('First name must be at least 2 characters long.');
+          document.getElementById('regFirstName')?.focus();
+          return;
+        }
+
+        if (!lastName) {
+          showAlert('Please enter your last name.');
+          document.getElementById('regLastName')?.focus();
+          return;
+        }
+        if (lastName.length < 2) {
+          showAlert('Last name must be at least 2 characters long.');
+          document.getElementById('regLastName')?.focus();
+          return;
+        }
+
+        const emailCheck = validateEmailFormat(email);
+        if (!emailCheck.valid) {
+          showAlert(emailCheck.message);
+          document.getElementById('regEmail')?.focus();
+          return;
+        }
 
         const stateKey = regStateInput ? regStateInput.value : '';
         const lga = regLgaInput ? regLgaInput.value : '';
@@ -1758,7 +1836,10 @@
         submitBtn.querySelector('span').textContent = 'Creating account...';
 
         try {
-          const res = await signUpUser(email, pass, { 
+          const fullName = `${firstName} ${lastName}`.trim();
+          const res = await signUpUser(emailCheck.cleanEmail, pass, { 
+            firstName,
+            lastName,
             fullName, 
             phone,
             state: stateName,
@@ -1783,10 +1864,9 @@
             submitBtn.disabled = false;
             submitBtn.querySelector('span').textContent = 'Create Free Account';
             setTimeout(() => {
-              const loginTabBtn = document.querySelector('[data-tab="login"]');
-              if (loginTabBtn) loginTabBtn.click();
+              switchTab(false);
               const loginEmailInput = document.getElementById('loginEmail');
-              if (loginEmailInput) loginEmailInput.value = email;
+              if (loginEmailInput) loginEmailInput.value = emailCheck.cleanEmail;
             }, 2500);
           } else {
             showAlert('Account created successfully! Redirecting...', false);
@@ -1830,11 +1910,21 @@
         e.preventDefault();
         const email = document.getElementById('forgotEmail').value;
         const btn = document.getElementById('forgotSubmitBtn');
+
+        const emailCheck = validateEmailFormat(email);
+        if (!emailCheck.valid) {
+          forgotAlert.className = 'auth-alert error';
+          forgotAlert.textContent = emailCheck.message;
+          forgotAlert.style.display = 'block';
+          document.getElementById('forgotEmail').focus();
+          return;
+        }
+
         btn.disabled = true;
         btn.textContent = 'Sending...';
 
         try {
-          await resetPasswordForEmail(email);
+          await resetPasswordForEmail(emailCheck.cleanEmail);
           forgotAlert.className = 'auth-alert success';
           forgotAlert.textContent = 'Password reset instructions have been sent to your email.';
           forgotAlert.style.display = 'block';
