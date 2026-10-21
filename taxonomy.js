@@ -117,14 +117,14 @@ window.RALPHMART_TAXONOMY = window.NKEMMART_TAXONOMY = {
   },
   supermarket: {
     id: "supermarket",
-    name: "Supermarket",
+    name: "Groceries & Supermarket",
     icon: "images/categories/cat_supermarket.jpg?v=3",
     count: "115 800",
     subcategories: [
-      { id: "food-cupboard", name: "Food Cupboard & Grains", count: "48 900", icon: "images/subcategories/supermarket_food.jpg?v=3", keywords: ["rice", "beans", "oil", "pasta", "flour", "sugar", "salt"] },
-      { id: "drinks-beverages", name: "Beverages, Milk & Drinks", count: "33 450", icon: "images/subcategories/supermarket_drinks.jpg?v=3", keywords: ["milk", "juice", "tea", "coffee", "wine", "water", "milo"] },
+      { id: "food-cupboard", name: "Food Cupboard & Grains", count: "48 900", icon: "images/subcategories/supermarket_food.jpg?v=3", keywords: ["groceries", "grocery", "rice", "beans", "oil", "pasta", "flour", "sugar", "salt"] },
+      { id: "drinks-beverages", name: "Beverages, Milk & Drinks", count: "33 450", icon: "images/subcategories/supermarket_drinks.jpg?v=3", keywords: ["groceries", "grocery", "milk", "juice", "tea", "coffee", "wine", "water", "milo"] },
       { id: "cleaning-laundry", name: "Household Cleaning & Laundry", count: "21 350", icon: "images/subcategories/supermarket_cleaning.jpg?v=3", keywords: ["detergent", "bleach", "soap", "sponge", "air freshener", "tissue"] },
-      { id: "canned-packaged", name: "Canned & Packaged Goods", count: "12 100", icon: "images/subcategories/supermarket_packaged.jpg?v=3", keywords: ["sardine", "corned beef", "canned", "biscuits", "snacks"] }
+      { id: "canned-packaged", name: "Canned & Packaged Goods", count: "12 100", icon: "images/subcategories/supermarket_packaged.jpg?v=3", keywords: ["groceries", "grocery", "sardine", "corned beef", "canned", "biscuits", "snacks"] }
     ]
   },
   computing: {
@@ -966,7 +966,7 @@ window.RALPHMART_CATALOG = window.NKEMMART_CATALOG = [
     image: "images/subcategories/supermarket_food.jpg?v=3",
     rating: 5,
     reviews: 6420,
-    keywords: ["rice", "bag of rice", "mama gold", "food", "grains", "parboiled rice", "supermarket"]
+    keywords: ["rice", "bag of rice", "mama gold", "food", "grains", "parboiled rice", "supermarket", "groceries", "grocery"]
   },
   {
     id: "prod-sup-2",
@@ -980,7 +980,7 @@ window.RALPHMART_CATALOG = window.NKEMMART_CATALOG = [
     image: "images/subcategories/supermarket_food.jpg?v=3",
     rating: 5,
     reviews: 4510,
-    keywords: ["oil", "cooking oil", "vegetable oil", "golden penny", "groundnut oil", "food"]
+    keywords: ["oil", "cooking oil", "vegetable oil", "golden penny", "groundnut oil", "food", "groceries", "grocery", "supermarket"]
   },
   {
     id: "prod-sup-3",
@@ -994,7 +994,7 @@ window.RALPHMART_CATALOG = window.NKEMMART_CATALOG = [
     image: "images/subcategories/supermarket_drinks.jpg?v=3",
     rating: 5,
     reviews: 8940,
-    keywords: ["milk", "peak", "peak milk", "powdered milk", "dairy", "beverage", "tea"]
+    keywords: ["milk", "peak", "peak milk", "powdered milk", "dairy", "beverage", "tea", "groceries", "grocery", "supermarket"]
   },
   {
     id: "prod-sup-4",
@@ -1008,7 +1008,7 @@ window.RALPHMART_CATALOG = window.NKEMMART_CATALOG = [
     image: "images/subcategories/supermarket_drinks.jpg?v=3",
     rating: 5,
     reviews: 7810,
-    keywords: ["milo", "chocolate", "beverage", "tea", "drink", "nestle", "malt drink"]
+    keywords: ["milo", "chocolate", "beverage", "tea", "drink", "nestle", "malt drink", "groceries", "grocery", "supermarket"]
   },
   {
     id: "prod-sup-5",
@@ -1022,7 +1022,7 @@ window.RALPHMART_CATALOG = window.NKEMMART_CATALOG = [
     image: "images/subcategories/supermarket_cleaning.jpg?v=3",
     rating: 5,
     reviews: 5240,
-    keywords: ["detergent", "ariel", "washing powder", "soap", "laundry", "cleaning"]
+    keywords: ["detergent", "ariel", "washing powder", "soap", "laundry", "cleaning", "groceries", "supermarket"]
   },
   {
     id: "prod-sup-6",
@@ -1036,7 +1036,7 @@ window.RALPHMART_CATALOG = window.NKEMMART_CATALOG = [
     image: "images/subcategories/supermarket_packaged.jpg?v=3",
     rating: 5,
     reviews: 3820,
-    keywords: ["sardine", "titus", "titus sardine", "canned fish", "canned food", "canned"]
+    keywords: ["sardine", "titus", "titus sardine", "canned fish", "canned food", "canned", "groceries", "grocery", "supermarket"]
   },
 
   // --- COMPUTING ---
