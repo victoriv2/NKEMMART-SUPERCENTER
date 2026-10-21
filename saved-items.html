@@ -1478,6 +1478,14 @@
       // Initial Render
       updateHeaderCartBadge();
       renderSavedItems();
+
+      // Listen for cross-device / cloud saved items sync events
+      window.addEventListener('nkemmart_saved_synced', function() {
+        renderSavedItems();
+      });
+      window.addEventListener('nkemmart_cart_synced', function() {
+        updateHeaderCartBadge();
+      });
     });
   </script>
 

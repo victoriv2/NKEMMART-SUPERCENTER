@@ -184,8 +184,11 @@ async function signInUser(email, password) {
     if (typeof logUserActivity === 'function') {
       logUserActivity('login', 'Signed into account', { email: email.trim() });
     }
-    if (typeof syncUserDataWithSupabase === 'function') {
-      await syncUserDataWithSupabase();
+    if (typeof mergeGuestCartOnLogin === 'function') {
+      await mergeGuestCartOnLogin();
+    }
+    if (typeof setupRealtimeSync === 'function') {
+      await setupRealtimeSync();
     }
   } catch (syncErr) {}
 
@@ -341,10 +344,15 @@ async function getUserOrders() {
   }
 }
 
+let _isSyncingFromCloud = false;
+let realtimeChannel = null;
+
 // Explicit Cart Sync to Supabase
 async function syncCartToCloud(cartArray) {
   try {
     if (!Array.isArray(cartArray)) return;
+    const now = Date.now();
+    localStorage.setItem('nkemmart_cart_time', now.toString());
     localStorage.setItem('nkemmart_cart', JSON.stringify(cartArray));
     if (typeof syncAllBadges === 'function') syncAllBadges();
 
@@ -357,9 +365,13 @@ async function syncCartToCloud(cartArray) {
       .from('profiles')
       .update({
         cart: cartArray,
+        cart_updated_at: new Date(now).toISOString(),
         last_active_at: new Date().toISOString()
       })
       .eq('id', user.id);
+
+    const title = cartArray.length > 0 ? ('Updated shopping cart (' + cartArray.length + ' item' + (cartArray.length > 1 ? 's' : '') + ')') : 'Cleared shopping cart';
+    logUserActivity('cart_update', title, { count: cartArray.length });
   } catch (e) {
     console.warn('Notice syncing cart to cloud:', e);
   }
@@ -369,6 +381,8 @@ async function syncCartToCloud(cartArray) {
 async function syncSavedToCloud(savedArray) {
   try {
     if (!Array.isArray(savedArray)) return;
+    const now = Date.now();
+    localStorage.setItem('nkemmart_saved_time', now.toString());
     localStorage.setItem('nkemmart_saved_items', JSON.stringify(savedArray));
     if (typeof syncAllBadges === 'function') syncAllBadges();
 
@@ -381,77 +395,298 @@ async function syncSavedToCloud(savedArray) {
       .from('profiles')
       .update({
         saved_items: savedArray,
+        saved_updated_at: new Date(now).toISOString(),
         last_active_at: new Date().toISOString()
       })
       .eq('id', user.id);
+
+    const title = savedArray.length > 0 ? ('Updated saved items (' + savedArray.length + ' item' + (savedArray.length > 1 ? 's' : '') + ')') : 'Cleared saved items';
+    logUserActivity('saved_update', title, { count: savedArray.length });
   } catch (e) {
     console.warn('Notice syncing saved to cloud:', e);
   }
 }
 
-// Bidirectional Cloud & Local Synchronizer for Logged-In Users
-async function syncUserDataWithSupabase() {
+// Guest Cart Merge on Login
+async function mergeGuestCartOnLogin() {
   try {
     const client = getSupabase();
     if (!client) return;
     const user = await getCurrentUser();
     if (!user) return;
 
+    const { data: profile } = await client
+      .from('profiles')
+      .select('cart, saved_items, cart_updated_at, saved_updated_at')
+      .eq('id', user.id)
+      .single();
+
+    if (!profile) return;
+
+    const cloudCart = Array.isArray(profile.cart) ? profile.cart : [];
+    const cloudSaved = Array.isArray(profile.saved_items) ? profile.saved_items : [];
+
+    let localCart = [];
+    try { localCart = JSON.parse(localStorage.getItem('nkemmart_cart') || '[]'); } catch (e) {}
+    let localSaved = [];
+    try { localSaved = JSON.parse(localStorage.getItem('nkemmart_saved_items') || '[]'); } catch (e) {}
+
+    const lastAuthedUser = localStorage.getItem('nkemmart_last_authed_user');
+
+    // If this device was already used by this same user, cloud is the absolute truth!
+    if (lastAuthedUser === user.id) {
+      _isSyncingFromCloud = true;
+      localStorage.setItem('nkemmart_cart', JSON.stringify(cloudCart));
+      localStorage.setItem('nkemmart_saved_items', JSON.stringify(cloudSaved));
+      const cTime = profile.cart_updated_at ? new Date(profile.cart_updated_at).getTime() : Date.now();
+      const sTime = profile.saved_updated_at ? new Date(profile.saved_updated_at).getTime() : Date.now();
+      localStorage.setItem('nkemmart_cart_time', cTime.toString());
+      localStorage.setItem('nkemmart_saved_time', sTime.toString());
+      _isSyncingFromCloud = false;
+      if (typeof syncAllBadges === 'function') syncAllBadges();
+      return;
+    }
+
+    // New device or guest session login: merge unique guest items
+    const cartMap = new Map();
+    cloudCart.forEach(it => { if (it && (it.id || it.title)) cartMap.set(String(it.id || it.title), it); });
+    let hasNewGuestItems = false;
+    localCart.forEach(it => {
+      if (it && (it.id || it.title)) {
+        const key = String(it.id || it.title);
+        if (cartMap.has(key)) {
+          const ex = cartMap.get(key);
+          ex.qty = Math.max(ex.qty || 1, it.qty || 1);
+        } else {
+          cartMap.set(key, it);
+          hasNewGuestItems = true;
+        }
+      }
+    });
+
+    const finalCart = Array.from(cartMap.values());
+    const now = Date.now();
+
+    _isSyncingFromCloud = true;
+    localStorage.setItem('nkemmart_cart', JSON.stringify(finalCart));
+    localStorage.setItem('nkemmart_cart_time', now.toString());
+    localStorage.setItem('nkemmart_last_authed_user', user.id);
+    _isSyncingFromCloud = false;
+
+    if (hasNewGuestItems || finalCart.length !== cloudCart.length) {
+      await client.from('profiles').update({
+        cart: finalCart,
+        cart_updated_at: new Date(now).toISOString(),
+        last_active_at: new Date().toISOString()
+      }).eq('id', user.id);
+    }
+
+    // Merge saved items
+    const savedMap = new Map();
+    cloudSaved.forEach(it => { if (it && (it.id || it.title)) savedMap.set(String(it.id || it.title), it); });
+    let hasNewGuestSaved = false;
+    localSaved.forEach(it => {
+      if (it && (it.id || it.title)) {
+        const key = String(it.id || it.title);
+        if (!savedMap.has(key)) {
+          savedMap.set(key, it);
+          hasNewGuestSaved = true;
+        }
+      }
+    });
+    const finalSaved = Array.from(savedMap.values());
+    _isSyncingFromCloud = true;
+    localStorage.setItem('nkemmart_saved_items', JSON.stringify(finalSaved));
+    localStorage.setItem('nkemmart_saved_time', now.toString());
+    _isSyncingFromCloud = false;
+
+    if (hasNewGuestSaved || finalSaved.length !== cloudSaved.length) {
+      await client.from('profiles').update({
+        saved_items: finalSaved,
+        saved_updated_at: new Date(now).toISOString(),
+        last_active_at: new Date().toISOString()
+      }).eq('id', user.id);
+    }
+
+    if (typeof syncAllBadges === 'function') syncAllBadges();
+  } catch (e) {
+    console.warn('Notice merging guest cart on login:', e);
+  } finally {
+    _isSyncingFromCloud = false;
+  }
+}
+
+// Bidirectional Cloud & Local Synchronizer for Logged-In Users
+async function syncUserDataWithSupabase(force = false) {
+  try {
+    const client = getSupabase();
+    if (!client) return;
+    const user = await getCurrentUser();
+    if (!user) return;
+
+    localStorage.setItem('nkemmart_last_authed_user', user.id);
+
     const { data: profile, error } = await client
       .from('profiles')
-      .select('cart, saved_items, last_active_at')
+      .select('cart, saved_items, cart_updated_at, saved_updated_at, last_active_at')
       .eq('id', user.id)
       .single();
 
     if (error || !profile) return;
 
-    // 1. Merge Shopping Cart
-    let localCart = [];
-    try { localCart = JSON.parse(localStorage.getItem('nkemmart_cart') || '[]'); } catch (e) {}
+    const cloudCartTime = profile.cart_updated_at ? new Date(profile.cart_updated_at).getTime() : 0;
+    const localCartTime = parseInt(localStorage.getItem('nkemmart_cart_time') || '0', 10);
     const cloudCart = Array.isArray(profile.cart) ? profile.cart : [];
 
-    const cartMap = new Map();
-    cloudCart.forEach(it => { if (it && (it.id || it.title)) cartMap.set(String(it.id || it.title), it); });
-    localCart.forEach(it => {
-      if (it && (it.id || it.title)) {
-        const key = String(it.id || it.title);
-        if (cartMap.has(key)) {
-          const existing = cartMap.get(key);
-          existing.qty = Math.max(existing.qty || 1, it.qty || 1);
-        } else {
-          cartMap.set(key, it);
-        }
-      }
-    });
-    const mergedCart = Array.from(cartMap.values());
-    localStorage.setItem('nkemmart_cart', JSON.stringify(mergedCart));
+    let localCart = [];
+    try { localCart = JSON.parse(localStorage.getItem('nkemmart_cart') || '[]'); } catch (e) {}
 
-    // 2. Merge Saved Items
-    let localSaved = [];
-    try { localSaved = JSON.parse(localStorage.getItem('nkemmart_saved_items') || '[]'); } catch (e) {}
+    // Check if this device has pending local edits newer than cloud
+    if (localCartTime > cloudCartTime && !force) {
+      await client.from('profiles').update({
+        cart: localCart,
+        cart_updated_at: new Date(localCartTime).toISOString(),
+        last_active_at: new Date().toISOString()
+      }).eq('id', user.id);
+    } else {
+      // Cloud is authoritative
+      _isSyncingFromCloud = true;
+      localStorage.setItem('nkemmart_cart', JSON.stringify(cloudCart));
+      localStorage.setItem('nkemmart_cart_time', Math.max(cloudCartTime, localCartTime).toString());
+      _isSyncingFromCloud = false;
+      window.dispatchEvent(new CustomEvent('nkemmart_cart_synced', { detail: { cart: cloudCart } }));
+    }
+
+    // Saved items sync
+    const cloudSavedTime = profile.saved_updated_at ? new Date(profile.saved_updated_at).getTime() : 0;
+    const localSavedTime = parseInt(localStorage.getItem('nkemmart_saved_time') || '0', 10);
     const cloudSaved = Array.isArray(profile.saved_items) ? profile.saved_items : [];
 
-    const savedMap = new Map();
-    cloudSaved.forEach(it => { if (it && (it.id || it.title)) savedMap.set(String(it.id || it.title), it); });
-    localSaved.forEach(it => { if (it && (it.id || it.title)) savedMap.set(String(it.id || it.title), it); });
-    const mergedSaved = Array.from(savedMap.values());
-    localStorage.setItem('nkemmart_saved_items', JSON.stringify(mergedSaved));
+    let localSaved = [];
+    try { localSaved = JSON.parse(localStorage.getItem('nkemmart_saved_items') || '[]'); } catch (e) {}
 
-    // 3. Update Supabase if local additions existed
-    if (mergedCart.length !== cloudCart.length || mergedSaved.length !== cloudSaved.length) {
-      await client
-        .from('profiles')
-        .update({
-          cart: mergedCart,
-          saved_items: mergedSaved,
-          last_active_at: new Date().toISOString()
-        })
-        .eq('id', user.id);
+    if (localSavedTime > cloudSavedTime && !force) {
+      await client.from('profiles').update({
+        saved_items: localSaved,
+        saved_updated_at: new Date(localSavedTime).toISOString(),
+        last_active_at: new Date().toISOString()
+      }).eq('id', user.id);
+    } else {
+      _isSyncingFromCloud = true;
+      localStorage.setItem('nkemmart_saved_items', JSON.stringify(cloudSaved));
+      localStorage.setItem('nkemmart_saved_time', Math.max(cloudSavedTime, localSavedTime).toString());
+      _isSyncingFromCloud = false;
+      window.dispatchEvent(new CustomEvent('nkemmart_saved_synced', { detail: { saved_items: cloudSaved } }));
     }
 
     if (typeof syncAllBadges === 'function') syncAllBadges();
   } catch (err) {
     console.warn('Error during cloud user sync:', err);
+  } finally {
+    _isSyncingFromCloud = false;
+  }
+}
+
+// Handle Realtime incoming profile changes
+function handleCloudProfileUpdate(profile) {
+  if (!profile) return;
+  const cloudCartTime = profile.cart_updated_at ? new Date(profile.cart_updated_at).getTime() : 0;
+  const localCartTime = parseInt(localStorage.getItem('nkemmart_cart_time') || '0', 10);
+
+  if (cloudCartTime >= localCartTime) {
+    const cloudCart = Array.isArray(profile.cart) ? profile.cart : [];
+    _isSyncingFromCloud = true;
+    localStorage.setItem('nkemmart_cart', JSON.stringify(cloudCart));
+    localStorage.setItem('nkemmart_cart_time', cloudCartTime.toString());
+    _isSyncingFromCloud = false;
+    if (typeof syncAllBadges === 'function') syncAllBadges();
+    window.dispatchEvent(new CustomEvent('nkemmart_cart_synced', { detail: { cart: cloudCart } }));
+  }
+
+  const cloudSavedTime = profile.saved_updated_at ? new Date(profile.saved_updated_at).getTime() : 0;
+  const localSavedTime = parseInt(localStorage.getItem('nkemmart_saved_time') || '0', 10);
+
+  if (cloudSavedTime >= localSavedTime) {
+    const cloudSaved = Array.isArray(profile.saved_items) ? profile.saved_items : [];
+    _isSyncingFromCloud = true;
+    localStorage.setItem('nkemmart_saved_items', JSON.stringify(cloudSaved));
+    localStorage.setItem('nkemmart_saved_time', cloudSavedTime.toString());
+    _isSyncingFromCloud = false;
+    if (typeof syncAllBadges === 'function') syncAllBadges();
+    window.dispatchEvent(new CustomEvent('nkemmart_saved_synced', { detail: { saved_items: cloudSaved } }));
+  }
+
+  if (typeof updateSiteAccountMenu === 'function') {
+    updateSiteAccountMenu();
+  }
+}
+
+// Realtime cross-device channel subscriber
+async function setupRealtimeSync() {
+  try {
+    const client = getSupabase();
+    if (!client) return;
+    const user = await getCurrentUser();
+    if (!user) return;
+
+    localStorage.setItem('nkemmart_last_authed_user', user.id);
+
+    if (realtimeChannel) {
+      try { client.removeChannel(realtimeChannel); } catch (e) {}
+      realtimeChannel = null;
+    }
+
+    realtimeChannel = client
+      .channel('user-realtime-' + user.id)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'profiles',
+          filter: `id=eq.${user.id}`
+        },
+        (payload) => {
+          if (payload && payload.new) {
+            handleCloudProfileUpdate(payload.new);
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'user_activities',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          if (payload && payload.new) {
+            window.dispatchEvent(new CustomEvent('nkemmart_activity_logged', { detail: payload.new }));
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'orders',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          if (payload && payload.new) {
+            window.dispatchEvent(new CustomEvent('nkemmart_order_updated', { detail: payload.new }));
+          }
+        }
+      )
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          syncUserDataWithSupabase();
+        }
+      });
+  } catch (err) {
+    console.warn('Realtime sync setup notice:', err);
   }
 }
 
@@ -460,13 +695,18 @@ async function syncUserDataWithSupabase() {
   if (typeof window === 'undefined') return;
 
   const originalSetItem = localStorage.setItem.bind(localStorage);
+  const originalRemoveItem = localStorage.removeItem.bind(localStorage);
   let cartSyncTimer = null;
   let savedSyncTimer = null;
 
   localStorage.setItem = function(key, value) {
     originalSetItem(key, value);
 
+    if (_isSyncingFromCloud) return;
+
     if (key === 'nkemmart_cart') {
+      const now = Date.now();
+      originalSetItem('nkemmart_cart_time', now.toString());
       clearTimeout(cartSyncTimer);
       cartSyncTimer = setTimeout(async () => {
         try {
@@ -477,17 +717,19 @@ async function syncUserDataWithSupabase() {
           const parsed = JSON.parse(value || '[]');
           await client.from('profiles').update({
             cart: parsed,
+            cart_updated_at: new Date(now).toISOString(),
             last_active_at: new Date().toISOString()
           }).eq('id', user.id);
 
-          logUserActivity('cart_update', 'Updated shopping cart (' + parsed.length + ' items)', {
-            count: parsed.length
-          });
+          const title = parsed.length > 0 ? ('Updated shopping cart (' + parsed.length + ' item' + (parsed.length > 1 ? 's' : '') + ')') : 'Cleared shopping cart';
+          logUserActivity('cart_update', title, { count: parsed.length });
         } catch (e) {}
-      }, 700);
+      }, 200);
     }
 
     if (key === 'nkemmart_saved_items') {
+      const now = Date.now();
+      originalSetItem('nkemmart_saved_time', now.toString());
       clearTimeout(savedSyncTimer);
       savedSyncTimer = setTimeout(async () => {
         try {
@@ -498,14 +740,62 @@ async function syncUserDataWithSupabase() {
           const parsed = JSON.parse(value || '[]');
           await client.from('profiles').update({
             saved_items: parsed,
+            saved_updated_at: new Date(now).toISOString(),
             last_active_at: new Date().toISOString()
           }).eq('id', user.id);
 
-          logUserActivity('saved_update', 'Updated saved items list (' + parsed.length + ' items)', {
-            count: parsed.length
-          });
+          const title = parsed.length > 0 ? ('Updated saved items (' + parsed.length + ' item' + (parsed.length > 1 ? 's' : '') + ')') : 'Cleared saved items';
+          logUserActivity('saved_update', title, { count: parsed.length });
         } catch (e) {}
-      }, 700);
+      }, 200);
+    }
+  };
+
+  localStorage.removeItem = function(key) {
+    originalRemoveItem(key);
+
+    if (_isSyncingFromCloud) return;
+
+    if (key === 'nkemmart_cart') {
+      const now = Date.now();
+      originalSetItem('nkemmart_cart_time', now.toString());
+      clearTimeout(cartSyncTimer);
+      cartSyncTimer = setTimeout(async () => {
+        try {
+          const client = getSupabase();
+          if (!client) return;
+          const user = await getCurrentUser();
+          if (!user) return;
+          await client.from('profiles').update({
+            cart: [],
+            cart_updated_at: new Date(now).toISOString(),
+            last_active_at: new Date().toISOString()
+          }).eq('id', user.id);
+
+          logUserActivity('cart_update', 'Cleared shopping cart', { count: 0 });
+        } catch (e) {}
+      }, 100);
+    }
+
+    if (key === 'nkemmart_saved_items') {
+      const now = Date.now();
+      originalSetItem('nkemmart_saved_time', now.toString());
+      clearTimeout(savedSyncTimer);
+      savedSyncTimer = setTimeout(async () => {
+        try {
+          const client = getSupabase();
+          if (!client) return;
+          const user = await getCurrentUser();
+          if (!user) return;
+          await client.from('profiles').update({
+            saved_items: [],
+            saved_updated_at: new Date(now).toISOString(),
+            last_active_at: new Date().toISOString()
+          }).eq('id', user.id);
+
+          logUserActivity('saved_update', 'Cleared saved items', { count: 0 });
+        } catch (e) {}
+      }, 100);
     }
   };
 })();
@@ -848,22 +1138,41 @@ function initHeaderDropdowns() {
   }
 }
 
-// Auto update menu, badges, smart header, and back-to-top on DOM load
+// Auto update menu, badges, smart header, realtime sync, and back-to-top on DOM load
 if (typeof document !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      syncAllBadges();
-      initSmartHeader();
-      initBackToTop();
-      initHeaderDropdowns();
-      setTimeout(updateSiteAccountMenu, 300);
-    });
-  } else {
+  const initAppSync = () => {
     syncAllBadges();
     initSmartHeader();
     initBackToTop();
     initHeaderDropdowns();
+    if (typeof setupRealtimeSync === 'function') {
+      setupRealtimeSync();
+    }
     setTimeout(updateSiteAccountMenu, 300);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAppSync);
+  } else {
+    initAppSync();
   }
   window.addEventListener('storage', syncAllBadges);
+
+  // Sync when user returns to tab / unlocks phone
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      if (typeof syncUserDataWithSupabase === 'function') syncUserDataWithSupabase();
+      if (typeof updateSiteAccountMenu === 'function') updateSiteAccountMenu();
+    }
+  });
+  window.addEventListener('focus', () => {
+    if (typeof syncUserDataWithSupabase === 'function') syncUserDataWithSupabase();
+    if (typeof updateSiteAccountMenu === 'function') updateSiteAccountMenu();
+  });
+  // Active tab periodic heartbeat sync
+  setInterval(() => {
+    if (document.visibilityState === 'visible') {
+      if (typeof syncUserDataWithSupabase === 'function') syncUserDataWithSupabase();
+    }
+  }, 12000);
 }

@@ -1147,6 +1147,15 @@
 
         renderOrders(filtered);
       });
+
+      window.addEventListener('nkemmart_order_updated', (e) => {
+        if (e.detail) {
+          const exIdx = allOrders.findIndex(o => o.id === e.detail.id);
+          if (exIdx >= 0) allOrders[exIdx] = e.detail;
+          else allOrders.unshift(e.detail);
+          renderOrders(allOrders);
+        }
+      });
     });
 
     function escapeHtml(str) {

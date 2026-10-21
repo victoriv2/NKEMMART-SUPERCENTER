@@ -1468,6 +1468,11 @@
 
       // Initial Render
       renderCart();
+
+      // Listen for cross-device / cloud cart sync events
+      window.addEventListener('nkemmart_cart_synced', function() {
+        renderCart();
+      });
     });
   </script>
 
