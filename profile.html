@@ -88,6 +88,10 @@
       flex-shrink: 0;
     }
 
+    .profile-hero-info {
+      min-width: 0;
+    }
+
     .profile-hero-name {
       font-size: 22px;
       font-weight: 800;
@@ -99,7 +103,8 @@
       font-size: 13.5px;
       color: #e2e8f0;
       margin: 0 0 8px 0;
-      word-break: break-all;
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
 
     .profile-hero-badges {
@@ -167,19 +172,114 @@
       transform: translateY(-1px);
     }
 
+    /* Vertical stacked layout on smaller screens or when text breaks */
+    @media (max-width: 768px) {
+      .profile-hero-card {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        padding: 24px 18px !important;
+        gap: 18px !important;
+      }
+
+      .profile-hero-left {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        gap: 14px !important;
+      }
+
+      .profile-hero-avatar {
+        width: 72px !important;
+        height: 72px !important;
+        font-size: 30px !important;
+        margin: 0 auto !important;
+      }
+
+      .profile-hero-info {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        width: 100% !important;
+      }
+
+      .profile-hero-name {
+        text-align: center !important;
+        font-size: 20px !important;
+        margin-bottom: 4px !important;
+      }
+
+      .profile-hero-email {
+        text-align: center !important;
+        font-size: 13.5px !important;
+        max-width: 100% !important;
+        margin: 0 auto 10px auto !important;
+        overflow-wrap: anywhere !important;
+        word-break: normal !important;
+      }
+
+      .profile-hero-badges {
+        justify-content: center !important;
+        margin: 0 auto !important;
+        gap: 8px !important;
+      }
+
+      .profile-hero-actions {
+        width: 100% !important;
+        justify-content: center !important;
+        margin-top: 2px !important;
+      }
+
+      .profile-hero-btn {
+        width: 100% !important;
+        max-width: 280px !important;
+        justify-content: center !important;
+      }
+
+      .profile-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .profile-hero-card {
+        padding: 20px 14px !important;
+      }
+
+      .profile-hero-avatar {
+        width: 68px !important;
+        height: 68px !important;
+        font-size: 28px !important;
+      }
+
+      .profile-hero-name {
+        font-size: 18px !important;
+      }
+
+      .profile-hero-email {
+        font-size: 13px !important;
+      }
+
+      .profile-order-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .profile-order-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
     /* Activity Summary Stats Grid */
     .profile-stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
       margin-bottom: 24px;
-    }
-
-    @media (max-width: 640px) {
-      .profile-stats-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
     }
 
     .profile-stat-box {
@@ -1097,7 +1197,7 @@
     <section class="profile-hero-card" aria-label="User Profile Summary">
       <div class="profile-hero-left">
         <div class="profile-hero-avatar" id="heroAvatar">U</div>
-        <div>
+        <div class="profile-hero-info">
           <h1 class="profile-hero-name" id="heroName">Loading Profile...</h1>
           <p class="profile-hero-email" id="heroEmail">loading...</p>
           <div class="profile-hero-badges">
