@@ -2589,7 +2589,6 @@ body {
   background-color: #6b2897;
   border-color: #d8b4fe;
   color: #ffffff;
-  transform: translateY(-1px);
 }
 
 .toast-close-btn {
@@ -8609,7 +8608,6 @@ html, body {
   background-color: #faf5ff;
   border-color: #512175;
   color: #512175;
-  transform: translateY(-1px);
 }
 
 .search-empty-btn {
@@ -8621,10 +8619,9 @@ html, body {
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: background-color 0.2s;
 }
 
 .search-empty-btn:hover {
   background-color: #3d1858;
-  transform: translateY(-1px);
 }
