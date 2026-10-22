@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>Edit Profile & Account Information - RALPHMART SUPERCENTER</title>
-  <link rel="stylesheet" href="styles.css?v=21.0">
+  <link rel="stylesheet" href="styles.css?v=21.2">
   <!-- Supabase JS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
@@ -158,7 +158,9 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.2s;
+      transition: background-color 0.15s;
+      transform: none !important;
+      box-shadow: none !important;
     }
 
     .profile-hero-btn.btn-light {
@@ -169,6 +171,8 @@
 
     .profile-hero-btn.btn-light:hover {
       background: #f8fafc;
+      transform: none !important;
+      box-shadow: none !important;
     }
 
     /* Vertical stacked layout on smaller screens or when text breaks */
@@ -292,12 +296,15 @@
       text-decoration: none;
       color: inherit;
       box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-      transition: all 0.2s;
+      transition: border-color 0.15s, background-color 0.15s;
+      transform: none !important;
     }
 
     .profile-stat-box:hover {
       border-color: #512175;
-      box-shadow: 0 4px 12px rgba(81, 33, 117, 0.08);
+      background-color: #faf5ff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
+      transform: none !important;
     }
 
     .profile-stat-icon {
@@ -339,12 +346,14 @@
       background: #f8fafc;
       border: 1px solid #f1f5f9;
       border-radius: 10px;
-      transition: background 0.15s;
+      transition: background-color 0.15s, border-color 0.15s;
+      transform: none !important;
     }
 
     .profile-activity-item:hover {
       background: #faf5ff;
       border-color: #f3e8ff;
+      transform: none !important;
     }
 
     .profile-activity-icon {
@@ -395,12 +404,14 @@
       border-radius: 10px;
       gap: 12px;
       flex-wrap: wrap;
-      transition: all 0.15s;
+      transition: border-color 0.15s, background-color 0.15s;
+      transform: none !important;
     }
 
     .profile-order-item:hover {
       border-color: #512175;
       background: #faf5ff;
+      transform: none !important;
     }
 
     .profile-order-left {

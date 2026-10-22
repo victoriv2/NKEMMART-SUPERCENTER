@@ -87,7 +87,7 @@
       border-radius: 10px;
       padding: 20px;
       text-align: center;
-      transition: all 0.2s ease;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
       text-decoration: none;
       color: #1f2937;
       display: flex;
@@ -95,11 +95,13 @@
       align-items: center;
       min-width: 0;
       box-sizing: border-box;
+      transform: none !important;
     }
 
     .help-quick-card:hover {
       border-color: #512175;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      background-color: #faf5ff;
+      transform: none !important;
     }
 
     .help-card-icon {
