@@ -116,15 +116,42 @@ async function getCurrentProfile() {
   }
 }
 
+async function checkEmailExists(email) {
+  const client = getSupabase();
+  if (!client || !email) return false;
+  try {
+    const cleanEmail = String(email).trim().toLowerCase();
+    if (!cleanEmail) return false;
+    const { data, error } = await client.rpc('check_email_exists', { lookup_email: cleanEmail });
+    if (error) {
+      console.warn('check_email_exists RPC note:', error.message);
+      return false;
+    }
+    return Boolean(data);
+  } catch (err) {
+    console.warn('Error checking email existence:', err);
+    return false;
+  }
+}
+
 async function signUpUser(email, password, { firstName, lastName, fullName, phone, state, stateKey, lga }) {
   const client = getSupabase();
   if (!client) throw new Error('Supabase client unavailable');
+
+  const cleanEmail = (email || '').trim().toLowerCase();
+  if (!cleanEmail) throw new Error('Please enter a valid email address.');
+
+  // 1. Pre-check if email is already registered on the server
+  const alreadyExists = await checkEmailExists(cleanEmail);
+  if (alreadyExists) {
+    throw new Error('An account with this email address already exists. Please log in or use another email.');
+  }
 
   const fName = (firstName || '').trim();
   const lName = (lastName || '').trim();
   const computedFullName = (fullName || (fName && lName ? `${fName} ${lName}` : (fName || lName))).trim();
 
-  const isOwner = (email.trim().toLowerCase() === 'ralphmart.supercenter@gmail.com' || email.trim().toLowerCase() === 'nkemmart.supercenter@gmail.com');
+  const isOwner = (cleanEmail === 'ralphmart.supercenter@gmail.com' || cleanEmail === 'nkemmart.supercenter@gmail.com');
   const role = isOwner ? 'admin' : 'customer';
 
   const metadata = {
@@ -139,14 +166,29 @@ async function signUpUser(email, password, { firstName, lastName, fullName, phon
   };
 
   const { data, error } = await client.auth.signUp({
-    email: email.trim(),
+    email: cleanEmail,
     password: password,
     options: {
       data: metadata
     }
   });
 
-  if (error) throw error;
+  if (error) {
+    const msg = (error.message || '').toLowerCase();
+    if (msg.includes('already registered') || msg.includes('already exists') || msg.includes('email_exists') || msg.includes('user already exists') || msg.includes('duplicate')) {
+      throw new Error('An account with this email address already exists. Please log in or use another email.');
+    }
+    throw error;
+  }
+
+  // 2. Supabase Auth returns an empty identities array if user enumeration protection is enabled and the email already exists
+  if (data && data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+    throw new Error('An account with this email address already exists. Please log in or use another email.');
+  }
+
+  if (!data || !data.user) {
+    throw new Error('Account registration could not be completed. Please try again.');
+  }
 
   // Persist chosen location immediately to localStorage
   if (stateKey && typeof window !== 'undefined') {

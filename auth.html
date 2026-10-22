@@ -1797,6 +1797,20 @@
           return;
         }
 
+        // Fast server check to verify email is not already taken
+        if (typeof checkEmailExists === 'function') {
+          try {
+            const isTaken = await checkEmailExists(emailCheck.cleanEmail);
+            if (isTaken) {
+              showAlert('An account with this email address already exists. Please log in instead or use a different email.');
+              document.getElementById('regEmail')?.focus();
+              return;
+            }
+          } catch (e) {
+            // Continues to signUpUser validation
+          }
+        }
+
         const stateKey = regStateInput ? regStateInput.value : '';
         const lga = regLgaInput ? regLgaInput.value : '';
         const locations = window.NIGERIA_LOCATIONS || {};
@@ -1884,6 +1898,31 @@
           submitBtn.querySelector('span').textContent = 'Create Free Account';
         }
       });
+
+      // Real-time email validation on blur in registration form
+      const regEmailField = document.getElementById('regEmail');
+      if (regEmailField) {
+        regEmailField.addEventListener('blur', async () => {
+          const val = (regEmailField.value || '').trim();
+          if (!val) return;
+          const check = validateEmailFormat(val);
+          if (!check.valid) return;
+          if (typeof checkEmailExists === 'function') {
+            try {
+              const isTaken = await checkEmailExists(check.cleanEmail);
+              if (isTaken) {
+                showAlert('An account with this email address already exists. Please log in instead or use a different email.');
+                regEmailField.style.borderColor = '#ef4444';
+              } else {
+                regEmailField.style.borderColor = '';
+              }
+            } catch (e) {}
+          }
+        });
+        regEmailField.addEventListener('input', () => {
+          regEmailField.style.borderColor = '';
+        });
+      }
 
       // Forgot Password Modal
       const forgotModal = document.getElementById('forgotModal');
