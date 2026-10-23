@@ -903,12 +903,63 @@ function onAuthChange(callback) {
   return subscription;
 }
 
-// Global Auth UI Bar Update Helper (updates Account dropdowns across the site)
+// Global Account Modal Manager
+window.openAccountModal = function(e) {
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+
+  let overlay = document.getElementById('siteAccountModalOverlay');
+  if (!overlay && typeof updateSiteAccountMenu === 'function') {
+    updateSiteAccountMenu();
+    overlay = document.getElementById('siteAccountModalOverlay');
+  }
+  if (overlay) {
+    overlay.classList.add('open');
+    document.body.classList.add('modal-open');
+    if (document.documentElement) document.documentElement.classList.add('modal-open');
+  }
+};
+
+window.closeAccountModal = function() {
+  const overlay = document.getElementById('siteAccountModalOverlay');
+  if (overlay) {
+    overlay.classList.remove('open');
+  }
+  document.body.classList.remove('modal-open');
+  if (document.documentElement) document.documentElement.classList.remove('modal-open');
+};
+
+// Delegated click handler so clicking ANY account trigger on any page opens the modal cleanly
+if (!window._accountModalClickDelegated) {
+  window._accountModalClickDelegated = true;
+  document.addEventListener('click', (e) => {
+    const accountBtn = e.target.closest('#accountMenuBtn, .account-btn-header, .header-actions .action-item:first-child .action-btn, [data-account-modal-trigger]');
+    if (accountBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.openAccountModal(e);
+    }
+  });
+}
+
+// Global Auth UI Bar Update Helper (updates Account Modal & header state across site)
 async function updateSiteAccountMenu() {
   try {
     const profile = await getCurrentProfile();
-    const accountButtons = document.querySelectorAll('#accountMenuBtn, .account-btn-header');
+    const accountButtons = document.querySelectorAll('#accountMenuBtn, .account-btn-header, .header-actions .action-item:first-child .action-btn');
     const accountDropdowns = document.querySelectorAll('#accountMenu, .account-dropdown-menu');
+
+    // Ensure site account modal overlay container exists
+    let modalOverlay = document.getElementById('siteAccountModalOverlay');
+    if (!modalOverlay) {
+      modalOverlay = document.createElement('div');
+      modalOverlay.id = 'siteAccountModalOverlay';
+      modalOverlay.className = 'site-account-modal-overlay';
+      modalOverlay.setAttribute('role', 'dialog');
+      modalOverlay.setAttribute('aria-modal', 'true');
+      modalOverlay.setAttribute('aria-label', 'My Account');
+      document.body.appendChild(modalOverlay);
+    }
 
     if (profile) {
       // Sync cloud cart and saved items with local storage
@@ -919,72 +970,148 @@ async function updateSiteAccountMenu() {
       accountButtons.forEach(btn => {
         const textSpan = btn.querySelector('span:not(.chevron-icon)');
         if (textSpan) {
-          const firstName = profile.full_name ? profile.full_name.split(' ')[0] : 'Account';
+          const firstName = profile.full_name ? profile.full_name.trim().split(' ')[0] : 'Account';
           textSpan.textContent = firstName.length > 10 ? firstName.substring(0, 9) + '...' : firstName;
         }
+        btn.setAttribute('aria-haspopup', 'dialog');
+        btn.onclick = (e) => window.openAccountModal(e);
       });
 
-      accountDropdowns.forEach(menu => {
-        let adminItemHtml = '';
-        if (profile.role === 'admin') {
-          adminItemHtml = `
-            <a href="admin.html" class="dropdown-item" style="color: #512175; font-weight: 700; background: rgba(81, 33, 117, 0.1);">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
-              <span>Admin Portal</span>
-            </a>
-            <div class="dropdown-divider"></div>
-          `;
-        }
+      const initialChar = profile.full_name ? profile.full_name.trim().charAt(0).toUpperCase() : 'U';
+      const roleClass = profile.role === 'admin' ? 'admin' : 'customer';
+      const roleText = profile.role === 'admin' ? 'ADMIN' : 'CUSTOMER';
+      const locationText = profile.state ? ((profile.lga ? profile.lga + ', ' : '') + profile.state) : '';
 
-        menu.innerHTML = `
-          <a href="profile.html" style="text-decoration: none; display: block; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; background: #f8fafc; transition: all 0.2s; cursor: pointer; box-sizing: border-box;" onmouseover="this.style.background='#f3e8ff'" onmouseout="this.style.background='#f8fafc'" title="Click to edit profile info">
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-              <div style="font-size: 13px; font-weight: 800; color: #091e3a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;">${escapeHtml(profile.full_name)}</div>
-              <span style="font-size: 11px; font-weight: 700; color: #512175; text-decoration: underline; flex-shrink: 0;">Edit Info</span>
+      let adminLinkHtml = '';
+      if (profile.role === 'admin') {
+        adminLinkHtml = `
+          <a href="admin.html" class="site-account-modal-link">
+            <span class="site-account-modal-link-icon" style="color: #15803d; background: #f0fdf4;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+            </span>
+            <div class="site-account-modal-link-content">
+              <div class="site-account-modal-link-title" style="color: #15803d;">Admin Portal</div>
+              <div class="site-account-modal-link-sub">Manage products, inventory &amp; orders</div>
             </div>
-            <div style="font-size: 11px; color: #64748b; margin-top: 3px; word-break: break-all;">${escapeHtml(profile.email)}</div>
-            <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
-              <span style="display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: ${profile.role === 'admin' ? '#dcfce7; color: #15803d;' : '#e0f2fe; color: #0369a1;'}">${profile.role}</span>
-              ${profile.state ? `<span style="font-size: 11px; color: #475569; font-weight: 500;">${escapeHtml(profile.lga ? profile.lga + ', ' : '')}${escapeHtml(profile.state)}</span>` : ''}
-            </div>
+            <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </a>
-          <a href="profile.html" class="dropdown-item" style="color: #512175; font-weight: 700;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-            <span>Edit Profile &amp; Info</span>
-          </a>
-          <a href="activities.html" class="dropdown-item">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-            <span>Activity History</span>
-          </a>
-          ${adminItemHtml}
-          <a href="orders.html" class="dropdown-item">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            <span>My Orders</span>
-          </a>
-          <a href="saved-items.html" class="dropdown-item">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-            <span>Saved Items</span>
-          </a>
-          <a href="cart.html" class="dropdown-item">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-            <span>Shopping Cart</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <button type="button" class="dropdown-item" id="siteSignOutBtn" style="color: #ef4444; width: 100%; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            <span>Sign Out</span>
-          </button>
         `;
+      }
 
-        const signOutBtn = menu.querySelector('#siteSignOutBtn');
-        if (signOutBtn) {
-          signOutBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            await signOutUser();
-            window.location.reload();
-          });
-        }
-      });
+      modalOverlay.innerHTML = `
+        <div class="site-account-modal-dialog">
+          <div class="site-account-modal-header">
+            <h3 class="site-account-modal-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span>My Account</span>
+            </h3>
+            <button type="button" class="site-account-modal-close" aria-label="Close Account Dialog" onclick="window.closeAccountModal();">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+
+          <div class="site-account-modal-body">
+            <a href="profile.html" class="site-account-modal-profile-card" title="Click to view/edit profile">
+              <div class="site-account-modal-avatar">${escapeHtml(initialChar)}</div>
+              <div class="site-account-modal-profile-info">
+                <div class="site-account-modal-profile-name">${escapeHtml(profile.full_name)}</div>
+                <div class="site-account-modal-profile-email">${escapeHtml(profile.email)}</div>
+                <div class="site-account-modal-profile-badges">
+                  <span class="site-account-badge-role ${roleClass}">${roleText}</span>
+                  ${locationText ? `<span class="site-account-badge-loc">${escapeHtml(locationText)}</span>` : ''}
+                </div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.5" style="flex-shrink: 0;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+
+            <div class="site-account-modal-nav">
+              <a href="profile.html" class="site-account-modal-link">
+                <span class="site-account-modal-link-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </span>
+                <div class="site-account-modal-link-content">
+                  <div class="site-account-modal-link-title">Edit Profile &amp; Info</div>
+                  <div class="site-account-modal-link-sub">Manage phone number, state, LGA &amp; security</div>
+                </div>
+                <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+
+              <a href="activities.html" class="site-account-modal-link ${window.location.pathname.includes('activities.html') ? 'active-link' : ''}">
+                <span class="site-account-modal-link-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                </span>
+                <div class="site-account-modal-link-content">
+                  <div class="site-account-modal-link-title">Activity History</div>
+                  <div class="site-account-modal-link-sub">Audit trail, real-time live sync, filters &amp; sorting</div>
+                </div>
+                <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+
+              ${adminLinkHtml}
+
+              <a href="orders.html" class="site-account-modal-link">
+                <span class="site-account-modal-link-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                </span>
+                <div class="site-account-modal-link-content">
+                  <div class="site-account-modal-link-title">My Orders</div>
+                  <div class="site-account-modal-link-sub">Track delivery progress &amp; order receipts</div>
+                </div>
+                <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+
+              <a href="saved-items.html" class="site-account-modal-link">
+                <span class="site-account-modal-link-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                </span>
+                <div class="site-account-modal-link-content">
+                  <div class="site-account-modal-link-title">Saved Items</div>
+                  <div class="site-account-modal-link-sub">Wishlist &amp; products saved for later</div>
+                </div>
+                <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+
+              <a href="cart.html" class="site-account-modal-link">
+                <span class="site-account-modal-link-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                </span>
+                <div class="site-account-modal-link-content">
+                  <div class="site-account-modal-link-title">Shopping Cart</div>
+                  <div class="site-account-modal-link-sub">Review items &amp; proceed to secure checkout</div>
+                </div>
+                <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+
+              <a href="help.html" class="site-account-modal-link">
+                <span class="site-account-modal-link-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </span>
+                <div class="site-account-modal-link-content">
+                  <div class="site-account-modal-link-title">Help &amp; Customer Care</div>
+                  <div class="site-account-modal-link-sub">Delivery questions, FAQs &amp; WhatsApp support</div>
+                </div>
+                <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="site-account-modal-footer">
+            <button type="button" class="site-account-modal-signout-btn" id="modalSignOutBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              <span>Sign Out of Account</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      const signOutBtn = modalOverlay.querySelector('#modalSignOutBtn');
+      if (signOutBtn) {
+        signOutBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          await signOutUser();
+          window.location.reload();
+        });
+      }
 
       // Update mobile drawer account items if present
       const mobileAccountItems = document.querySelectorAll('#mobileAccountSubNav a[href="auth.html"], .mobile-account-auth-link');
@@ -996,7 +1123,106 @@ async function updateSiteAccountMenu() {
           span.textContent = 'Edit Profile (' + fName + ')';
         }
       });
+    } else {
+      // User is logged out
+      accountButtons.forEach(btn => {
+        const textSpan = btn.querySelector('span:not(.chevron-icon)');
+        if (textSpan) {
+          textSpan.textContent = 'Account';
+        }
+        btn.setAttribute('aria-haspopup', 'dialog');
+        btn.onclick = (e) => window.openAccountModal(e);
+      });
+
+      modalOverlay.innerHTML = `
+        <div class="site-account-modal-dialog">
+          <div class="site-account-modal-header">
+            <h3 class="site-account-modal-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span>Welcome to Ralphmart</span>
+            </h3>
+            <button type="button" class="site-account-modal-close" aria-label="Close Account Dialog" onclick="window.closeAccountModal();">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+
+          <div class="site-account-modal-body">
+            <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 12px; padding: 18px 16px; text-align: center; margin-bottom: 16px;">
+              <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: 800; color: #091e3a;">Sign in to your account</h4>
+              <p style="margin: 0 0 14px 0; font-size: 12.5px; color: #64748b; line-height: 1.4;">Access your orders, track deliveries, save favorite products, and view recent activity.</p>
+              <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <a href="auth.html" style="background: #512175; color: #ffffff; padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">Sign In</a>
+                <a href="auth.html?mode=signup" style="background: #ffffff; color: #512175; border: 1.5px solid #512175; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">Create Account</a>
+              </div>
+            </div>
+
+            <div class="site-account-modal-nav">
+              <a href="orders.html" class="site-account-modal-link">
+                <span class="site-account-modal-link-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                </span>
+                <div class="site-account-modal-link-content">
+                  <div class="site-account-modal-link-title">Track Orders</div>
+                  <div class="site-account-modal-link-sub">Check status using order tracking number</div>
+                </div>
+                <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+
+              <a href="cart.html" class="site-account-modal-link">
+                <span class="site-account-modal-link-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                </span>
+                <div class="site-account-modal-link-content">
+                  <div class="site-account-modal-link-title">Shopping Cart</div>
+                  <div class="site-account-modal-link-sub">Review items added to cart</div>
+                </div>
+                <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+
+              <a href="help.html" class="site-account-modal-link">
+                <span class="site-account-modal-link-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </span>
+                <div class="site-account-modal-link-content">
+                  <div class="site-account-modal-link-title">Help Center &amp; Support</div>
+                  <div class="site-account-modal-link-sub">Contact customer care &amp; read FAQs</div>
+                </div>
+                <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
     }
+
+    // Close on overlay backdrop click
+    modalOverlay.onclick = (e) => {
+      if (e.target === modalOverlay) {
+        window.closeAccountModal();
+      }
+    };
+
+    // Auto-close on link click
+    modalOverlay.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        window.closeAccountModal();
+      });
+    });
+
+    // Global escape key listener
+    if (!window._accountModalEscapeBound) {
+      window._accountModalEscapeBound = true;
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          window.closeAccountModal();
+        }
+      });
+    }
+
+    // Keep legacy dropdown hidden and sync if any exist
+    accountDropdowns.forEach(menu => {
+      menu.style.display = 'none';
+    });
   } catch (e) {
     console.warn('Error updating account menu:', e);
   }

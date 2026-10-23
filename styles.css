@@ -412,6 +412,7 @@ body {
 .header-actions {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap !important;
   gap: 8px;
   margin-left: auto;
   flex-shrink: 0;
@@ -2288,6 +2289,7 @@ body {
     margin-left: auto;
     display: flex;
     align-items: center;
+    flex-wrap: nowrap !important;
     gap: 4px;
     flex-shrink: 0;
     position: relative;
@@ -8625,3 +8627,325 @@ html, body {
 .search-empty-btn:hover {
   background-color: #3d1858;
 }
+
+/* ========================================================
+   MODULAR ACCOUNT MODAL (REPLACES OLD FLOATING DROPDOWN)
+   ======================================================== */
+.header-actions #accountMenu,
+.header-actions .account-dropdown-menu,
+#accountMenu {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.site-account-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.site-account-modal-overlay.open {
+  display: flex !important;
+  animation: siteAccountModalFadeIn 0.2s ease-out;
+}
+
+@keyframes siteAccountModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.site-account-modal-dialog {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 440px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: siteAccountModalZoomIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: none !important;
+}
+
+@keyframes siteAccountModalZoomIn {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.site-account-modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+}
+
+.site-account-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.site-account-modal-close {
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #64748b;
+  transition: background-color 0.15s, color 0.15s;
+  padding: 0;
+  transform: none !important;
+}
+
+.site-account-modal-close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.site-account-modal-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.site-account-modal-profile-card {
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  border: 1px solid #e9d5ff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s;
+  transform: none !important;
+}
+
+.site-account-modal-profile-card:hover {
+  border-color: #512175;
+}
+
+.site-account-modal-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #512175 0%, #6b21a8 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(81, 33, 117, 0.2);
+}
+
+.site-account-modal-profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.site-account-modal-profile-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #091e3a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.site-account-modal-profile-email {
+  font-size: 12px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 6px;
+}
+
+.site-account-modal-profile-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.site-account-badge-role {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+
+.site-account-badge-role.customer {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.site-account-badge-role.admin {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.site-account-badge-loc {
+  font-size: 11px;
+  color: #475569;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+}
+
+.site-account-modal-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.site-account-modal-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #1e293b;
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  transition: background-color 0.15s, border-color 0.15s;
+  transform: none !important;
+}
+
+.site-account-modal-link:hover {
+  background: #faf5ff;
+  border-color: #e9d5ff;
+  transform: none !important;
+}
+
+.site-account-modal-link.active-link {
+  background: #faf5ff;
+  border-color: #512175;
+}
+
+.site-account-modal-link-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #512175;
+  flex-shrink: 0;
+  border: 1px solid #e2e8f0;
+}
+
+.site-account-modal-link-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.site-account-modal-link-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #091e3a;
+  line-height: 1.25;
+}
+
+.site-account-modal-link-sub {
+  font-size: 11.5px;
+  color: #64748b;
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
+.site-account-modal-arrow {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.site-account-modal-footer {
+  padding: 14px 20px;
+  border-top: 1px solid #f1f5f9;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.site-account-modal-signout-btn {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1.5px solid #fecaca;
+  background: #fff;
+  color: #dc2626;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.15s, border-color 0.15s;
+  transform: none !important;
+}
+
+.site-account-modal-signout-btn:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
+  transform: none !important;
+}
+
+/* Mobile responsive bottom sheet */
+@media (max-width: 640px) {
+  .site-account-modal-overlay {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+
+  .site-account-modal-dialog {
+    max-width: 100% !important;
+    max-height: 85vh !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    animation: siteAccountModalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  @keyframes siteAccountModalSlideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+}
+
