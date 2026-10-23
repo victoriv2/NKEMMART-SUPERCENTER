@@ -345,20 +345,29 @@ async function logUserActivity(activityType, activityTitle, details = {}) {
   }
 }
 
-// Fetch User Activities for Profile Timeline
-async function getUserActivities(limit = 15) {
+// Fetch User Activities for Profile Timeline and Activities Page
+async function getUserActivities(limit = 100, activityType = null, sortAscending = false) {
   try {
     const client = getSupabase();
     if (!client) return [];
     const user = await getCurrentUser();
     if (!user) return [];
 
-    const { data, error } = await client
+    let query = client
       .from('user_activities')
       .select('*')
       .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(limit);
+      .order('created_at', { ascending: Boolean(sortAscending) });
+
+    if (activityType && activityType !== 'all') {
+      query = query.eq('activity_type', activityType);
+    }
+
+    if (limit && limit > 0) {
+      query = query.limit(limit);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.warn('Notice fetching activities:', error);
@@ -942,6 +951,10 @@ async function updateSiteAccountMenu() {
           <a href="profile.html" class="dropdown-item" style="color: #512175; font-weight: 700;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
             <span>Edit Profile &amp; Info</span>
+          </a>
+          <a href="activities.html" class="dropdown-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            <span>Activity History</span>
           </a>
           ${adminItemHtml}
           <a href="orders.html" class="dropdown-item">

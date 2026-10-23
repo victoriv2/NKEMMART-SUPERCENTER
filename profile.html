@@ -1477,10 +1477,21 @@
               </h2>
               <p class="profile-card-subtitle">Saved record of your orders, shopping cart, wishlist, and profile updates.</p>
             </div>
+            <a href="activities.html" style="font-size: 12.5px; font-weight: 700; color: #512175; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 6px; transition: background-color 0.15s;" onmouseover="this.style.background='#faf5ff'" onmouseout="this.style.background='transparent'">
+              <span>View All</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
           </div>
 
           <div id="activityFeedList" class="profile-activity-list">
             <div style="text-align: center; padding: 24px; color: #64748b; font-size: 13px;">Loading activity history...</div>
+          </div>
+
+          <div id="viewAllActivitiesBtnWrap" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #f1f5f9; text-align: center;">
+            <a href="activities.html" style="font-size: 13px; font-weight: 700; color: #512175; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 18px; border: 1px solid #e2e8f0; border-radius: 8px; background: #faf5ff; width: 100%; box-sizing: border-box; transition: border-color 0.15s, background-color 0.15s;" onmouseover="this.style.borderColor='#512175'" onmouseout="this.style.borderColor='#e2e8f0'">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              <span>View Full Activity History (with Filters &amp; Search) &rarr;</span>
+            </a>
           </div>
         </div>
 
@@ -1521,6 +1532,14 @@
               <span class="profile-sidebar-item-left">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                 <span>Shopping Cart</span>
+              </span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+
+            <a href="activities.html" class="profile-sidebar-item">
+              <span class="profile-sidebar-item-left">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <span>Recent Activities</span>
               </span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </a>
@@ -2233,22 +2252,27 @@
         }).join('');
       }
 
-      // Load Activities
+      // Load Activities (Max 6 on Profile, Full list on activities.html)
       async function loadActivitiesList() {
         const feed = document.getElementById('activityFeedList');
+        const viewAllWrap = document.getElementById('viewAllActivitiesBtnWrap');
         if (!feed) return;
         try {
-          const acts = typeof getUserActivities === 'function' ? await getUserActivities(15) : [];
-          if (!acts || acts.length === 0) {
+          const acts = typeof getUserActivities === 'function' ? await getUserActivities(6) : [];
+          const displayActs = (acts || []).slice(0, 6);
+          if (!displayActs || displayActs.length === 0) {
             feed.innerHTML = `
               <div style="text-align: center; padding: 24px; color: #64748b; font-size: 13px;">
                 No recent activity logged yet. Your shopping actions, cart updates, and orders will show here in real time.
               </div>
             `;
+            if (viewAllWrap) viewAllWrap.style.display = 'none';
             return;
           }
 
-          feed.innerHTML = acts.map(act => {
+          if (viewAllWrap) viewAllWrap.style.display = 'block';
+
+          feed.innerHTML = displayActs.map(act => {
             let iconSvg = '';
             if (act.activity_type.includes('cart')) {
               iconSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>';

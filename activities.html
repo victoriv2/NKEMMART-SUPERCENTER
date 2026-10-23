@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <title>Account Activity History &amp; Audit Log - RALPHMART SUPERCENTER</title>
+  <link rel="stylesheet" href="styles.css?v=21.2">
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="taxonomy.js?v=3.3"></script>
+  <style>
+    body {
+      background-color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .activities-page-container {
+      max-width: 960px;
+      margin: 24px auto 48px auto;
+      padding: 0 16px;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+    }
+
+    .activities-breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 18px;
+    }
+
+    .activities-breadcrumbs a {
+      color: #512175;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .activities-breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .activities-breadcrumbs span.sep {
+      color: #cbd5e1;
+    }
+
+    /* Hero Header Card */
+    .activities-hero-card {
+      background: linear-gradient(135deg, #512175 0%, #3d1858 100%);
+      border-radius: 14px;
+      padding: 24px 28px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(81, 33, 117, 0.15);
+      flex-wrap: wrap;
+    }
+
+    .activities-hero-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .activities-hero-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #ffffff;
+    }
+
+    .activities-hero-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin: 0 0 4px 0;
+      letter-spacing: -0.3px;
+    }
+
+    .activities-hero-sub {
+      font-size: 13.5px;
+      color: #e2e8f0;
+      margin: 0 0 8px 0;
+      line-height: 1.4;
+    }
+
+    .activities-hero-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .activities-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.3px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .activities-hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .activities-hero-btn {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.15s, border-color 0.15s;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .activities-hero-btn.btn-light {
+      background: #ffffff;
+      color: #512175;
+      border: none;
+    }
+
+    .activities-hero-btn.btn-light:hover {
+      background: #f8fafc;
+    }
+
+    .activities-hero-btn.btn-outline {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .activities-hero-btn.btn-outline:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    /* Filter & Controls Panel Card */
+    .activities-filter-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .activities-search-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .activities-search-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .activities-search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      pointer-events: none;
+    }
+
+    .activities-search-input {
+      width: 100%;
+      height: 42px;
+      padding: 0 38px 0 38px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.15s;
+    }
+
+    .activities-search-input:focus {
+      border-color: #512175;
+      box-shadow: 0 0 0 3px rgba(81, 33, 117, 0.1);
+    }
+
+    .activities-search-clear {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 4px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .activities-search-clear:hover {
+      color: #0f172a;
+    }
+
+    /* Filter Chips Row */
+    .activities-chips-scroll {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .activities-chip {
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+      transform: none !important;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .activities-chip:hover {
+      background: #faf5ff;
+      border-color: #512175;
+      color: #512175;
+    }
+
+    .activities-chip.active {
+      background: #512175;
+      border-color: #512175;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* Dropdown controls row */
+    .activities-options-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid #f1f5f9;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .activities-select-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .activities-select-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .activities-select {
+      height: 36px;
+      padding: 0 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      font-size: 13px;
+      color: #0f172a;
+      outline: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .activities-select:focus {
+      border-color: #512175;
+    }
+
+    .activities-reset-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 700;
+      background: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fca5a5;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .activities-reset-btn:hover {
+      background: #fecaca;
+    }
+
+    /* Counter bar */
+    .activities-count-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding: 0 4px;
+    }
+
+    .activities-count-text {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .activities-live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #16a34a;
+    }
+
+    .activities-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #16a34a;
+      box-shadow: 0 0 0 rgba(22, 163, 74, 0.4);
+      animation: pulseGreen 2s infinite;
+    }
+
+    @keyframes pulseGreen {
+      0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+    }
+
+    /* Activities Feed List */
+    .activities-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .activity-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      transition: border-color 0.15s, background-color 0.15s;
+      transform: none !important;
+    }
+
+    .activity-card:hover {
+      border-color: #512175;
+      background-color: #faf5ff;
+      transform: none !important;
+    }
+
+    .activity-card.just-added {
+      border-color: #512175;
+      background-color: #f3e8ff;
+    }
+
+    .activity-card-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .activity-card-icon.icon-cart {
+      background: rgba(81, 33, 117, 0.12);
+      color: #512175;
+    }
+
+    .activity-card-icon.icon-saved {
+      background: #ffe4e6;
+      color: #e11d48;
+    }
+
+    .activity-card-icon.icon-order {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .activity-card-icon.icon-profile {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .activity-card-icon.icon-security {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .activity-card-icon.icon-default {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .activity-card-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .activity-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .activity-card-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+      word-break: break-word;
+    }
+
+    .activity-card-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
+    }
+
+    .activity-card-time {
+      font-size: 12.5px;
+      color: #64748b;
+      margin: 0 0 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .activity-card-time span.exact {
+      color: #94a3b8;
+      font-size: 11.5px;
+    }
+
+    .activity-card-details {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .activity-meta-tag {
+      font-size: 11.5px;
+      color: #475569;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    /* Empty state */
+    .activities-empty-state {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 56px 20px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .activities-empty-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #faf5ff;
+      color: #512175;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px auto;
+    }
+
+    .activities-empty-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #091e3a;
+      margin: 0 0 8px 0;
+    }
+
+    .activities-empty-text {
+      font-size: 13.5px;
+      color: #64748b;
+      max-width: 440px;
+      margin: 0 auto 20px auto;
+      line-height: 1.5;
+    }
+
+    /* Responsive Mobile layout (<= 768px) */
+    @media (max-width: 768px) {
+      .activities-page-container {
+        margin: 16px auto 36px auto !important;
+        padding: 0 12px !important;
+      }
+
+      .activities-breadcrumbs {
+        font-size: 12px !important;
+        margin-bottom: 14px !important;
+      }
+
+      .activities-hero-card {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        padding: 22px 16px !important;
+        gap: 16px !important;
+      }
+
+      .activities-hero-left {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        gap: 12px !important;
+      }
+
+      .activities-hero-title {
+        font-size: 20px !important;
+      }
+
+      .activities-hero-badges {
+        justify-content: center !important;
+      }
+
+      .activities-hero-actions {
+        width: 100% !important;
+        justify-content: center !important;
+      }
+
+      .activities-hero-btn {
+        width: 100% !important;
+        max-width: 260px !important;
+        justify-content: center !important;
+      }
+
+      .activities-filter-card {
+        padding: 14px 14px !important;
+      }
+
+      .activities-options-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+      }
+
+      .activities-select-group {
+        width: 100% !important;
+        justify-content: space-between !important;
+      }
+
+      .activities-select {
+        flex: 1 !important;
+      }
+
+      .activity-card {
+        padding: 14px 14px !important;
+        gap: 12px !important;
+      }
+
+      .activity-card-icon {
+        width: 38px !important;
+        height: 38px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Unified Site Header Wrapper -->
+  <div class="site-header-wrapper">
+    <!-- Top Announcement Ribbon -->
+    <aside class="top-bar" aria-label="Announcement Bar">
+      <div class="top-bar-inner">
+        <div class="top-bar-left">
+          <span class="doorstep-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+            Doorstep Delivery
+          </span>
+          <span>We deliver all across Nigeria!</span>
+          <span class="top-bar-slogan" style="color: #c084fc !important;">"Everything Dey™"</span>
+        </div>
+        <div class="top-bar-right">
+          <a href="sell.html" class="top-bar-link">Sell on Ralphmart</a>
+          <span class="top-bar-divider">|</span>
+          <a href="tel:08155608447" class="top-bar-link">Call: 08155608447</a>
+          <span class="top-bar-divider">|</span>
+          <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="top-bar-link">WhatsApp: 07042087633</a>
+          <span class="top-bar-divider">|</span>
+          <span class="top-bar-link" style="color: #fff; font-weight: 600;">₦ NGN</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Navigation Header -->
+    <header class="main-header" role="banner">
+      <div class="header-container">
+        
+        <!-- Hamburger Menu Button -->
+        <div class="header-menu-wrapper">
+          <button class="menu-btn" id="mobileMenuBtn" aria-label="Open categories menu" title="All Categories" type="button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+
+          <!-- Desktop Categories Dropdown -->
+          <div class="desktop-category-dropdown" id="desktopCategoryDropdown">
+            <div class="category-dropdown-list">
+              <a href="category.html?cat=vehicles" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L18 11l-2.7-3.6a1 1 0 0 0-.8-.4H9.5a1 1 0 0 0-.8.4L6 11l-3.16.86a1 1 0 0 0-.84.99V16h3"></path><circle cx="6.5" cy="16.5" r="2.5"></circle><circle cx="16.5" cy="16.5" r="2.5"></circle></svg>
+                <span>Vehicles</span>
+              </a>
+              <a href="category.html?cat=appliances" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="10" x2="20" y2="10"></line></svg>
+                <span>Appliances</span>
+              </a>
+              <a href="category.html?cat=phones" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                <span>Phones &amp; Tablets</span>
+              </a>
+              <a href="category.html?cat=health-beauty" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path><path d="M19 3v4M21 5h-4"></path></svg>
+                <span>Health &amp; Beauty</span>
+              </a>
+              <a href="category.html?cat=home-office" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                <span>Home &amp; Office</span>
+              </a>
+              <a href="category.html?cat=electronics" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+                <span>Electronics</span>
+              </a>
+              <a href="category.html?cat=fashion" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.5a2 2 0 0 0 1.25 1.57L7 12v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-9l2.89-1.24a2 2 0 0 0 1.25-1.57l.58-3.5a2 2 0 0 0-1.34-2.23z"></path></svg>
+                <span>Fashion</span>
+              </a>
+              <a href="category.html?cat=supermarket" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 5-5 13-5 13S7 12 7 7a5 5 0 0 1 5-5z"></path></svg>
+                <span>Groceries &amp; Supermarket</span>
+              </a>
+              <a href="category.html?cat=computing" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                <span>Computing</span>
+              </a>
+              <a href="category.html?cat=baby" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                <span>Baby Products</span>
+              </a>
+              <a href="category.html?cat=gaming" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="6"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="11" r="1"></circle><circle cx="18" cy="13" r="1"></circle></svg>
+                <span>Gaming</span>
+              </a>
+              <a href="category.html?cat=other" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                <span>Other categories</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Brand Logo -->
+        <a href="index.html" class="brand-link" title="RALPHMART SUPERCENTER - Home">
+          <img src="logo/LOGO.png" alt="RALPHMART SUPERCENTER" class="brand-logo" />
+        </a>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+          <form class="search-form" action="category.html" method="GET" role="search" onsubmit="if(!this.q.value.trim()){this.q.focus();return false;}">
+            <span class="search-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <input type="search" name="q" class="search-input" placeholder="Search products, brands and categories..." autocomplete="off" aria-label="Search products, brands and categories" />
+            <button type="submit" class="search-btn">Search</button>
+          </form>
+        </div>
+
+        <!-- Navigation Actions -->
+        <nav class="header-actions" aria-label="Account and Cart navigation">
+          
+          <!-- Account Dropdown -->
+          <div class="action-item header-action-wrapper" style="position: relative;">
+            <button class="action-btn" id="accountMenuBtn" aria-label="My Account" aria-expanded="false" type="button">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>Account</span>
+              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="account-dropdown-menu" id="accountMenu">
+              <a href="profile.html" class="dropdown-item">Edit Profile &amp; Info</a>
+              <a href="activities.html" class="dropdown-item" style="color: #512175; font-weight: 700;">Activity History</a>
+              <a href="orders.html" class="dropdown-item">My Orders</a>
+              <a href="saved-items.html" class="dropdown-item">Saved Items</a>
+              <a href="cart.html" class="dropdown-item">Shopping Cart</a>
+              <div class="dropdown-divider"></div>
+              <button type="button" class="dropdown-item" id="siteSignOutBtn" style="color: #ef4444; width: 100%; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Help -->
+          <div class="action-item">
+            <a href="help.html" class="action-btn" title="Help Center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <span>Help</span>
+            </a>
+          </div>
+
+          <!-- Saved Items -->
+          <div class="action-item">
+            <a href="saved-items.html" class="action-btn" title="Saved Items">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+              <span>Saved</span>
+              <span class="badge" id="headerSavedBadge" style="display: none;">0</span>
+            </a>
+          </div>
+
+          <!-- Cart -->
+          <div class="action-item">
+            <a href="cart.html" class="action-btn cart-btn" title="Shopping Cart">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+              <span>Cart</span>
+              <span class="badge" id="headerCartBadge" style="display: none;">0</span>
+            </a>
+          </div>
+
+        </nav>
+      </div>
+    </header>
+  </div>
+
+  <!-- Main Container -->
+  <main class="activities-page-container" role="main">
+
+    <!-- Breadcrumbs -->
+    <div class="activities-breadcrumbs">
+      <a href="index.html">Home</a>
+      <span class="sep">&gt;</span>
+      <a href="profile.html">My Account</a>
+      <span class="sep">&gt;</span>
+      <span>Activity History</span>
+    </div>
+
+    <!-- Hero Header Card -->
+    <section class="activities-hero-card" aria-label="Activity Summary">
+      <div class="activities-hero-left">
+        <div class="activities-hero-icon">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+        </div>
+        <div>
+          <h1 class="activities-hero-title">Account Activity History</h1>
+          <p class="activities-hero-sub" id="heroUserEmail">Loading real-time audit log of your account...</p>
+          <div class="activities-hero-badges">
+            <span class="activities-pill" id="totalActivitiesPill">0 Total Logged</span>
+            <span class="activities-pill" id="liveSyncStatusPill">Live Sync Active</span>
+          </div>
+        </div>
+      </div>
+      <div class="activities-hero-actions">
+        <a href="profile.html" class="activities-hero-btn btn-light" title="Edit Profile Details">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          <span>Edit Profile</span>
+        </a>
+        <a href="orders.html" class="activities-hero-btn btn-outline" title="View Order History">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span>My Orders</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Filter & Search Controls Panel -->
+    <div class="activities-filter-card">
+      <!-- Search row -->
+      <div class="activities-search-row">
+        <div class="activities-search-wrap">
+          <svg class="activities-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="activitySearchInput" class="activities-search-input" placeholder="Search activities by title, product or keyword..." autocomplete="off">
+          <button type="button" id="activitySearchClear" class="activities-search-clear" title="Clear Search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Category Chips -->
+      <div class="activities-chips-scroll" role="tablist" aria-label="Activity Categories">
+        <button type="button" class="activities-chip active" data-type="all">All Activities</button>
+        <button type="button" class="activities-chip" data-type="cart">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>Cart Updates</span>
+        </button>
+        <button type="button" class="activities-chip" data-type="saved">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span>Saved Items</span>
+        </button>
+        <button type="button" class="activities-chip" data-type="order">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span>Orders</span>
+        </button>
+        <button type="button" class="activities-chip" data-type="profile">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          <span>Profile Changes</span>
+        </button>
+        <button type="button" class="activities-chip" data-type="security">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span>Sign In &amp; Security</span>
+        </button>
+      </div>
+
+      <!-- Dropdowns & Reset Row -->
+      <div class="activities-options-row">
+        <div class="activities-select-group">
+          <span class="activities-select-label">Time:</span>
+          <select id="timeRangeSelect" class="activities-select" aria-label="Filter by time range">
+            <option value="all">All Time</option>
+            <option value="today">Today</option>
+            <option value="week">Past 7 Days</option>
+            <option value="month">Past 30 Days</option>
+          </select>
+
+          <span class="activities-select-label" style="margin-left: 8px;">Sort:</span>
+          <select id="sortOrderSelect" class="activities-select" aria-label="Sort activity order">
+            <option value="desc">Newest First</option>
+            <option value="asc">Oldest First</option>
+          </select>
+        </div>
+
+        <button type="button" id="resetFiltersBtn" class="activities-reset-btn" title="Reset all search filters">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          <span>Reset Filters</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Count Summary & Live Pulse -->
+    <div class="activities-count-bar">
+      <div class="activities-count-text" id="activitiesCountText">Loading activities...</div>
+      <div class="activities-live-indicator">
+        <span class="activities-pulse-dot"></span>
+        <span>Real-time Live Sync</span>
+      </div>
+    </div>
+
+    <!-- Activities Feed List -->
+    <div id="activitiesFeedList" class="activities-list">
+      <div style="text-align: center; padding: 48px 20px; color: #64748b; font-size: 14px;">
+        Loading account activity log...
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Mobile Navigation Drawer & Backdrop -->
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+  <aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Navigation">
+    <div class="mobile-nav-header">
+      <button class="mobile-nav-close" id="mobileNavCloseBtn" aria-label="Close menu" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <img src="logo/LOGO.png" alt="RALPHMART SUPERCENTER" class="mobile-nav-logo">
+    </div>
+
+    <div class="mobile-nav-section">
+      <div class="mobile-section-header">
+        <span class="mobile-section-title">MY ACCOUNT</span>
+      </div>
+      <div class="mobile-sub-nav-list">
+        <a href="profile.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          <span>Edit Profile</span>
+        </a>
+        <a href="activities.html" class="mobile-sub-nav-item" style="color: #512175; font-weight: 700;">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          <span>Recent Activities</span>
+        </a>
+        <a href="orders.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span>My Orders</span>
+        </a>
+        <a href="saved-items.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span>Saved Items</span>
+        </a>
+        <a href="cart.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>Shopping Cart</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-newsletter-wrap">
+      <div class="footer-newsletter-inner">
+        <div class="footer-newsletter-text">
+          <span class="footer-newsletter-badge">Stay Updated</span>
+          <h3>BE THE FIRST TO KNOW</h3>
+          <p>Subscribe to our newsletter to receive daily flash sale discounts, price cuts, and exclusive coupon codes.</p>
+        </div>
+        <form class="footer-newsletter-form" onsubmit="event.preventDefault(); var inp = this.querySelector('input'); if (inp && inp.value) { alert('Thank you for subscribing to RALPHMART updates with: ' + inp.value); inp.value = ''; }">
+          <input type="email" class="footer-newsletter-input" placeholder="Enter your email address" required aria-label="Enter your email address">
+          <button type="submit" class="footer-newsletter-btn">
+            <span>Subscribe</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Page Logic Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Auth Guard
+      const user = await getCurrentUser();
+      if (!user) {
+        window.location.href = 'auth.html?redirect=activities.html';
+        return;
+      }
+
+      const heroEmail = document.getElementById('heroUserEmail');
+      if (heroEmail && user.email) {
+        heroEmail.textContent = 'Active log for ' + user.email;
+      }
+
+      // State
+      let allActivities = [];
+      let currentCategory = 'all';
+      let currentTimeRange = 'all';
+      let currentSort = 'desc';
+      let currentSearchQuery = '';
+
+      const feedList = document.getElementById('activitiesFeedList');
+      const countText = document.getElementById('activitiesCountText');
+      const totalPill = document.getElementById('totalActivitiesPill');
+      const searchInput = document.getElementById('activitySearchInput');
+      const clearSearchBtn = document.getElementById('activitySearchClear');
+      const chips = document.querySelectorAll('.activities-chip');
+      const timeSelect = document.getElementById('timeRangeSelect');
+      const sortSelect = document.getElementById('sortOrderSelect');
+      const resetBtn = document.getElementById('resetFiltersBtn');
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function formatRelativeTime(dateStr) {
+        if (!dateStr) return 'Just now';
+        const date = new Date(dateStr);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffSec = Math.floor(diffMs / 1000);
+        const diffMin = Math.floor(diffSec / 60);
+        const diffHr = Math.floor(diffMin / 60);
+        const diffDays = Math.floor(diffHr / 24);
+
+        if (diffSec < 45) return 'Just now';
+        if (diffMin < 60) return diffMin === 1 ? '1 minute ago' : diffMin + ' minutes ago';
+        if (diffHr < 24) return diffHr === 1 ? '1 hour ago' : diffHr + ' hours ago';
+        if (diffDays === 1) {
+          const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          return 'Yesterday at ' + time;
+        }
+        if (diffDays < 7) return diffDays + ' days ago';
+        return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      }
+
+      function formatExactTime(dateStr) {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      }
+
+      function getActivityCategory(type) {
+        if (!type) return 'default';
+        const t = type.toLowerCase();
+        if (t.includes('cart')) return 'cart';
+        if (t.includes('saved') || t.includes('wishlist')) return 'saved';
+        if (t.includes('order')) return 'order';
+        if (t.includes('profile')) return 'profile';
+        if (t.includes('password') || t.includes('security') || t.includes('login') || t.includes('signup') || t.includes('logout')) return 'security';
+        return 'default';
+      }
+
+      function getActivityIconAndBadge(category) {
+        switch (category) {
+          case 'cart':
+            return {
+              cls: 'icon-cart',
+              badgeText: 'Shopping Cart',
+              badgeStyle: 'background: #f3e8ff; color: #512175;',
+              svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>'
+            };
+          case 'saved':
+            return {
+              cls: 'icon-saved',
+              badgeText: 'Saved / Wishlist',
+              badgeStyle: 'background: #ffe4e6; color: #e11d48;',
+              svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>'
+            };
+          case 'order':
+            return {
+              cls: 'icon-order',
+              badgeText: 'Order Placed',
+              badgeStyle: 'background: #dcfce7; color: #15803d;',
+              svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>'
+            };
+          case 'profile':
+            return {
+              cls: 'icon-profile',
+              badgeText: 'Profile Update',
+              badgeStyle: 'background: #dbeafe; color: #1d4ed8;',
+              svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>'
+            };
+          case 'security':
+            return {
+              cls: 'icon-security',
+              badgeText: 'Account & Security',
+              badgeStyle: 'background: #fef3c7; color: #b45309;',
+              svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>'
+            };
+          default:
+            return {
+              cls: 'icon-default',
+              badgeText: 'Account Action',
+              badgeStyle: 'background: #f1f5f9; color: #475569;',
+              svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>'
+            };
+        }
+      }
+
+      function applyFiltersAndRender() {
+        const query = currentSearchQuery.trim().toLowerCase();
+        const now = new Date().getTime();
+
+        let filtered = allActivities.filter(act => {
+          // Category filter
+          if (currentCategory !== 'all') {
+            const cat = getActivityCategory(act.activity_type);
+            if (cat !== currentCategory) return false;
+          }
+
+          // Time Range filter
+          if (currentTimeRange !== 'all') {
+            const actTime = new Date(act.created_at).getTime();
+            if (currentTimeRange === 'today') {
+              const startOfToday = new Date().setHours(0,0,0,0);
+              if (actTime < startOfToday) return false;
+            } else if (currentTimeRange === 'week') {
+              const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
+              if (actTime < sevenDaysAgo) return false;
+            } else if (currentTimeRange === 'month') {
+              const thirtyDaysAgo = now - (30 * 24 * 60 * 60 * 1000);
+              if (actTime < thirtyDaysAgo) return false;
+            }
+          }
+
+          // Search query
+          if (query) {
+            const titleMatch = (act.activity_title || '').toLowerCase().includes(query);
+            const typeMatch = (act.activity_type || '').toLowerCase().includes(query);
+            let detailsMatch = false;
+            if (act.activity_details && typeof act.activity_details === 'object') {
+              detailsMatch = JSON.stringify(act.activity_details).toLowerCase().includes(query);
+            }
+            if (!titleMatch && !typeMatch && !detailsMatch) return false;
+          }
+
+          return true;
+        });
+
+        // Sort order
+        filtered.sort((a, b) => {
+          const timeA = new Date(a.created_at).getTime();
+          const timeB = new Date(b.created_at).getTime();
+          return currentSort === 'asc' ? timeA - timeB : timeB - timeA;
+        });
+
+        // Check if any filter is active
+        const isFilterActive = (currentCategory !== 'all' || currentTimeRange !== 'all' || currentSort !== 'desc' || query !== '');
+        if (resetBtn) resetBtn.style.display = isFilterActive ? 'inline-flex' : 'none';
+
+        // Update count text
+        if (countText) {
+          if (filtered.length === allActivities.length) {
+            countText.textContent = `Showing all ${allActivities.length} activities`;
+          } else {
+            countText.textContent = `Showing ${filtered.length} of ${allActivities.length} activities`;
+          }
+        }
+
+        // Render feed
+        if (filtered.length === 0) {
+          feedList.innerHTML = `
+            <div class="activities-empty-state">
+              <div class="activities-empty-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              </div>
+              <h3 class="activities-empty-title">${isFilterActive ? 'No Matching Activities' : 'No Activity History Yet'}</h3>
+              <p class="activities-empty-text">
+                ${isFilterActive 
+                  ? 'No activity entries matched your active filters and search terms. Try clearing search or choosing another category.' 
+                  : 'Your account activities, orders, shopping cart modifications, and wishlist updates will automatically appear here.'}
+              </p>
+              ${isFilterActive 
+                ? '<button type="button" class="activities-hero-btn btn-light" id="emptyResetBtn" style="border: 1px solid #cbd5e1; display: inline-flex;">Reset Filters</button>' 
+                : '<a href="index.html" class="activities-hero-btn btn-light" style="background: #512175; color: #fff; display: inline-flex;">Explore Store</a>'}
+            </div>
+          `;
+
+          const emptyReset = document.getElementById('emptyResetBtn');
+          if (emptyReset) {
+            emptyReset.addEventListener('click', resetAllFilters);
+          }
+          return;
+        }
+
+        feedList.innerHTML = filtered.map(act => {
+          const category = getActivityCategory(act.activity_type);
+          const { cls, badgeText, badgeStyle, svg } = getActivityIconAndBadge(category);
+          const relativeTime = formatRelativeTime(act.created_at);
+          const exactTime = formatExactTime(act.created_at);
+
+          // Details meta tags
+          let metaHtml = '';
+          if (act.activity_details && typeof act.activity_details === 'object') {
+            const d = act.activity_details;
+            if (typeof d.count !== 'undefined') {
+              metaHtml += `<span class="activity-meta-tag">${d.count} ${d.count === 1 ? 'item' : 'items'}</span>`;
+            }
+            if (d.state) {
+              metaHtml += `<span class="activity-meta-tag">${escapeHtml(d.lga ? d.lga + ', ' : '')}${escapeHtml(d.state)}</span>`;
+            }
+            if (d.order_id) {
+              metaHtml += `<span class="activity-meta-tag">Order #${escapeHtml(d.order_id)}</span>`;
+            }
+          }
+
+          return `
+            <div class="activity-card" data-id="${act.id || ''}">
+              <div class="activity-card-icon ${cls}">
+                ${svg}
+              </div>
+              <div class="activity-card-content">
+                <div class="activity-card-top">
+                  <h4 class="activity-card-title">${escapeHtml(act.activity_title)}</h4>
+                  <span class="activity-card-badge" style="${badgeStyle}">${badgeText}</span>
+                </div>
+                <div class="activity-card-time">
+                  <span>${relativeTime}</span>
+                  <span class="exact">&bull; ${exactTime}</span>
+                </div>
+                ${metaHtml ? `<div class="activity-card-details">${metaHtml}</div>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function resetAllFilters() {
+        currentCategory = 'all';
+        currentTimeRange = 'all';
+        currentSort = 'desc';
+        currentSearchQuery = '';
+
+        if (searchInput) {
+          searchInput.value = '';
+          clearSearchBtn.style.display = 'none';
+        }
+
+        chips.forEach(c => {
+          c.classList.toggle('active', c.getAttribute('data-type') === 'all');
+        });
+
+        if (timeSelect) timeSelect.value = 'all';
+        if (sortSelect) sortSelect.value = 'desc';
+
+        applyFiltersAndRender();
+      }
+
+      // Load initial activities
+      async function loadInitialData() {
+        try {
+          if (typeof getUserActivities === 'function') {
+            allActivities = await getUserActivities(100);
+          } else {
+            allActivities = [];
+          }
+
+          if (totalPill) {
+            totalPill.textContent = `${allActivities.length} Total Logged`;
+          }
+
+          applyFiltersAndRender();
+        } catch (err) {
+          console.error('Error fetching activities:', err);
+          feedList.innerHTML = `
+            <div style="text-align: center; padding: 40px; color: #ef4444; font-size: 14px;">
+              Failed to load activity history. Please check your network and try again.
+            </div>
+          `;
+        }
+      }
+
+      // Event Listeners: Category Chips
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          chips.forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          currentCategory = chip.getAttribute('data-type') || 'all';
+          applyFiltersAndRender();
+        });
+      });
+
+      // Search input
+      if (searchInput) {
+        searchInput.addEventListener('input', () => {
+          currentSearchQuery = searchInput.value;
+          clearSearchBtn.style.display = currentSearchQuery ? 'flex' : 'none';
+          applyFiltersAndRender();
+        });
+      }
+
+      if (clearSearchBtn) {
+        clearSearchBtn.addEventListener('click', () => {
+          searchInput.value = '';
+          currentSearchQuery = '';
+          clearSearchBtn.style.display = 'none';
+          applyFiltersAndRender();
+          searchInput.focus();
+        });
+      }
+
+      // Select Dropdowns
+      if (timeSelect) {
+        timeSelect.addEventListener('change', () => {
+          currentTimeRange = timeSelect.value;
+          applyFiltersAndRender();
+        });
+      }
+
+      if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+          currentSort = sortSelect.value;
+          applyFiltersAndRender();
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', resetAllFilters);
+      }
+
+      // Listen for Live Real-time Activity Events from Supabase
+      window.addEventListener('nkemmart_activity_logged', (e) => {
+        if (e.detail) {
+          // Prepend new activity
+          allActivities.unshift(e.detail);
+          if (totalPill) {
+            totalPill.textContent = `${allActivities.length} Total Logged`;
+          }
+          applyFiltersAndRender();
+
+          // Highlight the card briefly
+          const firstCard = feedList.querySelector('.activity-card');
+          if (firstCard) {
+            firstCard.classList.add('just-added');
+            setTimeout(() => {
+              firstCard.classList.remove('just-added');
+            }, 1400);
+          }
+        }
+      });
+
+      // Mobile Drawer logic
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileNavDrawer = document.getElementById('mobileNavDrawer');
+      const mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+      const mobileNavCloseBtn = document.getElementById('mobileNavCloseBtn');
+
+      function openDrawer() {
+        if (mobileNavDrawer && mobileNavBackdrop) {
+          mobileNavDrawer.classList.add('active');
+          mobileNavBackdrop.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      function closeDrawer() {
+        if (mobileNavDrawer && mobileNavBackdrop) {
+          mobileNavDrawer.classList.remove('active');
+          mobileNavBackdrop.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      }
+
+      if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+      if (mobileNavCloseBtn) mobileNavCloseBtn.addEventListener('click', closeDrawer);
+      if (mobileNavBackdrop) mobileNavBackdrop.addEventListener('click', closeDrawer);
+
+      // Account Menu & Badges
+      if (typeof syncAllBadges === 'function') syncAllBadges();
+      if (typeof updateSiteAccountMenu === 'function') updateSiteAccountMenu();
+
+      // Load activities
+      await loadInitialData();
+    });
+  </script>
+</body>
+</html>
