@@ -781,40 +781,94 @@ async function getUserNotifications() {
       const now = Date.now();
       localNotifs = [
         {
-          id: 'notif_welcome',
-          type: 'account',
-          title: 'Welcome to RALPHMART Supercenter',
-          message: 'Genuine products, real-time dispatch across all 36 states and FCT in Nigeria.',
-          link: 'profile.html',
-          is_read: false,
-          created_at: new Date(now - 1000 * 60 * 30).toISOString()
-        },
-        {
-          id: 'notif_orders',
+          id: 'notif_order_dispatch',
           type: 'order',
-          title: 'Order Status & Live Tracking Active',
-          message: 'Check your real-time delivery stepper and print tax receipts anytime.',
+          title: 'Order #ORD-9821 Dispatched',
+          message: 'Your order containing Oraimo 20000mAh Powerbank has been dispatched via Ralphmart Express. Estimated doorstep arrival: Tomorrow between 10:00 AM - 2:00 PM.',
           link: 'orders.html',
           is_read: false,
-          created_at: new Date(now - 1000 * 60 * 120).toISOString()
+          created_at: new Date(now - 1000 * 60 * 18).toISOString()
         },
         {
           id: 'notif_flash_sale',
           type: 'promo',
-          title: 'Special Promo: 20,000mAh Powerbanks',
-          message: 'Exclusive discounts on fast-charging accessories. Free doorstep delivery on select items.',
+          title: 'Flash Sale: Up to 35% Off Electronics & Computing',
+          message: 'Huge price drops on laptops, powerbanks, fast chargers and audio accessories. Offer valid while stock lasts.',
           link: 'category.html?cat=electronics',
+          is_read: false,
+          created_at: new Date(now - 1000 * 60 * 45).toISOString()
+        },
+        {
+          id: 'notif_review_reply',
+          type: 'review',
+          title: 'Store Team Replied to Your Review',
+          message: 'Ralphmart Support replied to your 5-star review on Oraimo 20,000mAh Powerbank: "Thank you for shopping with us! We are thrilled you love the rapid charging speed."',
+          link: 'reviews.html',
+          is_read: false,
+          created_at: new Date(now - 1000 * 60 * 90).toISOString()
+        },
+        {
+          id: 'notif_voucher',
+          type: 'promo',
+          title: '₦2,500 Discount Voucher Unlocked',
+          message: 'Use coupon code RALPH2500 at checkout on orders of ₦20,000 or more. Valid across all store categories.',
+          link: 'checkout.html',
+          is_read: false,
+          created_at: new Date(now - 1000 * 60 * 180).toISOString()
+        },
+        {
+          id: 'notif_order_payment',
+          type: 'order',
+          title: 'Payment Confirmed for Order #ORD-9821',
+          message: 'Your payment of ₦28,500 was successfully processed. Printable VAT invoice and dispatch tracking are ready.',
+          link: 'orders.html',
+          is_read: true,
+          created_at: new Date(now - 1000 * 60 * 60 * 6).toISOString()
+        },
+        {
+          id: 'notif_welcome',
+          type: 'account',
+          title: 'Welcome to RALPHMART Supercenter',
+          message: 'Genuine products, wholesale pricing, and verified nationwide doorstep delivery across all 36 states and FCT in Nigeria.',
+          link: 'profile.html',
           is_read: true,
           created_at: new Date(now - 1000 * 60 * 60 * 24).toISOString()
         },
         {
-          id: 'notif_review',
+          id: 'notif_order_delivered',
+          type: 'order',
+          title: 'Order #ORD-8410 Marked Delivered',
+          message: 'Your delivery to Ikeja, Lagos State has been marked delivered. Please verify the items and leave a verified review.',
+          link: 'orders.html',
+          is_read: true,
+          created_at: new Date(now - 1000 * 60 * 60 * 36).toISOString()
+        },
+        {
+          id: 'notif_review_request',
           type: 'review',
-          title: 'Verified Customer Reviews',
-          message: 'Rate your purchases and see community ratings on RALPHMART items.',
+          title: 'Share Your Product Experience',
+          message: 'How is your experience with the Samsung Galaxy A15? Rate your purchase and help other shoppers in Nigeria.',
           link: 'reviews.html',
           is_read: true,
           created_at: new Date(now - 1000 * 60 * 60 * 48).toISOString()
+        },
+        {
+          id: 'notif_price_drop',
+          type: 'promo',
+          title: 'Wishlist Price Drop Alert',
+          message: 'Good news! An item in your Saved Items dropped in price by ₦5,000. Grab it before inventory runs out.',
+          link: 'saved-items.html',
+          is_read: true,
+          created_at: new Date(now - 1000 * 60 * 60 * 72).toISOString()
+        },
+        {
+          id: 'notif_sec_profile',
+          type: 'account',
+          title: 'Profile Information Updated',
+          message: 'Your shipping address and contact telephone number were successfully updated in your profile.',
+          link: 'profile.html',
+          is_read: true,
+          created_at: new Date(now - 1000 * 60 * 60 * 96).toISOString()
         }
       ];
       localStorage.setItem('nkemmart_user_notifications', JSON.stringify(localNotifs));

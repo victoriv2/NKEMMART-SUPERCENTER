@@ -883,6 +883,277 @@
         to { transform: translateY(0); }
       }
     }
+
+    /* Checkbox & Batch Selection Bar */
+    .notif-card {
+      cursor: pointer;
+    }
+
+    .notif-card-check-wrap {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding-top: 4px;
+      margin-right: -4px;
+    }
+
+    .notif-feed-list.batch-mode .notif-card-check-wrap {
+      display: flex;
+    }
+
+    .notif-card.selected {
+      border-color: #512175 !important;
+      background: #faf5ff !important;
+    }
+
+    .notif-reset-btn.active {
+      background: #512175 !important;
+      color: #ffffff !important;
+      border-color: #512175 !important;
+    }
+
+    .notif-card-checkbox {
+      width: 18px;
+      height: 18px;
+      accent-color: #512175;
+      cursor: pointer;
+    }
+
+    @media (max-width: 640px) {
+      .notif-detail-overlay {
+        padding: 0 !important;
+        align-items: flex-end !important;
+      }
+
+      .notif-detail-dialog {
+        max-width: 100% !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        animation: filterModalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+    }
+
+    .notif-batch-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 40px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .notif-batch-bar.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .notif-batch-count {
+      font-size: 13px;
+      font-weight: 700;
+      color: #e2e8f0;
+      padding-right: 6px;
+      border-right: 1px solid #334155;
+    }
+
+    .notif-batch-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.15s;
+      transform: none !important;
+    }
+
+    .notif-batch-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .notif-batch-btn.btn-danger:hover {
+      background: #ef4444;
+      border-color: #ef4444;
+    }
+
+    /* Notification Details Modal */
+    .notif-detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(2px);
+    }
+
+    .notif-detail-overlay.open {
+      display: flex;
+    }
+
+    .notif-detail-dialog {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 540px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      animation: notifModalFade 0.2s ease;
+    }
+
+    @keyframes notifModalFade {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .notif-detail-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .notif-detail-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .notif-detail-body {
+      padding: 22px;
+      overflow-y: auto;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #334155;
+    }
+
+    .notif-detail-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+      line-height: 1.35;
+    }
+
+    .notif-detail-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+      color: #64748b;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+
+    .notif-detail-footer {
+      padding: 16px 22px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .notif-detail-footer-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Preferences Modal */
+    .notif-pref-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid #f1f5f9;
+      gap: 16px;
+    }
+
+    .notif-pref-row:last-child {
+      border-bottom: none;
+    }
+
+    .notif-pref-info-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    .notif-pref-info-sub {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.3;
+    }
+
+    .notif-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .notif-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .notif-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .25s;
+      border-radius: 24px;
+    }
+
+    .notif-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .25s;
+      border-radius: 50%;
+    }
+
+    .notif-switch input:checked + .notif-slider {
+      background-color: #512175;
+    }
+
+    .notif-switch input:checked + .notif-slider:before {
+      transform: translateX(20px);
+    }
   </style>
 </head>
 <body>
@@ -964,54 +1235,78 @@
               </a>
               <a href="category.html?cat=supermarket" class="category-dropdown-item">
                 <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 5-5 13-5 13S7 12 7 7a5 5 0 0 1 5-5z"></path></svg>
-                <span>Supermarket</span>
+                <span>Groceries &amp; Supermarket</span>
+              </a>
+              <a href="category.html?cat=computing" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                <span>Computing</span>
+              </a>
+              <a href="category.html?cat=baby" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                <span>Baby Products</span>
+              </a>
+              <a href="category.html?cat=gaming" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="6"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="11" r="1"></circle><circle cx="18" cy="13" r="1"></circle></svg>
+                <span>Gaming</span>
+              </a>
+              <a href="category.html?cat=other" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                <span>Other categories</span>
               </a>
             </div>
           </div>
         </div>
 
         <!-- Brand Logo -->
-        <a href="index.html" class="logo-area" aria-label="RALPHMART Home">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="logo-icon">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <path d="M16 10a4 4 0 0 1-8 0"></path>
-          </svg>
-          <div class="logo-text-group">
-            <span class="logo-brand">RALPHMART</span>
-            <span class="logo-sub">SUPERCENTER</span>
-          </div>
+        <a href="index.html" class="brand-link" title="RALPHMART SUPERCENTER - Home">
+          <img src="logo/LOGO.png" alt="RALPHMART SUPERCENTER" class="brand-logo" />
         </a>
 
         <!-- Header Predictive Search -->
         <div class="search-container">
           <form class="search-form" id="mainSearchForm" action="category.html" method="GET" role="search">
-            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
+            <span class="search-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
             <input type="search" name="q" class="search-input" id="mainSearchInput" placeholder="Search products, brands and categories..." autocomplete="off">
-            <button type="submit" class="search-btn">Search</button>
+            <button type="submit" class="search-button">Search</button>
           </form>
         </div>
 
         <!-- Header Actions -->
         <nav class="header-actions" aria-label="User navigation">
-          <div class="action-item location-action-item">
-            <button class="action-btn location-btn" id="headerLocationBtn" type="button" title="Select Delivery Location">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
+          <!-- Account Action (Opens Modular Account Modal) -->
+          <div class="action-item">
+            <button class="action-btn" id="accountMenuBtn" aria-haspopup="dialog" aria-expanded="false" type="button" onclick="if(window.openAccountModal) window.openAccountModal(event);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
               </svg>
-              <div class="location-btn-text">
-                <span class="location-btn-sub">Deliver to</span>
-                <span class="location-btn-state" id="headerLocationText">Select State</span>
-              </div>
+              <span>Account</span>
+              <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
             </button>
+
+            <div class="dropdown-menu" id="accountMenu">
+              <div class="dropdown-header">
+                <a href="auth.html" class="sign-in-btn">SIGN IN</a>
+              </div>
+              <a href="profile.html" class="dropdown-item">My Account / Profile</a>
+              <a href="orders.html" class="dropdown-item">Orders</a>
+              <a href="reviews.html" class="dropdown-item">My Reviews &amp; Feedback</a>
+              <a href="notifications.html" class="dropdown-item">Notification Center</a>
+              <a href="saved-items.html" class="dropdown-item">Saved Items</a>
+              <a href="cart.html" class="dropdown-item">Shopping Cart</a>
+            </div>
           </div>
 
+          <!-- Notification Action (Active on this page) -->
           <div class="action-item header-notif-wrap" id="headerNotifWrap">
-            <a href="notifications.html" class="action-btn" id="headerNotifBtn" title="Notification Center">
+            <a href="notifications.html" class="action-btn" id="headerNotifBtn" title="Notification Center" style="color: #512175; font-weight: 700;">
               <div class="notif-icon-wrapper" style="position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                   <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -1023,16 +1318,33 @@
             </a>
           </div>
 
+          <!-- Help Dropdown -->
           <div class="action-item">
-            <button class="action-btn" id="accountMenuBtn" type="button" aria-haspopup="dialog" aria-expanded="false" title="My Account">
+            <button class="action-btn" aria-haspopup="true" aria-expanded="false" type="button">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
               </svg>
-              <span class="action-label">Account</span>
+              <span>Help</span>
+              <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
             </button>
+            <div class="dropdown-menu">
+              <a href="help.html#faqs" class="dropdown-item">Help Center &amp; FAQs</a>
+              <a href="orders.html" class="dropdown-item">Place &amp; Track Order</a>
+              <a href="help.html#cancellations" class="dropdown-item">Order Cancellation</a>
+              <a href="help.html#returns" class="dropdown-item">Returns &amp; Refunds</a>
+              <div class="dropdown-divider"></div>
+              <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="dropdown-item" style="color: var(--primary-green); font-weight: 600;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <span>Live Chat Support</span>
+              </a>
+            </div>
           </div>
 
+          <!-- Saved Items -->
           <div class="action-item">
             <a href="saved-items.html" class="action-btn" title="Saved Items">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -1043,15 +1355,18 @@
             </a>
           </div>
 
+          <!-- Cart Action -->
           <div class="action-item">
             <a href="cart.html" class="action-btn" title="Shopping Cart">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="9" cy="21" r="1"></circle>
-                <circle cx="20" cy="21" r="1"></circle>
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-              </svg>
+              <div class="cart-icon-wrapper">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="cart-badge" id="headerCartBadge" style="display: none;">0</span>
+              </div>
               <span class="action-label">Cart</span>
-              <span class="badge" id="headerCartBadge" style="display: none;">0</span>
             </a>
           </div>
         </nav>
@@ -1095,6 +1410,10 @@
         <button type="button" class="notif-hero-btn btn-light" id="btnMarkAllReadHero" title="Mark all alerts as read">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
           <span>Mark All as Read</span>
+        </button>
+        <button type="button" class="notif-hero-btn btn-outline" id="btnNotifSettings" title="Notification Preferences">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Preferences</span>
         </button>
         <button type="button" class="notif-hero-btn btn-outline" id="btnClearAllHero" title="Clear all alerts">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
@@ -1163,10 +1482,16 @@
           </button>
         </div>
 
-        <button type="button" id="btnResetNotifFilters" class="notif-reset-btn" title="Reset all search filters">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-          <span>Reset Filters</span>
-        </button>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" id="btnToggleBatchMode" class="notif-reset-btn" title="Select multiple notifications to mark as read or delete">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+            <span id="btnToggleBatchModeText">Select</span>
+          </button>
+          <button type="button" id="btnResetNotifFilters" class="notif-reset-btn" title="Reset all search filters">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            <span>Reset</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1270,6 +1595,218 @@
     </div>
   </div>
 
+  <!-- 3. Notification Details Dialog Modal -->
+  <div class="notif-detail-overlay" id="notifDetailOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="notif-detail-dialog">
+      <div class="notif-detail-header">
+        <div class="notif-detail-header-left">
+          <span class="notif-type-tag" id="modalNotifTypeTag">Order</span>
+          <span class="notif-pill unread-pill" id="modalNotifUnreadPill" style="display: none;">Unread</span>
+        </div>
+        <button type="button" class="filter-picker-modal-close" id="notifDetailClose" aria-label="Close notification details">&times;</button>
+      </div>
+      <div class="notif-detail-body">
+        <h2 class="notif-detail-title" id="modalNotifTitle">Notification Title</h2>
+        <div class="notif-detail-meta">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          <span id="modalNotifTime">Just now</span>
+        </div>
+        <div id="modalNotifMessage" style="font-size: 14.5px; color: #1e293b; line-height: 1.6;">Message text</div>
+      </div>
+      <div class="notif-detail-footer">
+        <div class="notif-detail-footer-actions">
+          <button type="button" class="notif-btn-secondary" id="modalBtnToggleRead">Mark as Read</button>
+          <button type="button" class="notif-btn-delete" id="modalBtnDelete">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span>Delete</span>
+          </button>
+        </div>
+        <a href="index.html" class="notif-hero-btn btn-light" id="modalBtnCta" style="background: #512175; color: #ffffff; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700;">
+          <span id="modalBtnCtaText">View Details</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Notification Preferences Settings Modal -->
+  <div class="notif-detail-overlay" id="notifSettingsOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="notif-detail-dialog" style="max-width: 480px;">
+      <div class="notif-detail-header">
+        <div class="notif-detail-header-left">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span style="font-weight: 800; font-size: 15px; color: #0f172a;">Notification Preferences</span>
+        </div>
+        <button type="button" class="filter-picker-modal-close" id="notifSettingsClose" aria-label="Close preferences">&times;</button>
+      </div>
+      <div class="notif-detail-body">
+        <p style="font-size: 13px; color: #64748b; margin-top: 0; margin-bottom: 16px;">Customize what alerts you receive across your active sessions.</p>
+
+        <div class="notif-pref-row">
+          <div>
+            <div class="notif-pref-info-title">Orders &amp; Dispatch Tracking</div>
+            <div class="notif-pref-info-sub">Real-time status updates on packages and deliveries.</div>
+          </div>
+          <label class="notif-switch">
+            <input type="checkbox" id="prefOrder" checked>
+            <span class="notif-slider"></span>
+          </label>
+        </div>
+
+        <div class="notif-pref-row">
+          <div>
+            <div class="notif-pref-info-title">Deals, Coupons &amp; Flash Sales</div>
+            <div class="notif-pref-info-sub">Instant alerts on discounts, price drops, and voucher drops.</div>
+          </div>
+          <label class="notif-switch">
+            <input type="checkbox" id="prefPromo" checked>
+            <span class="notif-slider"></span>
+          </label>
+        </div>
+
+        <div class="notif-pref-row">
+          <div>
+            <div class="notif-pref-info-title">Customer Reviews &amp; Replies</div>
+            <div class="notif-pref-info-sub">Get notified when the store team replies to your ratings.</div>
+          </div>
+          <label class="notif-switch">
+            <input type="checkbox" id="prefReview" checked>
+            <span class="notif-slider"></span>
+          </label>
+        </div>
+
+        <div class="notif-pref-row">
+          <div>
+            <div class="notif-pref-info-title">Security &amp; Account Notices</div>
+            <div class="notif-pref-info-sub">Important profile updates and sign-in verification alerts.</div>
+          </div>
+          <label class="notif-switch">
+            <input type="checkbox" id="prefAccount" checked disabled>
+            <span class="notif-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="notif-detail-footer">
+        <button type="button" class="notif-btn-secondary" id="notifSettingsCancel">Cancel</button>
+        <button type="button" class="notif-hero-btn btn-light" id="notifSettingsSave" style="background: #512175; color: #ffffff; padding: 8px 18px;">Save Preferences</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Floating Batch Actions Bar -->
+  <div class="notif-batch-bar" id="notifBatchBar">
+    <div class="notif-batch-count" id="notifBatchCountText">0 selected</div>
+    <button type="button" class="notif-batch-btn" id="batchBtnMarkRead">Mark as Read</button>
+    <button type="button" class="notif-batch-btn btn-danger" id="batchBtnDelete">Delete</button>
+    <button type="button" class="notif-batch-btn" id="batchBtnCancel" style="background: transparent; border: none; opacity: 0.85;">Cancel</button>
+  </div>
+
+  <!-- Off-Canvas Mobile Navigation Drawer -->
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+  <aside class="mobile-nav-drawer" id="mobileNavDrawer" role="dialog" aria-modal="true" aria-label="Main Navigation Menu">
+    <div class="mobile-nav-header">
+      <button class="mobile-nav-close" id="mobileNavCloseBtn" aria-label="Close menu" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <img src="logo/LOGO.png" alt="RALPHMART SUPERCENTER" class="mobile-nav-logo">
+    </div>
+
+    <!-- Need Help Section -->
+    <div class="mobile-nav-section">
+      <a href="help.html" class="mobile-nav-link-row">
+        <span>NEED HELP?</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </a>
+    </div>
+
+    <!-- My Account Section -->
+    <div class="mobile-nav-section" id="mobileAccountSection">
+      <button type="button" class="mobile-nav-link-row mobile-nav-accordion-toggle" id="mobileAccountToggle" aria-expanded="true" aria-controls="mobileAccountSubNav">
+        <span>MY RALPHMART ACCOUNT</span>
+        <svg class="mobile-nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="mobile-sub-nav-list" id="mobileAccountSubNav">
+        <a href="profile.html" class="mobile-sub-nav-item" style="font-weight: 700; color: #512175;">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>My Profile &amp; Account</span>
+        </a>
+        <a href="orders.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          <span>Orders</span>
+        </a>
+        <a href="reviews.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span>Reviews &amp; Feedback</span>
+        </a>
+        <a href="notifications.html" class="mobile-sub-nav-item" style="color: #512175; font-weight: 700;">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <span>Notification Center</span>
+        </a>
+        <a href="saved-items.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span>Saved Items</span>
+        </a>
+        <a href="cart.html" class="mobile-sub-nav-item">
+          <svg class="mobile-sub-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>Shopping Cart</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Our Categories Section -->
+    <div class="mobile-nav-section">
+      <div class="mobile-section-header">
+        <span class="mobile-section-title">OUR CATEGORIES</span>
+      </div>
+      <div class="mobile-categories-list">
+        <a href="category.html?cat=vehicles" class="mobile-category-item"><span>Vehicles</span></a>
+        <a href="category.html?cat=appliances" class="mobile-category-item"><span>Appliances</span></a>
+        <a href="category.html?cat=phones" class="mobile-category-item"><span>Phones &amp; Tablets</span></a>
+        <a href="category.html?cat=health-beauty" class="mobile-category-item"><span>Health &amp; Beauty</span></a>
+        <a href="category.html?cat=home-office" class="mobile-category-item"><span>Home &amp; Office</span></a>
+        <a href="category.html?cat=electronics" class="mobile-category-item"><span>Electronics</span></a>
+        <a href="category.html?cat=fashion" class="mobile-category-item"><span>Fashion</span></a>
+        <a href="category.html?cat=supermarket" class="mobile-category-item"><span>Groceries &amp; Supermarket</span></a>
+        <a href="category.html?cat=computing" class="mobile-category-item"><span>Computing</span></a>
+        <a href="category.html?cat=baby" class="mobile-category-item"><span>Baby Products</span></a>
+        <a href="category.html?cat=gaming" class="mobile-category-item"><span>Gaming</span></a>
+        <a href="category.html?cat=other" class="mobile-category-item"><span>Other categories</span></a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Bottom Floating Navigation Bar -->
+  <nav class="mobile-floating-bar" aria-label="Mobile Navigation">
+    <div class="mobile-bar-container">
+      <a href="index.html" class="mobile-bar-item" aria-label="Home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <span>Home</span>
+      </a>
+      <button type="button" class="mobile-bar-item" id="mobileBarCategoriesBtn" aria-label="Categories">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+        <span>Categories</span>
+      </button>
+      <a href="notifications.html" class="mobile-bar-item active" aria-label="Notifications" style="color: #512175; font-weight: 700;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+        <span>Alerts</span>
+      </a>
+      <a href="profile.html" class="mobile-bar-item" aria-label="Account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>Account</span>
+      </a>
+      <a href="cart.html" class="mobile-bar-item" aria-label="Cart">
+        <span style="position: relative; display: inline-flex; align-items: center; justify-content: center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
+          <span class="cart-badge" id="mobileBarCartBadge" style="display: none;">0</span>
+        </span>
+        <span>Cart</span>
+      </a>
+    </div>
+  </nav>
+
   <!-- SITE FOOTER -->
   <footer class="site-footer">
     <div class="footer-newsletter-wrap">
@@ -1339,6 +1876,9 @@
       var activeStatus = 'all';
       var activeSort = 'newest';
       var activeSearch = '';
+      var isBatchMode = false;
+      var selectedNotifIds = new Set();
+      var activeDetailNotif = null;
 
       var feedContainer = document.getElementById('notificationsFeedList');
       var searchInput = document.getElementById('notifSearchInput');
@@ -1360,6 +1900,39 @@
       var btnMarkAllHero = document.getElementById('btnMarkAllReadHero');
       var btnClearAllHero = document.getElementById('btnClearAllHero');
       var btnResetFilters = document.getElementById('btnResetNotifFilters');
+
+      // Batch selection elements
+      var btnToggleBatchMode = document.getElementById('btnToggleBatchMode');
+      var btnToggleBatchModeText = document.getElementById('btnToggleBatchModeText');
+      var notifBatchBar = document.getElementById('notifBatchBar');
+      var notifBatchCountText = document.getElementById('notifBatchCountText');
+      var batchBtnMarkRead = document.getElementById('batchBtnMarkRead');
+      var batchBtnDelete = document.getElementById('batchBtnDelete');
+      var batchBtnCancel = document.getElementById('batchBtnCancel');
+
+      // Notification detail dialog elements
+      var notifDetailOverlay = document.getElementById('notifDetailOverlay');
+      var notifDetailClose = document.getElementById('notifDetailClose');
+      var modalNotifTypeTag = document.getElementById('modalNotifTypeTag');
+      var modalNotifUnreadPill = document.getElementById('modalNotifUnreadPill');
+      var modalNotifTitle = document.getElementById('modalNotifTitle');
+      var modalNotifTime = document.getElementById('modalNotifTime');
+      var modalNotifMessage = document.getElementById('modalNotifMessage');
+      var modalBtnToggleRead = document.getElementById('modalBtnToggleRead');
+      var modalBtnDelete = document.getElementById('modalBtnDelete');
+      var modalBtnCta = document.getElementById('modalBtnCta');
+      var modalBtnCtaText = document.getElementById('modalBtnCtaText');
+
+      // Notification preferences elements
+      var btnNotifSettings = document.getElementById('btnNotifSettings');
+      var notifSettingsOverlay = document.getElementById('notifSettingsOverlay');
+      var notifSettingsClose = document.getElementById('notifSettingsClose');
+      var notifSettingsCancel = document.getElementById('notifSettingsCancel');
+      var notifSettingsSave = document.getElementById('notifSettingsSave');
+      var prefOrder = document.getElementById('prefOrder');
+      var prefPromo = document.getElementById('prefPromo');
+      var prefReview = document.getElementById('prefReview');
+      var prefAccount = document.getElementById('prefAccount');
 
       // 1. Fetch Notifications
       async function loadNotifications() {
@@ -1455,9 +2028,16 @@
           return;
         }
 
+        if (isBatchMode) {
+          feedContainer.classList.add('batch-mode');
+        } else {
+          feedContainer.classList.remove('batch-mode');
+        }
+
         feedContainer.innerHTML = items.map(function(n) {
           var type = (n.type || 'account').toLowerCase();
           var isRead = !!n.is_read;
+          var isSelected = selectedNotifIds.has(n.id);
           var timeStr = formatRelativeTime(n.created_at);
 
           var iconHtml = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>';
@@ -1479,7 +2059,10 @@
           }
 
           return `
-            <div class="notif-card ${isRead ? 'read' : 'unread'}" id="card-${n.id}">
+            <div class="notif-card ${isRead ? 'read' : 'unread'} ${isSelected ? 'selected' : ''}" id="card-${n.id}" data-id="${n.id}">
+              <div class="notif-card-check-wrap">
+                <input type="checkbox" class="notif-card-checkbox" data-id="${n.id}" ${isSelected ? 'checked' : ''} aria-label="Select alert">
+              </div>
               <div class="notif-card-icon-wrap ${type}">
                 ${iconHtml}
               </div>
@@ -1496,14 +2079,14 @@
                 </div>
                 <div class="notif-card-msg">${escapeHtml(n.message)}</div>
                 <div class="notif-card-actions">
-                  <a href="${escapeHtml(n.link || 'index.html')}" class="notif-action-link" onclick="window.handleNotifClick('${n.id}')">
+                  <a href="${escapeHtml(n.link || 'index.html')}" class="notif-action-link" onclick="window.handleNotifClick('${n.id}', event)">
                     <span>${ctaText}</span>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
                   </a>
-                  <button type="button" class="notif-btn-secondary" onclick="window.toggleNotifRead('${n.id}')">
+                  <button type="button" class="notif-btn-secondary" onclick="window.toggleNotifRead('${n.id}', event)">
                     ${isRead ? 'Mark as unread' : 'Mark as read'}
                   </button>
-                  <button type="button" class="notif-btn-delete" onclick="window.handleDeleteNotif('${n.id}')" title="Delete notification">
+                  <button type="button" class="notif-btn-delete" onclick="window.handleDeleteNotif('${n.id}', event)" title="Delete notification">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                     <span>Delete</span>
                   </button>
@@ -1512,6 +2095,62 @@
             </div>
           `;
         }).join('');
+
+        // Attach Card Click Handlers
+        feedContainer.querySelectorAll('.notif-card').forEach(function(cardEl) {
+          var id = cardEl.getAttribute('data-id');
+          cardEl.addEventListener('click', function(e) {
+            // Ignore clicks directly on buttons, links, or inputs
+            if (e.target.closest('a') || e.target.closest('button')) {
+              return;
+            }
+
+            if (isBatchMode) {
+              toggleSelectCard(id);
+            } else {
+              window.openNotifDetail(id);
+            }
+          });
+        });
+
+        // Attach checkbox click handlers
+        feedContainer.querySelectorAll('.notif-card-checkbox').forEach(function(chk) {
+          chk.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var id = chk.getAttribute('data-id');
+            toggleSelectCard(id);
+          });
+        });
+      }
+
+      function toggleSelectCard(id) {
+        if (selectedNotifIds.has(id)) {
+          selectedNotifIds.delete(id);
+        } else {
+          selectedNotifIds.add(id);
+        }
+        updateBatchBarUI();
+      }
+
+      function updateBatchBarUI() {
+        var count = selectedNotifIds.size;
+        if (notifBatchCountText) {
+          notifBatchCountText.textContent = count + ' selected';
+        }
+        if (notifBatchBar) {
+          if (count > 0 && isBatchMode) {
+            notifBatchBar.classList.add('active');
+          } else {
+            notifBatchBar.classList.remove('active');
+          }
+        }
+        feedContainer.querySelectorAll('.notif-card').forEach(function(cardEl) {
+          var id = cardEl.getAttribute('data-id');
+          var isSel = selectedNotifIds.has(id);
+          cardEl.classList.toggle('selected', isSel);
+          var chk = cardEl.querySelector('.notif-card-checkbox');
+          if (chk) chk.checked = isSel;
+        });
       }
 
       function formatRelativeTime(iso) {
@@ -1539,23 +2178,69 @@
         return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       }
 
-      // 4. Global Action Handlers
-      window.handleNotifClick = async function(id) {
-        if (typeof markNotificationAsRead === 'function') {
-          await markNotificationAsRead(id);
-        }
-      };
+      // 4. Batch Mode Toolbar Handlers
+      if (btnToggleBatchMode) {
+        btnToggleBatchMode.addEventListener('click', function() {
+          isBatchMode = !isBatchMode;
+          btnToggleBatchMode.classList.toggle('active', isBatchMode);
+          if (btnToggleBatchModeText) {
+            btnToggleBatchModeText.textContent = isBatchMode ? 'Done' : 'Select';
+          }
+          if (!isBatchMode) {
+            selectedNotifIds.clear();
+          }
+          applyFiltersAndRender();
+          updateBatchBarUI();
+        });
+      }
 
-      window.toggleNotifRead = async function(id) {
-        var target = allNotifications.find(function(n) { return n.id === id; });
-        if (!target) return;
-        target.is_read = !target.is_read;
-        localStorage.setItem('nkemmart_user_notifications', JSON.stringify(allNotifications));
-        if (typeof updateNotificationBadges === 'function') {
-          updateNotificationBadges();
-        }
-        applyFiltersAndRender();
+      if (batchBtnCancel) {
+        batchBtnCancel.addEventListener('click', function() {
+          selectedNotifIds.clear();
+          updateBatchBarUI();
+        });
+      }
 
+      if (batchBtnMarkRead) {
+        batchBtnMarkRead.addEventListener('click', async function() {
+          if (selectedNotifIds.size === 0) return;
+          allNotifications.forEach(function(n) {
+            if (selectedNotifIds.has(n.id)) {
+              n.is_read = true;
+            }
+          });
+          localStorage.setItem('nkemmart_user_notifications', JSON.stringify(allNotifications));
+          if (typeof updateNotificationBadges === 'function') {
+            updateNotificationBadges();
+          }
+          syncNotificationsToCloud();
+          selectedNotifIds.clear();
+          updateBatchBarUI();
+          applyFiltersAndRender();
+        });
+      }
+
+      if (batchBtnDelete) {
+        batchBtnDelete.addEventListener('click', async function() {
+          var count = selectedNotifIds.size;
+          if (count === 0) return;
+          if (confirm('Delete ' + count + ' selected alert' + (count > 1 ? 's' : '') + '?')) {
+            allNotifications = allNotifications.filter(function(n) {
+              return !selectedNotifIds.has(n.id);
+            });
+            localStorage.setItem('nkemmart_user_notifications', JSON.stringify(allNotifications));
+            if (typeof updateNotificationBadges === 'function') {
+              updateNotificationBadges();
+            }
+            syncNotificationsToCloud();
+            selectedNotifIds.clear();
+            updateBatchBarUI();
+            applyFiltersAndRender();
+          }
+        });
+      }
+
+      async function syncNotificationsToCloud() {
         var client = typeof getSupabase === 'function' ? getSupabase() : null;
         if (client && typeof getCurrentUser === 'function') {
           var user = await getCurrentUser();
@@ -1565,9 +2250,121 @@
             } catch (err) {}
           }
         }
+      }
+
+      // 5. Open Notification Detail Dialog
+      window.openNotifDetail = async function(id) {
+        var n = allNotifications.find(function(item) { return item.id === id; });
+        if (!n) return;
+        activeDetailNotif = n;
+
+        // Auto mark as read on open
+        if (!n.is_read) {
+          n.is_read = true;
+          localStorage.setItem('nkemmart_user_notifications', JSON.stringify(allNotifications));
+          if (typeof updateNotificationBadges === 'function') updateNotificationBadges();
+          syncNotificationsToCloud();
+          applyFiltersAndRender();
+        }
+
+        var type = (n.type || 'account').toLowerCase();
+        var typeLabels = { order: 'Order', promo: 'Discount', review: 'Review', account: 'Account' };
+        var ctaTexts = { order: 'Track Order', promo: 'Explore Deals', review: 'View Feedback', account: 'View Details' };
+
+        if (modalNotifTypeTag) {
+          modalNotifTypeTag.textContent = typeLabels[type] || 'Account';
+          modalNotifTypeTag.className = 'notif-type-tag ' + type;
+        }
+        if (modalNotifUnreadPill) {
+          modalNotifUnreadPill.style.display = 'none';
+        }
+        if (modalNotifTitle) modalNotifTitle.textContent = n.title || '';
+        if (modalNotifTime) modalNotifTime.textContent = formatRelativeTime(n.created_at);
+        if (modalNotifMessage) modalNotifMessage.textContent = n.message || '';
+
+        if (modalBtnToggleRead) {
+          modalBtnToggleRead.textContent = n.is_read ? 'Mark as unread' : 'Mark as read';
+        }
+        if (modalBtnCta) {
+          modalBtnCta.href = n.link || 'index.html';
+        }
+        if (modalBtnCtaText) {
+          modalBtnCtaText.textContent = ctaTexts[type] || 'View Details';
+        }
+
+        if (notifDetailOverlay) {
+          notifDetailOverlay.classList.add('open');
+          notifDetailOverlay.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        }
       };
 
-      window.handleDeleteNotif = async function(id) {
+      function closeNotifDetail() {
+        if (notifDetailOverlay) {
+          notifDetailOverlay.classList.remove('open');
+          notifDetailOverlay.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+        activeDetailNotif = null;
+      }
+
+      if (notifDetailClose) notifDetailClose.addEventListener('click', closeNotifDetail);
+      if (notifDetailOverlay) {
+        notifDetailOverlay.addEventListener('click', function(e) {
+          if (e.target === notifDetailOverlay) closeNotifDetail();
+        });
+      }
+
+      if (modalBtnToggleRead) {
+        modalBtnToggleRead.addEventListener('click', function() {
+          if (!activeDetailNotif) return;
+          activeDetailNotif.is_read = !activeDetailNotif.is_read;
+          localStorage.setItem('nkemmart_user_notifications', JSON.stringify(allNotifications));
+          if (typeof updateNotificationBadges === 'function') updateNotificationBadges();
+          syncNotificationsToCloud();
+          modalBtnToggleRead.textContent = activeDetailNotif.is_read ? 'Mark as unread' : 'Mark as read';
+          applyFiltersAndRender();
+        });
+      }
+
+      if (modalBtnDelete) {
+        modalBtnDelete.addEventListener('click', async function() {
+          if (!activeDetailNotif) return;
+          var id = activeDetailNotif.id;
+          if (confirm('Delete this notification?')) {
+            allNotifications = allNotifications.filter(function(n) { return n.id !== id; });
+            localStorage.setItem('nkemmart_user_notifications', JSON.stringify(allNotifications));
+            if (typeof updateNotificationBadges === 'function') updateNotificationBadges();
+            syncNotificationsToCloud();
+            closeNotifDetail();
+            applyFiltersAndRender();
+          }
+        });
+      }
+
+      // 6. Global Action Handlers
+      window.handleNotifClick = async function(id, e) {
+        if (e) e.stopPropagation();
+        if (typeof markNotificationAsRead === 'function') {
+          await markNotificationAsRead(id);
+        }
+      };
+
+      window.toggleNotifRead = async function(id, e) {
+        if (e) e.stopPropagation();
+        var target = allNotifications.find(function(n) { return n.id === id; });
+        if (!target) return;
+        target.is_read = !target.is_read;
+        localStorage.setItem('nkemmart_user_notifications', JSON.stringify(allNotifications));
+        if (typeof updateNotificationBadges === 'function') {
+          updateNotificationBadges();
+        }
+        applyFiltersAndRender();
+        syncNotificationsToCloud();
+      };
+
+      window.handleDeleteNotif = async function(id, e) {
+        if (e) e.stopPropagation();
         if (typeof deleteUserNotification === 'function') {
           allNotifications = await deleteUserNotification(id);
         } else {
@@ -1577,6 +2374,71 @@
         applyFiltersAndRender();
       };
 
+      // 7. Preferences Modal Logic
+      function loadPreferences() {
+        var raw = localStorage.getItem('nkemmart_notif_preferences');
+        var prefs = { order: true, promo: true, review: true, account: true };
+        if (raw) {
+          try { prefs = JSON.parse(raw); } catch (err) {}
+        }
+        if (prefOrder) prefOrder.checked = prefs.order !== false;
+        if (prefPromo) prefPromo.checked = prefs.promo !== false;
+        if (prefReview) prefReview.checked = prefs.review !== false;
+        if (prefAccount) prefAccount.checked = true;
+      }
+
+      function openPreferences() {
+        loadPreferences();
+        if (notifSettingsOverlay) {
+          notifSettingsOverlay.classList.add('open');
+          notifSettingsOverlay.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      function closePreferences() {
+        if (notifSettingsOverlay) {
+          notifSettingsOverlay.classList.remove('open');
+          notifSettingsOverlay.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+      }
+
+      if (btnNotifSettings) btnNotifSettings.addEventListener('click', openPreferences);
+      if (notifSettingsClose) notifSettingsClose.addEventListener('click', closePreferences);
+      if (notifSettingsCancel) notifSettingsCancel.addEventListener('click', closePreferences);
+      if (notifSettingsOverlay) {
+        notifSettingsOverlay.addEventListener('click', function(e) {
+          if (e.target === notifSettingsOverlay) closePreferences();
+        });
+      }
+
+      if (notifSettingsSave) {
+        notifSettingsSave.addEventListener('click', async function() {
+          var prefs = {
+            order: prefOrder ? prefOrder.checked : true,
+            promo: prefPromo ? prefPromo.checked : true,
+            review: prefReview ? prefReview.checked : true,
+            account: true
+          };
+          localStorage.setItem('nkemmart_notif_preferences', JSON.stringify(prefs));
+
+          var client = typeof getSupabase === 'function' ? getSupabase() : null;
+          if (client && typeof getCurrentUser === 'function') {
+            var user = await getCurrentUser();
+            if (user) {
+              try {
+                await client.from('profiles').update({ notification_preferences: prefs }).eq('id', user.id);
+              } catch (err) {}
+            }
+          }
+
+          closePreferences();
+          alert('Notification preferences updated successfully.');
+        });
+      }
+
+      // 8. Filter Reset & Action Buttons
       window.resetNotifFilters = function() {
         activeCategory = 'all';
         activeStatus = 'all';
@@ -1658,7 +2520,7 @@
         });
       });
 
-      // 5. Custom Modal Select Pickers
+      // 9. Custom Modal Select Pickers
       function openModal(modalOverlay, triggerBtn) {
         if (!modalOverlay) return;
         modalOverlay.classList.add('open');
@@ -1748,15 +2610,65 @@
       await loadNotifications();
     });
 
-    // Mobile Drawer and Dropdown interaction
+    // Mobile Navigation Drawer, Categories & Cart Synchronizer
     (function() {
       var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      var mobileBarCategoriesBtn = document.getElementById('mobileBarCategoriesBtn');
+      var mobileNavDrawer = document.getElementById('mobileNavDrawer');
+      var mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+      var mobileNavCloseBtn = document.getElementById('mobileNavCloseBtn');
       var desktopCategoryDropdown = document.getElementById('desktopCategoryDropdown');
+      var mobileAccountToggle = document.getElementById('mobileAccountToggle');
+      var mobileAccountSubNav = document.getElementById('mobileAccountSubNav');
 
-      if (mobileMenuBtn && desktopCategoryDropdown) {
+      function openMobileDrawer() {
+        if (window.innerWidth <= 860) {
+          if (mobileNavDrawer && mobileNavBackdrop) {
+            mobileNavDrawer.classList.add('open');
+            mobileNavBackdrop.classList.add('open');
+            document.body.style.overflow = 'hidden';
+          }
+        } else {
+          if (desktopCategoryDropdown) {
+            desktopCategoryDropdown.classList.toggle('open');
+          }
+        }
+      }
+
+      function closeMobileDrawer() {
+        if (mobileNavDrawer && mobileNavBackdrop) {
+          mobileNavDrawer.classList.remove('open');
+          mobileNavBackdrop.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      }
+
+      if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', function(e) {
           e.stopPropagation();
-          desktopCategoryDropdown.classList.toggle('open');
+          openMobileDrawer();
+        });
+      }
+
+      if (mobileBarCategoriesBtn) {
+        mobileBarCategoriesBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openMobileDrawer();
+        });
+      }
+
+      if (mobileNavCloseBtn) mobileNavCloseBtn.addEventListener('click', closeMobileDrawer);
+      if (mobileNavBackdrop) mobileNavBackdrop.addEventListener('click', closeMobileDrawer);
+
+      if (mobileAccountToggle && mobileAccountSubNav) {
+        mobileAccountToggle.addEventListener('click', function() {
+          var isExpanded = mobileAccountToggle.getAttribute('aria-expanded') === 'true';
+          mobileAccountToggle.setAttribute('aria-expanded', !isExpanded);
+          mobileAccountSubNav.style.display = isExpanded ? 'none' : 'flex';
+          var chevron = mobileAccountToggle.querySelector('.mobile-nav-chevron');
+          if (chevron) {
+            chevron.style.transform = isExpanded ? 'rotate(-90deg)' : 'rotate(0deg)';
+          }
         });
       }
 
@@ -1765,6 +2677,22 @@
           desktopCategoryDropdown.classList.remove('open');
         }
       });
+
+      // Cart Badges Synchronizer
+      try {
+        var cartData = JSON.parse(localStorage.getItem('nkemmart_cart') || '[]');
+        var totalQty = cartData.reduce(function(acc, item) { return acc + (item.qty || 1); }, 0);
+        var headerBadge = document.getElementById('headerCartBadge');
+        var mobileBadge = document.getElementById('mobileBarCartBadge');
+        if (headerBadge) {
+          headerBadge.textContent = totalQty;
+          headerBadge.style.display = totalQty > 0 ? 'inline-flex' : 'none';
+        }
+        if (mobileBadge) {
+          mobileBadge.textContent = totalQty;
+          mobileBadge.style.display = totalQty > 0 ? 'inline-flex' : 'none';
+        }
+      } catch (e) {}
     })();
   </script>
 
