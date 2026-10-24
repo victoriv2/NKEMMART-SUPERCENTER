@@ -1780,55 +1780,157 @@
 
   <!-- SITE FOOTER -->
   <footer class="site-footer">
+    <!-- Newsletter Strip -->
     <div class="footer-newsletter-wrap">
       <div class="footer-newsletter-inner">
         <div class="footer-newsletter-text">
           <span class="footer-newsletter-badge">Stay Updated</span>
-          <h3 class="footer-newsletter-title">Get special discounts &amp; order notifications</h3>
-          <p class="footer-newsletter-sub">Subscribe to our newsletter for exclusive deals, flash sales, and new arrivals.</p>
+          <h3>BE THE FIRST TO KNOW</h3>
+          <p>Subscribe to our newsletter to receive daily flash sale discounts, price cuts, and exclusive coupon codes.</p>
         </div>
-        <form class="footer-newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed successfully to RALPHMART newsletter!');">
-          <input type="email" placeholder="Enter your email address" class="footer-newsletter-input" required>
-          <button type="submit" class="footer-newsletter-btn">Subscribe</button>
+        <form class="footer-newsletter-form" onsubmit="event.preventDefault(); var inp = this.querySelector('input'); if (inp && inp.value) { alert('Thank you for subscribing to RALPHMART updates with: ' + inp.value); inp.value = ''; }">
+          <input type="email" class="footer-newsletter-input" placeholder="Enter your email address" required aria-label="Enter your email address">
+          <button type="submit" class="footer-newsletter-btn">
+            <span>Subscribe</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
         </form>
       </div>
     </div>
 
+    <!-- Main Footer Columns -->
     <div class="footer-main">
       <div class="footer-col">
         <div class="footer-brand-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           <span>RALPHMART SUPERCENTER</span>
         </div>
-        <p class="footer-brand-desc">Nigeria's premier multi-category digital marketplace for genuine products, competitive wholesale pricing, and verified nationwide doorstep delivery.</p>
+        <p class="footer-brand-desc">
+          Life is easier when everything you need is within reach! Welcome to RALPHMART SUPERCENTER, your trusted destination for everyday essentials, lifestyle products, electronics, fashion, building materials, properties, repair services, cleaning services, and so much more. At RALPHMART, EVERYTHING DEY!
+        </p>
+        <div class="footer-contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <a href="tel:08155608447" class="footer-contact-link">Call: 08155608447 (Mon-Sat: 8am-8pm)</a>
+        </div>
+        <div class="footer-contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="footer-contact-link">WhatsApp: 07042087633 (Chat & Orders)</a>
+        </div>
+        <div class="footer-contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <a href="mailto:support@ralphmart.com" class="footer-contact-link">Email: support@ralphmart.com</a>
+        </div>
       </div>
 
       <div class="footer-col">
-        <h4 class="footer-col-heading">Customer Service</h4>
-        <div class="footer-contact-item"><a href="orders.html" class="footer-contact-link">Track Your Order</a></div>
-        <div class="footer-contact-item"><a href="notifications.html" class="footer-contact-link">Notification Center</a></div>
-        <div class="footer-contact-item"><a href="reviews.html" class="footer-contact-link">Ratings &amp; Reviews</a></div>
-        <div class="footer-contact-item"><a href="profile.html" class="footer-contact-link">My Account</a></div>
+        <h4 class="footer-col-heading">Customer Care</h4>
+        <ul class="footer-links-list">
+          <li><a href="help.html#faqs" class="footer-link">Help Center & FAQs</a></li>
+          <li><a href="orders.html" class="footer-link">Track Your Order</a></li>
+          <li><a href="cart.html" class="footer-link">Shopping Cart</a></li>
+          <li><a href="saved-items.html" class="footer-link">Saved Items</a></li>
+          <li><a href="help.html#returns" class="footer-link">Returns & Refunds</a></li>
+          <li><a href="help.html#cancellations" class="footer-link">Order Cancellation</a></li>
+          <li><a href="help.html#contact" class="footer-link">Contact Support</a></li>
+        </ul>
       </div>
 
       <div class="footer-col">
-        <h4 class="footer-col-heading">Categories</h4>
-        <div class="footer-contact-item"><a href="category.html?cat=electronics" class="footer-contact-link">Electronics</a></div>
-        <div class="footer-contact-item"><a href="category.html?cat=phones" class="footer-contact-link">Phones &amp; Tablets</a></div>
-        <div class="footer-contact-item"><a href="category.html?cat=appliances" class="footer-contact-link">Appliances</a></div>
-        <div class="footer-contact-item"><a href="category.html?cat=fashion" class="footer-contact-link">Fashion</a></div>
+        <h4 class="footer-col-heading">About Ralphmart</h4>
+        <ul class="footer-links-list">
+          <li><a href="index.html" class="footer-link">About Us</a></li>
+          <li><a href="category.html?cat=appliances" class="footer-link">Appliances & Electronics</a></li>
+          <li><a href="category.html?cat=supermarket" class="footer-link">Groceries & Supermarket</a></li>
+          <li><a href="category.html?cat=phones" class="footer-link">Phones & Tablets</a></li>
+          <li><a href="terms.html" class="footer-link">Terms and Conditions</a></li>
+          <li><a href="terms.html#privacy" class="footer-link">Privacy Notice</a></li>
+          <li><a href="help.html#careers" class="footer-link">Careers at Ralphmart</a></li>
+        </ul>
       </div>
 
       <div class="footer-col">
-        <h4 class="footer-col-heading">Contact Support</h4>
-        <div class="footer-contact-item"><a href="tel:08155608447" class="footer-contact-link">08155608447</a></div>
-        <div class="footer-contact-item"><a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="footer-contact-link">WhatsApp: +234 704 208 7633</a></div>
-        <div class="footer-contact-item">support@ralphmart.com</div>
+        <h4 class="footer-col-heading">Sell & Partner</h4>
+        <ul class="footer-links-list">
+          <li><a href="sell.html" class="footer-link">Sell on Ralphmart</a></li>
+          <li><a href="sell.html" class="footer-link">Vendor Hub & Merchant Center</a></li>
+          <li><a href="help.html#careers" class="footer-link">Logistics Partner Program</a></li>
+          <li><a href="sell.html#bulk" class="footer-link">Corporate & Bulk Purchasing</a></li>
+          <li><a href="help.html#service-center" class="footer-link">Service Center Network</a></li>
+        </ul>
       </div>
     </div>
 
-    <div class="footer-bottom">
-      <div>&copy; 2026 RALPHMART SUPERCENTER. All Rights Reserved.</div>
+    <!-- Trust & Payment Guarantee Strip -->
+    <div class="footer-trust-strip">
+      <div class="footer-trust-inner">
+        <div class="footer-trust-perks">
+          <div class="footer-trust-perk">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>100% Genuine Products</span>
+          </div>
+          <div class="footer-trust-perk">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>Fast Nationwide Delivery</span>
+          </div>
+          <div class="footer-trust-perk">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span>Secure Bank-Grade Payment</span>
+          </div>
+        </div>
+
+        <div class="footer-payment-group">
+          <span class="footer-payment-label">Accepted Payments:</span>
+          <span class="footer-payment-pill">
+            <svg class="payment-icon" width="18" height="12" viewBox="0 0 24 15" fill="none">
+              <circle cx="7.5" cy="7.5" r="5.5" fill="#eb001b"/>
+              <circle cx="16.5" cy="7.5" r="5.5" fill="#f79e1b"/>
+              <path d="M12 3.7a5.5 5.5 0 0 1 0 7.6 5.5 5.5 0 0 1 0-7.6z" fill="#ff5f00"/>
+            </svg>
+            MASTERCARD
+          </span>
+          <span class="footer-payment-pill">
+            <svg class="payment-icon" width="18" height="12" viewBox="0 0 24 15" fill="none">
+              <rect width="24" height="15" rx="2" fill="#1434cb"/>
+              <text x="12" y="10.5" font-family="-apple-system, sans-serif" font-weight="900" font-style="italic" font-size="7.5" fill="#ffffff" text-anchor="middle" letter-spacing="-0.4">VISA</text>
+            </svg>
+            VISA
+          </span>
+          <span class="footer-payment-pill">
+            <svg class="payment-icon" width="16" height="12" viewBox="0 0 22 15" fill="none">
+              <rect width="22" height="15" rx="2.5" fill="#0c4a85"/>
+              <path d="M4.5 4L8.5 11L12.5 4" stroke="#ed1c24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="16.5" cy="7.5" r="2.5" fill="#ffffff"/>
+            </svg>
+            VERVE
+          </span>
+          <span class="footer-payment-pill">
+            <svg class="payment-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 3l9 5H3l9-5z"></path>
+            </svg>
+            BANK TRANSFER
+          </span>
+          <span class="footer-payment-pill">
+            <svg class="payment-icon" width="15" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+              <circle cx="12" cy="12" r="2.5"></circle>
+              <path d="M6 12h.01M18 12h.01"></path>
+            </svg>
+            PAY ON DELIVERY
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Legal Copyright Bar -->
+    <div class="footer-bottom-bar">
+      <div class="footer-bottom-inner">
+        <span>Copyright &copy; 2026 RALPHMART SUPERCENTER. All Rights Reserved.</span>
+        <div class="footer-legal-links">
+          <a href="terms.html">Terms of Service</a>
+          <a href="terms.html#privacy">Privacy Policy</a>
+          <a href="terms.html#cookies">Cookie Notice</a>
+        </div>
+      </div>
     </div>
   </footer>
 
