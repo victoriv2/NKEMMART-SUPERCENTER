@@ -1719,10 +1719,10 @@ body {
 /* Back to Top & Floating Support Buttons (Vertical Inline Alignment & Scroll Transitions) */
 .back-to-top-btn {
   position: fixed;
-  bottom: 80px;
-  right: 22px;
-  width: 44px;
-  height: 44px;
+  bottom: 74px;
+  right: 20px;
+  width: 46px;
+  height: 46px;
   background-color: var(--white);
   border: 1.5px solid var(--border-color);
   border-radius: 50%;
@@ -1739,6 +1739,7 @@ body {
   pointer-events: none;
   transform: scale(0.8) translateY(10px);
   transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease, background-color 0.2s;
+  box-sizing: border-box;
 }
 
 .back-to-top-btn.visible {
@@ -1772,6 +1773,23 @@ body {
   align-items: flex-end;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.26s ease;
   pointer-events: auto;
+}
+
+#floatingSupportTriggerBtn {
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 50% !important;
+  background: #512175 !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 8px 24px rgba(81, 33, 117, 0.35) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transform: none !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
 }
 
 .floating-support-container.hide-on-scroll {
@@ -2506,11 +2524,16 @@ body {
     right: 16px;
   }
 
+  #floatingSupportTriggerBtn {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
   .back-to-top-btn {
-    bottom: 124px;
-    right: 18px;
-    width: 40px;
-    height: 40px;
+    bottom: 120px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
   }
 }
 
