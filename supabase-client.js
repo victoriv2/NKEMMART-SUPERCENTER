@@ -1450,6 +1450,9 @@ if (typeof document !== 'undefined') {
       setupRealtimeSync();
     }
     setTimeout(updateSiteAccountMenu, 300);
+    if (typeof window.initModularSelects === 'function') {
+      window.initModularSelects();
+    }
   };
 
   if (document.readyState === 'loading') {
