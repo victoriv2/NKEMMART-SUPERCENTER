@@ -1028,6 +1028,9 @@
       </div>
     </section>
 
+    <!-- Recently Viewed Products Shelf -->
+    <div id="homeRecentlyViewedContainer" style="max-width: 1240px; margin: 24px auto; padding: 0 20px;"></div>
+
   </main>
 
   <!-- Mobile Floating Action Bar (Sort & Filter) -->
@@ -2950,6 +2953,10 @@
       updateCartBadges();
       syncProductCardsUI();
       syncWishlistButtons();
+
+      if (typeof renderRecentlyViewedShelf === 'function') {
+        renderRecentlyViewedShelf('homeRecentlyViewedContainer');
+      }
 
       // Listen for cross-device cloud sync events
       window.addEventListener('nkemmart_cart_synced', function() {

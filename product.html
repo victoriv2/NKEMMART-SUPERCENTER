@@ -624,6 +624,9 @@
       </div>
     </section>
 
+    <!-- Recently Viewed Products Shelf -->
+    <div id="pdpRecentlyViewedContainer"></div>
+
   </main>
 
   <!-- SITE FOOTER -->
@@ -1784,6 +1787,25 @@
       // Fallback if id was not found
       if (!activeProduct) {
         activeProduct = CATALOG_PRODUCTS[0];
+      }
+
+      // Track recently viewed and render shelf
+      try {
+        if (typeof trackRecentlyViewedProduct === 'function' && activeProduct) {
+          trackRecentlyViewedProduct({
+            id: activeProduct.id,
+            title: activeProduct.title,
+            price: activeProduct.price,
+            originalPrice: activeProduct.originalPrice,
+            image: activeProduct.image,
+            category: activeProduct.categoryKey || activeProduct.categoryName
+          });
+        }
+        if (typeof renderRecentlyViewedShelf === 'function') {
+          renderRecentlyViewedShelf('pdpRecentlyViewedContainer');
+        }
+      } catch (err) {
+        console.warn('Recently viewed track note:', err);
       }
 
       // Update page title

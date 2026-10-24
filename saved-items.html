@@ -253,13 +253,19 @@
               <span class="cart-header-count" id="savedHeaderCount">(0)</span>
             </h1>
 
-            <button type="button" class="cart-clear-btn" id="clearSavedBtn" title="Remove all saved items">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-              <span>Clear All</span>
-            </button>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button type="button" class="btn-saved-move-cart" id="topMoveAllBtn" style="padding: 6px 12px; font-size: 11.5px; height: auto;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <span>Move All to Cart</span>
+              </button>
+              <button type="button" class="cart-clear-btn" id="clearSavedBtn" title="Remove all saved items">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Clear All</span>
+              </button>
+            </div>
           </div>
 
           <!-- Items List Container -->
@@ -1050,11 +1056,19 @@
               row.setAttribute('data-id', item.id);
 
               var discountHtml = '';
+              var priceDropBadge = '';
               if (item.originalPrice && item.originalPrice > item.price) {
                 var disc = Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100);
                 discountHtml = 
                   '<span class="cart-item-orig-price">' + formatNaira(item.originalPrice) + '</span>' +
                   '<span class="cart-item-discount-tag">-' + disc + '%</span>';
+                priceDropBadge = 
+                  '<div style="margin-top: 5px;">' +
+                    '<span style="display: inline-flex; align-items: center; gap: 4px; background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px;">' +
+                      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>' +
+                      'Price Dropped (-' + disc + '%)' +
+                    '</span>' +
+                  '</div>';
               }
 
               row.innerHTML = 
@@ -1069,8 +1083,9 @@
                   '</div>' +
                   '<div class="cart-item-status">' +
                     '<span class="cart-item-status-dot"></span>' +
-                    '<span>In Stock | Eligible for Doorstep Delivery</span>' +
+                    '<span>In Stock &bull; Only 4 units remaining &bull; Fast Delivery</span>' +
                   '</div>' +
+                  priceDropBadge +
                 '</div>' +
                 '<div class="cart-item-actions-row">' +
                   '<button type="button" class="btn-saved-move-cart" data-action="move-to-cart" data-id="' + item.id + '">' +
@@ -1249,6 +1264,13 @@
           updateHeaderCartBadge();
           renderSavedItems();
           showToast('All items moved to shopping cart', 'VIEW CART', 'cart.html');
+        });
+      }
+
+      var topMoveAllBtn = document.getElementById('topMoveAllBtn');
+      if (topMoveAllBtn) {
+        topMoveAllBtn.addEventListener('click', function() {
+          if (moveAllBtn) moveAllBtn.click();
         });
       }
 

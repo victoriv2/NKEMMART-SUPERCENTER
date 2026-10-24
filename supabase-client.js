@@ -247,7 +247,7 @@ async function signInUser(email, password) {
   return data;
 }
 
-async function updateUserProfile({ firstName, lastName, phone, state, stateKey, lga }) {
+async function updateUserProfile({ firstName, lastName, phone, state, stateKey, lga, avatar_url }) {
   const client = getSupabase();
   if (!client) throw new Error('Supabase client unavailable');
 
@@ -258,19 +258,22 @@ async function updateUserProfile({ firstName, lastName, phone, state, stateKey, 
   const lName = (lastName || '').trim();
   const fullName = (fName && lName ? `${fName} ${lName}` : (fName || lName)).trim();
 
+  const updateFields = {
+    updated_at: new Date().toISOString()
+  };
+  if (firstName !== undefined) updateFields.first_name = fName;
+  if (lastName !== undefined) updateFields.last_name = lName;
+  if (firstName !== undefined || lastName !== undefined) updateFields.full_name = fullName;
+  if (phone !== undefined) updateFields.phone = (phone || '').trim();
+  if (state !== undefined) updateFields.state = (state || '').trim();
+  if (stateKey !== undefined) updateFields.state_key = (stateKey || '').trim();
+  if (lga !== undefined) updateFields.lga = (lga || '').trim();
+  if (avatar_url !== undefined) updateFields.avatar_url = avatar_url;
+
   // 1. Update public.profiles table in Supabase
   const { data: updatedProfile, error: profileError } = await client
     .from('profiles')
-    .update({
-      first_name: fName,
-      last_name: lName,
-      full_name: fullName,
-      phone: (phone || '').trim(),
-      state: (state || '').trim(),
-      state_key: (stateKey || '').trim(),
-      lga: (lga || '').trim(),
-      updated_at: new Date().toISOString()
-    })
+    .update(updateFields)
     .eq('id', user.id);
 
   if (profileError) {
@@ -280,16 +283,10 @@ async function updateUserProfile({ firstName, lastName, phone, state, stateKey, 
 
   // 2. Update auth user metadata
   try {
+    const metaUpdates = { ...updateFields };
+    delete metaUpdates.updated_at;
     await client.auth.updateUser({
-      data: {
-        first_name: fName,
-        last_name: lName,
-        full_name: fullName,
-        phone: (phone || '').trim(),
-        state: (state || '').trim(),
-        state_key: (stateKey || '').trim(),
-        lga: (lga || '').trim()
-      }
+      data: metaUpdates
     });
   } catch (authErr) {
     console.warn('Auth metadata update notice:', authErr);
@@ -611,6 +608,812 @@ async function adminReplyToReview(reviewId, replyText) {
   }
 
   return data;
+}
+
+// ==========================================
+// 1. SAVED ADDRESS BOOK MANAGEMENT
+// ==========================================
+async function getUserAddresses() {
+  try {
+    const client = getSupabase();
+    const user = await getCurrentUser();
+    let localAddresses = [];
+    try {
+      localAddresses = JSON.parse(localStorage.getItem('nkemmart_user_addresses') || '[]');
+    } catch (e) {}
+
+    if (client && user) {
+      const { data: profile } = await client
+        .from('profiles')
+        .select('addresses, state, state_key, lga, full_name, phone')
+        .eq('id', user.id)
+        .single();
+
+      if (profile && Array.isArray(profile.addresses) && profile.addresses.length > 0) {
+        localStorage.setItem('nkemmart_user_addresses', JSON.stringify(profile.addresses));
+        return profile.addresses;
+      }
+
+      // If user has primary profile state/LGA but no saved addresses yet, seed a default "Home" address
+      if (profile && profile.state_key && localAddresses.length === 0) {
+        const defaultAddr = {
+          id: 'addr_default_' + user.id.substring(0, 8),
+          label: 'Home',
+          full_name: profile.full_name || 'Primary Recipient',
+          phone: profile.phone || '',
+          street: profile.lga ? (profile.lga + ', Nigeria') : 'Doorstep Delivery',
+          state_key: profile.state_key,
+          state_name: profile.state || profile.state_key,
+          lga: profile.lga || '',
+          is_default: true,
+          created_at: new Date().toISOString()
+        };
+        const initialList = [defaultAddr];
+        localStorage.setItem('nkemmart_user_addresses', JSON.stringify(initialList));
+        await client.from('profiles').update({ addresses: initialList }).eq('id', user.id);
+        return initialList;
+      }
+    }
+    return localAddresses;
+  } catch (err) {
+    console.warn('Error fetching addresses:', err);
+    try {
+      return JSON.parse(localStorage.getItem('nkemmart_user_addresses') || '[]');
+    } catch (e) {
+      return [];
+    }
+  }
+}
+
+async function saveUserAddress(addressObj) {
+  if (!addressObj || !addressObj.state_key) throw new Error('State and delivery details are required.');
+  const user = await getCurrentUser();
+  const client = getSupabase();
+
+  let addresses = await getUserAddresses();
+  const addrId = addressObj.id || ('addr_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6));
+
+  const cleanAddr = {
+    id: addrId,
+    label: (addressObj.label || 'Home').trim(),
+    full_name: (addressObj.full_name || '').trim(),
+    phone: (addressObj.phone || '').trim(),
+    street: (addressObj.street || '').trim(),
+    state_key: (addressObj.state_key || '').trim(),
+    state_name: (addressObj.state_name || addressObj.state || '').trim(),
+    lga: (addressObj.lga || addressObj.city || '').trim(),
+    is_default: Boolean(addressObj.is_default),
+    updated_at: new Date().toISOString()
+  };
+
+  if (cleanAddr.is_default || addresses.length === 0) {
+    cleanAddr.is_default = true;
+    addresses.forEach(a => { a.is_default = false; });
+  }
+
+  const existingIdx = addresses.findIndex(a => a.id === addrId);
+  if (existingIdx >= 0) {
+    addresses[existingIdx] = cleanAddr;
+  } else {
+    addresses.unshift(cleanAddr);
+  }
+
+  localStorage.setItem('nkemmart_user_addresses', JSON.stringify(addresses));
+
+  if (client && user) {
+    await client.from('profiles').update({ addresses: addresses, updated_at: new Date().toISOString() }).eq('id', user.id);
+  }
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nkemmart_address_updated', { detail: { addresses } }));
+  }
+
+  return cleanAddr;
+}
+
+async function deleteUserAddress(addressId) {
+  if (!addressId) return;
+  const user = await getCurrentUser();
+  const client = getSupabase();
+
+  let addresses = await getUserAddresses();
+  addresses = addresses.filter(a => a.id !== addressId);
+  if (addresses.length > 0 && !addresses.some(a => a.is_default)) {
+    addresses[0].is_default = true;
+  }
+
+  localStorage.setItem('nkemmart_user_addresses', JSON.stringify(addresses));
+
+  if (client && user) {
+    await client.from('profiles').update({ addresses: addresses }).eq('id', user.id);
+  }
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nkemmart_address_updated', { detail: { addresses } }));
+  }
+}
+
+async function setDefaultUserAddress(addressId) {
+  if (!addressId) return;
+  const user = await getCurrentUser();
+  const client = getSupabase();
+
+  let addresses = await getUserAddresses();
+  addresses.forEach(a => { a.is_default = (a.id === addressId); });
+
+  localStorage.setItem('nkemmart_user_addresses', JSON.stringify(addresses));
+
+  if (client && user) {
+    await client.from('profiles').update({ addresses: addresses }).eq('id', user.id);
+  }
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nkemmart_address_updated', { detail: { addresses } }));
+  }
+}
+
+// ==========================================
+// 2. IN-APP NOTIFICATION INBOX & REAL-TIME ALERTS
+// ==========================================
+async function getUserNotifications() {
+  try {
+    const client = getSupabase();
+    const user = await getCurrentUser();
+    let localNotifs = [];
+    try {
+      localNotifs = JSON.parse(localStorage.getItem('nkemmart_user_notifications') || '[]');
+    } catch (e) {}
+
+    if (client && user) {
+      const { data: profile } = await client
+        .from('profiles')
+        .select('notifications')
+        .eq('id', user.id)
+        .single();
+
+      if (profile && Array.isArray(profile.notifications) && profile.notifications.length > 0) {
+        localStorage.setItem('nkemmart_user_notifications', JSON.stringify(profile.notifications));
+        return profile.notifications;
+      }
+    }
+
+    if (localNotifs.length === 0) {
+      const welcome = {
+        id: 'notif_welcome',
+        type: 'system',
+        title: 'Welcome to Ralphmart Supercenter',
+        message: 'Genuine products, real-time dispatch across all 36 states and FCT in Nigeria.',
+        link: 'index.html',
+        is_read: false,
+        created_at: new Date().toISOString()
+      };
+      localNotifs = [welcome];
+      localStorage.setItem('nkemmart_user_notifications', JSON.stringify(localNotifs));
+    }
+
+    return localNotifs;
+  } catch (err) {
+    console.warn('Error fetching notifications:', err);
+    try {
+      return JSON.parse(localStorage.getItem('nkemmart_user_notifications') || '[]');
+    } catch (e) {
+      return [];
+    }
+  }
+}
+
+async function addUserNotification({ type, title, message, link }) {
+  if (!title) return;
+  const notif = {
+    id: 'notif_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+    type: type || 'order',
+    title: title.trim(),
+    message: (message || '').trim(),
+    link: link || 'orders.html',
+    is_read: false,
+    created_at: new Date().toISOString()
+  };
+
+  let notifs = [];
+  try {
+    notifs = JSON.parse(localStorage.getItem('nkemmart_user_notifications') || '[]');
+  } catch (e) {}
+
+  notifs.unshift(notif);
+  if (notifs.length > 50) notifs = notifs.slice(0, 50);
+  localStorage.setItem('nkemmart_user_notifications', JSON.stringify(notifs));
+
+  const client = getSupabase();
+  const user = await getCurrentUser();
+  if (client && user) {
+    try {
+      await client.from('profiles').update({ notifications: notifs }).eq('id', user.id);
+    } catch (e) {}
+  }
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nkemmart_notification_received', { detail: notif }));
+    updateNotificationBadges();
+  }
+  return notif;
+}
+
+async function markNotificationAsRead(notifId) {
+  let notifs = [];
+  try {
+    notifs = JSON.parse(localStorage.getItem('nkemmart_user_notifications') || '[]');
+  } catch (e) {}
+
+  notifs.forEach(n => {
+    if (n.id === notifId) n.is_read = true;
+  });
+
+  localStorage.setItem('nkemmart_user_notifications', JSON.stringify(notifs));
+
+  const client = getSupabase();
+  const user = await getCurrentUser();
+  if (client && user) {
+    try {
+      await client.from('profiles').update({ notifications: notifs }).eq('id', user.id);
+    } catch (e) {}
+  }
+
+  updateNotificationBadges();
+}
+
+async function markAllNotificationsAsRead() {
+  let notifs = [];
+  try {
+    notifs = JSON.parse(localStorage.getItem('nkemmart_user_notifications') || '[]');
+  } catch (e) {}
+
+  notifs.forEach(n => { n.is_read = true; });
+  localStorage.setItem('nkemmart_user_notifications', JSON.stringify(notifs));
+
+  const client = getSupabase();
+  const user = await getCurrentUser();
+  if (client && user) {
+    try {
+      await client.from('profiles').update({ notifications: notifs }).eq('id', user.id);
+    } catch (e) {}
+  }
+
+  updateNotificationBadges();
+}
+
+function updateNotificationBadges() {
+  let notifs = [];
+  try {
+    notifs = JSON.parse(localStorage.getItem('nkemmart_user_notifications') || '[]');
+  } catch (e) {}
+
+  const unreadCount = notifs.filter(n => !n.is_read).length;
+  const badges = document.querySelectorAll('.header-notif-badge');
+  badges.forEach(b => {
+    if (unreadCount > 0) {
+      b.style.display = 'inline-flex';
+      b.textContent = unreadCount > 9 ? '9+' : unreadCount;
+    } else {
+      b.style.display = 'none';
+    }
+  });
+}
+
+function initGlobalNotificationCenter() {
+  if (typeof document === 'undefined') return;
+  const headerActions = document.querySelector('.header-actions');
+  if (!headerActions || document.getElementById('headerNotifWrap')) return;
+
+  const notifWrap = document.createElement('div');
+  notifWrap.className = 'action-item header-notif-wrap';
+  notifWrap.id = 'headerNotifWrap';
+  notifWrap.style.position = 'relative';
+
+  notifWrap.innerHTML = `
+    <button type="button" class="action-btn" id="headerNotifBtn" title="Notifications" aria-haspopup="dialog" aria-expanded="false">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+      </svg>
+      <span class="action-label">Alerts</span>
+      <span class="badge header-notif-badge" id="headerNotifBadge" style="display: none; background-color: #ef4444;">0</span>
+    </button>
+    <div class="header-notif-tray" id="headerNotifTray" style="display: none;">
+      <div class="notif-tray-header">
+        <div style="font-weight: 800; font-size: 14px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+          <span>Notifications</span>
+          <span class="notif-tray-count-pill" id="notifTrayCountPill">0 Unread</span>
+        </div>
+        <button type="button" class="notif-mark-all-btn" id="notifMarkAllReadBtn">Mark all as read</button>
+      </div>
+      <div class="notif-tray-list" id="notifTrayList">
+        <div style="text-align: center; padding: 24px; color: #64748b; font-size: 12.5px;">Loading alerts...</div>
+      </div>
+      <div class="notif-tray-footer">
+        <a href="activities.html" style="font-size: 12px; font-weight: 700; color: #512175; text-decoration: none;">View Full Activity Audit Trail &rarr;</a>
+      </div>
+    </div>
+  `;
+
+  headerActions.insertBefore(notifWrap, headerActions.firstChild);
+
+  const notifBtn = notifWrap.querySelector('#headerNotifBtn');
+  const notifTray = notifWrap.querySelector('#headerNotifTray');
+  const markAllBtn = notifWrap.querySelector('#notifMarkAllReadBtn');
+
+  async function renderNotifTray() {
+    const listEl = notifWrap.querySelector('#notifTrayList');
+    const pill = notifWrap.querySelector('#notifTrayCountPill');
+    const notifs = await getUserNotifications();
+    const unread = notifs.filter(n => !n.is_read).length;
+    if (pill) pill.textContent = unread + ' Unread';
+
+    if (notifs.length === 0) {
+      listEl.innerHTML = '<div style="text-align: center; padding: 28px 16px; color: #64748b; font-size: 13px;">No notifications yet. Alerts about orders, price drops, and replies will show here.</div>';
+      return;
+    }
+
+    listEl.innerHTML = notifs.slice(0, 15).map(n => {
+      let icon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>';
+      if (n.type === 'order') {
+        icon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>';
+      } else if (n.type === 'review') {
+        icon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+      }
+
+      const timeAgo = formatNotifTime(n.created_at);
+      return `
+        <a href="${n.link || 'orders.html'}" class="notif-tray-item ${n.is_read ? 'read' : 'unread'}" onclick="markNotificationAsRead('${n.id}')">
+          <div class="notif-item-icon">${icon}</div>
+          <div class="notif-item-content">
+            <div class="notif-item-title">${escapeNotifHtml(n.title)}</div>
+            <div class="notif-item-sub">${escapeNotifHtml(n.message)}</div>
+            <div class="notif-item-time">${timeAgo}</div>
+          </div>
+          ${!n.is_read ? '<span class="notif-item-dot"></span>' : ''}
+        </a>
+      `;
+    }).join('');
+  }
+
+  function formatNotifTime(iso) {
+    if (!iso) return 'Just now';
+    try {
+      const d = new Date(iso);
+      const diffMin = Math.floor((new Date() - d) / 60000);
+      if (diffMin < 2) return 'Just now';
+      if (diffMin < 60) return diffMin + 'm ago';
+      const diffH = Math.floor(diffMin / 60);
+      if (diffH < 24) return diffH + 'h ago';
+      return d.toLocaleDateString('en-NG', { day: 'numeric', month: 'short' });
+    } catch (e) { return 'Recent'; }
+  }
+
+  function escapeNotifHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  notifBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = notifTray.style.display === 'block';
+    document.querySelectorAll('.dropdown-menu, .site-account-modal-overlay').forEach(el => el.classList.remove('open'));
+    if (isOpen) {
+      notifTray.style.display = 'none';
+      notifBtn.setAttribute('aria-expanded', 'false');
+    } else {
+      notifTray.style.display = 'block';
+      notifBtn.setAttribute('aria-expanded', 'true');
+      renderNotifTray();
+    }
+  });
+
+  if (markAllBtn) {
+    markAllBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      await markAllNotificationsAsRead();
+      renderNotifTray();
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!notifWrap.contains(e.target)) {
+      notifTray.style.display = 'none';
+      notifBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  updateNotificationBadges();
+}
+
+// ==========================================
+// 3. RECENTLY VIEWED PRODUCTS TRACKER
+// ==========================================
+function trackRecentlyViewedProduct(product) {
+  if (!product || !product.id) return;
+  try {
+    let list = JSON.parse(localStorage.getItem('nkemmart_recently_viewed') || '[]');
+    list = list.filter(p => p.id !== product.id);
+    list.unshift({
+      id: product.id,
+      title: product.title || 'Product',
+      price: product.price || 0,
+      old_price: product.old_price || product.oldPrice || null,
+      image: (product.images && product.images[0]) || product.image || 'images/subcategories/sub_smartphones.jpg',
+      brand: product.brand || '',
+      category: product.category || product.category_id || '',
+      viewed_at: Date.now()
+    });
+    if (list.length > 15) list = list.slice(0, 15);
+    localStorage.setItem('nkemmart_recently_viewed', JSON.stringify(list));
+
+    getCurrentUser().then(user => {
+      if (user) {
+        const client = getSupabase();
+        if (client) client.from('profiles').update({ recently_viewed: list }).eq('id', user.id).then(() => {}).catch(() => {});
+      }
+    });
+  } catch (e) {}
+}
+
+function getRecentlyViewedProducts() {
+  try {
+    return JSON.parse(localStorage.getItem('nkemmart_recently_viewed') || '[]');
+  } catch (e) { return []; }
+}
+
+function renderRecentlyViewedShelf(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const list = getRecentlyViewedProducts();
+  if (!list || list.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'block';
+  container.innerHTML = `
+    <div style="margin: 36px 0 20px 0; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #0f172a;">Recently Viewed Products</h3>
+        </div>
+        <a href="category.html" style="font-size: 13px; font-weight: 700; color: #512175; text-decoration: none;">Explore More Products &rarr;</a>
+      </div>
+      <div class="recently-viewed-scroll-track" style="display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin;">
+        ${list.map(p => `
+          <a href="product.html?id=${encodeURIComponent(p.id)}" class="recently-viewed-card" style="flex: 0 0 160px; text-decoration: none; border: 1px solid #f1f5f9; border-radius: 10px; padding: 12px; background: #ffffff; display: flex; flex-direction: column; transition: transform 0.15s, border-color 0.15s;" onmouseover="this.style.borderColor='#cbd5e1'" onmouseout="this.style.borderColor='#f1f5f9'">
+            <div style="width: 100%; height: 110px; display: flex; align-items: center; justify-content: center; background: #f8fafc; border-radius: 8px; margin-bottom: 8px;">
+              <img src="${p.image}" alt="${p.title}" style="max-width: 100%; max-height: 100px; object-fit: contain;">
+            </div>
+            <span style="font-size: 12px; color: #64748b; margin-bottom: 2px;">${p.brand || 'Ralphmart'}</span>
+            <span style="font-size: 13px; font-weight: 700; color: #0f172a; line-height: 1.3; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 6px;">${p.title}</span>
+            <span style="font-size: 14px; font-weight: 800; color: #512175; margin-top: auto;">₦${Number(p.price || 0).toLocaleString()}</span>
+          </a>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ==========================================
+// 4. ORDER LIFECYCLE (CANCEL, REORDER, RETURN)
+// ==========================================
+async function cancelOrder(orderId, reason) {
+  if (!orderId) throw new Error('Order ID required.');
+  const client = getSupabase();
+  const now = new Date().toISOString();
+
+  if (client) {
+    const { error } = await client
+      .from('orders')
+      .update({
+        order_status: 'cancelled',
+        cancellation_reason: (reason || 'Cancelled by customer').trim(),
+        cancelled_at: now,
+        updated_at: now
+      })
+      .eq('id', orderId);
+    if (error) throw error;
+  }
+
+  try {
+    const orders = JSON.parse(localStorage.getItem('nkemmart_user_orders') || '[]');
+    const target = orders.find(o => o.id === orderId);
+    if (target) {
+      target.order_status = 'cancelled';
+      target.cancellation_reason = reason;
+      target.cancelled_at = now;
+      localStorage.setItem('nkemmart_user_orders', JSON.stringify(orders));
+    }
+  } catch (e) {}
+
+  try {
+    if (typeof logUserActivity === 'function') {
+      logUserActivity('order_cancelled', 'Cancelled order #' + orderId, { orderId, reason });
+    }
+    await addUserNotification({
+      type: 'order',
+      title: 'Order Cancelled',
+      message: 'Your order #' + orderId + ' has been cancelled as requested.',
+      link: 'orders.html?orderId=' + orderId
+    });
+  } catch (e) {}
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nkemmart_order_updated', { detail: { id: orderId, status: 'cancelled' } }));
+  }
+}
+
+async function requestOrderReturn(orderId, reason) {
+  if (!orderId) throw new Error('Order ID required.');
+  const client = getSupabase();
+  const now = new Date().toISOString();
+
+  if (client) {
+    const { error } = await client
+      .from('orders')
+      .update({
+        return_status: 'requested',
+        return_reason: (reason || 'Customer requested return').trim(),
+        return_requested_at: now,
+        updated_at: now
+      })
+      .eq('id', orderId);
+    if (error) throw error;
+  }
+
+  try {
+    const orders = JSON.parse(localStorage.getItem('nkemmart_user_orders') || '[]');
+    const target = orders.find(o => o.id === orderId);
+    if (target) {
+      target.return_status = 'requested';
+      target.return_reason = reason;
+      target.return_requested_at = now;
+      localStorage.setItem('nkemmart_user_orders', JSON.stringify(orders));
+    }
+  } catch (e) {}
+
+  try {
+    if (typeof logUserActivity === 'function') {
+      logUserActivity('return_requested', 'Requested return for order #' + orderId, { orderId, reason });
+    }
+    await addUserNotification({
+      type: 'order',
+      title: 'Return Request Received',
+      message: 'Your return request for order #' + orderId + ' has been submitted for store review.',
+      link: 'orders.html?orderId=' + orderId
+    });
+  } catch (e) {}
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nkemmart_order_updated', { detail: { id: orderId, return_status: 'requested' } }));
+  }
+}
+
+async function reorderOrderItems(orderId) {
+  if (!orderId) return;
+  let items = [];
+  try {
+    const orders = JSON.parse(localStorage.getItem('nkemmart_user_orders') || '[]');
+    const target = orders.find(o => o.id === orderId);
+    if (target && Array.isArray(target.items)) {
+      items = target.items;
+    }
+  } catch (e) {}
+
+  if (items.length === 0) {
+    const client = getSupabase();
+    if (client) {
+      const { data } = await client.from('orders').select('items').eq('id', orderId).single();
+      if (data && Array.isArray(data.items)) items = data.items;
+    }
+  }
+
+  if (items.length === 0) throw new Error('Could not find items to reorder.');
+
+  let cart = [];
+  try { cart = JSON.parse(localStorage.getItem('nkemmart_cart') || '[]'); } catch (e) {}
+  const cartMap = new Map();
+  cart.forEach(it => { if (it && it.id) cartMap.set(String(it.id), it); });
+
+  items.forEach(it => {
+    if (it && it.id) {
+      const key = String(it.id);
+      if (cartMap.has(key)) {
+        cartMap.get(key).qty = (cartMap.get(key).qty || 1) + (it.qty || 1);
+      } else {
+        cartMap.set(key, { ...it });
+      }
+    }
+  });
+
+  const finalCart = Array.from(cartMap.values());
+  if (typeof syncCartToCloud === 'function') {
+    await syncCartToCloud(finalCart);
+  } else {
+    localStorage.setItem('nkemmart_cart', JSON.stringify(finalCart));
+    if (typeof syncAllBadges === 'function') syncAllBadges();
+  }
+
+  return finalCart;
+}
+
+// ==========================================
+// 5. LIVE PREDICTIVE INSTANT SEARCH
+// ==========================================
+function initLivePredictiveSearch() {
+  if (typeof document === 'undefined') return;
+  const searchInputs = document.querySelectorAll('.search-input');
+  searchInputs.forEach(input => {
+    if (input.getAttribute('data-predictive-ready')) return;
+    input.setAttribute('data-predictive-ready', 'true');
+
+    const form = input.closest('form') || input.parentElement;
+    form.style.position = 'relative';
+
+    const menu = document.createElement('div');
+    menu.className = 'predictive-search-menu';
+    menu.style.cssText = `
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.16);
+      z-index: 99999;
+      display: none;
+      max-height: 420px;
+      overflow-y: auto;
+      margin-top: 2px;
+    `;
+    form.appendChild(menu);
+
+    let debounceTimer = null;
+
+    input.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      const query = input.value.trim().toLowerCase();
+      if (query.length < 2) {
+        menu.style.display = 'none';
+        return;
+      }
+
+      debounceTimer = setTimeout(() => {
+        let catalog = [];
+        if (typeof RALPHMART_CATALOG !== 'undefined' && Array.isArray(RALPHMART_CATALOG)) {
+          catalog = RALPHMART_CATALOG;
+        } else if (typeof CATALOG_PRODUCTS !== 'undefined' && Array.isArray(CATALOG_PRODUCTS)) {
+          catalog = CATALOG_PRODUCTS;
+        }
+
+        const matched = catalog.filter(p => {
+          const t = (p.title || '').toLowerCase();
+          const b = (p.brand || '').toLowerCase();
+          const c = (p.category || p.category_id || '').toLowerCase();
+          return t.includes(query) || b.includes(query) || c.includes(query);
+        }).slice(0, 6);
+
+        if (matched.length === 0) {
+          menu.innerHTML = `
+            <div style="padding: 16px; text-align: center; color: #64748b; font-size: 13px;">
+              No matching products found for "<strong>${escapeSearchHtml(query)}</strong>"
+            </div>
+          `;
+          menu.style.display = 'block';
+          return;
+        }
+
+        menu.innerHTML = `
+          <div style="padding: 8px 14px; background: #f8fafc; border-bottom: 1px solid #f1f5f9; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">
+            Matching Products (${matched.length})
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            ${matched.map(p => `
+              <a href="product.html?id=${encodeURIComponent(p.id)}" class="predictive-search-item" style="display: flex; align-items: center; gap: 12px; padding: 10px 14px; text-decoration: none; border-bottom: 1px solid #f8fafc; transition: background-color 0.15s;" onmouseover="this.style.background='#faf5ff'" onmouseout="this.style.background='transparent'">
+                <img src="${(p.images && p.images[0]) || p.image || 'images/subcategories/sub_smartphones.jpg'}" alt="${p.title}" style="width: 42px; height: 42px; object-fit: contain; background: #f8fafc; border-radius: 6px; padding: 2px;">
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-size: 13px; font-weight: 700; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeSearchHtml(p.title)}</div>
+                  <div style="font-size: 11.5px; color: #64748b;">${escapeSearchHtml(p.brand || 'Ralphmart')} &bull; <span style="color: #16a34a; font-weight: 600;">Verified Listing</span></div>
+                </div>
+                <div style="font-size: 13.5px; font-weight: 800; color: #512175; white-space: nowrap;">₦${Number(p.price || 0).toLocaleString()}</div>
+              </a>
+            `).join('')}
+          </div>
+          <a href="category.html?q=${encodeURIComponent(query)}" style="display: block; padding: 10px 14px; background: #faf5ff; text-align: center; font-size: 12.5px; font-weight: 700; color: #512175; text-decoration: none; border-top: 1px solid #e9d5ff;">
+            See all results for "${escapeSearchHtml(query)}" &rarr;
+          </a>
+        `;
+        menu.style.display = 'block';
+      }, 150);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!form.contains(e.target)) {
+        menu.style.display = 'none';
+      }
+    });
+
+    function escapeSearchHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+  });
+}
+
+// ==========================================
+// 6. FLOATING QUICK SUPPORT & WHATSAPP WIDGET
+// ==========================================
+function initFloatingSupportWidget() {
+  if (typeof document === 'undefined' || document.getElementById('floatingSupportWidget')) return;
+
+  const widget = document.createElement('div');
+  widget.id = 'floatingSupportWidget';
+  widget.className = 'floating-support-container';
+  widget.style.cssText = `
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9998;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  `;
+
+  widget.innerHTML = `
+    <div class="floating-support-card" id="floatingSupportCard" style="display: none; width: 280px; background: #ffffff; border-radius: 14px; box-shadow: 0 16px 36px rgba(0,0,0,0.18); border: 1px solid #e2e8f0; margin-bottom: 12px; overflow: hidden; animation: notifFadeIn 0.2s ease;">
+      <div style="background: linear-gradient(135deg, #512175 0%, #3d1858 100%); color: #ffffff; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 10px; height: 10px; border-radius: 50%; background: #22c55e;"></div>
+          <div>
+            <div style="font-weight: 800; font-size: 13.5px;">Customer Care</div>
+            <div style="font-size: 11px; opacity: 0.85;">Live Support Across Nigeria</div>
+          </div>
+        </div>
+        <button type="button" id="closeFloatingCardBtn" style="background: transparent; border: none; color: #ffffff; font-size: 18px; cursor: pointer;">&times;</button>
+      </div>
+      <div style="padding: 12px;">
+        <a href="https://wa.me/2347042087633?text=Hello%20Ralphmart%20Support,%20I%20need%20assistance" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; text-decoration: none; margin-bottom: 8px; transition: background 0.15s;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#16a34a"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <div>
+            <div style="font-weight: 700; font-size: 13px; color: #166534;">Chat on WhatsApp</div>
+            <div style="font-size: 11px; color: #15803d;">Instant reply (07042087633)</div>
+          </div>
+        </a>
+        <a href="tel:08155608447" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; margin-bottom: 8px; color: #0f172a;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <div>
+            <div style="font-weight: 700; font-size: 13px;">Call Support Line</div>
+            <div style="font-size: 11px; color: #64748b;">08155608447 (Mon - Sat)</div>
+          </div>
+        </a>
+        <a href="orders.html" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; text-decoration: none; font-size: 12.5px; font-weight: 600; color: #512175;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>Track Delivery Status</span>
+        </a>
+      </div>
+    </div>
+
+    <button type="button" id="floatingSupportTriggerBtn" style="width: 52px; height: 52px; border-radius: 50%; background: #512175; color: #ffffff; border: 2.5px solid #ffffff; box-shadow: 0 8px 24px rgba(81, 33, 117, 0.35); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; transform: none !important;" aria-label="Open support options">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+    </button>
+  `;
+
+  document.body.appendChild(widget);
+
+  const card = widget.querySelector('#floatingSupportCard');
+  const trigger = widget.querySelector('#floatingSupportTriggerBtn');
+  const closeBtn = widget.querySelector('#closeFloatingCardBtn');
+
+  trigger.addEventListener('click', () => {
+    card.style.display = card.style.display === 'block' ? 'none' : 'block';
+  });
+  closeBtn.addEventListener('click', () => {
+    card.style.display = 'none';
+  });
 }
 
 let _isSyncingFromCloud = false;
@@ -1689,6 +2492,15 @@ if (typeof document !== 'undefined') {
     initSmartHeader();
     initBackToTop();
     initHeaderDropdowns();
+    if (typeof initGlobalNotificationCenter === 'function') {
+      initGlobalNotificationCenter();
+    }
+    if (typeof initLivePredictiveSearch === 'function') {
+      initLivePredictiveSearch();
+    }
+    if (typeof initFloatingSupportWidget === 'function') {
+      initFloatingSupportWidget();
+    }
     if (typeof setupRealtimeSync === 'function') {
       setupRealtimeSync();
     }

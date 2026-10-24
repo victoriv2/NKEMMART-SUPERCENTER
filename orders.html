@@ -980,6 +980,7 @@
       } catch (e) {
         allOrders = [];
       }
+      window.allOrders = allOrders;
 
       // Also fetch from Supabase if user logged in
       const client = getSupabase();
@@ -1023,56 +1024,82 @@
         feedContainer.innerHTML = ordersToDisplay.map(ord => {
           const dateStr = ord.created_at ? new Date(ord.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recent';
           const items = Array.isArray(ord.items) ? ord.items : [];
-          const status = ord.order_status || 'confirmed';
+          const status = (ord.order_status || 'confirmed').toLowerCase();
 
           let statusClass = 'status-confirmed';
           let statusText = 'Confirmed';
           if (status === 'shipped') { statusClass = 'status-shipped'; statusText = 'Out for Delivery'; }
           else if (status === 'delivered') { statusClass = 'status-delivered'; statusText = 'Delivered'; }
           else if (status === 'pending') { statusClass = 'status-pending'; statusText = 'Pending'; }
+          else if (status === 'cancelled') { statusClass = 'status-cancelled'; statusText = 'Cancelled'; }
 
           // Stepper calculations
+          const isCancelled = status === 'cancelled';
           const isPlaced = true;
-          const isConfirmed = status === 'confirmed' || status === 'processing' || status === 'shipped' || status === 'delivered';
-          const isProcessing = status === 'processing' || status === 'shipped' || status === 'delivered';
-          const isShipped = status === 'shipped' || status === 'delivered';
-          const isDelivered = status === 'delivered';
+          const isConfirmed = !isCancelled && (status === 'confirmed' || status === 'processing' || status === 'shipped' || status === 'delivered');
+          const isProcessing = !isCancelled && (status === 'processing' || status === 'shipped' || status === 'delivered');
+          const isShipped = !isCancelled && (status === 'shipped' || status === 'delivered');
+          const isDelivered = !isCancelled && (status === 'delivered');
+          const isCanCancel = !isCancelled && !isDelivered && status !== 'shipped';
 
           const waMsg = encodeURIComponent(`Hello RALPHMART Support, I am tracking my order ${ord.id}. Name: ${ord.customer_name}.`);
+
+          let cancelBanner = '';
+          if (isCancelled) {
+            cancelBanner = `
+              <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; color: #991b1b; font-size: 13px;">
+                <strong>Order Cancelled:</strong> ${escapeHtml(ord.cancellation_reason || 'Cancelled at customer request')}. No further payments or deliveries will be processed.
+              </div>
+            `;
+          }
+
+          let returnBanner = '';
+          if (ord.return_status === 'requested') {
+            returnBanner = `
+              <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; color: #1e40af; font-size: 13px;">
+                <strong>Return Requested:</strong> Your return request (${escapeHtml(ord.return_reason || 'Product return')}) is being reviewed by our customer relations team.
+              </div>
+            `;
+          }
 
           return `
             <div class="order-card" id="order-${ord.id}">
               <div class="order-card-header">
                 <div>
-                  <h3 class="order-id-title">Order #${ord.id}</h3>
+                  <h3 class="order-id-title">Order #${escapeHtml(ord.id)}</h3>
                   <span class="order-date-text">Placed on ${dateStr}</span>
                 </div>
                 <span class="order-status-pill ${statusClass}">${statusText}</span>
               </div>
 
-              <!-- Stepper -->
-              <div class="order-stepper">
-                <div class="step-node ${isPlaced ? 'completed' : ''}">
-                  <div class="step-circle">&#10003;</div>
-                  <span>Placed</span>
+              ${cancelBanner}
+              ${returnBanner}
+
+              <!-- Visual Delivery Stepper (hidden if cancelled) -->
+              ${!isCancelled ? `
+                <div class="order-stepper">
+                  <div class="step-node ${isPlaced ? 'completed' : ''}">
+                    <div class="step-circle">&#10003;</div>
+                    <span>Placed</span>
+                  </div>
+                  <div class="step-node ${isConfirmed ? 'completed' : ''}">
+                    <div class="step-circle">${isConfirmed ? '&#10003;' : '2'}</div>
+                    <span>Confirmed</span>
+                  </div>
+                  <div class="step-node ${isProcessing ? 'completed' : (isConfirmed ? 'active' : '')}">
+                    <div class="step-circle">${isProcessing ? '&#10003;' : '3'}</div>
+                    <span>Processing</span>
+                  </div>
+                  <div class="step-node ${isShipped ? 'completed' : ''}">
+                    <div class="step-circle">${isShipped ? '&#10003;' : '4'}</div>
+                    <span>Shipped</span>
+                  </div>
+                  <div class="step-node ${isDelivered ? 'completed' : ''}">
+                    <div class="step-circle">${isDelivered ? '&#10003;' : '5'}</div>
+                    <span>Delivered</span>
+                  </div>
                 </div>
-                <div class="step-node ${isConfirmed ? 'completed' : ''}">
-                  <div class="step-circle">${isConfirmed ? '&#10003;' : '2'}</div>
-                  <span>Confirmed</span>
-                </div>
-                <div class="step-node ${isProcessing ? 'completed' : (isConfirmed ? 'active' : '')}">
-                  <div class="step-circle">${isProcessing ? '&#10003;' : '3'}</div>
-                  <span>Processing</span>
-                </div>
-                <div class="step-node ${isShipped ? 'completed' : ''}">
-                  <div class="step-circle">${isShipped ? '&#10003;' : '4'}</div>
-                  <span>Shipped</span>
-                </div>
-                <div class="step-node ${isDelivered ? 'completed' : ''}">
-                  <div class="step-circle">${isDelivered ? '&#10003;' : '5'}</div>
-                  <span>Delivered</span>
-                </div>
-              </div>
+              ` : ''}
 
               <!-- Items List -->
               <div class="order-items-grid">
@@ -1110,16 +1137,40 @@
                 </div>
               </div>
 
-              <!-- Contact & Support for this order -->
-              <div class="order-contact-actions">
-                <a href="https://wa.me/2347042087633?text=${waMsg}" target="_blank" rel="noopener noreferrer" class="order-action-btn btn-wa">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                  <span>WhatsApp Inquiry for this Order</span>
-                </a>
-                <a href="tel:08155608447" class="order-action-btn btn-call">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                  <span>Call 08155608447</span>
-                </a>
+              <!-- Actions & Support -->
+              <div class="order-contact-actions" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <button type="button" class="order-action-btn" onclick="window.showOrderInvoice('${escapeHtml(ord.id)}')" style="background: #faf5ff; color: #512175; border: 1.5px solid #d8b4fe; font-weight: 700;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Print Invoice</span>
+                  </button>
+                  <button type="button" class="order-action-btn" onclick="window.handleReorderOrder('${escapeHtml(ord.id)}')" style="background: #512175; color: #ffffff; border: none; font-weight: 700;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    <span>Buy Again</span>
+                  </button>
+                  ${isCanCancel ? `
+                    <button type="button" class="order-action-btn" onclick="window.handleCancelOrder('${escapeHtml(ord.id)}')" style="background: #ffffff; color: #dc2626; border: 1.5px solid #fca5a5; font-weight: 600;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                      <span>Cancel Order</span>
+                    </button>
+                  ` : ''}
+                  ${isDelivered && ord.return_status !== 'requested' ? `
+                    <button type="button" class="order-action-btn" onclick="window.handleRequestReturn('${escapeHtml(ord.id)}')" style="background: #ffffff; color: #475569; border: 1.5px solid #cbd5e1; font-weight: 600;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                      <span>Request Return</span>
+                    </button>
+                  ` : ''}
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <a href="https://wa.me/2347042087633?text=${waMsg}" target="_blank" rel="noopener noreferrer" class="order-action-btn btn-wa">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    <span>WhatsApp</span>
+                  </a>
+                  <a href="tel:08155608447" class="order-action-btn btn-call">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <span>Call</span>
+                  </a>
+                </div>
               </div>
             </div>
           `;
@@ -1157,6 +1208,8 @@
 
         renderOrders(filtered);
       });
+
+      window.renderOrders = renderOrders;
 
       window.addEventListener('nkemmart_order_updated', (e) => {
         if (e.detail) {
@@ -1229,7 +1282,199 @@
         badge.style.display = totalQty > 0 ? 'flex' : 'none';
       }
     } catch(e) {}
+
+    // Invoice and Order Management Handlers
+    window.showOrderInvoice = function(orderId) {
+      const orders = window.allOrders || [];
+      const ord = orders.find(o => String(o.id) === String(orderId));
+      if (!ord) {
+        alert('Order not found.');
+        return;
+      }
+
+      const modal = document.getElementById('orderInvoiceModal');
+      const container = document.getElementById('orderInvoiceContent');
+      if (!modal || !container) return;
+
+      const items = Array.isArray(ord.items) ? ord.items : [];
+      const orderDate = ord.created_at ? new Date(ord.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A';
+      const subtotal = items.reduce((sum, it) => sum + (Number(it.price || 0) * (it.qty || 1)), 0);
+      const deliveryFee = Number(ord.delivery_fee || 0);
+      const totalAmount = Number(ord.total_amount || (subtotal + deliveryFee));
+
+      container.innerHTML = `
+        <div style="font-family: inherit; color: #1e293b;">
+          <!-- Store Header -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #512175; padding-bottom: 16px; margin-bottom: 20px;">
+            <div>
+              <h2 style="margin: 0 0 4px 0; color: #512175; font-size: 22px; font-weight: 800; letter-spacing: 0.5px;">RALPHMART SUPERCENTER</h2>
+              <p style="margin: 0; font-size: 12.5px; color: #64748b;">Official Tax Invoice &amp; Purchase Summary</p>
+              <p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b;">RC: 3829104 | support@ralphmart.com | +234 704 208 7633</p>
+            </div>
+            <div style="text-align: right;">
+              <span style="display: inline-block; padding: 4px 10px; background: #faf5ff; border: 1px solid #d8b4fe; color: #512175; font-weight: 800; font-size: 12px; border-radius: 4px; text-transform: uppercase;">Invoice</span>
+              <p style="margin: 6px 0 2px 0; font-size: 13.5px; font-weight: 700; color: #0f172a;">#${escapeHtml(ord.id)}</p>
+              <p style="margin: 0; font-size: 12px; color: #64748b;">Date: ${orderDate}</p>
+            </div>
+          </div>
+
+          <!-- Customer & Order Meta -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 20px;">
+            <div>
+              <p style="margin: 0 0 4px 0; font-size: 11px; text-transform: uppercase; font-weight: 700; color: #64748b;">Billed / Delivered To:</p>
+              <p style="margin: 0; font-size: 13.5px; font-weight: 700; color: #0f172a;">${escapeHtml(ord.customer_name || 'Valued Customer')}</p>
+              <p style="margin: 2px 0 0 0; font-size: 12.5px; color: #475569;">${escapeHtml(ord.delivery_address || '')}</p>
+              <p style="margin: 2px 0 0 0; font-size: 12.5px; color: #475569;">${escapeHtml(ord.city || '')}${ord.state ? ', ' + escapeHtml(ord.state) : ''}</p>
+              <p style="margin: 2px 0 0 0; font-size: 12.5px; color: #475569;">Phone: ${escapeHtml(ord.customer_phone || 'N/A')}</p>
+            </div>
+            <div>
+              <p style="margin: 0 0 4px 0; font-size: 11px; text-transform: uppercase; font-weight: 700; color: #64748b;">Order Details:</p>
+              <p style="margin: 0; font-size: 12.5px; color: #475569;">Payment Method: <strong>${escapeHtml((ord.payment_method || 'Pay on Delivery').replace(/_/g, ' '))}</strong></p>
+              <p style="margin: 2px 0 0 0; font-size: 12.5px; color: #475569;">Order Status: <strong style="text-transform: capitalize;">${escapeHtml(ord.order_status || 'Confirmed')}</strong></p>
+              ${ord.customer_email ? `<p style="margin: 2px 0 0 0; font-size: 12.5px; color: #475569;">Email: ${escapeHtml(ord.customer_email)}</p>` : ''}
+            </div>
+          </div>
+
+          <!-- Items Table -->
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px;">
+            <thead>
+              <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1; text-align: left;">
+                <th style="padding: 10px 12px; font-weight: 700; color: #334155;">Item Description</th>
+                <th style="padding: 10px 12px; font-weight: 700; color: #334155; text-align: center;">Qty</th>
+                <th style="padding: 10px 12px; font-weight: 700; color: #334155; text-align: right;">Unit Price</th>
+                <th style="padding: 10px 12px; font-weight: 700; color: #334155; text-align: right;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${items.map(it => `
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                  <td style="padding: 10px 12px; font-weight: 600; color: #1e293b;">${escapeHtml(it.title)}</td>
+                  <td style="padding: 10px 12px; text-align: center; color: #475569;">${it.qty || 1}</td>
+                  <td style="padding: 10px 12px; text-align: right; color: #475569;">${formatNaira(it.price || 0)}</td>
+                  <td style="padding: 10px 12px; text-align: right; font-weight: 700; color: #0f172a;">${formatNaira(Number(it.price || 0) * (it.qty || 1))}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <!-- Financial Breakdown -->
+          <div style="display: flex; justify-content: flex-end; margin-bottom: 24px;">
+            <div style="width: 280px; font-size: 13px;">
+              <div style="display: flex; justify-content: space-between; padding: 4px 0; color: #64748b;">
+                <span>Subtotal:</span>
+                <span style="font-weight: 600; color: #1e293b;">${formatNaira(subtotal)}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 4px 0; color: #64748b;">
+                <span>Delivery / Shipping Fee:</span>
+                <span style="font-weight: 600; color: #1e293b;">${formatNaira(deliveryFee)}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-top: 2px solid #512175; font-size: 15px; font-weight: 800; color: #512175;">
+                <span>Total Amount Paid:</span>
+                <span>${formatNaira(totalAmount)}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Note -->
+          <div style="text-align: center; border-top: 1px dashed #cbd5e1; padding-top: 14px; font-size: 11.5px; color: #64748b;">
+            Thank you for shopping with RALPHMART SUPERCENTER. For return or dispute assistance, please reach out via WhatsApp (+234 704 208 7633) or our support desk.
+          </div>
+        </div>
+      `;
+
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeOrderInvoice = function() {
+      const modal = document.getElementById('orderInvoiceModal');
+      if (modal) {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    };
+
+    window.handleReorderOrder = function(orderId) {
+      const res = reorderOrderItems(orderId);
+      if (res && res.success) {
+        if (typeof showToast === 'function') {
+          showToast(`Reordered ${res.reorderedCount} items to your shopping cart.`);
+        } else {
+          alert(`Reordered ${res.reorderedCount} items to your shopping cart.`);
+        }
+        setTimeout(function() {
+          window.location.href = 'cart.html';
+        }, 600);
+      } else {
+        alert('Unable to reorder items. Please try again.');
+      }
+    };
+
+    window.handleCancelOrder = async function(orderId) {
+      const reason = prompt('Please specify a cancellation reason (e.g., Placed by mistake, Found alternative, Change of delivery address):');
+      if (!reason || !reason.trim()) return;
+
+      const res = await cancelOrder(orderId, reason.trim());
+      if (res && res.success) {
+        const orders = window.allOrders || [];
+        const ord = orders.find(o => String(o.id) === String(orderId));
+        if (ord) {
+          ord.order_status = 'cancelled';
+          ord.cancellation_reason = reason.trim();
+        }
+        if (typeof window.renderOrders === 'function') {
+          window.renderOrders(orders);
+        }
+        alert('Order #' + orderId + ' has been cancelled successfully.');
+      } else {
+        alert('Failed to cancel order: ' + (res && res.error ? res.error : 'Unknown error'));
+      }
+    };
+
+    window.handleRequestReturn = async function(orderId) {
+      const reason = prompt('Please provide the reason for your return request (e.g. Defective or damaged item, Received wrong product):');
+      if (!reason || !reason.trim()) return;
+
+      const res = await requestOrderReturn(orderId, reason.trim());
+      if (res && res.success) {
+        const orders = window.allOrders || [];
+        const ord = orders.find(o => String(o.id) === String(orderId));
+        if (ord) {
+          ord.return_status = 'requested';
+          ord.return_reason = reason.trim();
+        }
+        if (typeof window.renderOrders === 'function') {
+          window.renderOrders(orders);
+        }
+        alert('Your return request has been submitted. Our customer relations team will contact you shortly.');
+      } else {
+        alert('Failed to submit return request: ' + (res && res.error ? res.error : 'Unknown error'));
+      }
+    };
   </script>
+
+  <!-- Printable Tax Invoice Modal -->
+  <div id="orderInvoiceModal" class="invoice-modal-overlay">
+    <div class="invoice-modal-dialog">
+      <div class="invoice-modal-header">
+        <h3 style="margin: 0; font-size: 16px; font-weight: 700; color: #091e3a; display: flex; align-items: center; gap: 8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span>Tax Invoice / Official Receipt</span>
+        </h3>
+        <button type="button" onclick="window.closeOrderInvoice()" style="background: none; border: none; font-size: 20px; line-height: 1; cursor: pointer; color: #64748b; padding: 4px 8px;">&times;</button>
+      </div>
+      <div id="orderInvoiceContent" class="invoice-modal-body">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="invoice-modal-footer">
+        <button type="button" onclick="window.closeOrderInvoice()" style="padding: 8px 18px; border: 1.5px solid #cbd5e1; background: #ffffff; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; color: #475569;">Close</button>
+        <button type="button" onclick="window.print()" style="padding: 8px 20px; border: none; background: #512175; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 6px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          <span>Print / Save as PDF</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
