@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <title>Notification Center &amp; Alerts - RALPHMART SUPERCENTER</title>
+  <link rel="stylesheet" href="styles.css?v=21.2">
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="taxonomy.js?v=3.3"></script>
+  <script src="modular-select-picker.js"></script>
+  <style>
+    body {
+      background-color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .notif-page-container {
+      max-width: 960px;
+      margin: 24px auto 48px auto;
+      padding: 0 16px;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+    }
+
+    .notif-breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 18px;
+    }
+
+    .notif-breadcrumbs a {
+      color: #512175;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .notif-breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .notif-breadcrumbs span.sep {
+      color: #cbd5e1;
+    }
+
+    /* Hero Header Card */
+    .notif-hero-card {
+      background: linear-gradient(135deg, #512175 0%, #3d1858 100%);
+      border-radius: 14px;
+      padding: 24px 28px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(81, 33, 117, 0.15);
+      flex-wrap: wrap;
+    }
+
+    .notif-hero-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .notif-hero-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #ffffff;
+    }
+
+    .notif-hero-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin: 0 0 4px 0;
+      letter-spacing: -0.3px;
+    }
+
+    .notif-hero-sub {
+      font-size: 13.5px;
+      color: #e2e8f0;
+      margin: 0 0 8px 0;
+      line-height: 1.4;
+    }
+
+    .notif-hero-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .notif-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.3px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .notif-pill.unread-pill {
+      background: #ef4444;
+      border-color: #f87171;
+      color: #ffffff;
+    }
+
+    .notif-hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .notif-hero-btn {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.15s, border-color 0.15s;
+      transform: none !important;
+      box-shadow: none !important;
+      border: none;
+    }
+
+    .notif-hero-btn.btn-light {
+      background: #ffffff;
+      color: #512175;
+    }
+
+    .notif-hero-btn.btn-light:hover {
+      background: #f8fafc;
+    }
+
+    .notif-hero-btn.btn-outline {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .notif-hero-btn.btn-outline:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    /* Filter & Controls Panel Card */
+    .notif-filter-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .notif-search-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .notif-search-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .notif-search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      pointer-events: none;
+    }
+
+    .notif-search-input {
+      width: 100%;
+      height: 42px;
+      padding: 0 38px 0 38px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.15s;
+    }
+
+    .notif-search-input:focus {
+      border-color: #512175;
+      box-shadow: 0 0 0 3px rgba(81, 33, 117, 0.1);
+    }
+
+    .notif-search-clear {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 4px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notif-search-clear:hover {
+      color: #0f172a;
+    }
+
+    /* Filter Chips Row */
+    .notif-chips-scroll {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .notif-chip {
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+      transform: none !important;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .notif-chip:hover {
+      background: #faf5ff;
+      border-color: #512175;
+      color: #512175;
+    }
+
+    .notif-chip.active {
+      background: #512175;
+      border-color: #512175;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* Dropdown controls row */
+    .notif-options-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid #f1f5f9;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .notif-select-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .notif-select-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    /* Custom Modal Select Trigger Buttons */
+    .notif-modal-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f172a;
+      cursor: pointer;
+      transition: background-color 0.15s, border-color 0.15s;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .notif-modal-trigger:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+
+    .notif-modal-trigger .trigger-icon {
+      color: #512175;
+      display: flex;
+      align-items: center;
+    }
+
+    .notif-modal-trigger .trigger-text {
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+
+    .notif-modal-trigger .trigger-chevron {
+      color: #64748b;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+      margin-left: 2px;
+    }
+
+    .notif-modal-trigger.is-open .trigger-chevron {
+      transform: rotate(180deg);
+    }
+
+    .notif-reset-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.15s, color 0.15s;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .notif-reset-btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    /* Count Summary & Live Pulse Bar */
+    .notif-count-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      font-size: 13px;
+      color: #64748b;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .notif-count-text strong {
+      color: #0f172a;
+    }
+
+    .notif-live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #15803d;
+      background: #f0fdf4;
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid #bbf7d0;
+    }
+
+    .notif-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      display: inline-block;
+      box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3);
+    }
+
+    /* Notifications Feed List */
+    .notif-feed-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .notif-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      position: relative;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      transition: border-color 0.15s, background-color 0.15s;
+    }
+
+    .notif-card.unread {
+      background: #ffffff;
+      border-color: #d8b4fe;
+      border-left: 4px solid #512175;
+    }
+
+    .notif-card.read {
+      background: #ffffff;
+      opacity: 0.92;
+    }
+
+    .notif-card:hover {
+      border-color: #cbd5e1;
+    }
+
+    .notif-card-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .notif-card-icon-wrap.order {
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1px solid #bfdbfe;
+    }
+
+    .notif-card-icon-wrap.promo {
+      background: #faf5ff;
+      color: #512175;
+      border: 1px solid #e9d5ff;
+    }
+
+    .notif-card-icon-wrap.review {
+      background: #fefce8;
+      color: #d97706;
+      border: 1px solid #fef08a;
+    }
+
+    .notif-card-icon-wrap.account {
+      background: #f0fdf4;
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
+    }
+
+    .notif-card-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .notif-card-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+
+    .notif-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .notif-unread-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #512175;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .notif-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .notif-type-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    .notif-type-tag.order { background: #dbeafe; color: #1e40af; }
+    .notif-type-tag.promo { background: #faf5ff; color: #512175; }
+    .notif-type-tag.review { background: #fef3c7; color: #92400e; }
+    .notif-type-tag.account { background: #dcfce7; color: #166534; }
+
+    .notif-card-time {
+      font-size: 12px;
+      color: #64748b;
+      white-space: nowrap;
+    }
+
+    .notif-card-msg {
+      font-size: 13.5px;
+      color: #334155;
+      line-height: 1.5;
+      margin: 4px 0 10px 0;
+    }
+
+    .notif-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .notif-action-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      background: #faf5ff;
+      color: #512175;
+      border: 1px solid #d8b4fe;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background-color 0.15s;
+    }
+
+    .notif-action-link:hover {
+      background: #f3e8ff;
+    }
+
+    .notif-btn-secondary {
+      background: none;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      padding: 4px 6px;
+      text-decoration: underline;
+    }
+
+    .notif-btn-secondary:hover {
+      color: #0f172a;
+    }
+
+    .notif-btn-delete {
+      background: none;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: #dc2626;
+      cursor: pointer;
+      padding: 4px 6px;
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .notif-btn-delete:hover {
+      text-decoration: underline;
+    }
+
+    /* Empty state */
+    .notif-empty-state {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 56px 20px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .notif-empty-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #faf5ff;
+      color: #512175;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px auto;
+    }
+
+    .notif-empty-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #091e3a;
+      margin: 0 0 8px 0;
+    }
+
+    .notif-empty-text {
+      font-size: 13.5px;
+      color: #64748b;
+      max-width: 440px;
+      margin: 0 auto 20px auto;
+      line-height: 1.5;
+    }
+
+    /* Custom Filter Modal Styles (Desktop Modal, Mobile Bottom Sheet) */
+    .filter-picker-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .filter-picker-modal-overlay.open {
+      display: flex !important;
+      animation: filterModalFadeIn 0.2s ease-out;
+    }
+
+    @keyframes filterModalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .filter-picker-modal-dialog {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24);
+      overflow: hidden;
+      box-sizing: border-box;
+      transform: none !important;
+    }
+
+    .filter-picker-modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+
+    .filter-picker-modal-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .filter-picker-modal-close {
+      background: #f1f5f9;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #64748b;
+      padding: 0;
+      transform: none !important;
+    }
+
+    .filter-picker-modal-close:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .filter-picker-modal-body {
+      padding: 14px 16px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .filter-picker-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1.5px solid #e2e8f0;
+      background: #ffffff;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 0.15s, background-color 0.15s;
+      transform: none !important;
+    }
+
+    .filter-picker-option:hover {
+      background: #faf5ff;
+      border-color: #d8b4fe;
+    }
+
+    .filter-picker-option.selected {
+      background: #faf5ff;
+      border-color: #512175;
+    }
+
+    .filter-picker-option-left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .filter-picker-option-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.3;
+    }
+
+    .filter-picker-option.selected .filter-picker-option-label {
+      color: #512175;
+    }
+
+    .filter-picker-option-sub {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+      line-height: 1.25;
+    }
+
+    .filter-picker-radio {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.15s;
+      background: #ffffff;
+    }
+
+    .filter-picker-option.selected .filter-picker-radio {
+      border-color: #512175;
+    }
+
+    .filter-picker-radio-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #512175;
+      display: none;
+    }
+
+    .filter-picker-option.selected .filter-picker-radio-dot {
+      display: block;
+    }
+
+    /* Responsive Mobile layout (<= 768px) */
+    @media (max-width: 768px) {
+      .notif-page-container {
+        margin: 16px auto 36px auto !important;
+        padding: 0 12px !important;
+      }
+
+      .notif-hero-card {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        padding: 22px 16px !important;
+        gap: 16px !important;
+      }
+
+      .notif-hero-left {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        gap: 12px !important;
+      }
+
+      .notif-hero-actions {
+        width: 100% !important;
+        justify-content: center !important;
+      }
+
+      .notif-hero-btn {
+        width: 100% !important;
+        max-width: 260px !important;
+        justify-content: center !important;
+      }
+
+      .notif-filter-card {
+        padding: 14px 14px !important;
+      }
+
+      .notif-options-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+      }
+
+      .notif-select-group {
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+      }
+
+      .notif-select-label {
+        display: none !important;
+      }
+
+      .notif-modal-trigger {
+        width: 100% !important;
+        justify-content: space-between !important;
+      }
+
+      .filter-picker-modal-overlay {
+        padding: 0 !important;
+        align-items: flex-end !important;
+      }
+
+      .filter-picker-modal-dialog {
+        max-width: 100% !important;
+        max-height: 80vh !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        animation: filterModalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+
+      @keyframes filterModalSlideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Unified Site Header Wrapper -->
+  <div class="site-header-wrapper">
+    <!-- Top Announcement Ribbon -->
+    <aside class="top-bar" aria-label="Announcement Bar">
+      <div class="top-bar-inner">
+        <div class="top-bar-left">
+          <span class="doorstep-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+            Doorstep Delivery
+          </span>
+          <span>We deliver all across Nigeria!</span>
+          <span class="top-bar-slogan" style="color: #c084fc !important;">"Everything Dey™"</span>
+        </div>
+        <div class="top-bar-right">
+          <a href="sell.html" class="top-bar-link">Sell on Ralphmart</a>
+          <span class="top-bar-divider">|</span>
+          <a href="tel:08155608447" class="top-bar-link">Call: 08155608447</a>
+          <span class="top-bar-divider">|</span>
+          <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="top-bar-link">WhatsApp: 07042087633</a>
+          <span class="top-bar-divider">|</span>
+          <span class="top-bar-link" style="color: #fff; font-weight: 600;">₦ NGN</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Navigation Header -->
+    <header class="main-header" role="banner">
+      <div class="header-container">
+        
+        <!-- Hamburger Menu Button -->
+        <div class="header-menu-wrapper">
+          <button class="menu-btn" id="mobileMenuBtn" aria-label="Open categories menu" title="All Categories" type="button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+
+          <!-- Desktop Categories Dropdown -->
+          <div class="desktop-category-dropdown" id="desktopCategoryDropdown">
+            <div class="category-dropdown-list">
+              <a href="category.html?cat=vehicles" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L18 11l-2.7-3.6a1 1 0 0 0-.8-.4H9.5a1 1 0 0 0-.8.4L6 11l-3.16.86a1 1 0 0 0-.84.99V16h3"></path><circle cx="6.5" cy="16.5" r="2.5"></circle><circle cx="16.5" cy="16.5" r="2.5"></circle></svg>
+                <span>Vehicles</span>
+              </a>
+              <a href="category.html?cat=appliances" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="10" x2="20" y2="10"></line></svg>
+                <span>Appliances</span>
+              </a>
+              <a href="category.html?cat=phones" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                <span>Phones &amp; Tablets</span>
+              </a>
+              <a href="category.html?cat=health-beauty" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path><path d="M19 3v4M21 5h-4"></path></svg>
+                <span>Health &amp; Beauty</span>
+              </a>
+              <a href="category.html?cat=home-office" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                <span>Home &amp; Office</span>
+              </a>
+              <a href="category.html?cat=electronics" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+                <span>Electronics</span>
+              </a>
+              <a href="category.html?cat=fashion" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.5a2 2 0 0 0 1.25 1.57L7 12v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-9l2.89-1.24a2 2 0 0 0 1.25-1.57l.58-3.5a2 2 0 0 0-1.34-2.23z"></path></svg>
+                <span>Fashion</span>
+              </a>
+              <a href="category.html?cat=supermarket" class="category-dropdown-item">
+                <svg class="category-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 5-5 13-5 13S7 12 7 7a5 5 0 0 1 5-5z"></path></svg>
+                <span>Supermarket</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Brand Logo -->
+        <a href="index.html" class="logo-area" aria-label="RALPHMART Home">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="logo-icon">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <div class="logo-text-group">
+            <span class="logo-brand">RALPHMART</span>
+            <span class="logo-sub">SUPERCENTER</span>
+          </div>
+        </a>
+
+        <!-- Header Predictive Search -->
+        <div class="search-container">
+          <form class="search-form" id="mainSearchForm" action="category.html" method="GET" role="search">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="search" name="q" class="search-input" id="mainSearchInput" placeholder="Search products, brands and categories..." autocomplete="off">
+            <button type="submit" class="search-btn">Search</button>
+          </form>
+        </div>
+
+        <!-- Header Actions -->
+        <nav class="header-actions" aria-label="User navigation">
+          <div class="action-item location-action-item">
+            <button class="action-btn location-btn" id="headerLocationBtn" type="button" title="Select Delivery Location">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <div class="location-btn-text">
+                <span class="location-btn-sub">Deliver to</span>
+                <span class="location-btn-state" id="headerLocationText">Select State</span>
+              </div>
+            </button>
+          </div>
+
+          <div class="action-item">
+            <a href="notifications.html" class="action-btn" id="headerNotifBtn" title="Notification Center">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span class="action-label">Alerts</span>
+              <span class="badge header-notif-badge" id="headerNotifBadge" style="display: none; background-color: #ef4444;">0</span>
+            </a>
+          </div>
+
+          <div class="action-item">
+            <button class="action-btn" id="accountMenuBtn" type="button" aria-haspopup="dialog" aria-expanded="false" title="My Account">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span class="action-label">Account</span>
+            </button>
+          </div>
+
+          <div class="action-item">
+            <a href="saved-items.html" class="action-btn" title="Saved Items">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+              <span class="action-label">Saved</span>
+              <span class="badge" id="headerSavedBadge" style="display: none;">0</span>
+            </a>
+          </div>
+
+          <div class="action-item">
+            <a href="cart.html" class="action-btn" title="Shopping Cart">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+              <span class="action-label">Cart</span>
+              <span class="badge" id="headerCartBadge" style="display: none;">0</span>
+            </a>
+          </div>
+        </nav>
+
+      </div>
+    </header>
+  </div>
+
+  <!-- Main Container -->
+  <main class="notif-page-container" role="main">
+
+    <!-- Breadcrumbs -->
+    <div class="notif-breadcrumbs">
+      <a href="index.html">Home</a>
+      <span class="sep">&gt;</span>
+      <a href="profile.html">My Account</a>
+      <span class="sep">&gt;</span>
+      <span>Notification Center</span>
+    </div>
+
+    <!-- Hero Header Card -->
+    <section class="notif-hero-card" aria-label="Notification Center Summary">
+      <div class="notif-hero-left">
+        <div class="notif-hero-icon">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="notif-hero-title">Notification Center</h1>
+          <p class="notif-hero-sub">Real-time alerts on your orders, special discounts, verified reviews and security</p>
+          <div class="notif-hero-badges">
+            <span class="notif-pill" id="totalNotifsPill">0 Total Alerts</span>
+            <span class="notif-pill unread-pill" id="unreadNotifsPill">0 Unread</span>
+            <span class="notif-pill" id="liveSyncPill">Live Sync Active</span>
+          </div>
+        </div>
+      </div>
+      <div class="notif-hero-actions">
+        <button type="button" class="notif-hero-btn btn-light" id="btnMarkAllReadHero" title="Mark all alerts as read">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Mark All as Read</span>
+        </button>
+        <button type="button" class="notif-hero-btn btn-outline" id="btnClearAllHero" title="Clear all alerts">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          <span>Clear All</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Filter & Search Controls Panel -->
+    <div class="notif-filter-card">
+      <!-- Search row -->
+      <div class="notif-search-row">
+        <div class="notif-search-wrap">
+          <svg class="notif-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="notifSearchInput" class="notif-search-input" placeholder="Search notifications by title, product, order ID or message..." autocomplete="off">
+          <button type="button" id="notifSearchClear" class="notif-search-clear" title="Clear Search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Category Chips -->
+      <div class="notif-chips-scroll" role="tablist" aria-label="Notification Categories">
+        <button type="button" class="notif-chip active" data-type="all">All Notifications</button>
+        <button type="button" class="notif-chip" data-type="unread">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: #ef4444; display: inline-block;"></span>
+          <span>Unread Only</span>
+        </button>
+        <button type="button" class="notif-chip" data-type="order">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>Orders &amp; Delivery</span>
+        </button>
+        <button type="button" class="notif-chip" data-type="promo">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span>Deals &amp; Discounts</span>
+        </button>
+        <button type="button" class="notif-chip" data-type="review">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          <span>Reviews &amp; Replies</span>
+        </button>
+        <button type="button" class="notif-chip" data-type="account">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>Account &amp; Security</span>
+        </button>
+      </div>
+
+      <!-- Dropdowns & Reset Row (Triggers Custom Modular Dialog on Desktop, Bottom Sheet on Mobile) -->
+      <div class="notif-options-row">
+        <div class="notif-select-group">
+          <span class="notif-select-label">Sort:</span>
+          <button type="button" id="notifSortTrigger" class="notif-modal-trigger" aria-haspopup="dialog" aria-expanded="false" title="Click to change sort order">
+            <span class="trigger-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+            </span>
+            <span class="trigger-text" id="notifSortTriggerText">Newest First</span>
+            <svg class="trigger-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+
+          <span class="notif-select-label" style="margin-left: 4px;">Status:</span>
+          <button type="button" id="notifStatusTrigger" class="notif-modal-trigger" aria-haspopup="dialog" aria-expanded="false" title="Click to filter by read status">
+            <span class="trigger-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            </span>
+            <span class="trigger-text" id="notifStatusTriggerText">All Status</span>
+            <svg class="trigger-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+        </div>
+
+        <button type="button" id="btnResetNotifFilters" class="notif-reset-btn" title="Reset all search filters">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          <span>Reset Filters</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Count Summary & Live Pulse Bar -->
+    <div class="notif-count-bar">
+      <div class="notif-count-text" id="notifCountText">Loading notifications...</div>
+      <div class="notif-live-indicator">
+        <span class="notif-pulse-dot"></span>
+        <span>Real-time Live Notifications</span>
+      </div>
+    </div>
+
+    <!-- Notifications Feed List -->
+    <div id="notificationsFeedList" class="notif-feed-list" role="feed" aria-busy="true">
+      <div class="notif-empty-state">
+        <div class="notif-empty-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+        </div>
+        <h3 class="notif-empty-title">Loading Notifications</h3>
+        <p class="notif-empty-text">Fetching your latest alerts, order updates, and messages...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Custom Filter Modals (Desktop Modal, Mobile Action Sheet Bottom Sheet) -->
+
+  <!-- 1. Sort Order Modal -->
+  <div class="filter-picker-modal-overlay" id="sortModalOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="filter-picker-modal-dialog">
+      <div class="filter-picker-modal-header">
+        <h3 class="filter-picker-modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+          <span>Sort Notifications</span>
+        </h3>
+        <button type="button" class="filter-picker-modal-close" id="sortModalClose" aria-label="Close sort modal">&times;</button>
+      </div>
+      <div class="filter-picker-modal-body">
+        <button type="button" class="filter-picker-option selected" data-value="newest">
+          <div class="filter-picker-option-left">
+            <div class="filter-picker-option-label">Newest First</div>
+            <div class="filter-picker-option-sub">Show most recent alerts at the top</div>
+          </div>
+          <div class="filter-picker-radio"><span class="filter-picker-radio-dot"></span></div>
+        </button>
+
+        <button type="button" class="filter-picker-option" data-value="oldest">
+          <div class="filter-picker-option-left">
+            <div class="filter-picker-option-label">Oldest First</div>
+            <div class="filter-picker-option-sub">Earliest notifications first</div>
+          </div>
+          <div class="filter-picker-radio"><span class="filter-picker-radio-dot"></span></div>
+        </button>
+
+        <button type="button" class="filter-picker-option" data-value="unread_first">
+          <div class="filter-picker-option-left">
+            <div class="filter-picker-option-label">Unread First</div>
+            <div class="filter-picker-option-sub">Keep all unread alerts prioritized at the top</div>
+          </div>
+          <div class="filter-picker-radio"><span class="filter-picker-radio-dot"></span></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Status Filter Modal -->
+  <div class="filter-picker-modal-overlay" id="statusModalOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="filter-picker-modal-dialog">
+      <div class="filter-picker-modal-header">
+        <h3 class="filter-picker-modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          <span>Filter by Status</span>
+        </h3>
+        <button type="button" class="filter-picker-modal-close" id="statusModalClose" aria-label="Close status modal">&times;</button>
+      </div>
+      <div class="filter-picker-modal-body">
+        <button type="button" class="filter-picker-option selected" data-value="all">
+          <div class="filter-picker-option-left">
+            <div class="filter-picker-option-label">All Status</div>
+            <div class="filter-picker-option-sub">Display both read and unread notifications</div>
+          </div>
+          <div class="filter-picker-radio"><span class="filter-picker-radio-dot"></span></div>
+        </button>
+
+        <button type="button" class="filter-picker-option" data-value="unread">
+          <div class="filter-picker-option-left">
+            <div class="filter-picker-option-label">Unread Only</div>
+            <div class="filter-picker-option-sub">Show alerts requiring your attention</div>
+          </div>
+          <div class="filter-picker-radio"><span class="filter-picker-radio-dot"></span></div>
+        </button>
+
+        <button type="button" class="filter-picker-option" data-value="read">
+          <div class="filter-picker-option-left">
+            <div class="filter-picker-option-label">Read Only</div>
+            <div class="filter-picker-option-sub">Past opened and viewed alerts</div>
+          </div>
+          <div class="filter-picker-radio"><span class="filter-picker-radio-dot"></span></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SITE FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-newsletter-wrap">
+      <div class="footer-newsletter-inner">
+        <div class="footer-newsletter-text">
+          <span class="footer-newsletter-badge">Stay Updated</span>
+          <h3 class="footer-newsletter-title">Get special discounts &amp; order notifications</h3>
+          <p class="footer-newsletter-sub">Subscribe to our newsletter for exclusive deals, flash sales, and new arrivals.</p>
+        </div>
+        <form class="footer-newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed successfully to RALPHMART newsletter!');">
+          <input type="email" placeholder="Enter your email address" class="footer-newsletter-input" required>
+          <button type="submit" class="footer-newsletter-btn">Subscribe</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-main">
+      <div class="footer-col">
+        <div class="footer-brand-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span>RALPHMART SUPERCENTER</span>
+        </div>
+        <p class="footer-brand-desc">Nigeria's premier multi-category digital marketplace for genuine products, competitive wholesale pricing, and verified nationwide doorstep delivery.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Customer Service</h4>
+        <div class="footer-contact-item"><a href="orders.html" class="footer-contact-link">Track Your Order</a></div>
+        <div class="footer-contact-item"><a href="notifications.html" class="footer-contact-link">Notification Center</a></div>
+        <div class="footer-contact-item"><a href="reviews.html" class="footer-contact-link">Ratings &amp; Reviews</a></div>
+        <div class="footer-contact-item"><a href="profile.html" class="footer-contact-link">My Account</a></div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Categories</h4>
+        <div class="footer-contact-item"><a href="category.html?cat=electronics" class="footer-contact-link">Electronics</a></div>
+        <div class="footer-contact-item"><a href="category.html?cat=phones" class="footer-contact-link">Phones &amp; Tablets</a></div>
+        <div class="footer-contact-item"><a href="category.html?cat=appliances" class="footer-contact-link">Appliances</a></div>
+        <div class="footer-contact-item"><a href="category.html?cat=fashion" class="footer-contact-link">Fashion</a></div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Contact Support</h4>
+        <div class="footer-contact-item"><a href="tel:08155608447" class="footer-contact-link">08155608447</a></div>
+        <div class="footer-contact-item"><a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="footer-contact-link">WhatsApp: +234 704 208 7633</a></div>
+        <div class="footer-contact-item">support@ralphmart.com</div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>&copy; 2026 RALPHMART SUPERCENTER. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Notification Page Core JavaScript Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var allNotifications = [];
+      var activeCategory = 'all';
+      var activeStatus = 'all';
+      var activeSort = 'newest';
+      var activeSearch = '';
+
+      var feedContainer = document.getElementById('notificationsFeedList');
+      var searchInput = document.getElementById('notifSearchInput');
+      var searchClearBtn = document.getElementById('notifSearchClear');
+      var countText = document.getElementById('notifCountText');
+      var totalPill = document.getElementById('totalNotifsPill');
+      var unreadPill = document.getElementById('unreadNotifsPill');
+
+      var sortTrigger = document.getElementById('notifSortTrigger');
+      var sortTriggerText = document.getElementById('notifSortTriggerText');
+      var sortModalOverlay = document.getElementById('sortModalOverlay');
+      var sortModalClose = document.getElementById('sortModalClose');
+
+      var statusTrigger = document.getElementById('notifStatusTrigger');
+      var statusTriggerText = document.getElementById('notifStatusTriggerText');
+      var statusModalOverlay = document.getElementById('statusModalOverlay');
+      var statusModalClose = document.getElementById('statusModalClose');
+
+      var btnMarkAllHero = document.getElementById('btnMarkAllReadHero');
+      var btnClearAllHero = document.getElementById('btnClearAllHero');
+      var btnResetFilters = document.getElementById('btnResetNotifFilters');
+
+      // 1. Fetch Notifications
+      async function loadNotifications() {
+        try {
+          if (typeof getUserNotifications === 'function') {
+            allNotifications = await getUserNotifications();
+          } else {
+            allNotifications = JSON.parse(localStorage.getItem('nkemmart_user_notifications') || '[]');
+          }
+        } catch (err) {
+          console.warn('Error loading notifications:', err);
+          allNotifications = [];
+        }
+        applyFiltersAndRender();
+      }
+
+      // 2. Filter & Sort Engine
+      function applyFiltersAndRender() {
+        var filtered = allNotifications.slice();
+
+        // Search Filter
+        if (activeSearch) {
+          var q = activeSearch.toLowerCase();
+          filtered = filtered.filter(function(n) {
+            var title = (n.title || '').toLowerCase();
+            var msg = (n.message || '').toLowerCase();
+            return title.includes(q) || msg.includes(q);
+          });
+        }
+
+        // Category Filter
+        if (activeCategory === 'unread') {
+          filtered = filtered.filter(function(n) { return !n.is_read; });
+        } else if (activeCategory !== 'all') {
+          filtered = filtered.filter(function(n) { return (n.type || '').toLowerCase() === activeCategory; });
+        }
+
+        // Status Filter
+        if (activeStatus === 'unread') {
+          filtered = filtered.filter(function(n) { return !n.is_read; });
+        } else if (activeStatus === 'read') {
+          filtered = filtered.filter(function(n) { return !!n.is_read; });
+        }
+
+        // Sort Engine
+        filtered.sort(function(a, b) {
+          var timeA = new Date(a.created_at || 0).getTime();
+          var timeB = new Date(b.created_at || 0).getTime();
+
+          if (activeSort === 'unread_first') {
+            if (a.is_read !== b.is_read) {
+              return a.is_read ? 1 : -1;
+            }
+            return timeB - timeA;
+          } else if (activeSort === 'oldest') {
+            return timeA - timeB;
+          } else {
+            // newest
+            return timeB - timeA;
+          }
+        });
+
+        // Update Badges & Counts
+        var totalCount = allNotifications.length;
+        var unreadCount = allNotifications.filter(function(n) { return !n.is_read; }).length;
+
+        if (totalPill) totalPill.textContent = totalCount + ' Total Alerts';
+        if (unreadPill) {
+          unreadPill.textContent = unreadCount + ' Unread';
+          unreadPill.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+        }
+
+        if (countText) {
+          countText.innerHTML = 'Showing <strong>' + filtered.length + '</strong> of <strong>' + totalCount + '</strong> alerts';
+        }
+
+        renderFeed(filtered);
+      }
+
+      // 3. Render HTML Feed
+      function renderFeed(items) {
+        if (!items || items.length === 0) {
+          feedContainer.innerHTML = `
+            <div class="notif-empty-state">
+              <div class="notif-empty-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              </div>
+              <h3 class="notif-empty-title">No notifications found</h3>
+              <p class="notif-empty-text">No alerts matched your current search filters or criteria.</p>
+              <button type="button" class="notif-action-link" onclick="window.resetNotifFilters()" style="margin: 0 auto; padding: 8px 18px;">Reset All Filters</button>
+            </div>
+          `;
+          return;
+        }
+
+        feedContainer.innerHTML = items.map(function(n) {
+          var type = (n.type || 'account').toLowerCase();
+          var isRead = !!n.is_read;
+          var timeStr = formatRelativeTime(n.created_at);
+
+          var iconHtml = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>';
+          var typeLabel = 'Account';
+          var ctaText = 'View Details';
+
+          if (type === 'order') {
+            typeLabel = 'Order';
+            ctaText = 'Track Order';
+            iconHtml = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>';
+          } else if (type === 'promo') {
+            typeLabel = 'Discount';
+            ctaText = 'Explore Deals';
+            iconHtml = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+          } else if (type === 'review') {
+            typeLabel = 'Review';
+            ctaText = 'View Feedback';
+            iconHtml = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
+          }
+
+          return `
+            <div class="notif-card ${isRead ? 'read' : 'unread'}" id="card-${n.id}">
+              <div class="notif-card-icon-wrap ${type}">
+                ${iconHtml}
+              </div>
+              <div class="notif-card-body">
+                <div class="notif-card-header-row">
+                  <h3 class="notif-card-title">
+                    ${!isRead ? '<span class="notif-unread-dot" title="Unread notification"></span>' : ''}
+                    <span>${escapeHtml(n.title)}</span>
+                  </h3>
+                  <div class="notif-card-meta">
+                    <span class="notif-type-tag ${type}">${typeLabel}</span>
+                    <span class="notif-card-time">${timeStr}</span>
+                  </div>
+                </div>
+                <div class="notif-card-msg">${escapeHtml(n.message)}</div>
+                <div class="notif-card-actions">
+                  <a href="${escapeHtml(n.link || 'index.html')}" class="notif-action-link" onclick="window.handleNotifClick('${n.id}')">
+                    <span>${ctaText}</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </a>
+                  <button type="button" class="notif-btn-secondary" onclick="window.toggleNotifRead('${n.id}')">
+                    ${isRead ? 'Mark as unread' : 'Mark as read'}
+                  </button>
+                  <button type="button" class="notif-btn-delete" onclick="window.handleDeleteNotif('${n.id}')" title="Delete notification">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    <span>Delete</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function formatRelativeTime(iso) {
+        if (!iso) return 'Recent';
+        try {
+          var d = new Date(iso);
+          var now = new Date();
+          var diffSec = Math.floor((now - d) / 1000);
+          if (diffSec < 60) return 'Just now';
+          var diffMin = Math.floor(diffSec / 60);
+          if (diffMin < 60) return diffMin + 'm ago';
+          var diffHour = Math.floor(diffMin / 60);
+          if (diffHour < 24) return diffHour + 'h ago';
+          var diffDays = Math.floor(diffHour / 24);
+          if (diffDays === 1) return 'Yesterday';
+          if (diffDays < 7) return diffDays + 'd ago';
+          return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        } catch (e) {
+          return 'Recent';
+        }
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      // 4. Global Action Handlers
+      window.handleNotifClick = async function(id) {
+        if (typeof markNotificationAsRead === 'function') {
+          await markNotificationAsRead(id);
+        }
+      };
+
+      window.toggleNotifRead = async function(id) {
+        var target = allNotifications.find(function(n) { return n.id === id; });
+        if (!target) return;
+        target.is_read = !target.is_read;
+        localStorage.setItem('nkemmart_user_notifications', JSON.stringify(allNotifications));
+        if (typeof updateNotificationBadges === 'function') {
+          updateNotificationBadges();
+        }
+        applyFiltersAndRender();
+
+        var client = typeof getSupabase === 'function' ? getSupabase() : null;
+        if (client && typeof getCurrentUser === 'function') {
+          var user = await getCurrentUser();
+          if (user) {
+            try {
+              await client.from('profiles').update({ notifications: allNotifications }).eq('id', user.id);
+            } catch (err) {}
+          }
+        }
+      };
+
+      window.handleDeleteNotif = async function(id) {
+        if (typeof deleteUserNotification === 'function') {
+          allNotifications = await deleteUserNotification(id);
+        } else {
+          allNotifications = allNotifications.filter(function(n) { return n.id !== id; });
+          localStorage.setItem('nkemmart_user_notifications', JSON.stringify(allNotifications));
+        }
+        applyFiltersAndRender();
+      };
+
+      window.resetNotifFilters = function() {
+        activeCategory = 'all';
+        activeStatus = 'all';
+        activeSort = 'newest';
+        activeSearch = '';
+        if (searchInput) searchInput.value = '';
+        if (searchClearBtn) searchClearBtn.style.display = 'none';
+
+        document.querySelectorAll('.notif-chip').forEach(function(c) {
+          c.classList.toggle('active', c.getAttribute('data-type') === 'all');
+        });
+
+        if (sortTriggerText) sortTriggerText.textContent = 'Newest First';
+        if (statusTriggerText) statusTriggerText.textContent = 'All Status';
+
+        updateModalOptionsActive(sortModalOverlay, 'newest');
+        updateModalOptionsActive(statusModalOverlay, 'all');
+
+        applyFiltersAndRender();
+      };
+
+      if (btnResetFilters) {
+        btnResetFilters.addEventListener('click', window.resetNotifFilters);
+      }
+
+      // Mark All Read Hero
+      if (btnMarkAllHero) {
+        btnMarkAllHero.addEventListener('click', async function() {
+          if (typeof markAllNotificationsAsRead === 'function') {
+            await markAllNotificationsAsRead();
+          }
+          allNotifications.forEach(function(n) { n.is_read = true; });
+          applyFiltersAndRender();
+        });
+      }
+
+      // Clear All Hero
+      if (btnClearAllHero) {
+        btnClearAllHero.addEventListener('click', async function() {
+          if (allNotifications.length === 0) return;
+          if (confirm('Are you sure you want to remove all notifications?')) {
+            if (typeof clearAllUserNotifications === 'function') {
+              allNotifications = await clearAllUserNotifications();
+            } else {
+              allNotifications = [];
+              localStorage.setItem('nkemmart_user_notifications', '[]');
+            }
+            applyFiltersAndRender();
+          }
+        });
+      }
+
+      // Search events
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          activeSearch = searchInput.value.trim();
+          if (searchClearBtn) {
+            searchClearBtn.style.display = activeSearch ? 'flex' : 'none';
+          }
+          applyFiltersAndRender();
+        });
+      }
+      if (searchClearBtn) {
+        searchClearBtn.addEventListener('click', function() {
+          searchInput.value = '';
+          activeSearch = '';
+          searchClearBtn.style.display = 'none';
+          applyFiltersAndRender();
+        });
+      }
+
+      // Filter Chips click
+      document.querySelectorAll('.notif-chip').forEach(function(chip) {
+        chip.addEventListener('click', function() {
+          document.querySelectorAll('.notif-chip').forEach(function(c) { c.classList.remove('active'); });
+          chip.classList.add('active');
+          activeCategory = chip.getAttribute('data-type');
+          applyFiltersAndRender();
+        });
+      });
+
+      // 5. Custom Modal Select Pickers
+      function openModal(modalOverlay, triggerBtn) {
+        if (!modalOverlay) return;
+        modalOverlay.classList.add('open');
+        modalOverlay.setAttribute('aria-hidden', 'false');
+        if (triggerBtn) triggerBtn.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal(modalOverlay, triggerBtn) {
+        if (!modalOverlay) return;
+        modalOverlay.classList.remove('open');
+        modalOverlay.setAttribute('aria-hidden', 'true');
+        if (triggerBtn) triggerBtn.classList.remove('is-open');
+        document.body.style.overflow = '';
+      }
+
+      function updateModalOptionsActive(modalOverlay, val) {
+        if (!modalOverlay) return;
+        modalOverlay.querySelectorAll('.filter-picker-option').forEach(function(opt) {
+          opt.classList.toggle('selected', opt.getAttribute('data-value') === val);
+        });
+      }
+
+      // Sort Modal
+      if (sortTrigger && sortModalOverlay) {
+        sortTrigger.addEventListener('click', function() {
+          openModal(sortModalOverlay, sortTrigger);
+        });
+        if (sortModalClose) {
+          sortModalClose.addEventListener('click', function() {
+            closeModal(sortModalOverlay, sortTrigger);
+          });
+        }
+        sortModalOverlay.addEventListener('click', function(e) {
+          if (e.target === sortModalOverlay) closeModal(sortModalOverlay, sortTrigger);
+        });
+        sortModalOverlay.querySelectorAll('.filter-picker-option').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            activeSort = btn.getAttribute('data-value');
+            if (sortTriggerText) {
+              var lbl = btn.querySelector('.filter-picker-option-label');
+              sortTriggerText.textContent = lbl ? lbl.textContent.trim() : 'Newest First';
+            }
+            updateModalOptionsActive(sortModalOverlay, activeSort);
+            closeModal(sortModalOverlay, sortTrigger);
+            applyFiltersAndRender();
+          });
+        });
+      }
+
+      // Status Modal
+      if (statusTrigger && statusModalOverlay) {
+        statusTrigger.addEventListener('click', function() {
+          openModal(statusModalOverlay, statusTrigger);
+        });
+        if (statusModalClose) {
+          statusModalClose.addEventListener('click', function() {
+            closeModal(statusModalOverlay, statusTrigger);
+          });
+        }
+        statusModalOverlay.addEventListener('click', function(e) {
+          if (e.target === statusModalOverlay) closeModal(statusModalOverlay, statusTrigger);
+        });
+        statusModalOverlay.querySelectorAll('.filter-picker-option').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            activeStatus = btn.getAttribute('data-value');
+            if (statusTriggerText) {
+              var lbl = btn.querySelector('.filter-picker-option-label');
+              statusTriggerText.textContent = lbl ? lbl.textContent.trim() : 'All Status';
+            }
+            updateModalOptionsActive(statusModalOverlay, activeStatus);
+            closeModal(statusModalOverlay, statusTrigger);
+            applyFiltersAndRender();
+          });
+        });
+      }
+
+      // Real-time notification updates listener
+      window.addEventListener('nkemmart_notification_received', function(e) {
+        loadNotifications();
+      });
+      window.addEventListener('nkemmart_notification_updated', function(e) {
+        loadNotifications();
+      });
+
+      // Initial load
+      await loadNotifications();
+    });
+
+    // Mobile Drawer and Dropdown interaction
+    (function() {
+      var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      var desktopCategoryDropdown = document.getElementById('desktopCategoryDropdown');
+
+      if (mobileMenuBtn && desktopCategoryDropdown) {
+        mobileMenuBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          desktopCategoryDropdown.classList.toggle('open');
+        });
+      }
+
+      document.addEventListener('click', function(e) {
+        if (desktopCategoryDropdown && !desktopCategoryDropdown.contains(e.target) && mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
+          desktopCategoryDropdown.classList.remove('open');
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>

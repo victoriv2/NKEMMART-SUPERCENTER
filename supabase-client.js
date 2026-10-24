@@ -778,16 +778,45 @@ async function getUserNotifications() {
     }
 
     if (localNotifs.length === 0) {
-      const welcome = {
-        id: 'notif_welcome',
-        type: 'system',
-        title: 'Welcome to Ralphmart Supercenter',
-        message: 'Genuine products, real-time dispatch across all 36 states and FCT in Nigeria.',
-        link: 'index.html',
-        is_read: false,
-        created_at: new Date().toISOString()
-      };
-      localNotifs = [welcome];
+      const now = Date.now();
+      localNotifs = [
+        {
+          id: 'notif_welcome',
+          type: 'account',
+          title: 'Welcome to RALPHMART Supercenter',
+          message: 'Genuine products, real-time dispatch across all 36 states and FCT in Nigeria.',
+          link: 'profile.html',
+          is_read: false,
+          created_at: new Date(now - 1000 * 60 * 30).toISOString()
+        },
+        {
+          id: 'notif_orders',
+          type: 'order',
+          title: 'Order Status & Live Tracking Active',
+          message: 'Check your real-time delivery stepper and print tax receipts anytime.',
+          link: 'orders.html',
+          is_read: false,
+          created_at: new Date(now - 1000 * 60 * 120).toISOString()
+        },
+        {
+          id: 'notif_flash_sale',
+          type: 'promo',
+          title: 'Special Promo: 20,000mAh Powerbanks',
+          message: 'Exclusive discounts on fast-charging accessories. Free doorstep delivery on select items.',
+          link: 'category.html?cat=electronics',
+          is_read: true,
+          created_at: new Date(now - 1000 * 60 * 60 * 24).toISOString()
+        },
+        {
+          id: 'notif_review',
+          type: 'review',
+          title: 'Verified Customer Reviews',
+          message: 'Rate your purchases and see community ratings on RALPHMART items.',
+          link: 'reviews.html',
+          is_read: true,
+          created_at: new Date(now - 1000 * 60 * 60 * 48).toISOString()
+        }
+      ];
       localStorage.setItem('nkemmart_user_notifications', JSON.stringify(localNotifs));
     }
 
@@ -859,6 +888,9 @@ async function markNotificationAsRead(notifId) {
   }
 
   updateNotificationBadges();
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nkemmart_notification_updated', { detail: { action: 'read', id: notifId } }));
+  }
 }
 
 async function markAllNotificationsAsRead() {
@@ -879,6 +911,51 @@ async function markAllNotificationsAsRead() {
   }
 
   updateNotificationBadges();
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nkemmart_notification_updated', { detail: { action: 'read_all' } }));
+  }
+}
+
+async function deleteUserNotification(notifId) {
+  let notifs = [];
+  try {
+    notifs = JSON.parse(localStorage.getItem('nkemmart_user_notifications') || '[]');
+  } catch (e) {}
+
+  notifs = notifs.filter(n => n.id !== notifId);
+  localStorage.setItem('nkemmart_user_notifications', JSON.stringify(notifs));
+
+  const client = getSupabase();
+  const user = await getCurrentUser();
+  if (client && user) {
+    try {
+      await client.from('profiles').update({ notifications: notifs }).eq('id', user.id);
+    } catch (e) {}
+  }
+
+  updateNotificationBadges();
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nkemmart_notification_updated', { detail: { action: 'delete', id: notifId } }));
+  }
+  return notifs;
+}
+
+async function clearAllUserNotifications() {
+  localStorage.setItem('nkemmart_user_notifications', JSON.stringify([]));
+
+  const client = getSupabase();
+  const user = await getCurrentUser();
+  if (client && user) {
+    try {
+      await client.from('profiles').update({ notifications: [] }).eq('id', user.id);
+    } catch (e) {}
+  }
+
+  updateNotificationBadges();
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nkemmart_notification_updated', { detail: { action: 'clear' } }));
+  }
+  return [];
 }
 
 function updateNotificationBadges() {
@@ -907,121 +984,21 @@ function initGlobalNotificationCenter() {
   const notifWrap = document.createElement('div');
   notifWrap.className = 'action-item header-notif-wrap';
   notifWrap.id = 'headerNotifWrap';
-  notifWrap.style.position = 'relative';
 
   notifWrap.innerHTML = `
-    <button type="button" class="action-btn" id="headerNotifBtn" title="Notifications" aria-haspopup="dialog" aria-expanded="false">
+    <a href="notifications.html" class="action-btn" id="headerNotifBtn" title="Notification Center">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
       </svg>
       <span class="action-label">Alerts</span>
       <span class="badge header-notif-badge" id="headerNotifBadge" style="display: none; background-color: #ef4444;">0</span>
-    </button>
-    <div class="header-notif-tray" id="headerNotifTray" style="display: none;">
-      <div class="notif-tray-header">
-        <div style="font-weight: 800; font-size: 14px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
-          <span>Notifications</span>
-          <span class="notif-tray-count-pill" id="notifTrayCountPill">0 Unread</span>
-        </div>
-        <button type="button" class="notif-mark-all-btn" id="notifMarkAllReadBtn">Mark all as read</button>
-      </div>
-      <div class="notif-tray-list" id="notifTrayList">
-        <div style="text-align: center; padding: 24px; color: #64748b; font-size: 12.5px;">Loading alerts...</div>
-      </div>
-      <div class="notif-tray-footer">
-        <a href="activities.html" style="font-size: 12px; font-weight: 700; color: #512175; text-decoration: none;">View Full Activity Audit Trail &rarr;</a>
-      </div>
-    </div>
+    </a>
   `;
 
   headerActions.insertBefore(notifWrap, headerActions.firstChild);
-
-  const notifBtn = notifWrap.querySelector('#headerNotifBtn');
-  const notifTray = notifWrap.querySelector('#headerNotifTray');
-  const markAllBtn = notifWrap.querySelector('#notifMarkAllReadBtn');
-
-  async function renderNotifTray() {
-    const listEl = notifWrap.querySelector('#notifTrayList');
-    const pill = notifWrap.querySelector('#notifTrayCountPill');
-    const notifs = await getUserNotifications();
-    const unread = notifs.filter(n => !n.is_read).length;
-    if (pill) pill.textContent = unread + ' Unread';
-
-    if (notifs.length === 0) {
-      listEl.innerHTML = '<div style="text-align: center; padding: 28px 16px; color: #64748b; font-size: 13px;">No notifications yet. Alerts about orders, price drops, and replies will show here.</div>';
-      return;
-    }
-
-    listEl.innerHTML = notifs.slice(0, 15).map(n => {
-      let icon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>';
-      if (n.type === 'order') {
-        icon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>';
-      } else if (n.type === 'review') {
-        icon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
-      }
-
-      const timeAgo = formatNotifTime(n.created_at);
-      return `
-        <a href="${n.link || 'orders.html'}" class="notif-tray-item ${n.is_read ? 'read' : 'unread'}" onclick="markNotificationAsRead('${n.id}')">
-          <div class="notif-item-icon">${icon}</div>
-          <div class="notif-item-content">
-            <div class="notif-item-title">${escapeNotifHtml(n.title)}</div>
-            <div class="notif-item-sub">${escapeNotifHtml(n.message)}</div>
-            <div class="notif-item-time">${timeAgo}</div>
-          </div>
-          ${!n.is_read ? '<span class="notif-item-dot"></span>' : ''}
-        </a>
-      `;
-    }).join('');
-  }
-
-  function formatNotifTime(iso) {
-    if (!iso) return 'Just now';
-    try {
-      const d = new Date(iso);
-      const diffMin = Math.floor((new Date() - d) / 60000);
-      if (diffMin < 2) return 'Just now';
-      if (diffMin < 60) return diffMin + 'm ago';
-      const diffH = Math.floor(diffMin / 60);
-      if (diffH < 24) return diffH + 'h ago';
-      return d.toLocaleDateString('en-NG', { day: 'numeric', month: 'short' });
-    } catch (e) { return 'Recent'; }
-  }
-
-  function escapeNotifHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-
-  notifBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isOpen = notifTray.style.display === 'block';
-    document.querySelectorAll('.dropdown-menu, .site-account-modal-overlay').forEach(el => el.classList.remove('open'));
-    if (isOpen) {
-      notifTray.style.display = 'none';
-      notifBtn.setAttribute('aria-expanded', 'false');
-    } else {
-      notifTray.style.display = 'block';
-      notifBtn.setAttribute('aria-expanded', 'true');
-      renderNotifTray();
-    }
-  });
-
-  if (markAllBtn) {
-    markAllBtn.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      await markAllNotificationsAsRead();
-      renderNotifTray();
-    });
-  }
-
-  document.addEventListener('click', (e) => {
-    if (!notifWrap.contains(e.target)) {
-      notifTray.style.display = 'none';
-      notifBtn.setAttribute('aria-expanded', 'false');
-    }
-  });
+  updateNotificationBadges();
+}
 
   updateNotificationBadges();
 }
@@ -2056,6 +2033,17 @@ async function updateSiteAccountMenu() {
                 <div class="site-account-modal-link-content">
                   <div class="site-account-modal-link-title">Edit Profile &amp; Info</div>
                   <div class="site-account-modal-link-sub">Manage phone number, state, LGA &amp; security</div>
+                </div>
+                <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+
+              <a href="notifications.html" class="site-account-modal-link ${window.location.pathname.includes('notifications.html') ? 'active-link' : ''}">
+                <span class="site-account-modal-link-icon" style="color: #512175; background: #faf5ff;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                </span>
+                <div class="site-account-modal-link-content">
+                  <div class="site-account-modal-link-title">Notification Center</div>
+                  <div class="site-account-modal-link-sub">Alerts, order updates, stock signals &amp; deals</div>
                 </div>
                 <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </a>
