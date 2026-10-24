@@ -1010,14 +1010,16 @@
             </button>
           </div>
 
-          <div class="action-item">
+          <div class="action-item header-notif-wrap" id="headerNotifWrap">
             <a href="notifications.html" class="action-btn" id="headerNotifBtn" title="Notification Center">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-              </svg>
-              <span class="action-label">Alerts</span>
-              <span class="badge header-notif-badge" id="headerNotifBadge" style="display: none; background-color: #ef4444;">0</span>
+              <div class="notif-icon-wrapper" style="position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span class="header-notif-badge" id="headerNotifBadge" style="display: none; position: absolute; top: -4px; right: -6px; background-color: #ef4444; color: #ffffff; font-size: 10px; font-weight: 700; min-width: 16px; height: 16px; border-radius: 8px; text-align: center; line-height: 16px; padding: 0 4px; box-sizing: border-box; z-index: 2;">0</span>
+              </div>
+              <span class="action-label notif-action-label" id="headerNotifLabel">Notification</span>
             </a>
           </div>
 
@@ -1321,6 +1323,13 @@
       <div>&copy; 2026 RALPHMART SUPERCENTER. All Rights Reserved.</div>
     </div>
   </footer>
+
+  <!-- Universal Back to Top Button -->
+  <a href="#" class="back-to-top-btn" title="Back to top" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </a>
 
   <!-- Notification Page Core JavaScript Logic -->
   <script>

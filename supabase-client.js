@@ -987,18 +987,25 @@ function initGlobalNotificationCenter() {
 
   notifWrap.innerHTML = `
     <a href="notifications.html" class="action-btn" id="headerNotifBtn" title="Notification Center">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-      </svg>
-      <span class="action-label">Alerts</span>
-      <span class="badge header-notif-badge" id="headerNotifBadge" style="display: none; background-color: #ef4444;">0</span>
+      <div class="notif-icon-wrapper" style="position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span class="header-notif-badge" id="headerNotifBadge" style="display: none; position: absolute; top: -4px; right: -6px; background-color: #ef4444; color: #ffffff; font-size: 10px; font-weight: 700; min-width: 16px; height: 16px; border-radius: 8px; text-align: center; line-height: 16px; padding: 0 4px; box-sizing: border-box; z-index: 2;">0</span>
+      </div>
+      <span class="action-label notif-action-label" id="headerNotifLabel">Notification</span>
     </a>
   `;
 
-  headerActions.insertBefore(notifWrap, headerActions.firstChild);
-  updateNotificationBadges();
-}
+  const accountItem = headerActions.querySelector('#accountMenuBtn')?.closest('.action-item');
+  if (accountItem && accountItem.nextSibling) {
+    headerActions.insertBefore(notifWrap, accountItem.nextSibling);
+  } else if (accountItem) {
+    accountItem.after(notifWrap);
+  } else {
+    headerActions.insertBefore(notifWrap, headerActions.firstChild);
+  }
 
   updateNotificationBadges();
 }
@@ -1330,15 +1337,6 @@ function initFloatingSupportWidget() {
   const widget = document.createElement('div');
   widget.id = 'floatingSupportWidget';
   widget.className = 'floating-support-container';
-  widget.style.cssText = `
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 9998;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  `;
 
   widget.innerHTML = `
     <div class="floating-support-card" id="floatingSupportCard" style="display: none; width: 280px; background: #ffffff; border-radius: 14px; box-shadow: 0 16px 36px rgba(0,0,0,0.18); border: 1px solid #e2e8f0; margin-bottom: 12px; overflow: hidden; animation: notifFadeIn 0.2s ease;">
@@ -1374,8 +1372,8 @@ function initFloatingSupportWidget() {
       </div>
     </div>
 
-    <button type="button" id="floatingSupportTriggerBtn" style="width: 52px; height: 52px; border-radius: 50%; background: #512175; color: #ffffff; border: 2.5px solid #ffffff; box-shadow: 0 8px 24px rgba(81, 33, 117, 0.35); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; transform: none !important;" aria-label="Open support options">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+    <button type="button" id="floatingSupportTriggerBtn" style="width: 48px; height: 48px; border-radius: 50%; background: #512175; color: #ffffff; border: 2.5px solid #ffffff; box-shadow: 0 8px 24px rgba(81, 33, 117, 0.35); cursor: pointer; display: flex; align-items: center; justify-content: center; transform: none !important;" aria-label="Open support options" title="Customer Support">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
     </button>
   `;
 
@@ -1934,7 +1932,7 @@ window.closeAccountModal = function() {
 if (!window._accountModalClickDelegated) {
   window._accountModalClickDelegated = true;
   document.addEventListener('click', (e) => {
-    const accountBtn = e.target.closest('#accountMenuBtn, .account-btn-header, .header-actions .action-item:first-child .action-btn, [data-account-modal-trigger]');
+    const accountBtn = e.target.closest('#accountMenuBtn, .account-btn-header, [data-account-modal-trigger]');
     if (accountBtn) {
       e.preventDefault();
       e.stopPropagation();
@@ -1946,8 +1944,11 @@ if (!window._accountModalClickDelegated) {
 // Global Auth UI Bar Update Helper (updates Account Modal & header state across site)
 async function updateSiteAccountMenu() {
   try {
+    const notifLabel = document.getElementById('headerNotifLabel');
+    if (notifLabel) notifLabel.textContent = 'Notification';
+
     const profile = await getCurrentProfile();
-    const accountButtons = document.querySelectorAll('#accountMenuBtn, .account-btn-header, .header-actions .action-item:first-child .action-btn');
+    const accountButtons = document.querySelectorAll('#accountMenuBtn, .account-btn-header');
     const accountDropdowns = document.querySelectorAll('#accountMenu, .account-dropdown-menu');
 
     // Ensure site account modal overlay container exists
@@ -2403,22 +2404,76 @@ function initSmartHeader() {
   }, { passive: true });
 }
 
-// Universal Back-to-Top Button Handler
+// Universal Floating Controls & Back-to-Top Scroll Direction Handler
 function initBackToTop() {
   var btn = document.querySelector('.back-to-top-btn');
-  if (!btn || btn.dataset.initialized) return;
-  btn.dataset.initialized = 'true';
+  if (window._floatingScrollInitialized) {
+    if (btn && !btn.dataset.clickInit) {
+      btn.dataset.clickInit = 'true';
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+    return;
+  }
+  window._floatingScrollInitialized = true;
+
+  let lastScrollY = window.scrollY || 0;
+  let scrollTicking = false;
+
   window.addEventListener('scroll', function() {
-    if (window.scrollY > 280) {
-      btn.classList.add('visible');
-    } else {
-      btn.classList.remove('visible');
+    if (!scrollTicking) {
+      window.requestAnimationFrame(function() {
+        const currentScrollY = window.scrollY || 0;
+        const scrollDiff = currentScrollY - lastScrollY;
+        const supportWidget = document.getElementById('floatingSupportWidget');
+        const backToTopBtn = document.querySelector('.back-to-top-btn');
+
+        // Scrolling DOWN -> Hide floating buttons smoothly
+        if (scrollDiff > 8 && currentScrollY > 70) {
+          if (supportWidget) {
+            supportWidget.classList.add('hide-on-scroll');
+            const card = supportWidget.querySelector('#floatingSupportCard');
+            if (card) card.style.display = 'none';
+          }
+          if (backToTopBtn) {
+            backToTopBtn.classList.add('hide-on-scroll');
+          }
+        }
+        // Scrolling UP -> Reveal floating buttons
+        else if (scrollDiff < -6 || currentScrollY <= 30) {
+          if (supportWidget) {
+            supportWidget.classList.remove('hide-on-scroll');
+          }
+          if (backToTopBtn) {
+            backToTopBtn.classList.remove('hide-on-scroll');
+            if (currentScrollY > 250) {
+              backToTopBtn.classList.add('visible');
+            } else {
+              backToTopBtn.classList.remove('visible');
+            }
+          }
+        }
+
+        if (currentScrollY <= 250 && backToTopBtn) {
+          backToTopBtn.classList.remove('visible');
+        }
+
+        lastScrollY = currentScrollY;
+        scrollTicking = false;
+      });
+      scrollTicking = true;
     }
   }, { passive: true });
-  btn.addEventListener('click', function(e) {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+
+  if (btn && !btn.dataset.clickInit) {
+    btn.dataset.clickInit = 'true';
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 }
 
 // Universal Header Dropdown (Account & Help) touch and click toggle
