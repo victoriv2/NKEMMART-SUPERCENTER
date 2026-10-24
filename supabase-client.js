@@ -405,6 +405,214 @@ async function getUserOrders() {
   }
 }
 
+// Fetch Product Reviews from Cloud Supabase
+async function getProductReviews(productId) {
+  if (!productId) return [];
+  try {
+    const client = getSupabase();
+    if (client) {
+      const { data, error } = await client
+        .from('product_reviews')
+        .select('*')
+        .eq('product_id', String(productId))
+        .order('created_at', { ascending: false });
+
+      if (!error && Array.isArray(data)) {
+        try {
+          localStorage.setItem('nkemmart_cached_reviews_' + productId, JSON.stringify(data));
+        } catch (e) {}
+        return data;
+      }
+    }
+  } catch (err) {
+    console.warn('Error fetching cloud product reviews:', err);
+  }
+
+  // Fallback to cached reviews
+  try {
+    const cached = localStorage.getItem('nkemmart_cached_reviews_' + productId);
+    if (cached) return JSON.parse(cached);
+  } catch (e) {}
+  return [];
+}
+
+// Submit Product Review to Cloud Supabase
+async function submitProductReview({ productId, productTitle, productImage, rating, comment, reviewerName }) {
+  if (!productId || !comment) {
+    throw new Error('Product ID and review comment are required.');
+  }
+
+  const client = getSupabase();
+  const user = await getCurrentUser();
+  const profile = await getCurrentProfile();
+
+  const numRating = Math.max(1, Math.min(5, parseInt(rating, 10) || 5));
+  const finalName = (reviewerName || '').trim() || (profile ? profile.full_name : '') || (user ? user.email.split('@')[0] : 'Verified Customer');
+  const userEmail = (user && user.email) || (profile && profile.email) || null;
+  const userId = (user && user.id) || null;
+
+  const reviewPayload = {
+    product_id: String(productId),
+    product_title: (productTitle || '').trim(),
+    product_image: (productImage || '').trim(),
+    user_id: userId,
+    user_email: userEmail,
+    reviewer_name: finalName,
+    rating: numRating,
+    comment: comment.trim(),
+    verified_purchase: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
+
+  let savedReview = null;
+
+  if (client) {
+    try {
+      const { data, error } = await client
+        .from('product_reviews')
+        .insert([reviewPayload])
+        .select()
+        .single();
+
+      if (error) {
+        console.warn('Supabase insert review note:', error.message);
+      } else if (data) {
+        savedReview = data;
+      }
+    } catch (insertErr) {
+      console.warn('Failed cloud insert for review:', insertErr);
+    }
+  }
+
+  if (!savedReview) {
+    savedReview = {
+      id: 'rev_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8),
+      ...reviewPayload
+    };
+  }
+
+  // Update local caches
+  try {
+    const prodCacheKey = 'nkemmart_cached_reviews_' + productId;
+    const existingProd = JSON.parse(localStorage.getItem(prodCacheKey) || '[]');
+    existingProd.unshift(savedReview);
+    localStorage.setItem(prodCacheKey, JSON.stringify(existingProd));
+
+    if (userId || userEmail) {
+      const userKey = 'nkemmart_user_reviews_' + (userId || userEmail);
+      const existingUser = JSON.parse(localStorage.getItem(userKey) || '[]');
+      existingUser.unshift(savedReview);
+      localStorage.setItem(userKey, JSON.stringify(existingUser));
+    }
+  } catch (e) {}
+
+  // Log user activity
+  try {
+    if (typeof logUserActivity === 'function' && userId) {
+      await logUserActivity(
+        'review_submitted',
+        `Rated & reviewed ${productTitle || 'product'} (${numRating} stars)`,
+        {
+          productId: String(productId),
+          productTitle: productTitle || '',
+          rating: numRating,
+          reviewId: savedReview.id
+        }
+      );
+    }
+  } catch (actErr) {}
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nkemmart_review_added', { detail: savedReview }));
+    window.dispatchEvent(new CustomEvent('nkemmart_review_updated', { detail: savedReview }));
+  }
+
+  return savedReview;
+}
+
+// Fetch all reviews submitted by the current user
+async function getUserReviews() {
+  try {
+    const client = getSupabase();
+    const user = await getCurrentUser();
+    if (!user) {
+      const guestReviews = localStorage.getItem('nkemmart_user_reviews_guest');
+      return guestReviews ? JSON.parse(guestReviews) : [];
+    }
+
+    if (client) {
+      const { data, error } = await client
+        .from('product_reviews')
+        .select('*')
+        .or(`user_id.eq.${user.id},user_email.eq.${user.email}`)
+        .order('created_at', { ascending: false });
+
+      if (!error && Array.isArray(data)) {
+        try {
+          localStorage.setItem('nkemmart_user_reviews_' + user.id, JSON.stringify(data));
+        } catch (e) {}
+        return data;
+      }
+    }
+
+    const cached = localStorage.getItem('nkemmart_user_reviews_' + user.id);
+    if (cached) return JSON.parse(cached);
+  } catch (err) {
+    console.warn('Error fetching user reviews:', err);
+  }
+  return [];
+}
+
+// Fetch all reviews for store admin / management
+async function getAllReviewsForAdmin() {
+  try {
+    const client = getSupabase();
+    if (!client) return [];
+    const { data, error } = await client
+      .from('product_reviews')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.warn('Error fetching admin reviews:', error);
+      return [];
+    }
+    return data || [];
+  } catch (err) {
+    console.warn('Error in getAllReviewsForAdmin:', err);
+    return [];
+  }
+}
+
+// Reply to a product review (for Admin / Store Owner)
+async function adminReplyToReview(reviewId, replyText) {
+  if (!reviewId || !replyText) throw new Error('Review ID and reply text are required.');
+  const client = getSupabase();
+  if (!client) throw new Error('Database client unavailable');
+
+  const replyPayload = {
+    admin_reply: replyText.trim(),
+    admin_reply_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
+
+  const { data, error } = await client
+    .from('product_reviews')
+    .update(replyPayload)
+    .eq('id', reviewId)
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('nkemmart_review_updated', { detail: data }));
+  }
+
+  return data;
+}
+
 let _isSyncingFromCloud = false;
 let realtimeChannel = null;
 
@@ -741,6 +949,19 @@ async function setupRealtimeSync() {
           }
         }
       )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'product_reviews'
+        },
+        (payload) => {
+          if (payload && payload.new) {
+            window.dispatchEvent(new CustomEvent('nkemmart_review_updated', { detail: payload.new }));
+          }
+        }
+      )
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           syncUserDataWithSupabase();
@@ -1047,6 +1268,17 @@ async function updateSiteAccountMenu() {
                 <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </a>
 
+              <a href="reviews.html" class="site-account-modal-link ${window.location.pathname.includes('reviews.html') ? 'active-link' : ''}">
+                <span class="site-account-modal-link-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #f59e0b;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </span>
+                <div class="site-account-modal-link-content">
+                  <div class="site-account-modal-link-title">My Reviews &amp; Feedback</div>
+                  <div class="site-account-modal-link-sub">Track rated products, comments &amp; store replies</div>
+                </div>
+                <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+
               ${adminLinkHtml}
 
               <a href="orders.html" class="site-account-modal-link">
@@ -1164,6 +1396,17 @@ async function updateSiteAccountMenu() {
                 <div class="site-account-modal-link-content">
                   <div class="site-account-modal-link-title">Track Orders</div>
                   <div class="site-account-modal-link-sub">Check status using order tracking number</div>
+                </div>
+                <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+
+              <a href="reviews.html" class="site-account-modal-link">
+                <span class="site-account-modal-link-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #f59e0b;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </span>
+                <div class="site-account-modal-link-content">
+                  <div class="site-account-modal-link-title">Customer Reviews &amp; Ratings</div>
+                  <div class="site-account-modal-link-sub">Explore ratings, feedback &amp; store responses</div>
                 </div>
                 <svg class="site-account-modal-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
               </a>

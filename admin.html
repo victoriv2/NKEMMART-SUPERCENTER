@@ -803,6 +803,13 @@
         </a>
       </li>
       <li class="admin-nav-item">
+        <a href="#reviews" class="admin-nav-link" data-tab="reviews" id="navLinkReviews">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span>Reviews &amp; Replies</span>
+          <span class="admin-nav-badge" id="adminReviewsBadge" style="display: none;">0</span>
+        </a>
+      </li>
+      <li class="admin-nav-item">
         <a href="#categories" class="admin-nav-link" data-tab="categories">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
           <span>Categories</span>
@@ -960,6 +967,44 @@
         </div>
       </section>
 
+      <!-- Reviews & Official Store Replies Card -->
+      <section class="admin-table-card" id="adminReviewsSection" style="margin-top: 24px;">
+        <div class="admin-table-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h2 class="admin-table-title" style="display: flex; align-items: center; gap: 8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span>Customer Product Reviews &amp; Official Store Replies</span>
+            </h2>
+            <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b;">Cloud synced reviews from buyers across Nigeria. View ratings, review comments, and send official store replies.</p>
+          </div>
+          <button type="button" class="admin-btn btn-secondary" id="adminRefreshReviewsBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            <span>Refresh Reviews</span>
+          </button>
+        </div>
+
+        <div class="admin-table-responsive">
+          <table class="admin-table" id="adminReviewsTable">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Reviewer</th>
+                <th>Rating</th>
+                <th>Customer Comment</th>
+                <th>Store Officer Reply</th>
+                <th>Date</th>
+                <th style="text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminReviewsTableBody">
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 28px; color: #64748b;">Loading reviews from Supabase cloud...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
     </div>
   </main>
 
@@ -1044,6 +1089,40 @@
         <div class="admin-modal-footer">
           <button type="button" class="admin-btn btn-secondary" id="cancelProductModal">Cancel</button>
           <button type="submit" class="admin-btn btn-green" id="saveProductModalBtn">Save Product to Catalog</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Official Store Reply to Review -->
+  <div class="admin-modal" id="replyReviewModal" role="dialog" aria-modal="true" aria-labelledby="replyModalHeading">
+    <div class="admin-modal-card" style="max-width: 540px;">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title" id="replyModalHeading">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          <span>Send Official Store Reply</span>
+        </h3>
+        <button type="button" class="admin-modal-close" id="closeReplyReviewModal">&times;</button>
+      </div>
+
+      <form id="replyReviewForm">
+        <input type="hidden" id="replyReviewId">
+        <div class="admin-modal-body">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px;">
+            <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">Customer Review</div>
+            <div id="replyModalReviewerName" style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin-top: 2px;"></div>
+            <div id="replyModalComment" style="font-size: 13px; color: #334155; margin-top: 4px; font-style: italic;"></div>
+          </div>
+
+          <div class="form-field">
+            <label for="replyModalText">Official Store Response</label>
+            <textarea id="replyModalText" rows="4" placeholder="Type your response to the customer regarding product quality, warranty, delivery, or gratitude..." required style="width: 100%; box-sizing: border-box; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; outline: none;"></textarea>
+          </div>
+        </div>
+
+        <div class="admin-modal-footer">
+          <button type="button" class="admin-btn btn-secondary" id="cancelReplyReviewModal">Cancel</button>
+          <button type="submit" class="admin-btn btn-green" id="saveReplyReviewBtn">Save &amp; Publish Reply to Cloud</button>
         </div>
       </form>
     </div>
@@ -1433,6 +1512,153 @@
         btn.querySelector('span').textContent = 'Sync to Supabase';
       }
     }
+
+    // Admin Reviews Management
+    let adminReviewsList = [];
+
+    async function loadAdminReviews() {
+      const tbody = document.getElementById('adminReviewsTableBody');
+      const badge = document.getElementById('adminReviewsBadge');
+      if (!tbody) return;
+
+      try {
+        if (typeof getAllReviewsForAdmin === 'function') {
+          adminReviewsList = await getAllReviewsForAdmin();
+        } else {
+          adminReviewsList = [];
+        }
+
+        if (badge) {
+          const pendingCount = adminReviewsList.filter(r => !r.admin_reply).length;
+          if (pendingCount > 0) {
+            badge.style.display = 'inline-block';
+            badge.textContent = pendingCount;
+          } else {
+            badge.style.display = 'none';
+          }
+        }
+
+        if (!adminReviewsList || adminReviewsList.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 32px; color: #64748b;">
+                No customer reviews submitted yet. When customers rate products, their feedback will show here.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = adminReviewsList.map(r => {
+          const rating = Math.max(1, Math.min(5, parseInt(r.rating, 10) || 5));
+          let stars = '';
+          for (let i = 0; i < 5; i++) {
+            stars += `<svg width="12" height="12" viewBox="0 0 24 24" fill="${i < rating ? '#f59e0b' : '#cbd5e1'}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+          }
+
+          let replySnippet = '<span style="color: #94a3b8; font-size: 12px;">No reply yet</span>';
+          if (r.admin_reply) {
+            replySnippet = `
+              <div style="font-size: 12.5px; color: #512175; font-weight: 600; line-height: 1.35; max-width: 240px;">
+                "${escapeHtml(r.admin_reply)}"
+              </div>
+            `;
+          }
+
+          const createdDate = r.created_at ? new Date(r.created_at).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently';
+
+          return `
+            <tr>
+              <td>
+                <div style="font-weight: 700; color: #0f172a; font-size: 13.5px;">${escapeHtml(r.product_title || r.product_id)}</div>
+                <div style="font-size: 11px; color: #94a3b8;">ID: ${escapeHtml(r.product_id)}</div>
+              </td>
+              <td>
+                <div style="font-weight: 600; color: #1e293b; font-size: 13px;">${escapeHtml(r.reviewer_name || 'Verified Buyer')}</div>
+                <div style="font-size: 11px; color: #64748b;">${escapeHtml(r.user_email || 'Direct User')}</div>
+              </td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <div style="display: inline-flex; align-items: center; gap: 1px;">${stars}</div>
+                  <span style="font-weight: 700; font-size: 12px; color: #0f172a;">${rating}.0</span>
+                </div>
+              </td>
+              <td style="max-width: 260px;">
+                <div style="font-size: 13px; color: #334155; line-height: 1.4; word-break: break-word;">${escapeHtml(r.comment)}</div>
+              </td>
+              <td>${replySnippet}</td>
+              <td style="font-size: 12px; color: #64748b; white-space: nowrap;">${createdDate}</td>
+              <td style="text-align: right; white-space: nowrap;">
+                <button type="button" class="admin-action-btn edit" onclick="window.openReplyModal('${escapeHtml(r.id)}')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                  <span>${r.admin_reply ? 'Edit Reply' : 'Send Reply'}</span>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Error in loadAdminReviews:', err);
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ef4444; padding: 24px;">Failed to load reviews from cloud.</td></tr>`;
+      }
+    }
+
+    window.openReplyModal = function(reviewId) {
+      const review = adminReviewsList.find(r => r.id === reviewId);
+      if (!review) return;
+
+      document.getElementById('replyReviewId').value = review.id;
+      document.getElementById('replyModalReviewerName').textContent = review.reviewer_name + ' on ' + (review.product_title || review.product_id);
+      document.getElementById('replyModalComment').textContent = `"${review.comment}"`;
+      document.getElementById('replyModalText').value = review.admin_reply || '';
+      document.getElementById('replyReviewModal').classList.add('open');
+    };
+
+    document.getElementById('closeReplyReviewModal').addEventListener('click', () => {
+      document.getElementById('replyReviewModal').classList.remove('open');
+    });
+
+    document.getElementById('cancelReplyReviewModal').addEventListener('click', () => {
+      document.getElementById('replyReviewModal').classList.remove('open');
+    });
+
+    document.getElementById('replyReviewForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const reviewId = document.getElementById('replyReviewId').value;
+      const replyText = document.getElementById('replyModalText').value.trim();
+      const saveBtn = document.getElementById('saveReplyReviewBtn');
+
+      if (!reviewId || !replyText) return;
+
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving to Supabase...';
+
+      try {
+        if (typeof adminReplyToReview === 'function') {
+          await adminReplyToReview(reviewId, replyText);
+        }
+        document.getElementById('replyReviewModal').classList.remove('open');
+        await loadAdminReviews();
+        alert('Official store reply published successfully to Supabase cloud!');
+      } catch (err) {
+        alert('Failed to publish reply: ' + (err.message || 'Error'));
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save & Publish Reply to Cloud';
+      }
+    });
+
+    const refreshBtn = document.getElementById('adminRefreshReviewsBtn');
+    if (refreshBtn) refreshBtn.addEventListener('click', loadAdminReviews);
+
+    // Initial load and realtime
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAdminReviews();
+    });
+
+    window.addEventListener('nkemmart_review_updated', () => {
+      loadAdminReviews();
+    });
 
     function escapeHtml(str) {
       if (!str) return '';

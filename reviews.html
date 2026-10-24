@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <title>My Reviews &amp; Product Feedback - RALPHMART SUPERCENTER</title>
+  <link rel="stylesheet" href="styles.css?v=21.2">
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="taxonomy.js?v=3.3"></script>
+  <script src="modular-select-picker.js"></script>
+  <style>
+    body {
+      background-color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .reviews-page-container {
+      max-width: 960px;
+      margin: 24px auto 48px auto;
+      padding: 0 16px;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+    }
+
+    .reviews-breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 18px;
+    }
+
+    .reviews-breadcrumbs a {
+      color: #512175;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .reviews-breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .reviews-breadcrumbs span.sep {
+      color: #cbd5e1;
+    }
+
+    /* Hero Header Card */
+    .reviews-hero-card {
+      background: linear-gradient(135deg, #512175 0%, #3d1858 100%);
+      border-radius: 14px;
+      padding: 24px 28px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(81, 33, 117, 0.15);
+      flex-wrap: wrap;
+    }
+
+    .reviews-hero-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .reviews-hero-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #f59e0b;
+    }
+
+    .reviews-hero-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin: 0 0 4px 0;
+      letter-spacing: -0.3px;
+    }
+
+    .reviews-hero-sub {
+      font-size: 13.5px;
+      color: #e2e8f0;
+      margin: 0 0 8px 0;
+      line-height: 1.4;
+    }
+
+    .reviews-hero-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .reviews-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.3px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .reviews-hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .reviews-hero-btn {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.15s, border-color 0.15s;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .reviews-hero-btn.btn-light {
+      background: #ffffff;
+      color: #512175;
+      border: none;
+    }
+
+    .reviews-hero-btn.btn-light:hover {
+      background: #f8fafc;
+    }
+
+    .reviews-hero-btn.btn-outline {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .reviews-hero-btn.btn-outline:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    /* Stats Overview Cards */
+    .reviews-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .reviews-stat-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .reviews-stat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .reviews-stat-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+
+    .reviews-stat-lbl {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    /* Filter Panel */
+    .reviews-filter-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .reviews-filter-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .reviews-search-wrap {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
+    }
+
+    .reviews-search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      pointer-events: none;
+    }
+
+    .reviews-search-input {
+      width: 100%;
+      height: 42px;
+      padding: 0 38px 0 38px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 13.5px;
+      box-sizing: border-box;
+      background: #ffffff;
+      color: #0f172a;
+      outline: none;
+    }
+
+    .reviews-search-input:focus {
+      border-color: #512175;
+      box-shadow: 0 0 0 3px rgba(81, 33, 117, 0.1);
+    }
+
+    .reviews-search-clear {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #94a3b8;
+      padding: 4px;
+      display: none;
+    }
+
+    .reviews-selects-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .reviews-select-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .reviews-select-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+      white-space: nowrap;
+    }
+
+    .reviews-select {
+      height: 40px;
+      padding: 0 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 13px;
+      background: #ffffff;
+      color: #0f172a;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Review Card Layout */
+    .reviews-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .user-review-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      transition: border-color 0.15s;
+    }
+
+    .user-review-card:hover {
+      border-color: #cbd5e1;
+    }
+
+    .user-review-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 14px;
+    }
+
+    .user-review-product-img {
+      width: 72px;
+      height: 72px;
+      border-radius: 8px;
+      object-fit: contain;
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      flex-shrink: 0;
+    }
+
+    .user-review-product-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-review-product-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 6px 0;
+      line-height: 1.35;
+      text-decoration: none;
+      display: block;
+    }
+
+    .user-review-product-title:hover {
+      color: #512175;
+      text-decoration: underline;
+    }
+
+    .user-review-rating-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .user-review-stars {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      color: #f59e0b;
+    }
+
+    .user-review-score-badge {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .user-review-verified-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #16a34a;
+      background: #f0fdf4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .user-review-date {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-left: auto;
+    }
+
+    .user-review-body {
+      margin-bottom: 14px;
+    }
+
+    .user-review-comment-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-bottom: 6px;
+    }
+
+    .user-review-comment-text {
+      font-size: 14px;
+      line-height: 1.55;
+      color: #334155;
+      margin: 0;
+      white-space: pre-line;
+    }
+
+    /* Store Reply Box */
+    .user-review-reply-box {
+      background: #faf5ff;
+      border-left: 3.5px solid #512175;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 12px;
+    }
+
+    .user-review-reply-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .user-review-reply-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #512175;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .user-review-reply-time {
+      font-size: 11.5px;
+      color: #7c3aed;
+      font-weight: 600;
+    }
+
+    .user-review-reply-text {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+    }
+
+    /* Action Footer */
+    .user-review-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
+      flex-wrap: wrap;
+    }
+
+    .user-review-footer-left {
+      font-size: 12px;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .user-review-actions-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-review-action-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: background-color 0.15s, border-color 0.15s;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .user-review-action-btn.btn-primary {
+      background: #512175;
+      color: #ffffff;
+      border: 1px solid #512175;
+    }
+
+    .user-review-action-btn.btn-primary:hover {
+      background: #3d1858;
+    }
+
+    .user-review-action-btn.btn-secondary {
+      background: #f8fafc;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .user-review-action-btn.btn-secondary:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    /* Empty State */
+    .reviews-empty-card {
+      background: #ffffff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 48px 24px;
+      text-align: center;
+      color: #64748b;
+    }
+
+    .reviews-empty-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #fef3c7;
+      color: #d97706;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px auto;
+    }
+
+    .reviews-empty-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 6px 0;
+    }
+
+    .reviews-empty-sub {
+      font-size: 13.5px;
+      max-width: 440px;
+      margin: 0 auto 20px auto;
+      line-height: 1.5;
+    }
+
+    .reviews-empty-btn {
+      background: #512175;
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .reviews-empty-btn:hover {
+      background: #3d1858;
+    }
+
+    /* Modal Form for writing/editing review */
+    .review-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(2px);
+    }
+
+    .review-modal-overlay.open {
+      display: flex;
+    }
+
+    .review-modal-dialog {
+      background: #ffffff;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      overflow: hidden;
+      animation: modalFadeIn 0.2s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .review-modal-header {
+      padding: 18px 22px;
+      background: #faf5ff;
+      border-bottom: 1px solid #f3e8ff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .review-modal-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #512175;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .review-modal-close {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #64748b;
+      padding: 4px;
+      border-radius: 6px;
+    }
+
+    .review-modal-close:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .review-modal-body {
+      padding: 22px;
+    }
+
+    .review-form-group {
+      margin-bottom: 16px;
+    }
+
+    .review-form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+
+    .review-form-input, .review-form-textarea, .review-form-select {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13.5px;
+      color: #0f172a;
+      outline: none;
+    }
+
+    .review-form-input:focus, .review-form-textarea:focus, .review-form-select:focus {
+      border-color: #512175;
+      box-shadow: 0 0 0 3px rgba(81, 33, 117, 0.1);
+    }
+
+    .review-modal-footer {
+      padding: 16px 22px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .review-modal-cancel {
+      padding: 9px 16px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+    }
+
+    .review-modal-submit {
+      padding: 9px 20px;
+      background: #512175;
+      border: 1px solid #512175;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .review-modal-submit:hover {
+      background: #3d1858;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .reviews-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .reviews-hero-card {
+        padding: 20px;
+      }
+      .reviews-hero-left {
+        gap: 12px;
+      }
+      .reviews-hero-icon {
+        width: 48px;
+        height: 48px;
+      }
+      .reviews-hero-title {
+        font-size: 18px;
+      }
+      .user-review-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .user-review-product-img {
+        width: 60px;
+        height: 60px;
+      }
+      .user-review-date {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .reviews-stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar & Header -->
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-left">
+        <span>Verified Genuine Products &bull; Doorstep Delivery Across Nigeria</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="help.html" class="top-bar-link">Customer Help</a>
+        <span class="top-bar-sep">|</span>
+        <a href="tel:08155608447" class="top-bar-link">Call: 08155608447</a>
+        <span class="top-bar-sep">|</span>
+        <a href="https://wa.me/2347042087633" target="_blank" rel="noopener noreferrer" class="top-bar-link">WhatsApp: 07042087633</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="main-header">
+    <div class="container header-content">
+      <div class="logo-area">
+        <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <a href="index.html" class="brand-logo" aria-label="RALPHMART SUPERCENTER Home">
+          <div class="logo-text">
+            <span class="logo-main">RALPHMART</span>
+            <span class="logo-sub">SUPERCENTER</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="header-search-wrap">
+        <form class="search-form" action="category.html" method="GET">
+          <input type="text" name="q" class="search-input" placeholder="Search 500+ genuine products, brands, groceries..." autocomplete="off">
+          <button type="submit" class="search-btn" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </button>
+        </form>
+      </div>
+
+      <div class="header-actions">
+        <div class="action-item header-account-wrap">
+          <button type="button" class="action-btn account-trigger" id="siteAccountBtn" aria-haspopup="dialog" aria-expanded="false" onclick="window.openAccountModal(event);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span class="action-label">Account</span>
+          </button>
+        </div>
+
+        <div class="action-item">
+          <a href="saved-items.html" class="action-btn" title="Saved Items">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <span class="action-label">Wishlist</span>
+            <span class="badge" id="headerWishlistBadge">0</span>
+          </a>
+        </div>
+
+        <div class="action-item">
+          <a href="cart.html" class="action-btn" title="Shopping Cart">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span class="action-label">Cart</span>
+            <span class="badge" id="headerCartBadge">0</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Reviews Viewport -->
+  <div class="reviews-page-container">
+    <div class="reviews-breadcrumbs">
+      <a href="index.html">Home</a>
+      <span class="sep">&gt;</span>
+      <a href="profile.html">My Account</a>
+      <span class="sep">&gt;</span>
+      <span>My Reviews &amp; Product Feedback</span>
+    </div>
+
+    <!-- Hero Header -->
+    <div class="reviews-hero-card">
+      <div class="reviews-hero-left">
+        <div class="reviews-hero-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <div>
+          <h1 class="reviews-hero-title">My Ratings &amp; Product Feedback</h1>
+          <p class="reviews-hero-sub">View all products you've rated, your comments, and verified store team replies.</p>
+          <div class="reviews-hero-badges">
+            <span class="reviews-pill">Supabase Cloud Sync</span>
+            <span class="reviews-pill" id="reviewsHeroEmailPill">Signed In</span>
+            <span class="reviews-pill">Live Feedback</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reviews-hero-actions">
+        <button type="button" class="reviews-hero-btn btn-light" id="openNewReviewModalBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>Rate a Product</span>
+        </button>
+        <a href="profile.html" class="reviews-hero-btn btn-outline">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"></path><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <span>Back to Profile</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Stats Summary Grid -->
+    <div class="reviews-stats-grid">
+      <div class="reviews-stat-card">
+        <div class="reviews-stat-icon" style="background: rgba(81, 33, 117, 0.1); color: #512175;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <div>
+          <div class="reviews-stat-val" id="statTotalReviews">0</div>
+          <div class="reviews-stat-lbl">Products Rated</div>
+        </div>
+      </div>
+
+      <div class="reviews-stat-card">
+        <div class="reviews-stat-icon" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <div>
+          <div class="reviews-stat-val" id="statFiveStar">0</div>
+          <div class="reviews-stat-lbl">5-Star Reviews</div>
+        </div>
+      </div>
+
+      <div class="reviews-stat-card">
+        <div class="reviews-stat-icon" style="background: rgba(22, 163, 74, 0.1); color: #16a34a;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div>
+          <div class="reviews-stat-val" id="statAvgRating">--</div>
+          <div class="reviews-stat-lbl">Average Score</div>
+        </div>
+      </div>
+
+      <div class="reviews-stat-card">
+        <div class="reviews-stat-icon" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+        </div>
+        <div>
+          <div class="reviews-stat-val" id="statStoreReplies">0</div>
+          <div class="reviews-stat-lbl">Store Replies</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter & Sort Panel -->
+    <div class="reviews-filter-card">
+      <div class="reviews-filter-row">
+        <div class="reviews-search-wrap">
+          <svg class="reviews-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="reviewsSearchInput" class="reviews-search-input" placeholder="Search by product name, brand or comment..." autocomplete="off">
+          <button type="button" id="reviewsSearchClearBtn" class="reviews-search-clear" aria-label="Clear search">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+
+        <div class="reviews-selects-wrap">
+          <div class="reviews-select-group">
+            <label for="reviewsFilterSelect" class="reviews-select-label">Filter:</label>
+            <select id="reviewsFilterSelect" class="reviews-select">
+              <option value="all" selected>All Ratings</option>
+              <option value="with_replies">With Store Replies</option>
+              <option value="5">5 Stars</option>
+              <option value="4">4 Stars</option>
+              <option value="3">3 Stars</option>
+              <option value="low">1 - 2 Stars</option>
+            </select>
+          </div>
+
+          <div class="reviews-select-group">
+            <label for="reviewsSortSelect" class="reviews-select-label">Sort:</label>
+            <select id="reviewsSortSelect" class="reviews-select">
+              <option value="newest" selected>Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="highest_rating">Highest Rating</option>
+              <option value="lowest_rating">Lowest Rating</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews List Container -->
+    <div class="reviews-list-container" id="userReviewsListContainer">
+      <!-- Loading State -->
+      <div style="text-align: center; padding: 48px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0;">
+        <div style="width: 32px; height: 32px; border: 3px solid #e2e8f0; border-top-color: #512175; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px auto;"></div>
+        <div style="font-size: 14px; font-weight: 700; color: #475569;">Loading your reviews from cloud...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Rate a Product / Write Feedback -->
+  <div class="review-modal-overlay" id="rateProductModalOverlay" aria-hidden="true" role="dialog" aria-label="Rate a Product">
+    <div class="review-modal-dialog">
+      <div class="review-modal-header">
+        <h3 class="review-modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span id="rateModalTitleText">Rate &amp; Share Feedback</span>
+        </h3>
+        <button type="button" class="review-modal-close" id="closeRateModalBtn" aria-label="Close dialog">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <form id="rateProductForm">
+        <div class="review-modal-body">
+          <div class="review-form-group">
+            <label class="review-form-label" for="modalProductSelect">Select Product</label>
+            <select id="modalProductSelect" class="review-form-select" required>
+              <option value="">-- Choose a Product --</option>
+            </select>
+          </div>
+
+          <div class="review-form-group">
+            <label class="review-form-label" for="modalReviewerName">Your Display Name</label>
+            <input type="text" id="modalReviewerName" class="review-form-input" placeholder="e.g. Victor I. (Verified Buyer)" required>
+          </div>
+
+          <div class="review-form-group">
+            <label class="review-form-label" for="modalRatingSelect">Rating Score</label>
+            <select id="modalRatingSelect" class="review-form-select" required>
+              <option value="5" selected>5 Stars - Excellent (Highly Recommended)</option>
+              <option value="4">4 Stars - Very Good (Satisfied)</option>
+              <option value="3">3 Stars - Good (Average)</option>
+              <option value="2">2 Stars - Fair (Needs Improvement)</option>
+              <option value="1">1 Star - Poor (Not Satisfied)</option>
+            </select>
+          </div>
+
+          <div class="review-form-group">
+            <label class="review-form-label" for="modalReviewComment">Detailed Feedback &amp; Experience</label>
+            <textarea id="modalReviewComment" class="review-form-textarea" rows="4" placeholder="Tell other shoppers about product quality, doorstep delivery speed, packaging, durability..." required></textarea>
+          </div>
+        </div>
+
+        <div class="review-modal-footer">
+          <button type="button" class="review-modal-cancel" id="cancelRateModalBtn">Cancel</button>
+          <button type="submit" class="review-modal-submit" id="submitRateModalBtn">Publish Review</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="main-footer" style="margin-top: auto;">
+    <div class="container footer-content" style="padding: 30px 16px; text-align: center; color: #94a3b8; font-size: 13px;">
+      <p style="margin: 0 0 8px 0; color: #ffffff; font-weight: 700;">RALPHMART SUPERCENTER NIGERIA</p>
+      <p style="margin: 0;">Genuine Products &bull; Real-Time Delivery &bull; Dedicated Support &bull; All Prices in Nigerian Naira (₦)</p>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var allUserReviews = [];
+      var activeFilter = 'all';
+      var activeSort = 'newest';
+      var searchQuery = '';
+
+      var listContainer = document.getElementById('userReviewsListContainer');
+      var searchInput = document.getElementById('reviewsSearchInput');
+      var searchClearBtn = document.getElementById('reviewsSearchClearBtn');
+      var filterSelect = document.getElementById('reviewsFilterSelect');
+      var sortSelect = document.getElementById('reviewsSortSelect');
+
+      // Modal elements
+      var rateModal = document.getElementById('rateProductModalOverlay');
+      var openRateBtn = document.getElementById('openNewReviewModalBtn');
+      var closeRateBtn = document.getElementById('closeRateModalBtn');
+      var cancelRateBtn = document.getElementById('cancelRateModalBtn');
+      var rateForm = document.getElementById('rateProductForm');
+      var modalProdSelect = document.getElementById('modalProductSelect');
+      var modalNameInput = document.getElementById('modalReviewerName');
+      var modalRatingSelect = document.getElementById('modalRatingSelect');
+      var modalCommentInput = document.getElementById('modalReviewComment');
+      var modalSubmitBtn = document.getElementById('submitRateModalBtn');
+
+      function escapeText(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function buildStarSvg(color) {
+        return '<svg width="14" height="14" viewBox="0 0 24 24" fill="' + color + '"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+      }
+
+      function formatTime(iso) {
+        if (!iso) return 'Recently';
+        try {
+          var d = new Date(iso);
+          var now = new Date();
+          var diffSec = Math.floor((now - d) / 1000);
+          if (diffSec < 60) return 'Just now';
+          var diffMin = Math.floor(diffSec / 60);
+          if (diffMin < 60) return diffMin + 'm ago';
+          var diffHrs = Math.floor(diffMin / 60);
+          if (diffHrs < 24) return diffHrs + 'h ago';
+          var diffDays = Math.floor(diffHrs / 24);
+          if (diffDays < 7) return diffDays + (diffDays === 1 ? ' day ago' : ' days ago');
+          return d.toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' });
+        } catch (e) {
+          return 'Recently';
+        }
+      }
+
+      // Populate Product selector in Modal
+      function populateModalProducts() {
+        if (!modalProdSelect) return;
+        modalProdSelect.innerHTML = '<option value="">-- Choose a Product to Review --</option>';
+
+        var prods = [];
+        if (Array.isArray(window.RALPHMART_CATALOG)) {
+          prods = window.RALPHMART_CATALOG;
+        } else if (Array.isArray(window.CATALOG_PRODUCTS)) {
+          prods = window.CATALOG_PRODUCTS;
+        }
+
+        prods.forEach(function(p) {
+          var opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = p.title + ' (' + (p.brand || 'Ralphmart') + ')';
+          opt.setAttribute('data-title', p.title);
+          opt.setAttribute('data-image', (p.images && p.images[0]) || p.image || '');
+          modalProdSelect.appendChild(opt);
+        });
+
+        if (typeof window.initModularSelects === 'function') {
+          window.initModularSelects();
+        }
+      }
+
+      // Pre-fill user name
+      if (typeof getCurrentProfile === 'function') {
+        getCurrentProfile().then(function(profile) {
+          if (profile) {
+            if (modalNameInput && !modalNameInput.value) {
+              modalNameInput.value = profile.full_name || '';
+            }
+            var heroPill = document.getElementById('reviewsHeroEmailPill');
+            if (heroPill) heroPill.textContent = profile.email || 'Verified Customer';
+          }
+        }).catch(function() {});
+      }
+
+      // Fetch user reviews
+      async function loadUserReviews() {
+        try {
+          if (typeof getUserReviews === 'function') {
+            allUserReviews = await getUserReviews();
+          } else {
+            allUserReviews = [];
+          }
+          renderReviews();
+          updateStats();
+        } catch (err) {
+          console.error('Error fetching reviews:', err);
+          renderReviews();
+        }
+      }
+
+      function updateStats() {
+        var total = allUserReviews.length;
+        var fiveStars = allUserReviews.filter(function(r) { return r.rating === 5; }).length;
+        var withReplies = allUserReviews.filter(function(r) { return Boolean(r.admin_reply); }).length;
+
+        var avg = '--';
+        if (total > 0) {
+          var sum = allUserReviews.reduce(function(acc, r) { return acc + (r.rating || 5); }, 0);
+          avg = (sum / total).toFixed(1) + ' ★';
+        }
+
+        var tEl = document.getElementById('statTotalReviews');
+        var fEl = document.getElementById('statFiveStar');
+        var aEl = document.getElementById('statAvgRating');
+        var rEl = document.getElementById('statStoreReplies');
+
+        if (tEl) tEl.textContent = total;
+        if (fEl) fEl.textContent = fiveStars;
+        if (aEl) aEl.textContent = avg;
+        if (rEl) rEl.textContent = withReplies;
+      }
+
+      function renderReviews() {
+        if (!listContainer) return;
+
+        var filtered = allUserReviews.filter(function(r) {
+          // Filter rating
+          if (activeFilter === 'with_replies') {
+            if (!r.admin_reply) return false;
+          } else if (activeFilter === '5' && r.rating !== 5) {
+            return false;
+          } else if (activeFilter === '4' && r.rating !== 4) {
+            return false;
+          } else if (activeFilter === '3' && r.rating !== 3) {
+            return false;
+          } else if (activeFilter === 'low' && (r.rating > 2)) {
+            return false;
+          }
+
+          // Search
+          if (searchQuery) {
+            var q = searchQuery.toLowerCase();
+            var title = (r.product_title || '').toLowerCase();
+            var comment = (r.comment || '').toLowerCase();
+            var reply = (r.admin_reply || '').toLowerCase();
+            var reviewer = (r.reviewer_name || '').toLowerCase();
+            if (!title.includes(q) && !comment.includes(q) && !reply.includes(q) && !reviewer.includes(q)) {
+              return false;
+            }
+          }
+          return true;
+        });
+
+        // Sorting
+        filtered.sort(function(a, b) {
+          if (activeSort === 'newest') {
+            return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+          } else if (activeSort === 'oldest') {
+            return new Date(a.created_at || 0) - new Date(b.created_at || 0);
+          } else if (activeSort === 'highest_rating') {
+            return (b.rating || 5) - (a.rating || 5);
+          } else if (activeSort === 'lowest_rating') {
+            return (a.rating || 5) - (b.rating || 5);
+          }
+          return 0;
+        });
+
+        if (filtered.length === 0) {
+          if (allUserReviews.length === 0) {
+            // Fresh user with no reviews
+            listContainer.innerHTML = 
+              '<div class="reviews-empty-card">' +
+                '<div class="reviews-empty-icon">' +
+                  '<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' +
+                '</div>' +
+                '<h3 class="reviews-empty-title">You Haven\'t Reviewed Any Products Yet</h3>' +
+                '<p class="reviews-empty-sub">Share your feedback on products you purchased to help other shoppers across Nigeria. Once you leave feedback, you can track official store responses right here.</p>' +
+                '<div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">' +
+                  '<button type="button" class="reviews-empty-btn" id="emptyRateProductBtn">' +
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>' +
+                    '<span>Rate a Product Now</span>' +
+                  '</button>' +
+                  '<a href="index.html" class="reviews-empty-btn" style="background: #ffffff; color: #512175; border: 1.5px solid #512175;">' +
+                    '<span>Explore Supercenter Store</span>' +
+                  '</a>' +
+                '</div>' +
+              '</div>';
+
+            var emptyRateBtn = document.getElementById('emptyRateProductBtn');
+            if (emptyRateBtn) {
+              emptyRateBtn.addEventListener('click', openRateModal);
+            }
+          } else {
+            // Filter match 0
+            listContainer.innerHTML = 
+              '<div class="reviews-empty-card">' +
+                '<h3 class="reviews-empty-title">No Reviews Match Your Filter</h3>' +
+                '<p class="reviews-empty-sub">Try adjusting your search terms or selecting "All Ratings" to view your feedback history.</p>' +
+                '<button type="button" class="reviews-empty-btn" id="resetFiltersBtn">Reset Filters</button>' +
+              '</div>';
+
+            var resetBtn = document.getElementById('resetFiltersBtn');
+            if (resetBtn) {
+              resetBtn.addEventListener('click', function() {
+                if (filterSelect) filterSelect.value = 'all';
+                if (searchInput) searchInput.value = '';
+                activeFilter = 'all';
+                searchQuery = '';
+                if (searchClearBtn) searchClearBtn.style.display = 'none';
+                renderReviews();
+              });
+            }
+          }
+          return;
+        }
+
+        var html = '';
+        filtered.forEach(function(rev) {
+          var rating = Math.max(1, Math.min(5, parseInt(rev.rating, 10) || 5));
+          var starsHtml = '';
+          for (var i = 0; i < 5; i++) {
+            starsHtml += buildStarSvg(i < rating ? '#f59e0b' : '#cbd5e1');
+          }
+
+          var title = rev.product_title || 'Ralphmart Supercenter Product';
+          var img = rev.product_image || 'img/products/default.jpg';
+          var pLink = 'product.html?id=' + encodeURIComponent(rev.product_id || '');
+          var timeAgo = formatTime(rev.created_at);
+
+          // Reply snippet
+          var replyHtml = '';
+          if (rev.admin_reply) {
+            var replyTimeAgo = formatTime(rev.admin_reply_at);
+            replyHtml = 
+              '<div class="user-review-reply-box">' +
+                '<div class="user-review-reply-header">' +
+                  '<span class="user-review-reply-badge">' +
+                    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>' +
+                    'Ralphmart Store Response' +
+                  '</span>' +
+                  '<span class="user-review-reply-time">' + replyTimeAgo + '</span>' +
+                '</div>' +
+                '<p class="user-review-reply-text">' + escapeText(rev.admin_reply) + '</p>' +
+              '</div>';
+          } else {
+            replyHtml = 
+              '<div style="margin-top: 10px; font-size: 12px; color: #94a3b8; display: inline-flex; align-items: center; gap: 5px;">' +
+                '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>' +
+                '<span>Awaiting store officer review &amp; reply</span>' +
+              '</div>';
+          }
+
+          html += 
+            '<div class="user-review-card">' +
+              '<div class="user-review-top">' +
+                '<img src="' + escapeText(img) + '" alt="' + escapeText(title) + '" class="user-review-product-img" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=\\\'http://www.w3.org/2000/svg\\\' width=\\\'72\\\' height=\\\'72\\\' viewBox=\\\'0 0 24 24\\\' fill=\\\'none\\\' stroke=\\\'%23cbd5e1\\\' stroke-width=\\\'1.5\\\'%3E%3Crect x=\\\'2\\\' y=\\\'2\\\' width=\\\'20\\\' height=\\\'20\\\' rx=\\\'4\\\'/%3E%3Cpath d=\\\'M7 17l5-5 5 5\\\'/%3E%3C/svg%3E\'">' +
+                '<div class="user-review-product-meta">' +
+                  '<a href="' + pLink + '" class="user-review-product-title">' + escapeText(title) + '</a>' +
+                  '<div class="user-review-rating-row">' +
+                    '<div class="user-review-stars">' + starsHtml + '</div>' +
+                    '<span class="user-review-score-badge">' + rating + '.0 / 5.0</span>' +
+                    '<span class="user-review-verified-badge">' +
+                      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>' +
+                      'Verified Purchase' +
+                    '</span>' +
+                    '<span class="user-review-date">' + timeAgo + '</span>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+              '<div class="user-review-body">' +
+                '<div class="user-review-comment-title">Your Feedback &amp; Comments</div>' +
+                '<p class="user-review-comment-text">' + escapeText(rev.comment) + '</p>' +
+                replyHtml +
+              '</div>' +
+              '<div class="user-review-footer">' +
+                '<div class="user-review-footer-left">' +
+                  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>' +
+                  '<span>Reviewer: <strong>' + escapeText(rev.reviewer_name || 'Verified Customer') + '</strong></span>' +
+                '</div>' +
+                '<div class="user-review-actions-wrap">' +
+                  '<a href="' + pLink + '" class="user-review-action-btn btn-secondary">' +
+                    '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>' +
+                    '<span>View Product</span>' +
+                  '</a>' +
+                  '<button type="button" class="user-review-action-btn btn-primary" onclick="window.openEditReviewModal(\'' + escapeText(rev.product_id) + '\', \'' + escapeText(title) + '\', ' + rating + ', ' + JSON.stringify(rev.comment) + ')">' +
+                    '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>' +
+                    '<span>Update Review</span>' +
+                  '</button>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+        });
+
+        listContainer.innerHTML = html;
+      }
+
+      // Filter events
+      if (filterSelect) {
+        filterSelect.addEventListener('change', function(e) {
+          activeFilter = e.target.value;
+          renderReviews();
+        });
+      }
+
+      if (sortSelect) {
+        sortSelect.addEventListener('change', function(e) {
+          activeSort = e.target.value;
+          renderReviews();
+        });
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+          searchQuery = e.target.value.trim();
+          if (searchClearBtn) {
+            searchClearBtn.style.display = searchQuery ? 'block' : 'none';
+          }
+          renderReviews();
+        });
+      }
+
+      if (searchClearBtn) {
+        searchClearBtn.addEventListener('click', function() {
+          if (searchInput) searchInput.value = '';
+          searchQuery = '';
+          searchClearBtn.style.display = 'none';
+          renderReviews();
+        });
+      }
+
+      // Modal open / close
+      function openRateModal() {
+        if (!rateModal) return;
+        rateModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeRateModal() {
+        if (!rateModal) return;
+        rateModal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      window.openEditReviewModal = function(prodId, prodTitle, rating, comment) {
+        openRateModal();
+        if (modalProdSelect) modalProdSelect.value = prodId;
+        if (modalRatingSelect) modalRatingSelect.value = String(rating);
+        if (modalCommentInput) modalCommentInput.value = comment || '';
+        var titleEl = document.getElementById('rateModalTitleText');
+        if (titleEl) titleEl.textContent = 'Update Review: ' + prodTitle;
+      };
+
+      if (openRateBtn) openRateBtn.addEventListener('click', openRateModal);
+      if (closeRateBtn) closeRateBtn.addEventListener('click', closeRateModal);
+      if (cancelRateBtn) cancelRateBtn.addEventListener('click', closeRateModal);
+
+      if (rateModal) {
+        rateModal.addEventListener('click', function(e) {
+          if (e.target === rateModal) closeRateModal();
+        });
+      }
+
+      // Review submission
+      if (rateForm) {
+        rateForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          var pId = modalProdSelect ? modalProdSelect.value : '';
+          var rating = modalRatingSelect ? modalRatingSelect.value : '5';
+          var name = modalNameInput ? modalNameInput.value.trim() : 'Verified Customer';
+          var comment = modalCommentInput ? modalCommentInput.value.trim() : '';
+
+          if (!pId) {
+            alert('Please select a product to rate.');
+            return;
+          }
+          if (!comment) {
+            alert('Please enter your review feedback.');
+            return;
+          }
+
+          var selectedOpt = modalProdSelect.options[modalProdSelect.selectedIndex];
+          var pTitle = selectedOpt ? selectedOpt.getAttribute('data-title') || selectedOpt.textContent : 'Ralphmart Product';
+          var pImg = selectedOpt ? selectedOpt.getAttribute('data-image') : '';
+
+          if (modalSubmitBtn) {
+            modalSubmitBtn.disabled = true;
+            modalSubmitBtn.textContent = 'Publishing to Cloud...';
+          }
+
+          try {
+            if (typeof submitProductReview === 'function') {
+              await submitProductReview({
+                productId: pId,
+                productTitle: pTitle,
+                productImage: pImg,
+                rating: parseInt(rating, 10),
+                comment: comment,
+                reviewerName: name
+              });
+            }
+
+            closeRateModal();
+            rateForm.reset();
+            await loadUserReviews();
+            alert('Thank you! Your verified review and rating have been saved to the cloud.');
+          } catch (err) {
+            console.error('Error submitting review:', err);
+            alert('Could not submit review: ' + (err.message || 'Network error'));
+          } finally {
+            if (modalSubmitBtn) {
+              modalSubmitBtn.disabled = false;
+              modalSubmitBtn.textContent = 'Publish Review';
+            }
+          }
+        });
+      }
+
+      // Realtime listener
+      window.addEventListener('nkemmart_review_updated', function() {
+        loadUserReviews();
+      });
+
+      // Init
+      document.addEventListener('DOMContentLoaded', function() {
+        populateModalProducts();
+        loadUserReviews();
+      });
+    })();
+  </script>
+</body>
+</html>

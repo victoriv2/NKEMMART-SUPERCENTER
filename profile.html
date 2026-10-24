@@ -175,14 +175,20 @@
       box-shadow: none !important;
     }
 
-    /* Activity Summary Stats Grid - Desktop Base (3 columns) */
+    /* Activity Summary Stats Grid - Desktop Base (4 columns) */
     .profile-stats-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       margin-bottom: 24px;
       width: 100%;
       box-sizing: border-box;
+    }
+
+    @media (max-width: 900px) and (min-width: 581px) {
+      .profile-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     .profile-stat-box {
@@ -1299,6 +1305,16 @@
           <div class="profile-stat-label">Saved Items (Synced)</div>
         </div>
       </a>
+
+      <a href="reviews.html" class="profile-stat-box" title="View your ratings & feedback">
+        <div class="profile-stat-icon" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <div>
+          <div class="profile-stat-val" id="statReviewsCount">0</div>
+          <div class="profile-stat-label">Ratings &amp; Reviews</div>
+        </div>
+      </a>
     </div>
 
     <!-- Layout Grid -->
@@ -1495,6 +1511,31 @@
           </div>
         </div>
 
+        <!-- My Product Reviews & Feedback Card -->
+        <div class="profile-card" style="margin-top: 24px;">
+          <div class="profile-card-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <h2 class="profile-card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span>My Product Ratings &amp; Feedback</span>
+              </h2>
+              <p class="profile-card-subtitle">Products you've rated, your comments, and official store responses.</p>
+            </div>
+            <a href="reviews.html" style="font-size: 12.5px; font-weight: 700; color: #512175; text-decoration: none;">View All Reviews &gt;</a>
+          </div>
+
+          <div id="profileReviewsListContainer" style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="text-align: center; padding: 24px; color: #64748b; font-size: 13px;">Loading your reviews from cloud...</div>
+          </div>
+
+          <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #f1f5f9; text-align: center;">
+            <a href="reviews.html" style="font-size: 13px; font-weight: 700; color: #512175; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 18px; border: 1px solid #e2e8f0; border-radius: 8px; background: #faf5ff; width: 100%; box-sizing: border-box; transition: border-color 0.15s, background-color 0.15s;" onmouseover="this.style.borderColor='#512175'" onmouseout="this.style.borderColor='#e2e8f0'">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span>Manage Reviews &amp; View Store Replies &rarr;</span>
+            </a>
+          </div>
+        </div>
+
       </div>
 
       <!-- Right Column: Quick Navigation Sidebar -->
@@ -1540,6 +1581,14 @@
               <span class="profile-sidebar-item-left">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                 <span>Recent Activities</span>
+              </span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+
+            <a href="reviews.html" class="profile-sidebar-item">
+              <span class="profile-sidebar-item-left">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color: #f59e0b;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span>My Reviews &amp; Feedback</span>
               </span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </a>
@@ -2205,9 +2254,70 @@
           const statSaved = document.getElementById('statSavedCount');
           if (statSaved) statSaved.textContent = saved.length;
 
+          // Reviews Count
+          const reviews = typeof getUserReviews === 'function' ? await getUserReviews() : [];
+          const statReviews = document.getElementById('statReviewsCount');
+          if (statReviews) statReviews.textContent = reviews.length;
+
           renderOrdersList(orders);
         } catch (e) {
           console.warn('Error loading stats:', e);
+        }
+      }
+
+      // Load Reviews Preview for Profile Page
+      async function loadUserReviewsPreview() {
+        const container = document.getElementById('profileReviewsListContainer');
+        if (!container) return;
+        try {
+          const reviews = typeof getUserReviews === 'function' ? await getUserReviews() : [];
+          if (!reviews || reviews.length === 0) {
+            container.innerHTML = `
+              <div style="text-align: center; padding: 24px; color: #64748b; font-size: 13px;">
+                You haven't submitted any product ratings or feedback yet. Share your experience on any product page.
+              </div>
+            `;
+            return;
+          }
+
+          const previewList = reviews.slice(0, 3);
+          container.innerHTML = previewList.map(r => {
+            const rating = Math.max(1, Math.min(5, parseInt(r.rating, 10) || 5));
+            let stars = '';
+            for (let i = 0; i < 5; i++) {
+              stars += `<svg width="12" height="12" viewBox="0 0 24 24" fill="${i < rating ? '#f59e0b' : '#cbd5e1'}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+            }
+
+            let replyHtml = '';
+            if (r.admin_reply) {
+              replyHtml = `
+                <div style="margin-top: 8px; background: #faf5ff; border-left: 3px solid #512175; border-radius: 6px; padding: 8px 12px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px;">
+                    <span style="font-size: 11px; font-weight: 800; color: #512175; text-transform: uppercase;">Store Reply</span>
+                    <span style="font-size: 10.5px; color: #7c3aed;">${formatRelativeTime(r.admin_reply_at)}</span>
+                  </div>
+                  <p style="margin: 0; font-size: 12.5px; color: #1e293b; line-height: 1.4;">${escapeHtml(r.admin_reply)}</p>
+                </div>
+              `;
+            }
+
+            return `
+              <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
+                  <a href="product.html?id=${encodeURIComponent(r.product_id)}" style="font-size: 13.5px; font-weight: 700; color: #0f172a; text-decoration: none;" onmouseover="this.style.color='#512175'" onmouseout="this.style.color='#0f172a'">${escapeHtml(r.product_title || 'Product')}</a>
+                  <span style="font-size: 11.5px; color: #94a3b8; white-space: nowrap;">${formatRelativeTime(r.created_at)}</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                  <div style="display: inline-flex; align-items: center; gap: 2px;">${stars}</div>
+                  <span style="font-size: 11px; font-weight: 700; color: #16a34a; background: #f0fdf4; padding: 1px 6px; border-radius: 4px;">Verified Purchase</span>
+                </div>
+                <p style="margin: 0; font-size: 13px; color: #334155; line-height: 1.45;">${escapeHtml(r.comment)}</p>
+                ${replyHtml}
+              </div>
+            `;
+          }).join('');
+        } catch (e) {
+          console.warn('Error loading reviews preview:', e);
         }
       }
 
@@ -2314,11 +2424,13 @@
       // Load User Activity and Stats
       await loadUserStats();
       await loadActivitiesList();
+      await loadUserReviewsPreview();
 
       // Listen for cross-device cloud sync and realtime activity updates
       window.addEventListener('nkemmart_activity_logged', async () => {
         await loadUserStats();
         await loadActivitiesList();
+        await loadUserReviewsPreview();
       });
       window.addEventListener('nkemmart_cart_synced', async () => {
         await loadUserStats();
@@ -2327,6 +2439,10 @@
       window.addEventListener('nkemmart_saved_synced', async () => {
         await loadUserStats();
         await loadActivitiesList();
+      });
+      window.addEventListener('nkemmart_review_updated', async () => {
+        await loadUserStats();
+        await loadUserReviewsPreview();
       });
 
       // Mobile Drawer and Dropdown interaction

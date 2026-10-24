@@ -6803,6 +6803,48 @@ body.modal-open {
   margin-top: 6px;
 }
 
+/* Product Reviews & Official Store Replies */
+.pdp-admin-reply-box {
+  margin-top: 10px;
+  background: #faf5ff;
+  border-left: 3.5px solid #512175;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.pdp-admin-reply-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pdp-admin-reply-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #512175;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.pdp-admin-reply-time {
+  font-size: 11px;
+  color: #7c3aed;
+  font-weight: 500;
+}
+
+.pdp-admin-reply-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #1e293b;
+  margin: 0;
+}
+
 /* Responsive PDP adjustments */
 @media (max-width: 1080px) {
   .pdp-main-grid {
