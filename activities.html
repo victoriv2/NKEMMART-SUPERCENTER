@@ -283,7 +283,7 @@
     .activities-select-group {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
@@ -295,26 +295,243 @@
       letter-spacing: 0.3px;
     }
 
-    .activities-select {
-      height: 36px;
-      padding: 0 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
+    /* Custom Modal Select Trigger Buttons */
+    .activities-modal-trigger {
+      height: 38px;
+      padding: 0 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
       background: #ffffff;
       font-size: 13px;
       color: #0f172a;
       outline: none;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s;
+      transform: none !important;
+      box-sizing: border-box;
+      user-select: none;
     }
 
-    .activities-select:focus {
+    .activities-modal-trigger:hover {
+      border-color: #512175;
+      background: #faf5ff;
+      transform: none !important;
+    }
+
+    .activities-modal-trigger:focus-visible {
+      border-color: #512175;
+      box-shadow: 0 0 0 3px rgba(81, 33, 117, 0.12);
+    }
+
+    .activities-modal-trigger .trigger-icon {
+      color: #512175;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .activities-modal-trigger .trigger-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+
+    .activities-modal-trigger .trigger-chevron {
+      color: #64748b;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+      margin-left: 2px;
+    }
+
+    .activities-modal-trigger.is-open .trigger-chevron {
+      transform: rotate(180deg);
+    }
+
+    /* Custom Filter Modal (Bottom Sheet on Mobile, Centered Modal on Desktop) */
+    .filter-picker-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .filter-picker-modal-overlay.open {
+      display: flex !important;
+      animation: filterModalFadeIn 0.2s ease-out;
+    }
+
+    @keyframes filterModalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .filter-picker-modal-dialog {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24);
+      overflow: hidden;
+      box-sizing: border-box;
+      animation: filterModalZoomIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: none !important;
+    }
+
+    @keyframes filterModalZoomIn {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .filter-picker-modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+
+    .filter-picker-modal-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .filter-picker-modal-close {
+      background: #f1f5f9;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #64748b;
+      transition: background-color 0.15s, color 0.15s;
+      padding: 0;
+      transform: none !important;
+    }
+
+    .filter-picker-modal-close:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .filter-picker-modal-body {
+      padding: 14px 16px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Option item */
+    .filter-picker-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1.5px solid #e2e8f0;
+      background: #ffffff;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 0.15s, background-color 0.15s;
+      transform: none !important;
+    }
+
+    .filter-picker-option:hover {
+      background: #faf5ff;
+      border-color: #d8b4fe;
+      transform: none !important;
+    }
+
+    .filter-picker-option.selected {
+      background: #faf5ff;
       border-color: #512175;
     }
 
+    .filter-picker-option-left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .filter-picker-option-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.3;
+    }
+
+    .filter-picker-option.selected .filter-picker-option-label {
+      color: #512175;
+    }
+
+    .filter-picker-option-sub {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+      line-height: 1.25;
+    }
+
+    /* Custom Radio indicator */
+    .filter-picker-radio {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.15s;
+      background: #ffffff;
+    }
+
+    .filter-picker-option.selected .filter-picker-radio {
+      border-color: #512175;
+    }
+
+    .filter-picker-radio-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #512175;
+      display: none;
+    }
+
+    .filter-picker-option.selected .filter-picker-radio-dot {
+      display: block;
+    }
+
     .activities-reset-btn {
-      padding: 6px 12px;
-      border-radius: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
       font-size: 12.5px;
       font-weight: 700;
       background: #fee2e2;
@@ -323,11 +540,14 @@
       cursor: pointer;
       display: none;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+      transition: background-color 0.15s;
+      transform: none !important;
     }
 
     .activities-reset-btn:hover {
       background: #fecaca;
+      transform: none !important;
     }
 
     /* Counter bar */
@@ -595,16 +815,45 @@
       .activities-options-row {
         flex-direction: column !important;
         align-items: stretch !important;
-        gap: 10px !important;
+        gap: 12px !important;
       }
 
       .activities-select-group {
         width: 100% !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+      }
+
+      .activities-select-label {
+        display: none !important;
+      }
+
+      .activities-modal-trigger {
+        width: 100% !important;
         justify-content: space-between !important;
       }
 
-      .activities-select {
-        flex: 1 !important;
+      .filter-picker-modal-overlay {
+        padding: 0 !important;
+        align-items: flex-end !important;
+      }
+
+      .filter-picker-modal-dialog {
+        max-width: 100% !important;
+        max-height: 80vh !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        animation: filterModalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+
+      @keyframes filterModalSlideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+
+      .filter-picker-option {
+        padding: 14px 14px !important;
       }
 
       .activity-card {
@@ -876,19 +1125,35 @@
         </button>
       </div>
 
-      <!-- Dropdowns & Reset Row -->
+      <!-- Dropdowns & Reset Row (Triggers Custom Filter Modals) -->
       <div class="activities-options-row">
         <div class="activities-select-group">
           <span class="activities-select-label">Time:</span>
-          <select id="timeRangeSelect" class="activities-select" aria-label="Filter by time range">
+          <button type="button" id="timeModalTrigger" class="activities-modal-trigger" aria-haspopup="dialog" aria-expanded="false" title="Click to filter by time range">
+            <span class="trigger-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </span>
+            <span class="trigger-text" id="timeTriggerLabel">All Time</span>
+            <svg class="trigger-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+
+          <span class="activities-select-label" style="margin-left: 4px;">Sort:</span>
+          <button type="button" id="sortModalTrigger" class="activities-modal-trigger" aria-haspopup="dialog" aria-expanded="false" title="Click to change sort order">
+            <span class="trigger-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+            </span>
+            <span class="trigger-text" id="sortTriggerLabel">Newest First</span>
+            <svg class="trigger-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+
+          <!-- Hidden native selects for backward compatibility -->
+          <select id="timeRangeSelect" style="display: none !important;">
             <option value="all">All Time</option>
             <option value="today">Today</option>
             <option value="week">Past 7 Days</option>
             <option value="month">Past 30 Days</option>
           </select>
-
-          <span class="activities-select-label" style="margin-left: 8px;">Sort:</span>
-          <select id="sortOrderSelect" class="activities-select" aria-label="Sort activity order">
+          <select id="sortOrderSelect" style="display: none !important;">
             <option value="desc">Newest First</option>
             <option value="asc">Oldest First</option>
           </select>
@@ -914,6 +1179,102 @@
     <div id="activitiesFeedList" class="activities-list">
       <div style="text-align: center; padding: 48px 20px; color: #64748b; font-size: 14px;">
         Loading account activity log...
+      </div>
+    </div>
+
+    <!-- ========================================================
+         TIME RANGE FILTER MODAL DIALOG
+         ======================================================== -->
+    <div class="filter-picker-modal-overlay" id="timePickerModal" role="dialog" aria-modal="true" aria-labelledby="timePickerTitle">
+      <div class="filter-picker-modal-dialog">
+        <div class="filter-picker-modal-header">
+          <h3 class="filter-picker-modal-title" id="timePickerTitle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>Filter by Time Range</span>
+          </h3>
+          <button type="button" class="filter-picker-modal-close" id="timePickerClose" aria-label="Close time filter modal">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div class="filter-picker-modal-body">
+          <button type="button" class="filter-picker-option selected" data-value="all">
+            <div class="filter-picker-option-left">
+              <div class="filter-picker-option-label">All Time</div>
+              <div class="filter-picker-option-sub">Show complete activity history from the beginning</div>
+            </div>
+            <div class="filter-picker-radio">
+              <div class="filter-picker-radio-dot"></div>
+            </div>
+          </button>
+
+          <button type="button" class="filter-picker-option" data-value="today">
+            <div class="filter-picker-option-left">
+              <div class="filter-picker-option-label">Today</div>
+              <div class="filter-picker-option-sub">Activities recorded in the last 24 hours</div>
+            </div>
+            <div class="filter-picker-radio">
+              <div class="filter-picker-radio-dot"></div>
+            </div>
+          </button>
+
+          <button type="button" class="filter-picker-option" data-value="week">
+            <div class="filter-picker-option-left">
+              <div class="filter-picker-option-label">Past 7 Days</div>
+              <div class="filter-picker-option-sub">Activities recorded during the past week</div>
+            </div>
+            <div class="filter-picker-radio">
+              <div class="filter-picker-radio-dot"></div>
+            </div>
+          </button>
+
+          <button type="button" class="filter-picker-option" data-value="month">
+            <div class="filter-picker-option-left">
+              <div class="filter-picker-option-label">Past 30 Days</div>
+              <div class="filter-picker-option-sub">Activities recorded within the last month</div>
+            </div>
+            <div class="filter-picker-radio">
+              <div class="filter-picker-radio-dot"></div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================
+         SORT ORDER MODAL DIALOG
+         ======================================================== -->
+    <div class="filter-picker-modal-overlay" id="sortPickerModal" role="dialog" aria-modal="true" aria-labelledby="sortPickerTitle">
+      <div class="filter-picker-modal-dialog">
+        <div class="filter-picker-modal-header">
+          <h3 class="filter-picker-modal-title" id="sortPickerTitle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#512175" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+            <span>Sort Activities</span>
+          </h3>
+          <button type="button" class="filter-picker-modal-close" id="sortPickerClose" aria-label="Close sort modal">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div class="filter-picker-modal-body">
+          <button type="button" class="filter-picker-option selected" data-value="desc">
+            <div class="filter-picker-option-left">
+              <div class="filter-picker-option-label">Newest First</div>
+              <div class="filter-picker-option-sub">Latest account activities appear first</div>
+            </div>
+            <div class="filter-picker-radio">
+              <div class="filter-picker-radio-dot"></div>
+            </div>
+          </button>
+
+          <button type="button" class="filter-picker-option" data-value="asc">
+            <div class="filter-picker-option-left">
+              <div class="filter-picker-option-label">Oldest First</div>
+              <div class="filter-picker-option-sub">Earliest account activities appear first</div>
+            </div>
+            <div class="filter-picker-radio">
+              <div class="filter-picker-radio-dot"></div>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1242,6 +1603,56 @@
         }).join('');
       }
 
+      // Time & Sort Filter Modal Elements
+      const timeModalTrigger = document.getElementById('timeModalTrigger');
+      const sortModalTrigger = document.getElementById('sortModalTrigger');
+      const timeTriggerLabel = document.getElementById('timeTriggerLabel');
+      const sortTriggerLabel = document.getElementById('sortTriggerLabel');
+
+      const timePickerModal = document.getElementById('timePickerModal');
+      const sortPickerModal = document.getElementById('sortPickerModal');
+      const timePickerClose = document.getElementById('timePickerClose');
+      const sortPickerClose = document.getElementById('sortPickerClose');
+
+      const timeOptions = document.querySelectorAll('#timePickerModal .filter-picker-option');
+      const sortOptions = document.querySelectorAll('#sortPickerModal .filter-picker-option');
+
+      function openTimeModal() {
+        if (timePickerModal) {
+          timePickerModal.classList.add('open');
+          if (timeModalTrigger) timeModalTrigger.classList.add('is-open');
+          document.body.classList.add('modal-open');
+          if (document.documentElement) document.documentElement.classList.add('modal-open');
+        }
+      }
+
+      function closeTimeModal() {
+        if (timePickerModal) {
+          timePickerModal.classList.remove('open');
+          if (timeModalTrigger) timeModalTrigger.classList.remove('is-open');
+          document.body.classList.remove('modal-open');
+          if (document.documentElement) document.documentElement.classList.remove('modal-open');
+        }
+      }
+
+      function openSortModal() {
+        if (sortPickerModal) {
+          sortPickerModal.classList.add('open');
+          if (sortModalTrigger) sortModalTrigger.classList.add('is-open');
+          document.body.classList.add('modal-open');
+          if (document.documentElement) document.documentElement.classList.add('modal-open');
+        }
+      }
+
+      function closeSortModal() {
+        if (sortPickerModal) {
+          sortPickerModal.classList.remove('open');
+          if (sortModalTrigger) sortModalTrigger.classList.remove('is-open');
+          document.body.classList.remove('modal-open');
+          if (document.documentElement) document.documentElement.classList.remove('modal-open');
+        }
+      }
+
       function resetAllFilters() {
         currentCategory = 'all';
         currentTimeRange = 'all';
@@ -1255,6 +1666,17 @@
 
         chips.forEach(c => {
           c.classList.toggle('active', c.getAttribute('data-type') === 'all');
+        });
+
+        if (timeTriggerLabel) timeTriggerLabel.textContent = 'All Time';
+        if (sortTriggerLabel) sortTriggerLabel.textContent = 'Newest First';
+
+        timeOptions.forEach(o => {
+          o.classList.toggle('selected', o.getAttribute('data-value') === 'all');
+        });
+
+        sortOptions.forEach(o => {
+          o.classList.toggle('selected', o.getAttribute('data-value') === 'desc');
         });
 
         if (timeSelect) timeSelect.value = 'all';
@@ -1316,7 +1738,70 @@
         });
       }
 
-      // Select Dropdowns
+      // Time & Sort Modal Listeners
+      if (timeModalTrigger) timeModalTrigger.addEventListener('click', openTimeModal);
+      if (timePickerClose) timePickerClose.addEventListener('click', closeTimeModal);
+      if (timePickerModal) {
+        timePickerModal.addEventListener('click', (e) => {
+          if (e.target === timePickerModal) closeTimeModal();
+        });
+      }
+
+      if (sortModalTrigger) sortModalTrigger.addEventListener('click', openSortModal);
+      if (sortPickerClose) sortPickerClose.addEventListener('click', closeSortModal);
+      if (sortPickerModal) {
+        sortPickerModal.addEventListener('click', (e) => {
+          if (e.target === sortPickerModal) closeSortModal();
+        });
+      }
+
+      // Time option selection
+      timeOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const val = opt.getAttribute('data-value');
+          currentTimeRange = val;
+          const labelEl = opt.querySelector('.filter-picker-option-label');
+          if (timeTriggerLabel && labelEl) {
+            timeTriggerLabel.textContent = labelEl.textContent.trim();
+          }
+          if (timeSelect) timeSelect.value = val;
+
+          timeOptions.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+
+          closeTimeModal();
+          applyFiltersAndRender();
+        });
+      });
+
+      // Sort option selection
+      sortOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const val = opt.getAttribute('data-value');
+          currentSort = val;
+          const labelEl = opt.querySelector('.filter-picker-option-label');
+          if (sortTriggerLabel && labelEl) {
+            sortTriggerLabel.textContent = labelEl.textContent.trim();
+          }
+          if (sortSelect) sortSelect.value = val;
+
+          sortOptions.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+
+          closeSortModal();
+          applyFiltersAndRender();
+        });
+      });
+
+      // Keyboard Escape listener for filter modals
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeTimeModal();
+          closeSortModal();
+        }
+      });
+
+      // Hidden select fallback listeners
       if (timeSelect) {
         timeSelect.addEventListener('change', () => {
           currentTimeRange = timeSelect.value;
